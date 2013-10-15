@@ -1,5 +1,26 @@
-bin/
+# System:
+Thumbs.db
+.DS_Store
+*.swp
+*~
+Desktop.ini
 
-gen/
+# Version Control Systems:
+.svn
+CVS
+.hg
+.bzr
 
-libs/
+# Android:
+local.properties
+proguard/**
+target/**
+bin/**
+obj/**
+gen/**
+gdb.setup
+gdbserver
+
+# IntelliJ / Android Studio:
+idea/workspace.xml
+idea/tasks.xml
