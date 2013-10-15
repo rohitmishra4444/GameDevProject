@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="40" height="25" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="landscape_mountains_(2D_Circle_Graphic_32x32)" tilewidth="32" tileheight="32">
+  <image source="gfx/landscape_mountains_(2D_Circle_Graphic_32x32).png" width="512" height="512"/>
+ </tileset>
+ <layer name="Gras" width="40" height="25">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC8VWWw7DMAjrDZsblPufYvtoJGTZYLpN+7Cy5gGNbejO4zjON9Y9nuR5idE918WoYl03Iv3G5xCje66LUcVaf8aVuGKcKl43YgAWu4LSOGPP4z3Wg5yoVwf3/bfWey7zMcmXucRnRPY+4y3zs2AP8zbmfgJ8j467qk8w7qb+6nJ/M6ajtfK40i6MM50GSo9q3dWw47e7GwJrQfEbZO6TGma5lL6Rzrk1XeWdaObeq4ul1rA/ODWsvnfKj7nfoBfy/iBrQdY7/liPU5pOPcC0mdZHfjfm5yBz036sYrm1MeEHz1f377h3fI77mM/x90R3VeeuxpWemduqD6ne7fi++69Rcc/6GMsTcGbHxrpjeMI9+5YqrlQvVnXh+MP5fld9qNv7pNacGu54X82ovNH1nooz5w6okxpZr89w8k7r6FdauTleY1MEL6APAAA=
+  </data>
+ </layer>
+ <layer name="Randbegrenzung" width="40" height="25">
+  <properties>
+   <property name="walkable" value="false"/>
+  </properties>
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3Wu2oCURSF4a1R+8RLYWcg9gbU9GLUtBJvrWjULtE3mryBPoIPln+Y2TCEg4XN3oILvuKcarGmmBOJSIQzhhjhAwPDcw9dvKXdfjHFDHMsjM/jTN8jTvjCBlvsjM/LTN82OuIv2vcFTeMul+J1P43X/XLIi9/9HvEkfvdr4Fn87tfCq9z3uza3sp/Xfrqf1++r+/XxbtwlFN3vExPjLqHofiusjbuEovt5je7nNbeyXxEl4y6h6H5V1Iy7hPL//xu/BR9QkGRTMbyL8y3JfnscJHkLllGRZNO64V3c7Sf1B0L/CgugDwAA
+  </data>
+ </layer>
+ <layer name="Weg" width="40" height="25">
+  <properties>
+   <property name="speedup" value="true"/>
+  </properties>
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+2Wyw2DMAyGs/+FDkCBAaATQGdrkLBkuX78MTliyReS2J+DHynlkUdKGau+O+jUmWO6vg1Vl6qHorOzJve9AkbpX64Nij1is2St+vGCvmQPGLV70Na+wp7H1sLnMWr+5blDWUN8r5c/NNc4I+312CLfHp+Vm1Gu7WzflmSL+Dib5h+ph/UGm8fnsZFwxlb7qGjnETYSYrTusAefzH2UDWHowXey8NzvWWMUf0boP96JjxgsG0iOenaXkqstPqeiGLOM2dyQPXEG7ER1ZPFF/ctjo3tH44x6rZxPp5+t/NevxWvNULQGND7ZM7JvJG++o/ml8bX2DW1uRW8PlLFHr5C+Wt4e2ruFK2KjhTHTs+W5O33/kVh+cexqp6APAAA=
+  </data>
+ </layer>
+ <layer name="Planzen" width="40" height="25">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+1WW07DMBBcDg03AHEBoBcA0gMAdwDS7wJtv3lV8MkjFewKjzpZ2U3aOPDDSEOT2Fl2NzO2Rf7RJ8bKm79OwqEINNwrH1q+d6m86iUjkW3ljrJ0z9+U7+F62hDjVnmXOS9gV7lH99eROfPwixoGgcCj8km5oBi+3lyYJJ7b/x4lxj6Un7LMCTH60PBY6rUP6X5G18MVMdDHdTScwoHyMPAoEhPaf5ZlP6bS7vuxhjfFmfI88CISE9qvKPc5jZeUN3qa08+IDU1bnxY0Du1LJHfA9zynnxEbmq6k7mGvfQ977vPmmroCsdHHUtIeBvAdUQd6jhpQUw4gL/5G3pu8TlgO5inz0iTcV1LXxUjqGukC5BXTFnSOOcjzWHlK85Cj5WS18TrUFavWAOgcc5Cned68bn0qIu/1uR9z3V7nXIvlNku8l8u/L8pXF7+icei8oDm8l0BjXq+5/Ptlf7a6xYjtc334dx2UkevYuScHeF2xMxPvx9iTYxi4e6w1vA6ug5SnvH9t7TgJ3Jcfnxqa+oxxy2+TXrb1lD8vtDnvl268af/xsLW9i6csR99n74suZylbM3J66jfwDflOLr+gDwAA
+  </data>
+ </layer>
+</map>
