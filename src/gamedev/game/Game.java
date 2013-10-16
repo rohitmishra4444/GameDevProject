@@ -71,6 +71,7 @@ public class Game extends SimpleBaseGameActivity {
 
 	private BitmapTextureAtlas mBitmapTextureAtlas;
 	private TiledTextureRegion mPlayerTextureRegion;
+	private TiledTextureRegion mNpcTextureRegion;	
 	private TMXTiledMap mTMXTiledMap;
 	private PhysicsWorld mPhysicsWorld;
 	private Scene mScene;
@@ -125,6 +126,11 @@ public class Game extends SimpleBaseGameActivity {
 		this.mOnScreenControlBaseTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mOnScreenControlTexture, this, "onscreen_control_base.png", 0, 0);
 		this.mOnScreenControlKnobTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mOnScreenControlTexture, this, "onscreen_control_knob.png", 128, 0);
 		this.mOnScreenControlTexture.load();
+		
+		// Load another Player - could be a dinosaur
+		this.mBitmapTextureAtlas = new BitmapTextureAtlas(this.getTextureManager(), 72, 128, TextureOptions.DEFAULT);
+		this.mNpcTextureRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.mBitmapTextureAtlas, this, "player.png", 0, 0, 3, 4);
+		this.mBitmapTextureAtlas.load();
 	}
 
 	@Override
@@ -138,23 +144,6 @@ public class Game extends SimpleBaseGameActivity {
 		mScene.registerUpdateHandler(this.mPhysicsWorld);
 
 		try {
-			// ===========================================================
-			// This could be deleted, since it does not work.
-			// Try to use properties of tmx tile. Idea is to prevent the player from moving beyond the border (rocks).
-//			final TMXLoader tmxLoader = new TMXLoader(this.getAssets(), this.mEngine.getTextureManager(), TextureOptions.BILINEAR_PREMULTIPLYALPHA, this.getVertexBufferObjectManager(), new ITMXTilePropertiesListener() {
-//				@Override
-//				public void onTMXTileWithPropertiesCreated(final TMXTiledMap pTMXTiledMap, final TMXLayer pTMXLayer, final TMXTile pTMXTile, final TMXProperties<TMXTileProperty> pTMXTileProperties) {
-//					/* We are going to count the tiles that have the property "cactus=true" set. */
-//					if(pTMXTileProperties.containsTMXProperty("cactus", "true")) {
-//						Game.this.mCactusCount++;
-//					}
-//					if(pTMXTileProperties.containsTMXProperty("walkable", "false")) {
-//						Toast.makeText(getBaseContext(), "Cannot walk here!", Toast.LENGTH_LONG).show();
-//						System.out.println("Cannot walk here!");
-//					}
-//				}
-//			});
-			// ===========================================================
 
 			final TMXLoader tmxLoader = new TMXLoader(this.getAssets(), this.mEngine.getTextureManager(), TextureOptions.BILINEAR_PREMULTIPLYALPHA, this.getVertexBufferObjectManager(), new ITMXTilePropertiesListener() {
 				@Override
@@ -205,9 +194,14 @@ public class Game extends SimpleBaseGameActivity {
 		player = new AnimatedSprite(centerX, centerY, this.mPlayerTextureRegion, this.getVertexBufferObjectManager());		
 		this.mBoundChaseCamera.setChaseEntity(player);
 		
+		// Create a test NPC and add it to the scene
+		final AnimatedSprite npc = new AnimatedSprite(centerX + 40, centerY, this.mNpcTextureRegion, this.getVertexBufferObjectManager());
+
 		// Connect our player to the PhysicsWorld
-		final FixtureDef playerFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0.5f);
+		final FixtureDef playerFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0.2f);
         mPlayerBody = PhysicsFactory.createBoxBody(this.mPhysicsWorld, player, BodyType.DynamicBody, playerFixtureDef);
+        
+        final Body mNpcBody = PhysicsFactory.createBoxBody(this.mPhysicsWorld, npc, BodyType.KinematicBody, playerFixtureDef);
         this.mPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(player, mPlayerBody, true, false){
                 @Override
                 public void onUpdate(float pSecondsElapsed){
@@ -215,8 +209,15 @@ public class Game extends SimpleBaseGameActivity {
                         mBoundChaseCamera.updateChaseEntity();
                 }
         });
+        this.mPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(npc, mNpcBody, true, false){
+            @Override
+            public void onUpdate(float pSecondsElapsed){
+                    super.onUpdate(pSecondsElapsed);
+            }
+        });        
         mScene.attachChild(player);
-		
+        mScene.attachChild(npc);
+        
 		// Add a PhysicsHandler to the player. Used for different velocities of player when using the control knob.
 		final PhysicsHandler physicsHandler = new PhysicsHandler(player);
 		player.registerUpdateHandler(physicsHandler);
