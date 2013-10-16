@@ -24,3 +24,4 @@ gdbserver
 # IntelliJ / Android Studio:
 idea/workspace.xml
 idea/tasks.xml
+project.properties
