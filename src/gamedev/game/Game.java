@@ -2,31 +2,20 @@ package gamedev.game;
 
 import org.andengine.engine.camera.BoundCamera;
 import org.andengine.engine.camera.hud.controls.AnalogOnScreenControl;
-import org.andengine.engine.camera.hud.controls.BaseOnScreenControl;
 import org.andengine.engine.camera.hud.controls.AnalogOnScreenControl.IAnalogOnScreenControlListener;
-import org.andengine.engine.handler.IUpdateHandler;
+import org.andengine.engine.camera.hud.controls.BaseOnScreenControl;
 import org.andengine.engine.handler.physics.PhysicsHandler;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
-import org.andengine.entity.IEntity;
-import org.andengine.entity.modifier.LoopEntityModifier;
-import org.andengine.entity.modifier.PathModifier;
 import org.andengine.entity.modifier.ScaleModifier;
 import org.andengine.entity.modifier.SequenceEntityModifier;
-import org.andengine.entity.modifier.PathModifier.IPathModifierListener;
-import org.andengine.entity.modifier.PathModifier.Path;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.primitive.vbo.IRectangleVertexBufferObject;
 import org.andengine.entity.scene.Scene;
-import org.andengine.entity.shape.IAreaShape;
-import org.andengine.entity.shape.Shape;
 import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.entity.util.FPSLogger;
-import org.andengine.extension.physics.box2d.FixedStepPhysicsWorld;
-import org.andengine.extension.physics.box2d.PhysicsConnector;
-import org.andengine.extension.physics.box2d.PhysicsFactory;
-import org.andengine.extension.physics.box2d.PhysicsWorld;
+import org.andengine.extension.physics.box2d.*;
 import org.andengine.extension.tmx.TMXLayer;
 import org.andengine.extension.tmx.TMXLoader;
 import org.andengine.extension.tmx.TMXLoader.ITMXTilePropertiesListener;
@@ -37,24 +26,25 @@ import org.andengine.extension.tmx.TMXTile;
 import org.andengine.extension.tmx.TMXTileProperty;
 import org.andengine.extension.tmx.TMXTiledMap;
 import org.andengine.extension.tmx.util.exception.TMXLoadException;
+import org.andengine.opengl.shader.ShaderProgram;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.opengl.texture.region.TiledTextureRegion;
+import org.andengine.opengl.util.GLState;
+import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
-import org.andengine.util.Constants;
+import org.andengine.util.IDisposable.AlreadyDisposedException;
 import org.andengine.util.debug.Debug;
 import org.andengine.util.math.MathUtils;
 
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-
 import android.opengl.GLES20;
 import android.view.Display;
-import android.widget.Toast;
+
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
 /**
  * (c) 2010 Nicolas Gramlich
@@ -68,7 +58,7 @@ public class Game extends SimpleBaseGameActivity {
 	// Constants
 	// ===========================================================
 
-	private static int CAMERA_WIDTH = 600;
+	private static int CAMERA_WIDTH = 800;
 	private static int CAMERA_HEIGHT = 480;
 
 	// ===========================================================
@@ -112,9 +102,9 @@ public class Game extends SimpleBaseGameActivity {
 		// CAMERA_WIDTH = displaySize.x;
 		// CAMERA_HEIGHT = displaySize.y;
 		
-		Display display = getWindowManager().getDefaultDisplay(); 
-		CAMERA_WIDTH = display.getWidth();
-		CAMERA_HEIGHT = display.getHeight();
+//		Display display = getWindowManager().getDefaultDisplay(); 
+//		CAMERA_WIDTH = display.getWidth();
+//		CAMERA_HEIGHT = display.getHeight();
 		
 		this.mBoundChaseCamera = new BoundCamera(0, 0, CAMERA_WIDTH, CAMERA_HEIGHT);
 
@@ -141,30 +131,41 @@ public class Game extends SimpleBaseGameActivity {
 	public Scene onCreateScene() {
 		this.mEngine.registerUpdateHandler(new FPSLogger());
 		
-		mScene = new Scene();
+		mScene = new Scene();		
 		
 		// Create physics world
-        // this.mPhysicsWorld = new FixedStepPhysicsWorld(30, new Vector2(0, 0), false, 8, 1);
-		// mScene.registerUpdateHandler(this.mPhysicsWorld);
+        this.mPhysicsWorld = new FixedStepPhysicsWorld(30, new Vector2(0, 0), false, 8, 1);
+		mScene.registerUpdateHandler(this.mPhysicsWorld);
 
 		try {
 			// ===========================================================
 			// This could be deleted, since it does not work.
 			// Try to use properties of tmx tile. Idea is to prevent the player from moving beyond the border (rocks).
-			final TMXLoader tmxLoader = new TMXLoader(this.getAssets(), this.mEngine.getTextureManager(), TextureOptions.BILINEAR_PREMULTIPLYALPHA, this.getVertexBufferObjectManager(), new ITMXTilePropertiesListener() {
-				@Override
-				public void onTMXTileWithPropertiesCreated(final TMXTiledMap pTMXTiledMap, final TMXLayer pTMXLayer, final TMXTile pTMXTile, final TMXProperties<TMXTileProperty> pTMXTileProperties) {
+//			final TMXLoader tmxLoader = new TMXLoader(this.getAssets(), this.mEngine.getTextureManager(), TextureOptions.BILINEAR_PREMULTIPLYALPHA, this.getVertexBufferObjectManager(), new ITMXTilePropertiesListener() {
+//				@Override
+//				public void onTMXTileWithPropertiesCreated(final TMXTiledMap pTMXTiledMap, final TMXLayer pTMXLayer, final TMXTile pTMXTile, final TMXProperties<TMXTileProperty> pTMXTileProperties) {
 //					/* We are going to count the tiles that have the property "cactus=true" set. */
 //					if(pTMXTileProperties.containsTMXProperty("cactus", "true")) {
 //						Game.this.mCactusCount++;
 //					}
-					if(pTMXTileProperties.containsTMXProperty("walkable", "false")) {
-						Toast.makeText(getBaseContext(), "Cannot walk here!", Toast.LENGTH_LONG).show();
-						System.out.println("Cannot walk here!");
-					}
+//					if(pTMXTileProperties.containsTMXProperty("walkable", "false")) {
+//						Toast.makeText(getBaseContext(), "Cannot walk here!", Toast.LENGTH_LONG).show();
+//						System.out.println("Cannot walk here!");
+//					}
+//				}
+//			});
+			// ===========================================================
+
+			final TMXLoader tmxLoader = new TMXLoader(this.getAssets(), this.mEngine.getTextureManager(), TextureOptions.BILINEAR_PREMULTIPLYALPHA, this.getVertexBufferObjectManager(), new ITMXTilePropertiesListener() {
+				@Override
+				public void onTMXTileWithPropertiesCreated(final TMXTiledMap pTMXTiledMap, final TMXLayer pTMXLayer, final TMXTile pTMXTile, final TMXProperties<TMXTileProperty> pTMXTileProperties) {
+					/* We are going to count the tiles that have the property "cactus=true" set. */
+//					if(pTMXTileProperties.containsTMXProperty("cactus", "true")) {
+//						Game.this.mCactusCount++;
+//					}
 				}
 			});
-			// ===========================================================
+			
 			
 			// Load the TMXTiledMap from tmx asset.
 			this.mTMXTiledMap = tmxLoader.loadFromAsset("tmx/Game_Map_Level_1.tmx");
@@ -186,21 +187,34 @@ public class Game extends SimpleBaseGameActivity {
 		// Attach other layers from the TMXTiledMap, if it has more than one.
 		for (int i = 1; i < this.mTMXTiledMap.getTMXLayers().size(); i++) {
 			TMXLayer tmxLayer = this.mTMXTiledMap.getTMXLayers().get(i);
-			mScene.attachChild(tmxLayer);
+			// Only add non-object layers
+			if (!tmxLayer.getTMXLayerProperties().containsTMXProperty("walkable", "false")) mScene.attachChild(tmxLayer);
 		}
 		
-		/* Make the camera not exceed the bounds of the TMXEntity. */
+		this.createUnwalkableObjects(this.mTMXTiledMap);
+		
+		// Make the camera not exceed the bounds of the TMXEntity.
 		this.mBoundChaseCamera.setBounds(0, 0, tmxLayerZero.getWidth(), tmxLayerZero.getHeight());
 		this.mBoundChaseCamera.setBoundsEnabled(true);
 
-		/* Calculate the coordinates for the face, so its centered on the camera. */
+		// Calculate the coordinates for the face, so its centered on the camera.
 		final float centerX = (CAMERA_WIDTH - this.mPlayerTextureRegion.getWidth()) / 2;
 		final float centerY = (CAMERA_HEIGHT - this.mPlayerTextureRegion.getHeight()) / 2;
 
-		/* Create the player sprite and add it to the scene. */
+		// Create the player sprite and add it to the scene.
 		player = new AnimatedSprite(centerX, centerY, this.mPlayerTextureRegion, this.getVertexBufferObjectManager());		
 		this.mBoundChaseCamera.setChaseEntity(player);
-		 
+		
+		// Connect our player to the PhysicsWorld
+		final FixtureDef playerFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0.5f);
+        mPlayerBody = PhysicsFactory.createBoxBody(this.mPhysicsWorld, player, BodyType.DynamicBody, playerFixtureDef);
+        this.mPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(player, mPlayerBody, true, false){
+                @Override
+                public void onUpdate(float pSecondsElapsed){
+                        super.onUpdate(pSecondsElapsed);
+                        mBoundChaseCamera.updateChaseEntity();
+                }
+        });
         mScene.attachChild(player);
 		
 		// Add a PhysicsHandler to the player. Used for different velocities of player when using the control knob.
@@ -211,7 +225,8 @@ public class Game extends SimpleBaseGameActivity {
 			@Override
 			public void onControlChange(final BaseOnScreenControl pBaseOnScreenControl, final float pValueX, final float pValueY) {
 				// Velocity could be used to check if the animation of the player should be walking or running.
-				physicsHandler.setVelocity(pValueX * 100, pValueY * 100);
+				//physicsHandler.setVelocity(pValueX * 200, pValueY * 200);
+				mPlayerBody.setLinearVelocity(pValueX * 10,  pValueY * 10);
 				
 				// Compute direction in degree (from -180° to +180°).
 				float degree = MathUtils.radToDeg((float)Math.atan2(pValueX, pValueY));
@@ -305,5 +320,22 @@ public class Game extends SimpleBaseGameActivity {
 
 		return mScene;
 	}
+	
+	private void createUnwalkableObjects(TMXTiledMap map){
+        // Loop through the object groups
+         for(final TMXObjectGroup group: this.mTMXTiledMap.getTMXObjectGroups()) {
+                 if(group.getTMXObjectGroupProperties().containsTMXProperty("walkable", "false")){
+                         // This is our "wall" layer. Create the boxes from it
+                         for(final TMXObject object : group.getTMXObjects()) {
+                                final Rectangle rect = new Rectangle((float)object.getX(), (float)object.getY(),(float)object.getWidth(), (float)object.getHeight(), this.getVertexBufferObjectManager());
+                        	 	final FixtureDef boxFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 1f);
+                                PhysicsFactory.createBoxBody(this.mPhysicsWorld, rect, BodyType.StaticBody, boxFixtureDef);
+                                rect.setVisible(false);
+                                mScene.attachChild(rect);
+                         }
+                 }
+         }
+}
+	
 
 }
