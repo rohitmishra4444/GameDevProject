@@ -143,8 +143,9 @@ public class Game extends SimpleBaseGameActivity {
         this.mPhysicsWorld = new FixedStepPhysicsWorld(30, new Vector2(0, 0), false, 8, 1);
 		mScene.registerUpdateHandler(this.mPhysicsWorld);
 
+		
+		//==============================TMX_MAP=======================================
 		try {
-
 			final TMXLoader tmxLoader = new TMXLoader(this.getAssets(), this.mEngine.getTextureManager(), TextureOptions.BILINEAR_PREMULTIPLYALPHA, this.getVertexBufferObjectManager(), new ITMXTilePropertiesListener() {
 				@Override
 				public void onTMXTileWithPropertiesCreated(final TMXTiledMap pTMXTiledMap, final TMXLayer pTMXLayer, final TMXTile pTMXTile, final TMXProperties<TMXTileProperty> pTMXTileProperties) {
@@ -154,8 +155,7 @@ public class Game extends SimpleBaseGameActivity {
 //					}
 				}
 			});
-			
-			
+				
 			// Load the TMXTiledMap from tmx asset.
 			this.mTMXTiledMap = tmxLoader.loadFromAsset("tmx/Game_Map_Level_1.tmx");
 			
@@ -181,6 +181,8 @@ public class Game extends SimpleBaseGameActivity {
 		}
 		
 		this.createUnwalkableObjects(this.mTMXTiledMap);
+		//==========================END_TMX_MAP========================================
+		
 		
 		// Make the camera not exceed the bounds of the TMXEntity.
 		this.mBoundChaseCamera.setBounds(0, 0, tmxLayerZero.getWidth(), tmxLayerZero.getHeight());
@@ -190,18 +192,16 @@ public class Game extends SimpleBaseGameActivity {
 		final float centerX = (CAMERA_WIDTH - this.mPlayerTextureRegion.getWidth()) / 2;
 		final float centerY = (CAMERA_HEIGHT - this.mPlayerTextureRegion.getHeight()) / 2;
 
+		
+		//==============================PLAYER========================================
 		// Create the player sprite and add it to the scene.
 		player = new AnimatedSprite(centerX, centerY, this.mPlayerTextureRegion, this.getVertexBufferObjectManager());		
 		this.mBoundChaseCamera.setChaseEntity(player);
 		
-		// Create a test NPC and add it to the scene
-		final AnimatedSprite npc = new AnimatedSprite(centerX + 40, centerY, this.mNpcTextureRegion, this.getVertexBufferObjectManager());
-
 		// Connect our player to the PhysicsWorld
 		final FixtureDef playerFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0.2f);
         mPlayerBody = PhysicsFactory.createBoxBody(this.mPhysicsWorld, player, BodyType.DynamicBody, playerFixtureDef);
         
-        final Body mNpcBody = PhysicsFactory.createBoxBody(this.mPhysicsWorld, npc, BodyType.KinematicBody, playerFixtureDef);
         this.mPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(player, mPlayerBody, true, false){
                 @Override
                 public void onUpdate(float pSecondsElapsed){
@@ -209,25 +209,38 @@ public class Game extends SimpleBaseGameActivity {
                         mBoundChaseCamera.updateChaseEntity();
                 }
         });
+        
+		// Add a PhysicsHandler to the player. Used for different velocities of player when using the control knob.
+		final PhysicsHandler physicsHandler = new PhysicsHandler(player);
+		player.registerUpdateHandler(physicsHandler);
+
+		mScene.attachChild(player);
+        //================================END_PLAYER==================================
+        
+		
+        //=================================NPC========================================
+		// Create a test NPC and add it to the scene
+		final AnimatedSprite npc = new AnimatedSprite(centerX + 40, centerY, this.mNpcTextureRegion, this.getVertexBufferObjectManager());
+
+        final Body mNpcBody = PhysicsFactory.createBoxBody(this.mPhysicsWorld, npc, BodyType.KinematicBody, playerFixtureDef);
         this.mPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(npc, mNpcBody, true, false){
             @Override
             public void onUpdate(float pSecondsElapsed){
                     super.onUpdate(pSecondsElapsed);
             }
         });        
-        mScene.attachChild(player);
-        mScene.attachChild(npc);
         
-		// Add a PhysicsHandler to the player. Used for different velocities of player when using the control knob.
-		final PhysicsHandler physicsHandler = new PhysicsHandler(player);
-		player.registerUpdateHandler(physicsHandler);
-
+        mScene.attachChild(npc);
+        //==================================END_NPC===================================
+        
+        
+        //=================================CONTROLS===================================
 		final AnalogOnScreenControl analogOnScreenControl = new AnalogOnScreenControl(0, CAMERA_HEIGHT - this.mOnScreenControlBaseTextureRegion.getHeight(), this.mBoundChaseCamera, this.mOnScreenControlBaseTextureRegion, this.mOnScreenControlKnobTextureRegion, 0.1f, 200, this.getVertexBufferObjectManager(), new IAnalogOnScreenControlListener() {
 			@Override
 			public void onControlChange(final BaseOnScreenControl pBaseOnScreenControl, final float pValueX, final float pValueY) {
 				// Velocity could be used to check if the animation of the player should be walking or running.
-				//physicsHandler.setVelocity(pValueX * 200, pValueY * 200);
-				mPlayerBody.setLinearVelocity(pValueX * 10,  pValueY * 10);
+				physicsHandler.setVelocity(pValueX * 5, pValueY * 5 );
+				mPlayerBody.setLinearVelocity(physicsHandler.getVelocityX(),  physicsHandler.getVelocityY());
 				
 				// Compute direction in degree (from -180° to +180°).
 				float degree = MathUtils.radToDeg((float)Math.atan2(pValueX, pValueY));
@@ -241,28 +254,28 @@ public class Game extends SimpleBaseGameActivity {
 				if (!player.isAnimationRunning()) {
 					if (-22.5 <= degree && degree <= 22.5 && degree != 0) {
 						// Direction: S
-						player.animate(new long[]{50, 50, 50, 50, 50, 50, 50, 50}, 32, 39, false);
+						player.animate(new long[]{30, 30, 30, 30, 30, 30, 30, 30}, 32, 39, false);
 					} else if (22.5 <= degree && degree <= 67.5) {
 						// Direction: SE
-						player.animate(new long[]{50, 50, 50, 50, 50, 50, 50, 50}, 40, 47, false);
+						player.animate(new long[]{30, 30, 30, 30, 30, 30, 30, 30}, 40, 47, false);
 					} else if (67.5 <= degree && degree <= 112.5) {
 						// Direction: E
-						player.animate(new long[]{50, 50, 50, 50, 50, 50, 50, 50}, 0, 7, false);
+						player.animate(new long[]{30, 30, 30, 30, 30, 30, 30, 30}, 0, 7, false);
 					} else if (112.5 <= degree && degree <= 157.5) {
 						// Direction: NE
-						player.animate(new long[]{50, 50, 50, 50, 50, 50, 50, 50}, 16, 23, false);
+						player.animate(new long[]{30, 30, 30, 30, 30, 30, 30, 30}, 16, 23, false);
 					} else if (157.5 <= degree || degree <= -157.5) {
 						// Direction: N
-						player.animate(new long[]{50, 50, 50, 50, 50, 50, 50, 50}, 8, 15, false);
+						player.animate(new long[]{30, 30, 30, 30, 30, 30, 30, 30}, 8, 15, false);
 					} else if (-157.5 <= degree && degree <= -112.5) {
 						// Direction: NW
-						player.animate(new long[]{50, 50, 50, 50, 50, 50, 50, 50}, 24, 31, false);
+						player.animate(new long[]{30, 30, 30, 30, 30, 30, 30, 30}, 24, 31, false);
 					} else if (-112.5 <= degree && degree <= -67.5) {
 						// Direction: W
-						player.animate(new long[]{50, 50, 50, 50, 50, 50, 50, 50}, 56, 63, false);
+						player.animate(new long[]{30, 30, 30, 30, 30, 30, 30, 30}, 56, 63, false);
 					} else if (-67.5 <= degree && degree <= -22.5) {
 						// Direction: SW
-						player.animate(new long[]{50, 50, 50, 50, 50, 50, 50, 50}, 48, 55, false);
+						player.animate(new long[]{30, 30, 30, 30, 30, 30, 30, 30}, 48, 55, false);
 					}
 				}
 			}
@@ -282,6 +295,9 @@ public class Game extends SimpleBaseGameActivity {
 		analogOnScreenControl.refreshControlKnobPosition();
 
 		mScene.setChildScene(analogOnScreenControl);
+		//===============================END_CONTROLS================================
+		
+		
 		
 		/* Now we are going to create a rectangle that will  always highlight the tile below the feet of the pEntity. */
 //		final Rectangle currentTileRectangle = new Rectangle(0, 0, this.mTMXTiledMap.getTileWidth(), this.mTMXTiledMap.getTileHeight(), this.getVertexBufferObjectManager());
