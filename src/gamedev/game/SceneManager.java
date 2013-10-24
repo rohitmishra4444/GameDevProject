@@ -1,11 +1,15 @@
 package gamedev.game;
 
 import org.andengine.engine.Engine;
+import org.andengine.engine.handler.timer.ITimerCallback;
+import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.ui.IGameInterface.OnCreateSceneCallback;
 
+import gamedev.levels.Level1;
 import gamedev.scenes.BaseScene;
 import gamedev.scenes.LoadingScene;
 import gamedev.scenes.MainMenuScene;
+import gamedev.scenes.SplashScene;
 
 public class SceneManager
 {
@@ -15,7 +19,7 @@ public class SceneManager
     
     private BaseScene splashScene;
     private BaseScene menuScene;
-    private BaseScene gameScene;
+    private BaseScene levelScene;
     private BaseScene loadingScene;
     
     //---------------------------------------------
@@ -57,7 +61,7 @@ public class SceneManager
                 setScene(menuScene);
                 break;
             case SCENE_GAME:
-                setScene(gameScene);
+                setScene(levelScene);
                 break;
             case SCENE_SPLASH:
                 setScene(splashScene);
@@ -69,30 +73,52 @@ public class SceneManager
                 break;
         }
     }
+
     
-    /*
-     * Create MainMenu Scene
-     */
+    //---------------------------------------------
+    // Creating and Disposing of the different scenes
+    //---------------------------------------------
+
     public void createMenuScene()
     {
-    	ResourcesManager.getInstance().loadMenuResources();
+    	//ResourcesManager.getInstance().loadMenuResources();
         menuScene = new MainMenuScene();
         loadingScene = new LoadingScene();
         SceneManager.getInstance().setScene(menuScene);
-        disposeSplashScene();    }
-    
-    
-    /**
-     * Create SplashScreen Scene
-     * @param pOnCreateSceneCallback
-     */
-	public void createSplashScene(OnCreateSceneCallback pOnCreateSceneCallback)
-    {
-//        ResourcesManager.getInstance().loadSplashScreen();
-//        splashScene = new SplashScene();
-//        currentScene = splashScene;
-//        pOnCreateSceneCallback.onCreateSceneFinished(splashScene);
+        disposeSplashScene();    
     }
+    
+    public void createSplashScene(OnCreateSceneCallback pOnCreateSceneCallback)
+    {
+        //ResourcesManager.getInstance().loadSplashScreen();
+        splashScene = new SplashScene();
+        currentScene = splashScene;
+        pOnCreateSceneCallback.onCreateSceneFinished(splashScene);
+    }
+    
+    private void disposeSplashScene()
+    {
+//        ResourcesManager.getInstance().unloadSplashScreen();
+        splashScene.disposeScene();
+        splashScene = null;
+    }
+    
+    public void createLevelScene(final Engine mEngine, int level)
+    {
+        setScene(loadingScene);
+        //ResourcesManager.getInstance().unloadMenuTextures();
+        mEngine.registerUpdateHandler(new TimerHandler(0.1f, new ITimerCallback() 
+        {
+            public void onTimePassed(final TimerHandler pTimerHandler) 
+            {
+                mEngine.unregisterUpdateHandler(pTimerHandler);
+                //ResourcesManager.getInstance().loadGameResources();
+               // levelScene = new Level1(); //TODO Load level dynamic based on provided level variable
+             //   setScene(levelScene);
+            }
+        }));
+    }
+
     
     //---------------------------------------------
     // GETTERS AND SETTERS
@@ -113,10 +139,5 @@ public class SceneManager
         return currentScene;
     }
     
-    private void disposeSplashScene() {
-    	ResourcesManager.getInstance().unloadSplashScreen();
-        splashScene.disposeScene();
-        splashScene = null;		
-	}
 
 }

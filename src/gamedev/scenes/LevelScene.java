@@ -1,6 +1,7 @@
 package gamedev.scenes;
 
 import gamedev.game.GameActivity;
+import gamedev.game.ResourcesManager;
 import gamedev.game.SceneManager.SceneType;
 import gamedev.objects.Player;
 import gamedev.objects.Player.PlayerState;
@@ -20,6 +21,7 @@ import org.andengine.extension.tmx.TMXLoader.ITMXTilePropertiesListener;
 import org.andengine.extension.tmx.util.exception.TMXLoadException;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
+import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.util.debug.Debug;
 import org.andengine.util.math.MathUtils;
@@ -34,7 +36,6 @@ import com.badlogic.gdx.math.Vector2;
  */
 public class LevelScene extends BaseScene {
 
-	public static PhysicsWorld physicsWorld;
 
 	// TMX Map containing the Level
 	protected TMXTiledMap mTMXTiledMap;
@@ -48,16 +49,22 @@ public class LevelScene extends BaseScene {
 
 	// Player. Each level has to create the Player and its position in the world
 	protected Player player;
-
-	public LevelScene() {
+	
+	
+	public LevelScene(String tmxFileName) {
 		super();
+		this.player = new Player();
+		this.tmxFileName = tmxFileName;
+		this.createMap();
+		this.connectPhysics();
+		this.createControls();
+		this.attachChild(this.player);
 	}
-		
+	
+	
 	@Override
 	public void createScene() {
-		createMap();
-		createPhysics();
-		createControls();
+		
 	}
 
 	@Override
@@ -76,18 +83,16 @@ public class LevelScene extends BaseScene {
 
 	}
 
-	protected void createPhysics() {
-		LevelScene.physicsWorld = new FixedStepPhysicsWorld(30, new Vector2(0, 0),
-				false, 8, 1);
-		this.registerUpdateHandler(physicsWorld);
+	protected void connectPhysics() {
+		this.registerUpdateHandler(this.resourcesManager.physicsWorld);
 	}
 	
 	protected void createMap() {
 		try {
-			final TMXLoader tmxLoader = new TMXLoader(this.resourcesManager.activity.getAssets(),
-					this.resourcesManager.engine.getTextureManager(),
+			final TMXLoader tmxLoader = new TMXLoader(this.activity.getAssets(),
+					this.engine.getTextureManager(),
 					TextureOptions.BILINEAR_PREMULTIPLYALPHA,
-					this.resourcesManager.vbom,
+					this.vbom,
 					new ITMXTilePropertiesListener() {
 						@Override
 						public void onTMXTileWithPropertiesCreated(
@@ -99,33 +104,45 @@ public class LevelScene extends BaseScene {
 					});
 
 			// Load the TMXTiledMap from tmx asset.
-			this.mTMXTiledMap = tmxLoader
-					.loadFromAsset("tmx/" + this.tmxFileName);
+			this.mTMXTiledMap = tmxLoader.loadFromAsset("tmx/" + this.tmxFileName);
 
 		} catch (final TMXLoadException e) {
 			Debug.e(e);
 		}
-
-
+		
+		
+		TMXLayer tmxLayerZero = null;
+		
 		// Attach other layers from the TMXTiledMap, if it has more than one.
 		for (int i=0; i<this.mTMXTiledMap.getTMXLayers().size(); i++) {
 			TMXLayer tmxLayer = this.mTMXTiledMap.getTMXLayers().get(i);
+			if (i == 0) tmxLayerZero = tmxLayer;
 			// Only add non-object layers
 			if (!tmxLayer.getTMXLayerProperties().containsTMXProperty(
 					"walkable", "false"))
 				this.attachChild(tmxLayer);
 		}
+		
+		this.camera.setBounds(0, 0, tmxLayerZero.getWidth(),
+				tmxLayerZero.getHeight());
+		this.camera.setBoundsEnabled(true);
 	
 	}
 		
 	protected void createControls() {
+		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
+		this.controlTexture = new BitmapTextureAtlas(
+				this.textureManager, 256, 128, TextureOptions.BILINEAR);
+		this.controlBaseTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.controlTexture, this.activity, "onscreen_control_base.png", 0, 0);
+		this.controlKnobTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.controlTexture, this.activity, "onscreen_control_knob.png", 128, 0);
+		this.controlTexture.load();
+		
 		this.pad = new AnalogOnScreenControl(0, GameActivity.HEIGHT
 				- this.controlBaseTextureRegion.getHeight(), this.camera,
 				this.controlBaseTextureRegion, this.controlKnobTextureRegion,
 				0.1f, 200, this.vbom, createControlListener(this.player));
 
-		this.pad.getControlBase().setBlendFunction(
-				GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
+		this.pad.getControlBase().setBlendFunction(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
 		this.pad.getControlBase().setAlpha(0.5f);
 		this.pad.getControlBase().setScaleCenter(0, 128);
 		this.pad.getControlBase().setScale(1.25f);
@@ -141,17 +158,8 @@ public class LevelScene extends BaseScene {
 			public void onControlChange(
 					final BaseOnScreenControl pBaseOnScreenControl,
 					final float pValueX, final float pValueY) {
-				// Velocity could be used to check if the animation of
-				// the player should be walking or running.
 				
-				//LevelScene.setVelocity(pValueX * 5, pValueY * 5);
-				//mPlayerBody.setLinearVelocity(
-				//		physicsHandler.getVelocityX(),
-				//		physicsHandler.getVelocityY());
-				
-				//player.getPhysicsHandler().setVelocity(pValueX * 5, pValueY * 5);
-//				player.getBody().setLinearVelocity(pValueX * 5, pValueY * 5);
-				Player.body.setLinearVelocity(pValueX * 5, pValueY * 5);
+				player.playerBody.setLinearVelocity(pValueX * 5, pValueY * 5);
 				
 				// Compute direction in degree (from -180° to +180°).
 				float degree = MathUtils.radToDeg((float) Math.atan2(

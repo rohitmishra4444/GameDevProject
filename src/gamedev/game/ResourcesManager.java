@@ -1,8 +1,14 @@
 package gamedev.game;
 
+import gamedev.scenes.LevelScene;
+
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.BoundCamera;
 import org.andengine.engine.camera.Camera;
+import org.andengine.engine.handler.physics.PhysicsHandler;
+import org.andengine.extension.physics.box2d.FixedStepPhysicsWorld;
+import org.andengine.extension.physics.box2d.PhysicsFactory;
+import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
@@ -11,6 +17,10 @@ import org.andengine.opengl.texture.atlas.bitmap.BuildableBitmapTextureAtlas;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.ui.activity.BaseActivity;
+
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
 /**
  * @author Mateusz Mysliwiec
@@ -35,14 +45,37 @@ public class ResourcesManager
     // TEXTURES & TEXTURE REGIONS
     //---------------------------------------------
 
-    public BitmapTextureAtlas gameTextureAtlas;
+    public BitmapTextureAtlas playerAtlas;
     public ITiledTextureRegion playerRegion;
+    
+    
+    //---------------------------------------------
+    // Physic
+    //---------------------------------------------
+    
+	public PhysicsWorld physicsWorld;
 
     
     //---------------------------------------------
     // CLASS LOGIC
     //---------------------------------------------
+    
+    public void loadPlayerGraphics() {
+    	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
 
+    	this.playerAtlas = new BitmapTextureAtlas(
+				getInstance().textureManager, 768, 2400, TextureOptions.DEFAULT);
+
+    	this.playerRegion = BitmapTextureAtlasTextureRegionFactory
+				.createTiledFromAsset(this.playerAtlas, getInstance().activity,
+						"player_sprite.png", 0, 0, 8, 25);
+    	this.playerAtlas.load();
+    }
+    
+    public void loadPhysics() {
+    	this.physicsWorld = new FixedStepPhysicsWorld(30, new Vector2(0, 0),false, 8, 1);
+    }
+    
     public void loadMenuResources()
     {
         loadMenuGraphics();
@@ -69,14 +102,6 @@ public class ResourcesManager
     private void loadGameGraphics()
     {
 
-		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
-
-    	this.gameTextureAtlas = new BitmapTextureAtlas(
-				getInstance().textureManager, 982, 688, TextureOptions.DEFAULT);
-
-    	this.playerRegion = BitmapTextureAtlasTextureRegionFactory
-				.createTiledFromAsset(this.gameTextureAtlas, activity,
-						"caveman_walking.png", 0, 0, 10, 7);
     }
     
     private void loadGameFonts()
@@ -115,6 +140,10 @@ public class ResourcesManager
         getInstance().camera = camera;
         getInstance().vbom = vbom;
         getInstance().textureManager = textureManager;
+        
+        // We also load physics and player.. //TODO Move out from here, since a Menu scene does not require them in memory
+        getInstance().loadPhysics();
+        getInstance().loadPlayerGraphics();
     }
     
     //---------------------------------------------

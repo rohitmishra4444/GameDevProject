@@ -6,6 +6,8 @@ import java.io.IOException;
 import org.andengine.engine.Engine;
 import org.andengine.engine.LimitedFPSEngine;
 import org.andengine.engine.camera.BoundCamera;
+import org.andengine.engine.handler.timer.ITimerCallback;
+import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.WakeLockOptions;
@@ -35,32 +37,50 @@ public class GameActivity extends BaseGameActivity
 		return new LimitedFPSEngine(pEngineOptions, 60);
 	}
 	
+	@Override
 	public EngineOptions onCreateEngineOptions()
     {
 		 this.camera = new BoundCamera(0, 0, WIDTH, HEIGHT);
 		 EngineOptions engineOptions = new EngineOptions(true, ScreenOrientation.LANDSCAPE_FIXED, new RatioResolutionPolicy(WIDTH, HEIGHT), this.camera);
 		 engineOptions.getAudioOptions().setNeedsMusic(true).setNeedsSound(true);
 		 engineOptions.setWakeLockOptions(WakeLockOptions.SCREEN_ON);
+		 System.out.println("EngineOptions created");
 		 return engineOptions;
     }
-
+	
+	@Override
     public void onCreateResources(OnCreateResourcesCallback pOnCreateResourcesCallback) throws IOException
     {
     	ResourcesManager.prepareManager(this.mEngine, this, this.camera, this.getVertexBufferObjectManager(), this.getTextureManager());
         this.resourcesManager = ResourcesManager.getInstance();
+		System.out.println("Rescources created");
         pOnCreateResourcesCallback.onCreateResourcesFinished();
     }
     
 	@Override
 	public void onCreateScene(OnCreateSceneCallback pOnCreateSceneCallback)
 			throws Exception {
-        pOnCreateSceneCallback.onCreateSceneFinished(new Level1());		
+		System.out.println("Scene created");
+		SceneManager.getInstance().createSplashScene(pOnCreateSceneCallback);
 	}
     
     @Override
 	public void onPopulateScene(Scene pScene,
 			OnPopulateSceneCallback pOnPopulateSceneCallback) throws Exception {
-		// TODO Auto-generated method stub
+    	
+    	System.out.println("Populate Scene");
+    	mEngine.registerUpdateHandler(new TimerHandler(2f, new ITimerCallback() 
+        {
+                public void onTimePassed(final TimerHandler pTimerHandler) 
+                {
+                    mEngine.unregisterUpdateHandler(pTimerHandler);
+                    // load menu resources, create menu scene
+                    // set menu scene using scene manager
+                    // disposeSplashScene();
+                    // READ NEXT ARTICLE FOR THIS PART.
+                }
+        }));
+        pOnPopulateSceneCallback.onPopulateSceneFinished();
 		
 	}
 	
