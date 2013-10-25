@@ -7,10 +7,6 @@ import gamedev.game.SceneManager.SceneType;
 
 public class SplashScene extends BaseScene {
 
-	@Override
-	public void createScene() {
-		this.setBackground(new Background(new Color(1, 1, 1)));
-	}
 
 	@Override
 	public void onBackKeyPressed() {

@@ -1,5 +1,6 @@
 package gamedev.scenes;
 
+import gamedev.game.Direction;
 import gamedev.game.GameActivity;
 import gamedev.game.ResourcesManager;
 import gamedev.game.SceneManager.SceneType;
@@ -61,11 +62,6 @@ public class LevelScene extends BaseScene {
 		this.attachChild(this.player);
 	}
 	
-	
-	@Override
-	public void createScene() {
-		
-	}
 
 	@Override
 	public void onBackKeyPressed() {
@@ -159,47 +155,25 @@ public class LevelScene extends BaseScene {
 					final BaseOnScreenControl pBaseOnScreenControl,
 					final float pValueX, final float pValueY) {
 				
-				player.playerBody.setLinearVelocity(pValueX * 5, pValueY * 5);
 				
 				// Compute direction in degree (from -180° to +180°).
 				float degree = MathUtils.radToDeg((float) Math.atan2(
 						pValueX, pValueY));
-
-				// Stop animation if the controls are not used.
-				if (player.isAnimationRunning() && degree == 0) {
-					player.stopAnimation();
+				
+				// Set the direction and State
+				// TODO Handle the velocity on a method in the Player class?
+				player.setDirection(Direction.getDirectionFromDegree(degree));
+				if (degree == 0) {
+					player.setState(PlayerState.IDLE);
+					player.playerBody.setLinearVelocity(0, 0);
+				} else if (Math.abs(pValueX) > 0.75 || Math.abs(pValueY) > 0.75) {
+					player.setState(PlayerState.RUNNING);
+					player.playerBody.setLinearVelocity(pValueX * 7, pValueY * 7);
+				} else {
+					player.setState(PlayerState.WALKING);
+					player.playerBody.setLinearVelocity(pValueX * 5, pValueY * 5);					
 				}
-
-				// Animate the player with respect to one of the 8
-				// possible directions.
-				if (!player.isAnimationRunning()) {
-					if (-22.5 <= degree && degree <= 22.5
-							&& degree != 0) {
-						// Direction: S
-						player.setState(PlayerState.WALKING_S);
-					} else if (22.5 <= degree && degree <= 67.5) {
-						// Direction: SE
-						player.setState(PlayerState.WALKING_SE);
-					} else if (67.5 <= degree && degree <= 112.5) {
-						// Direction: E
-						player.setState(PlayerState.WALKING_E);
-					} else if (112.5 <= degree && degree <= 157.5) {
-						// Direction: NE
-						player.setState(PlayerState.WALKING_NE);
-					} else if (157.5 <= degree || degree <= -157.5) {
-						// Direction: N
-						player.setState(PlayerState.WALKING_N);
-					} else if (-157.5 <= degree && degree <= -112.5) {
-						// Direction: NW
-						player.setState(PlayerState.WALKING_NW);
-					} else if (-112.5 <= degree && degree <= -67.5) {
-						// Direction: W
-						player.setState(PlayerState.WALKING_W);
-					} else if (-67.5 <= degree && degree <= -22.5) {
-						// Direction: SW
-						player.setState(PlayerState.WALKING_SW);
-					}
-				}
+				
 			}
 
 			@Override

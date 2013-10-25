@@ -2,6 +2,7 @@ package gamedev.objects;
 
 import java.util.Arrays;
 
+import gamedev.game.Direction;
 import gamedev.game.ResourcesManager;
 import org.andengine.engine.camera.BoundCamera;
 import org.andengine.engine.handler.physics.PhysicsHandler;
@@ -13,45 +14,23 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
 public class Player extends AnimatedSprite {
-
-	protected ResourcesManager resourcesManager;
-	protected PlayerState currentState = PlayerState.WALKING_N;
+	
+	public final static long[] ANIMATION_DURATION = { 30, 30, 30, 30, 30, 30, 30, 30};
+	
 	public Body playerBody;
 	public PhysicsHandler physicsHandler;
+
+	protected ResourcesManager resourcesManager;
+	protected PlayerState currentState = PlayerState.IDLE;
+	
+	protected int direction = Direction.NORTH;
+	protected int life = 100;
 	
 	public enum PlayerState {
-		WALKING_W,
-		WALKING_SW,
-		WALKING_SE,
-		WALKING_S,
-		WALKING_NW,
-		WALKING_NE,
-		WALKING_N,
-		WALKING_E,
-//		IDLE_SE,
-//		IDLE_E,
-//		IDLE_NE,
-//		IDLE_N,
-//		IDLE_NW,
-//		IDLE_W,
-//		IDLE_SW,
-//		IDLE_S,
-		RUNNING_W,
-		RUNNING_SW,
-		RUNNING_SE,
-		RUNNING_S,
-		RUNNING_NW,
-		RUNNING_NE,
-		RUNNING_N,
-		RUNNING_E,
-		HIT_W,
-		HIT_SW,
-		HIT_SE,
-		HIT_S,
-		HIT_NW,
-		HIT_NE,
-		HIT_N,
-		HIT_E,
+		IDLE,
+		WALKING,
+		RUNNING,
+		HIT,
 	}
 	
 	/**
@@ -66,7 +45,6 @@ public class Player extends AnimatedSprite {
 		this.createAndConnectPhysics(this.resourcesManager.camera, this.resourcesManager.physicsWorld);
 	}
 	
-	//TODO Remove... need to find another way. where to initialize physics? ResourcesManager?
 	public Player() {
 		super(0, 0, ResourcesManager.getInstance().playerRegion, ResourcesManager.getInstance().vbom);
 		this.resourcesManager = ResourcesManager.getInstance();
@@ -77,9 +55,27 @@ public class Player extends AnimatedSprite {
 	
 	public void setState(PlayerState state) {
 		this.currentState = state;
-		// Display animation based on current State
-		int index = Arrays.asList(PlayerState.values()).indexOf(state);
-		this.animate(new long[] { 30, 30, 30, 30, 30, 30, 30, 30 }, index * 8, index * 8 + 7, false);
+		// Display animation based on current State and direction
+		if (state == PlayerState.IDLE) {
+			this.stopAnimation();
+			return;
+		}
+		if (!this.isAnimationRunning()) {
+			int rowIndex = 0;
+			if (state == PlayerState.WALKING) rowIndex = 0;
+			if (state == PlayerState.RUNNING) rowIndex = 9;
+			if (state == PlayerState.HIT) rowIndex = 17;
+			int startTile = rowIndex*8 + this.direction*8;
+			this.animate(ANIMATION_DURATION, startTile, startTile+7, false);			
+		}
+	}
+	
+	public void setDirection(int direction) {
+		this.direction = direction;
+	}
+	
+	public boolean isAlive() {
+		return this.life > 0;
 	}
 		
 	protected void createAndConnectPhysics(final BoundCamera camera, PhysicsWorld physicsWorld) {

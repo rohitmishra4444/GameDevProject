@@ -4,11 +4,6 @@ import gamedev.game.SceneManager.SceneType;
 
 public class MainMenuScene extends BaseScene {
 
-	@Override
-	public void createScene() {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void onBackKeyPressed() {
