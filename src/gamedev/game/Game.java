@@ -8,13 +8,21 @@ import org.andengine.engine.handler.physics.PhysicsHandler;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
+import org.andengine.entity.IEntity;
+import org.andengine.entity.modifier.LoopEntityModifier;
+import org.andengine.entity.modifier.PathModifier;
+import org.andengine.entity.modifier.PathModifier.IPathModifierListener;
+import org.andengine.entity.modifier.PathModifier.Path;
 import org.andengine.entity.modifier.ScaleModifier;
 import org.andengine.entity.modifier.SequenceEntityModifier;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.entity.util.FPSLogger;
-import org.andengine.extension.physics.box2d.*;
+import org.andengine.extension.physics.box2d.FixedStepPhysicsWorld;
+import org.andengine.extension.physics.box2d.PhysicsConnector;
+import org.andengine.extension.physics.box2d.PhysicsFactory;
+import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.extension.tmx.TMXLayer;
 import org.andengine.extension.tmx.TMXLoader;
 import org.andengine.extension.tmx.TMXLoader.ITMXTilePropertiesListener;
@@ -31,13 +39,16 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegion
 import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.opengl.texture.region.TiledTextureRegion;
 import org.andengine.ui.activity.SimpleBaseGameActivity;
+import org.andengine.util.Constants;
 import org.andengine.util.debug.Debug;
 import org.andengine.util.math.MathUtils;
 
 import android.opengl.GLES20;
+
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 
 /**
  * (c) 2010 Nicolas Gramlich (c) 2011 Zynga
@@ -58,7 +69,7 @@ public class Game extends SimpleBaseGameActivity {
 	// ===========================================================
 
 	private BoundCamera mBoundChaseCamera;
-	private AnimatedSprite player;
+	private FollowedSprite player;
 	private Body mPlayerBody;
 
 	private BitmapTextureAtlas mBitmapTextureAtlas;
@@ -213,14 +224,13 @@ public class Game extends SimpleBaseGameActivity {
 
 		// Calculate the coordinates for the face, so its centered on the
 		// camera.
-		final float centerX = (CAMERA_WIDTH - this.mPlayerTextureRegion
-				.getWidth()) / 2;
-		final float centerY = (CAMERA_HEIGHT - this.mPlayerTextureRegion
-				.getHeight()) / 2;
+		final float centerX = (0 + this.mPlayerTextureRegion.getWidth()) / 2;
+		final float centerY = ((mTMXTiledMap.getTileRows() * mTMXTiledMap
+				.getTileHeight()) + this.mPlayerTextureRegion.getHeight()) / 2;
 
 		// ==============================PLAYER========================================
 		// Create the player sprite and add it to the scene.
-		player = new AnimatedSprite(centerX, centerY,
+		player = new FollowedSprite(centerX, centerY,
 				this.mPlayerTextureRegion, this.getVertexBufferObjectManager());
 		this.mBoundChaseCamera.setChaseEntity(player);
 
@@ -259,8 +269,81 @@ public class Game extends SimpleBaseGameActivity {
 			@Override
 			public void onUpdate(float pSecondsElapsed) {
 				super.onUpdate(pSecondsElapsed);
+
+				final float[] playerFootCordinates = player
+						.convertLocalToSceneCoordinates(player.getX(),
+								player.getY());
+				float playerX = playerFootCordinates[Constants.VERTEX_INDEX_X];
+				float playerY = playerFootCordinates[Constants.VERTEX_INDEX_Y];
+
+				final float[] npcFootCordinates = npc
+						.convertLocalToSceneCoordinates(npc.getX(), npc.getY());
+				float npcX = npcFootCordinates[Constants.VERTEX_INDEX_X];
+				float npcY = npcFootCordinates[Constants.VERTEX_INDEX_Y];
+
+				float viewDistance = 50;
+
+				if (intervallContains(npcX - viewDistance, npcY + viewDistance,
+						playerX)
+						&& intervallContains(npcY - viewDistance, npcY
+								+ viewDistance, playerY)) {
+
+					if (npc.getEntityModifierCount() != 0) {
+						npc.clearEntityModifiers();
+					}
+
+					player.setFollowedEntity(npc, 1000, 1000);
+				}
+
 			}
 		});
+
+		final Path npcPath = new Path(5).to(400, 400).to(400, 500).to(500, 500)
+				.to(500, 400).to(400, 400);
+
+		npc.registerEntityModifier(new LoopEntityModifier(new PathModifier(30,
+				npcPath, null, new IPathModifierListener() {
+					@Override
+					public void onPathStarted(final PathModifier pPathModifier,
+							final IEntity pEntity) {
+					}
+
+					@Override
+					public void onPathWaypointStarted(
+							final PathModifier pPathModifier,
+							final IEntity pEntity, final int pWaypointIndex) {
+						switch (pWaypointIndex) {
+						case 0:
+							npc.animate(new long[] { 200, 200, 200 }, 6, 8,
+									true);
+							break;
+						case 1:
+							npc.animate(new long[] { 200, 200, 200 }, 3, 5,
+									true);
+							break;
+						case 2:
+							npc.animate(new long[] { 200, 200, 200 }, 0, 2,
+									true);
+							break;
+						case 3:
+							npc.animate(new long[] { 200, 200, 200 }, 9, 11,
+									true);
+							break;
+						}
+					}
+
+					@Override
+					public void onPathWaypointFinished(
+							final PathModifier pPathModifier,
+							final IEntity pEntity, final int pWaypointIndex) {
+					}
+
+					@Override
+					public void onPathFinished(
+							final PathModifier pPathModifier,
+							final IEntity pEntity) {
+					}
+				})));
 
 		mScene.attachChild(npc);
 		// ==================================END_NPC===================================
@@ -425,6 +508,18 @@ public class Game extends SimpleBaseGameActivity {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Checks if number n is in intervall [low, high].
+	 * 
+	 * @param low
+	 * @param high
+	 * @param n
+	 * @return true, if number is in intervall
+	 */
+	private static boolean intervallContains(float low, float high, float n) {
+		return n >= low && n <= high;
 	}
 
 }
