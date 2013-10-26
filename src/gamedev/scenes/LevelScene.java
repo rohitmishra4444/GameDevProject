@@ -155,23 +155,22 @@ public class LevelScene extends BaseScene {
 					final BaseOnScreenControl pBaseOnScreenControl,
 					final float pValueX, final float pValueY) {
 				
-				
 				// Compute direction in degree (from -180° to +180°).
 				float degree = MathUtils.radToDeg((float) Math.atan2(
 						pValueX, pValueY));
 				
 				// Set the direction and State
-				// TODO Handle the velocity on a method in the Player class?
+				// TODO Handle the velocity on a method in the Player class
 				player.setDirection(Direction.getDirectionFromDegree(degree));
 				if (degree == 0) {
 					player.setState(PlayerState.IDLE);
-					player.playerBody.setLinearVelocity(0, 0);
+					player.body.setLinearVelocity(0, 0);
 				} else if (Math.abs(pValueX) > 0.75 || Math.abs(pValueY) > 0.75) {
 					player.setState(PlayerState.RUNNING);
-					player.playerBody.setLinearVelocity(pValueX * 7, pValueY * 7);
+					player.body.setLinearVelocity(pValueX * 7, pValueY * 7);
 				} else {
 					player.setState(PlayerState.WALKING);
-					player.playerBody.setLinearVelocity(pValueX * 5, pValueY * 5);					
+					player.body.setLinearVelocity(pValueX * 5, pValueY * 5);					
 				}
 				
 			}

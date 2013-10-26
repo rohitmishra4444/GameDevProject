@@ -1,9 +1,13 @@
 package gamedev.game;
 
+import org.andengine.util.math.MathUtils;
+
 import com.badlogic.gdx.math.Vector2;
 
 public class Direction {
-
+	
+	// 8 possible directions. Note that the order is important, it is the same order as used
+	// for the animation in the tilesets
 	public static final int WEST = 0;
 	public static final int SOUTH_WEST = 1;
 	public static final int SOUTH_EAST = 2;
@@ -16,12 +20,21 @@ public class Direction {
 	/**
 	 * Calculate the direction of from the given vector
 	 * @param v1 Start-Position
-	 * @param v3 End-Position
+	 * @param v2 End-Position
 	 * @return
 	 */
-	public static int getDirectionFromVectors(Vector2 v1, Vector2 v3) {
-		//TODO Implement
-		return 0;
+	public static int getDirectionFromVectors(Vector2 v1, Vector2 v2) {
+		float x = v2.x - v1.x;
+		float y = v2.y - v1.y;		
+		float degree = MathUtils.radToDeg((float) Math.atan2(x, y));
+		return getDirectionFromDegree(degree);
+	}
+	
+	public static int getDirection(float xFrom, float xTo, float yFrom, float yTo) {
+		float x = xTo - xFrom;
+		float y = yTo - yFrom;
+		float degree = MathUtils.radToDeg((float) Math.atan2(x, y));
+		return getDirectionFromDegree(degree);
 	}
 	
 	/**

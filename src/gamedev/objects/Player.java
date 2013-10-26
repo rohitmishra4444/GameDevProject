@@ -1,7 +1,5 @@
 package gamedev.objects;
 
-import java.util.Arrays;
-
 import gamedev.game.Direction;
 import gamedev.game.ResourcesManager;
 import org.andengine.engine.camera.BoundCamera;
@@ -17,7 +15,7 @@ public class Player extends AnimatedSprite {
 	
 	public final static long[] ANIMATION_DURATION = { 30, 30, 30, 30, 30, 30, 30, 30};
 	
-	public Body playerBody;
+	public Body body;
 	public PhysicsHandler physicsHandler;
 
 	protected ResourcesManager resourcesManager;
@@ -64,7 +62,7 @@ public class Player extends AnimatedSprite {
 			int rowIndex = 0;
 			if (state == PlayerState.WALKING) rowIndex = 0;
 			if (state == PlayerState.RUNNING) rowIndex = 9;
-			if (state == PlayerState.HIT) rowIndex = 17;
+			if (state == PlayerState.HIT) rowIndex = 18;
 			int startTile = rowIndex*8 + this.direction*8;
 			this.animate(ANIMATION_DURATION, startTile, startTile+7, false);			
 		}
@@ -79,12 +77,12 @@ public class Player extends AnimatedSprite {
 	}
 		
 	protected void createAndConnectPhysics(final BoundCamera camera, PhysicsWorld physicsWorld) {
-		this.playerBody = PhysicsFactory.createBoxBody(this.resourcesManager.physicsWorld, this, BodyType.DynamicBody, PhysicsFactory.createFixtureDef(0, 0, 0));
-		this.playerBody.setUserData("player");	
+		this.body = PhysicsFactory.createBoxBody(this.resourcesManager.physicsWorld, this, BodyType.DynamicBody, PhysicsFactory.createFixtureDef(0, 0, 0));
+		this.body.setUserData("player");	
 		this.physicsHandler = new PhysicsHandler(this);
 		this.registerUpdateHandler(this.physicsHandler);
 		this.resourcesManager.physicsWorld.registerPhysicsConnector(new PhysicsConnector(
-				this, this.playerBody, true, false) {
+				this, this.body, true, false) {
 			@Override
 			public void onUpdate(float pSecondsElapsed) {
 				super.onUpdate(pSecondsElapsed);

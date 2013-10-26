@@ -47,6 +47,8 @@ public class ResourcesManager
 
     public BitmapTextureAtlas playerAtlas;
     public ITiledTextureRegion playerRegion;
+    public BitmapTextureAtlas dinosaurGreenAtlas;
+    public ITiledTextureRegion dinosaurGreenRegion;
     
     
     //---------------------------------------------
@@ -61,15 +63,6 @@ public class ResourcesManager
     //---------------------------------------------
     
     public void loadPlayerGraphics() {
-    	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
-
-    	this.playerAtlas = new BitmapTextureAtlas(
-				getInstance().textureManager, 768, 2400, TextureOptions.DEFAULT);
-
-    	this.playerRegion = BitmapTextureAtlasTextureRegionFactory
-				.createTiledFromAsset(this.playerAtlas, getInstance().activity,
-						"player_sprite.png", 0, 0, 8, 25);
-    	this.playerAtlas.load();
     }
     
     public void loadPhysics() {
@@ -101,6 +94,33 @@ public class ResourcesManager
 
     private void loadGameGraphics()
     {
+    	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
+    	
+    	// Player
+    	this.playerAtlas = new BitmapTextureAtlas(
+				getInstance().textureManager, 768, 2400, TextureOptions.DEFAULT);
+
+    	this.playerRegion = BitmapTextureAtlasTextureRegionFactory
+				.createTiledFromAsset(this.playerAtlas, getInstance().activity,
+						"player_sprite.png", 0, 0, 8, 25);
+    	this.playerAtlas.load();
+    	
+    	// Green Dino
+//    	this.dinosaurGreenAtlas = new BitmapTextureAtlas(
+//				getInstance().textureManager, 1664, 8192, TextureOptions.DEFAULT);
+
+    	this.dinosaurGreenAtlas = new BitmapTextureAtlas(
+				getInstance().textureManager, 3328, 4096, TextureOptions.DEFAULT);
+
+//    	this.dinosaurGreenRegion = BitmapTextureAtlasTextureRegionFactory
+//				.createTiledFromAsset(this.dinosaurGreenAtlas, getInstance().activity,
+//						"green_dino_sprite.png", 0, 0, 13, 64);
+
+    	this.dinosaurGreenRegion = BitmapTextureAtlasTextureRegionFactory
+				.createTiledFromAsset(this.dinosaurGreenAtlas, getInstance().activity,
+						"green_dino.png", 0, 0, 26, 32);
+
+    	this.dinosaurGreenAtlas.load();
 
     }
     
@@ -143,7 +163,7 @@ public class ResourcesManager
         
         // We also load physics and player.. //TODO Move out from here, since a Menu scene does not require them in memory
         getInstance().loadPhysics();
-        getInstance().loadPlayerGraphics();
+        getInstance().loadGameResources();
     }
     
     //---------------------------------------------
