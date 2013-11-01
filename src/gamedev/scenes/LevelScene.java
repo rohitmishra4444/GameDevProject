@@ -2,23 +2,20 @@ package gamedev.scenes;
 
 import gamedev.game.Direction;
 import gamedev.game.GameActivity;
-import gamedev.game.ResourcesManager;
 import gamedev.game.SceneManager.SceneType;
 import gamedev.objects.Player;
 import gamedev.objects.Player.PlayerState;
 
 import org.andengine.engine.camera.hud.controls.AnalogOnScreenControl;
-import org.andengine.engine.camera.hud.controls.BaseOnScreenControl;
 import org.andengine.engine.camera.hud.controls.AnalogOnScreenControl.IAnalogOnScreenControlListener;
-import org.andengine.extension.physics.box2d.FixedStepPhysicsWorld;
-import org.andengine.extension.physics.box2d.PhysicsWorld;
+import org.andengine.engine.camera.hud.controls.BaseOnScreenControl;
 import org.andengine.extension.tmx.TMXLayer;
 import org.andengine.extension.tmx.TMXLoader;
+import org.andengine.extension.tmx.TMXLoader.ITMXTilePropertiesListener;
 import org.andengine.extension.tmx.TMXProperties;
 import org.andengine.extension.tmx.TMXTile;
 import org.andengine.extension.tmx.TMXTileProperty;
 import org.andengine.extension.tmx.TMXTiledMap;
-import org.andengine.extension.tmx.TMXLoader.ITMXTilePropertiesListener;
 import org.andengine.extension.tmx.util.exception.TMXLoadException;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
@@ -28,8 +25,6 @@ import org.andengine.util.debug.Debug;
 import org.andengine.util.math.MathUtils;
 
 import android.opengl.GLES20;
-
-import com.badlogic.gdx.math.Vector2;
 
 /**
  * Base class for all levels
@@ -54,6 +49,11 @@ public class LevelScene extends BaseScene {
 	
 	public LevelScene(String tmxFileName) {
 		super();
+		createScene();
+	}
+
+	@Override
+	public void createScene() {
 		this.player = new Player();
 		this.tmxFileName = tmxFileName;
 		this.createMap();
@@ -61,7 +61,6 @@ public class LevelScene extends BaseScene {
 		this.createControls();
 		this.attachChild(this.player);
 	}
-	
 
 	@Override
 	public void onBackKeyPressed() {

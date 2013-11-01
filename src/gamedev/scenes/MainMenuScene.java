@@ -4,6 +4,10 @@ import gamedev.game.SceneManager.SceneType;
 
 public class MainMenuScene extends BaseScene {
 
+	@Override
+	public void createScene() {
+		createBackground();
+	}
 
 	@Override
 	public void onBackKeyPressed() {
@@ -21,4 +25,7 @@ public class MainMenuScene extends BaseScene {
 		
 	}
 
+	private void createBackground() {
+
+	}
 }
