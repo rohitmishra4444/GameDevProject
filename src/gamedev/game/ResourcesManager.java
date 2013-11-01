@@ -73,14 +73,14 @@ public class ResourcesManager
     public void loadMenuResources()
     {
         loadMenuGraphics();
-        loadMenuAudio();
+		// loadMenuAudio();
     }
     
     public void loadGameResources()
     {
         loadGameGraphics();
-        loadGameFonts();
-        loadGameAudio();
+		// loadGameFonts();
+		// loadGameAudio();
     }
     
     private void loadMenuGraphics()
@@ -182,8 +182,8 @@ public class ResourcesManager
         getInstance().textureManager = textureManager;
         
         // We also load physics and player.. //TODO Move out from here, since a Menu scene does not require them in memory
-        getInstance().loadPhysics();
-        getInstance().loadGameResources();
+		getInstance().loadPhysics();
+		getInstance().loadGameResources();
     }
     
     //---------------------------------------------

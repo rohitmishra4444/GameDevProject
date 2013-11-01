@@ -40,7 +40,7 @@ public class GameActivity extends BaseGameActivity
     {
 		 this.camera = new BoundCamera(0, 0, WIDTH, HEIGHT);
 		 EngineOptions engineOptions = new EngineOptions(true, ScreenOrientation.LANDSCAPE_FIXED, new RatioResolutionPolicy(WIDTH, HEIGHT), this.camera);
-		 engineOptions.getAudioOptions().setNeedsMusic(true).setNeedsSound(true);
+		// engineOptions.getAudioOptions().setNeedsMusic(true).setNeedsSound(true);
 		 engineOptions.setWakeLockOptions(WakeLockOptions.SCREEN_ON);
 		 System.out.println("EngineOptions created");
 		 return engineOptions;
@@ -75,13 +75,13 @@ public class GameActivity extends BaseGameActivity
 						SceneManager.getInstance().createMenuScene();
                     // load menu resources, create menu scene
                     // set menu scene using scene manager
-                    // disposeSplashScene();
+						// disposeSplashScene();
                     // READ NEXT ARTICLE FOR THIS PART.
 
                 }
         }));
-        pOnPopulateSceneCallback.onPopulateSceneFinished();
-		
+
+		pOnPopulateSceneCallback.onPopulateSceneFinished();
 	}
 	
 	/**
