@@ -1,6 +1,4 @@
 package gamedev.game;
-import gamedev.levels.Level1;
-
 import java.io.IOException;
 
 import org.andengine.engine.Engine;
@@ -75,6 +73,7 @@ public class GameActivity extends BaseGameActivity
                 {
                     mEngine.unregisterUpdateHandler(pTimerHandler);
                     // load menu resources, create menu scene
+						SceneManager.getInstance().createMenuScene();
                     // set menu scene using scene manager
                     // disposeSplashScene();
                     // READ NEXT ARTICLE FOR THIS PART.

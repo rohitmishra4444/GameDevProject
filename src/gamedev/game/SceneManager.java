@@ -1,15 +1,14 @@
 package gamedev.game;
 
-import org.andengine.engine.Engine;
-import org.andengine.engine.handler.timer.ITimerCallback;
-import org.andengine.engine.handler.timer.TimerHandler;
-import org.andengine.ui.IGameInterface.OnCreateSceneCallback;
-
-import gamedev.levels.Level1;
 import gamedev.scenes.BaseScene;
 import gamedev.scenes.LoadingScene;
 import gamedev.scenes.MainMenuScene;
 import gamedev.scenes.SplashScene;
+
+import org.andengine.engine.Engine;
+import org.andengine.engine.handler.timer.ITimerCallback;
+import org.andengine.engine.handler.timer.TimerHandler;
+import org.andengine.ui.IGameInterface.OnCreateSceneCallback;
 
 public class SceneManager
 {
@@ -81,7 +80,7 @@ public class SceneManager
 
     public void createMenuScene()
     {
-    	//ResourcesManager.getInstance().loadMenuResources();
+		ResourcesManager.getInstance().loadMenuResources();
         menuScene = new MainMenuScene();
         loadingScene = new LoadingScene();
         SceneManager.getInstance().setScene(menuScene);

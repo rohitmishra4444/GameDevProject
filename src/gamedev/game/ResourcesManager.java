@@ -1,26 +1,19 @@
 package gamedev.game;
 
-import gamedev.scenes.LevelScene;
-
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.BoundCamera;
-import org.andengine.engine.camera.Camera;
-import org.andengine.engine.handler.physics.PhysicsHandler;
 import org.andengine.extension.physics.box2d.FixedStepPhysicsWorld;
-import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
-import org.andengine.opengl.texture.atlas.bitmap.BuildableBitmapTextureAtlas;
+import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.ui.activity.BaseActivity;
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
 /**
  * @author Mateusz Mysliwiec
@@ -50,6 +43,11 @@ public class ResourcesManager
     public BitmapTextureAtlas dinosaurGreenAtlas;
     public ITiledTextureRegion dinosaurGreenRegion;
     
+	// Textures for menu scene
+	public ITextureRegion menu_background_region;
+	public ITiledTextureRegion buttons_region;
+
+	private BitmapTextureAtlas menuTextureAtlas;
     
     //---------------------------------------------
     // Physic
@@ -84,7 +82,20 @@ public class ResourcesManager
     
     private void loadMenuGraphics()
     {
-        
+		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/menu/");
+
+		this.menuTextureAtlas = new BitmapTextureAtlas(textureManager, 800,
+				600, TextureOptions.DEFAULT);
+
+		this.menu_background_region = BitmapTextureAtlasTextureRegionFactory
+				.createTiledFromAsset(this.menuTextureAtlas, activity,
+						"menubackground.png", 0, 0, 1, 1);
+		this.buttons_region = BitmapTextureAtlasTextureRegionFactory
+				.createTiledFromAsset(this.menuTextureAtlas, activity,
+						"menubuttons.png", 0, 0, 1, 3);
+
+		this.menuTextureAtlas.load();
+
     }
     
     private void loadMenuAudio()
