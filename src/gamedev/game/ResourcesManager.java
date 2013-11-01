@@ -43,10 +43,13 @@ public class ResourcesManager
     public BitmapTextureAtlas dinosaurGreenAtlas;
     public ITiledTextureRegion dinosaurGreenRegion;
     
+	// Texture for splash scene
+	public ITextureRegion splash_region;
+	private BitmapTextureAtlas splashTextureAtlas;
+
 	// Textures for menu scene
 	public ITextureRegion menu_background_region;
 	public ITiledTextureRegion buttons_region;
-
 	private BitmapTextureAtlas menuTextureAtlas;
     
     //---------------------------------------------
@@ -88,10 +91,12 @@ public class ResourcesManager
 				600, TextureOptions.DEFAULT);
 
 		this.menu_background_region = BitmapTextureAtlasTextureRegionFactory
-				.createTiledFromAsset(this.menuTextureAtlas, activity,
+				.createTiledFromAsset(this.menuTextureAtlas,
+						getInstance().activity,
 						"menubackground.png", 0, 0, 1, 1);
 		this.buttons_region = BitmapTextureAtlasTextureRegionFactory
-				.createTiledFromAsset(this.menuTextureAtlas, activity,
+				.createTiledFromAsset(this.menuTextureAtlas,
+						getInstance().activity,
 						"menubuttons.png", 0, 0, 1, 3);
 
 		this.menuTextureAtlas.load();
@@ -145,14 +150,18 @@ public class ResourcesManager
         
     }
     
-    public void loadSplashScreen()
-    {
-    
+	public void loadSplashScreen() {
+		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
+		splashTextureAtlas = new BitmapTextureAtlas(
+				getInstance().textureManager, 256, 256, TextureOptions.BILINEAR);
+		splash_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
+				splashTextureAtlas, activity, "splash.png", 0, 0);
+		splashTextureAtlas.load();
     }
     
-    public void unloadSplashScreen()
-    {
-
+	public void unloadSplashScreen() {
+		splashTextureAtlas.unload();
+		splash_region = null;
     }
     
     /**

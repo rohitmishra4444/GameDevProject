@@ -89,15 +89,15 @@ public class SceneManager
     
     public void createSplashScene(OnCreateSceneCallback pOnCreateSceneCallback)
     {
-        //ResourcesManager.getInstance().loadSplashScreen();
+		ResourcesManager.getInstance().loadSplashScreen();
         splashScene = new SplashScene();
         currentScene = splashScene;
         pOnCreateSceneCallback.onCreateSceneFinished(splashScene);
     }
     
     private void disposeSplashScene()
-    {
-//        ResourcesManager.getInstance().unloadSplashScreen();
+ {
+		ResourcesManager.getInstance().unloadSplashScreen();
         splashScene.disposeScene();
         splashScene = null;
     }

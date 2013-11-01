@@ -22,6 +22,7 @@ public class MainMenuScene extends BaseScene implements
 	@Override
 	public void createScene() {
 		createBackground();
+		createMenuChildScene();
 	}
 
 	@Override
