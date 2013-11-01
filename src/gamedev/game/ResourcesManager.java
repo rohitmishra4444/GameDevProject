@@ -12,7 +12,6 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
-import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.ui.activity.BaseActivity;
 
@@ -126,14 +125,16 @@ public class ResourcesManager
 						"player_sprite.png", 0, 0, 8, 25);
     	this.playerAtlas.load();
     	
-    	this.dinosaurGreenAtlas = new BitmapTextureAtlas(
-				getInstance().textureManager, 3328, 4096, TextureOptions.DEFAULT);
+		this.dinosaurGreenAtlas = new BitmapTextureAtlas(
+				getInstance().textureManager, 1664, 2048,
+				TextureOptions.DEFAULT);
 
-    	this.dinosaurGreenRegion = BitmapTextureAtlasTextureRegionFactory
-				.createTiledFromAsset(this.dinosaurGreenAtlas, getInstance().activity,
-						"green_dino.png", 0, 0, 26, 32);
+		this.dinosaurGreenRegion = BitmapTextureAtlasTextureRegionFactory
+				.createTiledFromAsset(this.dinosaurGreenAtlas,
+						getInstance().activity, "green_dino_0.5.png", 0, 0, 26,
+						32);
 
-    	this.dinosaurGreenAtlas.load();
+		this.dinosaurGreenAtlas.load();
     	
     	this.landscapeAtlas = new BitmapTextureAtlas(getInstance().textureManager, 512, 1204);
     	this.landscapeAtlas.load();

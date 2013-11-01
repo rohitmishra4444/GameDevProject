@@ -50,12 +50,18 @@ public class FollowedSprite extends AnimatedSprite {
 					10, splineMoveConfig);
 			follower.registerEntityModifier(splineMove);
 
-			// follower.setPosition(splineMove.cardinalSplineX(pX0, pX1, pX2,
-			// pX3,
-			// pT, pTension), splineMove.cardinalSplineY(pY0, pY1, pY2,
-			// pY3, pT, pTension));
+			CardinalSplineMoveModifier.cardinalSplineX(this.getX(), this.getX(), this.getX(),
+					 this.getX(),
+			 1, 1);
+			CardinalSplineMoveModifier.cardinalSplineY(this.getY(), this.getY(), this.getY(),
+					 this.getY(), 1, 1);
+					 
+//			 follower.setPosition(CardinalSplineMoveModifier.cardinalSplineX(this.getX(), this.getX(), this.getX(),
+//					 this.getX(),
+//			 1, 1), CardinalSplineMoveModifier.cardinalSplineY(this.getY(), this.getY(), this.getY(),
+//					 this.getY(), 1, 1));
 
-			follower.setPosition(superFunkyNewX, superFunkyNewY);
+			// follower.setPosition(superFunkyNewX, superFunkyNewY);
 		}
 	}
 

@@ -10,7 +10,6 @@ import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.util.Vector2Pool;
-import org.andengine.extension.physics.box2d.util.constants.PhysicsConstants;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -57,6 +56,10 @@ public class DinosaurWithPhysic extends AnimatedSprite {
 		this.direction = Direction.getRandomDirection();
 		this.setState(DinosaurState.LOOKING);
 		this.createPhysic();
+		// Scale it up, so it has normal size.
+		this.mScaleX = this.mScaleX * 2;
+		this.mScaleY = this.mScaleY * 2;
+
 	}
 
 	public void setDirection(int direction) {
