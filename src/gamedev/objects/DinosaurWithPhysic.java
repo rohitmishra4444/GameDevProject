@@ -53,9 +53,9 @@ public class DinosaurWithPhysic extends AnimatedSprite {
 	public DinosaurWithPhysic(float pX, float pY) {
 		super(pX, pY, ResourcesManager.getInstance().dinosaurGreenRegion, ResourcesManager.getInstance().vbom);
 		this.resourcesManager = ResourcesManager.getInstance();
+		this.createPhysic();
 		this.direction = Direction.getRandomDirection();
 		this.setState(DinosaurState.LOOKING);
-		this.createPhysic();
 		// Scale it up, so it has normal size.
 		this.mScaleX = this.mScaleX * 2;
 		this.mScaleY = this.mScaleY * 2;
@@ -143,8 +143,7 @@ public class DinosaurWithPhysic extends AnimatedSprite {
             Vector2 playerPos = this.resourcesManager.player.body.getPosition();
             float distance = this.body.getPosition().dst(playerPos); 
             if (distance < 0.5) {
-            	this.body.setLinearVelocity(0, 0);
-            	this.setState(DinosaurState.ATTACK);
+            	if (this.currentState != DinosaurState.ATTACK) this.setState(DinosaurState.ATTACK);
             	return;
             } else if (distance < this.radius) {
             	this.moveTo(playerPos.x, playerPos.y, DinosaurState.CHASE_PLAYER);
