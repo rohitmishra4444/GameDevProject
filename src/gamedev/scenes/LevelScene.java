@@ -59,11 +59,6 @@ public class LevelScene extends BaseScene {
 	
 	public LevelScene(String tmxFileName) {
 		super();
-		createScene();
-	}
-
-	@Override
-	public void createScene() {
 		this.player = new Player();
 		this.resourcesManager.player = player;
 		this.tmxFileName = tmxFileName;
@@ -71,6 +66,10 @@ public class LevelScene extends BaseScene {
 		this.connectPhysics();
 		this.createControls();
 		this.attachChild(this.player);
+	}
+
+	@Override
+	public void createScene() {
 	}
 
 	@Override
