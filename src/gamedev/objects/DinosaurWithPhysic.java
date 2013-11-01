@@ -70,16 +70,44 @@ public class DinosaurWithPhysic extends AnimatedSprite {
 		this.currentState = state;
 		// Display the correct animation based on the state and direction
 		int rowIndex = 0;
-		if (state == DinosaurState.WALKING) rowIndex = 0;
-		if (state == DinosaurState.TIPPING_OVER) rowIndex = 4;
-		if (state == DinosaurState.RUNNING || state == DinosaurState.CHASE_PLAYER) rowIndex = 8;
-		if (state == DinosaurState.ROARING) rowIndex = 12;
-		if (state == DinosaurState.PAUSED) rowIndex = 16;
-		if (state == DinosaurState.LOOKING) rowIndex = 20;
-		if (state == DinosaurState.BEEN_HIT) rowIndex = 24;
-		if (state == DinosaurState.ATTACK) rowIndex = 28;			
+		boolean animate = true;
+		
+		switch (state) {
+		case WALKING:
+			rowIndex = 0;
+			break;
+		case TIPPING_OVER:
+			rowIndex = 4;
+			this.body.setLinearVelocity(0, 0);
+			animate = false;
+			break;
+		case RUNNING:
+		case CHASE_PLAYER:
+			rowIndex = 8;
+			break;
+		case ROARING:
+			rowIndex = 12;
+			this.body.setLinearVelocity(0, 0);
+			break;
+		case PAUSED:
+			rowIndex = 16;
+			this.body.setLinearVelocity(0, 0);
+			break;
+		case LOOKING:
+			rowIndex = 20;
+			this.body.setLinearVelocity(0, 0);
+			break;
+		case BEEN_HIT:
+			rowIndex = 24;
+			this.body.setLinearVelocity(0, 0);
+			animate = false;
+			break;
+		case ATTACK:
+			rowIndex = 28;
+			this.body.setLinearVelocity(0, 0);
+			break;
+		}
 		int startTile = rowIndex*TILES_PER_LINE + this.direction*FRAMES_PER_ANIMATION;
-		boolean animate = (state == DinosaurState.TIPPING_OVER || state == DinosaurState.BEEN_HIT) ? false : true;
 		this.animate(ANIMATION_DURATION, startTile, startTile+12, animate);			
 
 	}
