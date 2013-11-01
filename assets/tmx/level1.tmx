@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" width="80" height="50" tilewidth="32" tileheight="32">
  <tileset firstgid="1" name="landscape_mountains_(2D_Circle_Graphic_32x32)" tilewidth="32" tileheight="32">
-  <image source="gfx/landscape_mountains_(2D_Circle_Graphic_32x32).png" width="512" height="512"/>
+  <image source="/gfx/landscape_mountains_(2D_Circle_Graphic_32x32).png" width="512" height="512"/>
   <tile id="241">
    <properties>
     <property name="walkable" value="false"/>
@@ -43,5 +43,17 @@
   <object x="2490" y="100" width="70" height="1498"/>
   <object x="4" y="1532" width="2482" height="64"/>
   <object x="0" y="100" width="82" height="1118"/>
+ </objectgroup>
+ <objectgroup name="Trees" width="80" height="50">
+  <properties>
+   <property name="tree" value="true"/>
+  </properties>
+  <object x="374" y="278" width="24" height="20"/>
+  <object x="1258" y="542" width="24" height="20"/>
+  <object x="898" y="976" width="22" height="22"/>
+  <object x="1380" y="1156" width="22" height="20"/>
+  <object x="1570" y="386" width="20" height="24"/>
+  <object x="1816" y="518" width="28" height="28"/>
+  <object x="1264" y="1080" width="28" height="30"/>
  </objectgroup>
 </map>

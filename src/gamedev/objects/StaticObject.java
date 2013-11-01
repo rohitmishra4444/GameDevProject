@@ -25,8 +25,7 @@ abstract class StaticObject extends Sprite {
 	
 	protected void createPhysics() {
 		FixtureDef objectFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0);
-		PhysicsFactory.createBoxBody(this.resourcesManager.physicsWorld, this, BodyType.StaticBody, objectFixtureDef);
-		this.body = PhysicsFactory.createBoxBody(this.resourcesManager.physicsWorld, this, BodyType.DynamicBody, PhysicsFactory.createFixtureDef(0, 0, 0));
+		this.body = PhysicsFactory.createBoxBody(this.resourcesManager.physicsWorld, this, BodyType.StaticBody, objectFixtureDef);
 		// TODO Maybe not necessary...
 //		this.physicsHandler = new PhysicsHandler(this);
 //		this.registerUpdateHandler(this.physicsHandler);
