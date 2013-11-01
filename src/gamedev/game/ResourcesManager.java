@@ -1,5 +1,7 @@
 package gamedev.game;
 
+import gamedev.objects.Player;
+
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.BoundCamera;
 import org.andengine.extension.physics.box2d.FixedStepPhysicsWorld;
@@ -10,6 +12,7 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
+import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.ui.activity.BaseActivity;
 
@@ -33,6 +36,7 @@ public class ResourcesManager
     public BoundCamera camera;
     public VertexBufferObjectManager vbom;
     public TextureManager textureManager;
+    public Player player;
     
     //---------------------------------------------
     // TEXTURES & TEXTURE REGIONS
@@ -42,6 +46,7 @@ public class ResourcesManager
     public ITiledTextureRegion playerRegion;
     public BitmapTextureAtlas dinosaurGreenAtlas;
     public ITiledTextureRegion dinosaurGreenRegion;
+    public BitmapTextureAtlas landscapeAtlas;
     
 	// Texture for splash scene
 	public ITextureRegion splash_region;
@@ -67,7 +72,7 @@ public class ResourcesManager
     }
     
     public void loadPhysics() {
-    	this.physicsWorld = new FixedStepPhysicsWorld(30, new Vector2(0, 0),false, 8, 1);
+    	this.physicsWorld = new FixedStepPhysicsWorld(30, new Vector2(0, 0), false, 8, 1);
     }
     
     public void loadMenuResources()
@@ -121,23 +126,21 @@ public class ResourcesManager
 						"player_sprite.png", 0, 0, 8, 25);
     	this.playerAtlas.load();
     	
-    	// Green Dino
-//    	this.dinosaurGreenAtlas = new BitmapTextureAtlas(
-//				getInstance().textureManager, 1664, 8192, TextureOptions.DEFAULT);
-
     	this.dinosaurGreenAtlas = new BitmapTextureAtlas(
 				getInstance().textureManager, 3328, 4096, TextureOptions.DEFAULT);
-
-//    	this.dinosaurGreenRegion = BitmapTextureAtlasTextureRegionFactory
-//				.createTiledFromAsset(this.dinosaurGreenAtlas, getInstance().activity,
-//						"green_dino_sprite.png", 0, 0, 13, 64);
 
     	this.dinosaurGreenRegion = BitmapTextureAtlasTextureRegionFactory
 				.createTiledFromAsset(this.dinosaurGreenAtlas, getInstance().activity,
 						"green_dino.png", 0, 0, 26, 32);
 
     	this.dinosaurGreenAtlas.load();
-
+    	
+    	this.landscapeAtlas = new BitmapTextureAtlas(getInstance().textureManager, 512, 1204);
+    	this.landscapeAtlas.load();
+    }
+    
+    public ITextureRegion getRandomTreeTexture() {
+    	return BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.landscapeAtlas, getInstance().activity, "trees.png", 0, 0, 8, 4);
     }
     
     private void loadGameFonts()

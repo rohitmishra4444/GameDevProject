@@ -12,6 +12,13 @@ import org.andengine.engine.camera.hud.controls.BaseOnScreenControl;
 import org.andengine.extension.tmx.TMXLayer;
 import org.andengine.extension.tmx.TMXLoader;
 import org.andengine.extension.tmx.TMXLoader.ITMXTilePropertiesListener;
+import org.andengine.entity.primitive.Rectangle;
+import org.andengine.extension.physics.box2d.PhysicsFactory;
+import org.andengine.extension.tmx.TMXLayer;
+import org.andengine.extension.tmx.TMXLoader;
+import org.andengine.extension.tmx.TMXLoader.ITMXTilePropertiesListener;
+import org.andengine.extension.tmx.TMXObject;
+import org.andengine.extension.tmx.TMXObjectGroup;
 import org.andengine.extension.tmx.TMXProperties;
 import org.andengine.extension.tmx.TMXTile;
 import org.andengine.extension.tmx.TMXTileProperty;
@@ -25,6 +32,9 @@ import org.andengine.util.debug.Debug;
 import org.andengine.util.math.MathUtils;
 
 import android.opengl.GLES20;
+
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 
 /**
  * Base class for all levels
@@ -55,6 +65,7 @@ public class LevelScene extends BaseScene {
 	@Override
 	public void createScene() {
 		this.player = new Player();
+		this.resourcesManager.player = player;
 		this.tmxFileName = tmxFileName;
 		this.createMap();
 		this.connectPhysics();
@@ -113,17 +124,36 @@ public class LevelScene extends BaseScene {
 			TMXLayer tmxLayer = this.mTMXTiledMap.getTMXLayers().get(i);
 			if (i == 0) tmxLayerZero = tmxLayer;
 			// Only add non-object layers
-			if (!tmxLayer.getTMXLayerProperties().containsTMXProperty(
-					"walkable", "false"))
+			if (!tmxLayer.getTMXLayerProperties().containsTMXProperty("boundaries", "true")) {
 				this.attachChild(tmxLayer);
+			}
 		}
 		
-		this.camera.setBounds(0, 0, tmxLayerZero.getWidth(),
-				tmxLayerZero.getHeight());
+		this.camera.setBounds(0, 0, tmxLayerZero.getWidth(), tmxLayerZero.getHeight());
 		this.camera.setBoundsEnabled(true);
-	
+		this.createUnwalkableObjects(this.mTMXTiledMap);
 	}
-		
+	
+	protected void createUnwalkableObjects(TMXTiledMap map) {
+		for (final TMXObjectGroup group : this.mTMXTiledMap.getTMXObjectGroups()) {
+			if (group.getTMXObjectGroupProperties().containsTMXProperty(
+					"boundaries", "true")) {
+				// This is our "wall" layer. Create the boxes from it
+				for (final TMXObject object : group.getTMXObjects()) {
+					final Rectangle rect = new Rectangle(object.getX(),
+							object.getY(), object.getWidth(),
+							object.getHeight(),
+							this.resourcesManager.vbom);
+					final FixtureDef boxFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0);
+					PhysicsFactory.createBoxBody(this.resourcesManager.physicsWorld, rect,
+							BodyType.StaticBody, boxFixtureDef);
+					rect.setVisible(false);
+					this.attachChild(rect);
+				}
+			}
+		}
+	}
+	
 	protected void createControls() {
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
 		this.controlTexture = new BitmapTextureAtlas(
