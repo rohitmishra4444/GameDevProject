@@ -1,5 +1,7 @@
 package gamedev.game;
 
+import java.util.Random;
+
 import org.andengine.util.math.MathUtils;
 
 import com.badlogic.gdx.math.Vector2;
@@ -24,17 +26,18 @@ public class Direction {
 	 * @return
 	 */
 	public static int getDirectionFromVectors(Vector2 v1, Vector2 v2) {
-		float x = v2.x - v1.x;
-		float y = v2.y - v1.y;		
-		float degree = MathUtils.radToDeg((float) Math.atan2(x, y));
+		v2.sub(v1).nor();
+		float degree = MathUtils.radToDeg((float) Math.atan2(v2.x, v2.y));
 		return getDirectionFromDegree(degree);
 	}
 	
 	public static int getDirection(float xFrom, float xTo, float yFrom, float yTo) {
-		float x = xTo - xFrom;
-		float y = yTo - yFrom;
-		float degree = MathUtils.radToDeg((float) Math.atan2(x, y));
+		float degree = MathUtils.radToDeg((float) Math.atan2(xTo - xFrom, yTo - yFrom));
 		return getDirectionFromDegree(degree);
+	}
+	
+	public static int getRandomDirection() {
+		return new Random().nextInt(8);
 	}
 	
 	/**

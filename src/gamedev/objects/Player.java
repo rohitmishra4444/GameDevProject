@@ -8,6 +8,8 @@ import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
+
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
@@ -75,13 +77,17 @@ public class Player extends AnimatedSprite {
 	public boolean isAlive() {
 		return this.life > 0;
 	}
-		
+	
+	public Vector2 getPositionVector() {
+		return new Vector2(this.getX(), this.getY());
+	}
+	
 	protected void createAndConnectPhysics(final BoundCamera camera, PhysicsWorld physicsWorld) {
-		this.body = PhysicsFactory.createBoxBody(this.resourcesManager.physicsWorld, this, BodyType.DynamicBody, PhysicsFactory.createFixtureDef(0, 0, 0));
+		this.body = PhysicsFactory.createBoxBody(physicsWorld, this, BodyType.KinematicBody, PhysicsFactory.createFixtureDef(0, 0, 0));
 		this.body.setUserData("player");	
 		this.physicsHandler = new PhysicsHandler(this);
 		this.registerUpdateHandler(this.physicsHandler);
-		this.resourcesManager.physicsWorld.registerPhysicsConnector(new PhysicsConnector(
+		physicsWorld.registerPhysicsConnector(new PhysicsConnector(
 				this, this.body, true, false) {
 			@Override
 			public void onUpdate(float pSecondsElapsed) {

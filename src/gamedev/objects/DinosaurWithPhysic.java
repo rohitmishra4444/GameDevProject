@@ -6,28 +6,24 @@ import gamedev.game.ResourcesManager;
 import java.util.Random;
 
 import org.andengine.engine.handler.physics.PhysicsHandler;
-import org.andengine.entity.IEntity;
-import org.andengine.entity.modifier.IEntityModifier.IEntityModifierListener;
-import org.andengine.entity.modifier.*;
 import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.util.Vector2Pool;
 import org.andengine.extension.physics.box2d.util.constants.PhysicsConstants;
-import org.andengine.util.modifier.IModifier;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
-public class Dinosaur extends AnimatedSprite {
+public class DinosaurWithPhysic extends AnimatedSprite {
 	
 	public final static long[] ANIMATION_DURATION = { 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120};
 	public final static int FRAMES_PER_ANIMATION = 13;
 	public final static int TILES_PER_LINE = 26;
 	
-//	public Body body;
-//	public PhysicsHandler physicsHandler;
+	public Body body;
+	public PhysicsHandler physicsHandler;
 
 	protected ResourcesManager resourcesManager;
 	protected DinosaurState currentState;
@@ -36,15 +32,13 @@ public class Dinosaur extends AnimatedSprite {
 	
 	protected int direction = Direction.WEST;
 	protected int life = 100;
-	// Ground  speed Pixels per second when moving
-	protected float speed = 3;
-	// Factor for speed when running
-	protected float speedFactor = 2;
+	protected float velocity = 2f;
+	protected float factorRunning = 2f;
 	
-	// If the player is in this radius, follow him
-	protected int radius = 100;
-	private MoveModifier currentMoveModifier;
-		
+	// Current vector to move to
+	protected Vector2 moveTo;
+	protected float radius = 5;
+	
 	public enum DinosaurState {
 		WALKING,
 		RUNNING,
@@ -57,12 +51,12 @@ public class Dinosaur extends AnimatedSprite {
 		CHASE_PLAYER,
 	}
 	
-	public Dinosaur(float pX, float pY) {
+	public DinosaurWithPhysic(float pX, float pY) {
 		super(pX, pY, ResourcesManager.getInstance().dinosaurGreenRegion, ResourcesManager.getInstance().vbom);
 		this.resourcesManager = ResourcesManager.getInstance();
 		this.direction = Direction.getRandomDirection();
 		this.setState(DinosaurState.LOOKING);
-//		this.createPhysic();
+		this.createPhysic();
 	}
 
 	public void setDirection(int direction) {
@@ -87,22 +81,58 @@ public class Dinosaur extends AnimatedSprite {
 
 	}
 	
-	public Vector2 getPositionVector() {
-		return new Vector2(this.getX(), this.getY());
+	
+	public void moveTo(float x, float y, DinosaurState state) {
+		// Store the point where to go
+		this.moveTo = new Vector2(x, y);
+		// Calculate the direction for the sprite animation
+		int direction = Direction.getDirectionFromVectors(this.body.getPosition(), this.moveTo);
+		// Calculate the slope between source/destination
+		Vector2 v = Vector2Pool.obtain(x - this.body.getPosition().x, y - this.body.getPosition().y);
+		v.nor();
+		if (state == DinosaurState.WALKING) {
+			this.body.setLinearVelocity(v.x * this.velocity, v.y * this.velocity);			
+		} else {
+			this.body.setLinearVelocity(v.x * this.velocity * this.factorRunning, v.y * this.velocity * this.factorRunning);						
+		}
+		Vector2Pool.recycle(v);
+		if (state == DinosaurState.CHASE_PLAYER && direction == this.direction) {
+			
+		} else {
+			this.setDirection(direction);
+			this.setState(state);			
+		}
 	}
 	
 	@Override
     protected void onManagedUpdate(float pSecondsElapsed) {
             super.onManagedUpdate(pSecondsElapsed);
             
-            // Check if we should chase the player!
-//            Vector2 playerPos = this.resourcesManager.player.getPositionVector();
-//            Vector2 pos = this.getPositionVector();
-//            if (pos.dst(playerPos) < this.radius) {
-//            	this.chasePlayer(pos, playerPos);
-//            	this.animationTime = 0;
-//            	return;
-//            } 
+            // Check if the dino should chase our player
+            Vector2 playerPos = this.resourcesManager.player.body.getPosition();
+            float distance = this.body.getPosition().dst(playerPos); 
+            if (distance < 0.5) {
+            	this.body.setLinearVelocity(0, 0);
+            	this.setState(DinosaurState.ATTACK);
+            	return;
+            } else if (distance < this.radius) {
+            	this.moveTo(playerPos.x, playerPos.y, DinosaurState.CHASE_PLAYER);
+            	return;
+            } else {
+            	if (this.currentState == DinosaurState.CHASE_PLAYER) {
+            		// Force calculation  of new state
+            		this.animationTime = 0;
+            	}
+            }
+            
+            // If walking or running, check if we reached our goal
+            if (this.currentState == DinosaurState.WALKING || this.currentState == DinosaurState.RUNNING) {
+            	if (Math.abs(this.body.getPosition().dst(this.moveTo)) < 5) {
+            		// Stop dino and force to calculate a new state
+            		this.body.setLinearVelocity(0, 0);
+            		this.animationTime = 0;
+            	}
+            }
             
             // Set a random state after a random time. If the state is walking or running, set a random position where the dino walks.
             this.animationElapsedTime += pSecondsElapsed;
@@ -116,8 +146,8 @@ public class Dinosaur extends AnimatedSprite {
             	// If the state is walking, calculate a new random position
             	if (randomState == DinosaurState.WALKING || randomState == DinosaurState.RUNNING) {
             		// The new Position should be in Range [-1000...1000] from the current position
-            		float rX = this.getX() + (-1000 + (r.nextFloat() * 2000 + 1));
-            		float rY = this.getY() + (-1000 + (r.nextFloat() * 2000 + 1));            		
+            		float rX = this.body.getPosition().x + (-1000 + (r.nextFloat() * 2000 + 1));
+            		float rY = this.body.getPosition().y + (-1000 + (r.nextFloat() * 2000 + 1));            		            		
             		this.moveTo(rX, rY, randomState);
             	} else {
                 	this.setState(randomState);            		
@@ -125,50 +155,17 @@ public class Dinosaur extends AnimatedSprite {
             }
     }
 	
-	protected void chasePlayer(Vector2 pos, Vector2 playerPos) {
-		this.setDirection(Direction.getDirectionFromVectors(pos, playerPos));
-		// Unregister random walking modifier
-		if (this.currentMoveModifier != null) this.unregisterEntityModifier(this.currentMoveModifier);
-
-		this.currentMoveModifier = new MoveModifier(10f, pos.x, playerPos.x, pos.y, playerPos.y, new IEntityModifierListener() {
-			
-			@Override
-			public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem) {
-				// TODO Auto-generated method stub
-			}
-		});
-		this.registerEntityModifier(new MoveModifier(10f, pos.x, playerPos.x, pos.y, playerPos.y));
-		this.setState(DinosaurState.CHASE_PLAYER);
-	}
-
-	protected void moveTo(float x, float y, DinosaurState state) {
-		// Calculate direction
-		Vector2 from = this.getPositionVector();
-		Vector2 to = Vector2Pool.obtain(x,y);
-		//this.setDirection(Direction.getDirection(this.getX(), x, this.getY(), y));
-		this.setDirection(Direction.getDirectionFromVectors(from, to));
-		// Calculate the distance
-		float dist = from.dst(to);
-		// Calculate time needed depending on state
-		float speed = (state == DinosaurState.WALKING) ? this.speed : this.speed * this.speedFactor;
-		this.animationTime = dist / speed;
-		this.setState(state);
-		this.currentMoveModifier = new MoveModifier(this.animationTime, this.getX(), x, this.getY(), y);
-		this.registerEntityModifier(this.currentMoveModifier);
-		Vector2Pool.recycle(from);
-		Vector2Pool.recycle(to);
+	protected void createPhysic() {
+		this.body = PhysicsFactory.createBoxBody(this.resourcesManager.physicsWorld, this, BodyType.KinematicBody, PhysicsFactory.createFixtureDef(0, 0, 0));
+//		this.physicsHandler = new PhysicsHandler(this);
+//		this.registerUpdateHandler(this.physicsHandler);
+		this.resourcesManager.physicsWorld.registerPhysicsConnector(new PhysicsConnector(this, this.body, true, true));		
 	}
 	
 	private DinosaurState getRandomState() {
     	Random r = new Random();
 		DinosaurState randomState = DinosaurState.values()[r.nextInt(7)];
-    	while (randomState == DinosaurState.ATTACK || randomState == DinosaurState.BEEN_HIT || randomState == DinosaurState.TIPPING_OVER) {
+    	while (randomState == DinosaurState.ATTACK || randomState == DinosaurState.BEEN_HIT || randomState == DinosaurState.TIPPING_OVER || randomState == DinosaurState.CHASE_PLAYER) {
     		randomState = DinosaurState.values()[r.nextInt(7)];
     	}
 		return randomState;
