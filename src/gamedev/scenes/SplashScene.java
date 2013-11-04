@@ -12,7 +12,8 @@ public class SplashScene extends BaseScene {
 
 	@Override
 	public void createScene() {
-		splash = new Sprite(0, 0, resourcesManager.splash_region, vbom) {
+		splash = new Sprite(800, 480,
+				resourcesManager.splash_region, vbom) {
 			@Override
 			protected void preDraw(GLState pGLState, Camera pCamera) {
 				super.preDraw(pGLState, pCamera);
@@ -20,8 +21,10 @@ public class SplashScene extends BaseScene {
 			}
 		};
 
-		splash.setScale(1.5f);
-		splash.setPosition(400, 240);
+		// splash.setScale(1.5f);
+		splash.setPosition(camera.getWidth() / 2
+				- resourcesManager.splash_region.getWidth() / 2,
+				resourcesManager.splash_region.getHeight() / 2);
 		attachChild(splash);
 	}
 

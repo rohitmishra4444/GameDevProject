@@ -1,5 +1,6 @@
 package gamedev.scenes;
 
+import gamedev.game.SceneManager;
 import gamedev.game.SceneManager.SceneType;
 
 import org.andengine.engine.camera.Camera;
@@ -27,7 +28,7 @@ public class MainMenuScene extends BaseScene implements
 
 	@Override
 	public void onBackKeyPressed() {
-		System.exit(0);
+		back();
 	}
 
 	@Override
@@ -37,12 +38,12 @@ public class MainMenuScene extends BaseScene implements
 
 	@Override
 	public void disposeScene() {
-		// TODO Auto-generated method stub
-		
+		this.detachSelf();
+		this.dispose();
 	}
 
 	private void createBackground() {
-		attachChild(new Sprite(400, 240,
+		attachChild(new Sprite(0, 0,
 				resourcesManager.menu_background_region, vbom) {
 			@Override
 			protected void preDraw(GLState pGLState, Camera pCamera) {
@@ -54,7 +55,8 @@ public class MainMenuScene extends BaseScene implements
 
 	private void createMenuChildScene() {
 		menuChildScene = new MenuScene(camera);
-		menuChildScene.setPosition(400, 240);
+		// Not necessary.
+		// menuChildScene.setPosition(0, 0);
 
 		final IMenuItem playMenuItem = new ScaleMenuItemDecorator(
 				new SpriteMenuItem(MENU_PLAY,
@@ -79,12 +81,9 @@ public class MainMenuScene extends BaseScene implements
 		menuChildScene.buildAnimations();
 		menuChildScene.setBackgroundEnabled(false);
 
-		playMenuItem.setPosition(playMenuItem.getX(),
-				playMenuItem.getY() + 10);
-		exitMenuItem
-				.setPosition(exitMenuItem.getX(), exitMenuItem.getY() - 110);
-		backMenuItem
-				.setPosition(backMenuItem.getX(), backMenuItem.getY() - 230);
+		playMenuItem.setPosition(playMenuItem.getX(), playMenuItem.getY());
+		exitMenuItem.setPosition(exitMenuItem.getX(), exitMenuItem.getY());
+		backMenuItem.setPosition(backMenuItem.getX(), backMenuItem.getY());
 
 		menuChildScene.setOnMenuItemClickListener(this);
 
@@ -97,8 +96,10 @@ public class MainMenuScene extends BaseScene implements
 
 		switch (pMenuItem.getID()) {
 		case MENU_PLAY:
+			SceneManager.getInstance().createLevelScene(engine, 1);
 			return true;
 		case MENU_EXIT:
+			System.exit(0);
 			return true;
 		case MENU_BACK:
 			return true;

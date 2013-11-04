@@ -9,9 +9,6 @@ import gamedev.objects.Player.PlayerState;
 import org.andengine.engine.camera.hud.controls.AnalogOnScreenControl;
 import org.andengine.engine.camera.hud.controls.AnalogOnScreenControl.IAnalogOnScreenControlListener;
 import org.andengine.engine.camera.hud.controls.BaseOnScreenControl;
-import org.andengine.extension.tmx.TMXLayer;
-import org.andengine.extension.tmx.TMXLoader;
-import org.andengine.extension.tmx.TMXLoader.ITMXTilePropertiesListener;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.tmx.TMXLayer;
@@ -74,7 +71,8 @@ public class LevelScene extends BaseScene {
 
 	@Override
 	public void onBackKeyPressed() {
-		// TODO GOTO Pause menu
+		back();
+		// SceneManager.getInstance().setMenuScene();
 	}
 
 	@Override

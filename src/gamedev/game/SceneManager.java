@@ -1,5 +1,6 @@
 package gamedev.game;
 
+import gamedev.levels.Level1;
 import gamedev.scenes.BaseScene;
 import gamedev.scenes.LoadingScene;
 import gamedev.scenes.MainMenuScene;
@@ -82,9 +83,9 @@ public class SceneManager
     {
 		ResourcesManager.getInstance().loadMenuResources();
         menuScene = new MainMenuScene();
-        loadingScene = new LoadingScene();
-        SceneManager.getInstance().setScene(menuScene);
-        disposeSplashScene();    
+		// loadingScene = new LoadingScene();
+		setScene(menuScene);
+		disposeSplashScene();
     }
     
     public void createSplashScene(OnCreateSceneCallback pOnCreateSceneCallback)
@@ -104,21 +105,24 @@ public class SceneManager
     
     public void createLevelScene(final Engine mEngine, int level)
     {
+		loadingScene = new LoadingScene();
         setScene(loadingScene);
-        //ResourcesManager.getInstance().unloadMenuTextures();
+		ResourcesManager.getInstance().unloadMenuTextures();
         mEngine.registerUpdateHandler(new TimerHandler(0.1f, new ITimerCallback() 
         {
             public void onTimePassed(final TimerHandler pTimerHandler) 
             {
                 mEngine.unregisterUpdateHandler(pTimerHandler);
-                //ResourcesManager.getInstance().loadGameResources();
-               // levelScene = new Level1(); //TODO Load level dynamic based on provided level variable
-             //   setScene(levelScene);
+						ResourcesManager.getInstance().loadGameResources();
+						levelScene = new Level1(); // TODO Load level dynamic
+													// based on provided level
+													// variable
+						setScene(levelScene);
+						loadingScene.disposeScene();
             }
         }));
     }
 
-    
     //---------------------------------------------
     // GETTERS AND SETTERS
     //---------------------------------------------
@@ -138,5 +142,8 @@ public class SceneManager
         return currentScene;
     }
     
+	public void setMenuScene() {
+    	setScene(menuScene);
+	}
 
 }

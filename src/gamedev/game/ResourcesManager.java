@@ -6,6 +6,10 @@ import org.andengine.engine.Engine;
 import org.andengine.engine.camera.BoundCamera;
 import org.andengine.extension.physics.box2d.FixedStepPhysicsWorld;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
+import org.andengine.opengl.font.Font;
+import org.andengine.opengl.font.FontFactory;
+import org.andengine.opengl.font.FontManager;
+import org.andengine.opengl.texture.ITexture;
 import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
@@ -14,6 +18,8 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.ui.activity.BaseActivity;
+
+import android.graphics.Color;
 
 import com.badlogic.gdx.math.Vector2;
 
@@ -55,12 +61,14 @@ public class ResourcesManager
 	public ITextureRegion menu_background_region;
 	public ITiledTextureRegion buttons_region;
 	private BitmapTextureAtlas menuTextureAtlas;
+	public Font font;
     
     //---------------------------------------------
     // Physic
     //---------------------------------------------
     
 	public PhysicsWorld physicsWorld;
+
 
     
     //---------------------------------------------
@@ -78,10 +86,12 @@ public class ResourcesManager
     {
         loadMenuGraphics();
 		// loadMenuAudio();
+		loadMenuFonts();
     }
     
     public void loadGameResources()
     {
+		loadPhysics();
         loadGameGraphics();
 		// loadGameFonts();
 		// loadGameAudio();
@@ -112,6 +122,26 @@ public class ResourcesManager
         
     }
 
+	private void loadMenuFonts() {
+		FontFactory.setAssetBasePath("font/");
+		final ITexture mainFontTexture = new BitmapTextureAtlas(
+				getInstance().textureManager, 256, 256,
+				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+
+		font = FontFactory.createStrokeFromAsset(new FontManager(),
+				mainFontTexture, activity.getAssets(), "font.ttf", 50f, true,
+				Color.WHITE, 2f, Color.BLACK);
+		font.load();
+	}
+
+	public void unloadMenuTextures() {
+		menuTextureAtlas.unload();
+	}
+
+	public void loadMenuTextures() {
+		menuTextureAtlas.load();
+	}
+
     private void loadGameGraphics()
     {
     	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
@@ -135,14 +165,17 @@ public class ResourcesManager
 						32);
 
 		this.dinosaurGreenAtlas.load();
-    	
-    	this.landscapeAtlas = new BitmapTextureAtlas(getInstance().textureManager, 512, 1204);
-    	this.landscapeAtlas.load();
+
+		// this.landscapeAtlas = new BitmapTextureAtlas(
+		// getInstance().textureManager, 512, 1204);
+		// this.landscapeAtlas.load();
     }
     
-    public ITextureRegion getRandomTreeTexture() {
-    	return BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(this.landscapeAtlas, getInstance().activity, "trees.png", 0, 0, 8, 4);
-    }
+	public ITextureRegion getRandomTreeTexture() {
+		return BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(
+				this.landscapeAtlas, getInstance().activity, "trees.png", 0, 0,
+				8, 4);
+	}
     
     private void loadGameFonts()
     {
@@ -157,7 +190,7 @@ public class ResourcesManager
 	public void loadSplashScreen() {
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
 		splashTextureAtlas = new BitmapTextureAtlas(
-				getInstance().textureManager, 256, 256, TextureOptions.BILINEAR);
+				getInstance().textureManager, 225, 256, TextureOptions.BILINEAR);
 		splash_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
 				splashTextureAtlas, activity, "splash.png", 0, 0);
 		splashTextureAtlas.load();
@@ -186,8 +219,8 @@ public class ResourcesManager
         getInstance().textureManager = textureManager;
         
         // We also load physics and player.. //TODO Move out from here, since a Menu scene does not require them in memory
-		getInstance().loadPhysics();
-		getInstance().loadGameResources();
+		// getInstance().loadPhysics();
+		// getInstance().loadGameResources();
     }
     
     //---------------------------------------------
