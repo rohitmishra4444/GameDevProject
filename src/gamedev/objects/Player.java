@@ -28,7 +28,7 @@ public class Player extends AnimatedSprite {
 	protected float velocity = 4f;	
 	protected float factorRunning = 1.5f;
 	protected int life = 100;
-	protected int engery = 100;
+	protected int energy = 100;
 	
 	public enum PlayerState {
 		IDLE,
@@ -66,6 +66,7 @@ public class Player extends AnimatedSprite {
 		if (state == PlayerState.IDLE) {
 			this.body.setLinearVelocity(0, 0);
 			this.stopAnimation();
+			this.setEnergy(this.energy+2);
 			return;
 		}
 		if (!this.isAnimationRunning()) {
@@ -86,11 +87,13 @@ public class Player extends AnimatedSprite {
 	 */
 	public void setVelocity(float pX, float pY, PlayerState state) {
 		// Check if enough energy, otherwise we reset to WALKIING
-		if (state == PlayerState.RUNNING && this.engery == 0) state = PlayerState.WALKING;
+		if (state == PlayerState.RUNNING && this.energy == 0) state = PlayerState.WALKING;
 		if (state == PlayerState.WALKING) {
 			this.body.setLinearVelocity(pX * this.velocity, pY * this.velocity);
+			//this.setEnergy(this.energy+1);
 		} else {
 			this.body.setLinearVelocity(pX * this.velocity * this.factorRunning, pY * this.velocity * this.factorRunning);
+			this.setEnergy(this.energy-1); // TODO Move to constant / variable
 		}
 		this.setState(state);
 	}
@@ -129,12 +132,13 @@ public class Player extends AnimatedSprite {
 		this.life = life;
 	}
 
-	public int getEngery() {
-		return engery;
+	public int getEnergy() {
+		return energy;
 	}
 
-	public void setEngery(int engery) {
-		this.engery = engery;
+	public void setEnergy(int energy) {
+		if (energy > 100) energy = 100;
+		this.energy = Math.max(energy, 0);
 	}
 
 	protected void createAndConnectPhysics(final BoundCamera camera, PhysicsWorld physicsWorld) {
