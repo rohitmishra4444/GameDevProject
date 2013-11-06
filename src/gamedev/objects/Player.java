@@ -129,7 +129,10 @@ public class Player extends AnimatedSprite {
 	}
 
 	public void setLife(int life) {
-		this.life = life;
+		if (life > 100) life = 100;
+		this.life = Math.max(life, 0);
+		this.resourcesManager.hud.setLife(this.life);
+		// TODO Game over when life == 0
 	}
 
 	public int getEnergy() {
@@ -139,6 +142,7 @@ public class Player extends AnimatedSprite {
 	public void setEnergy(int energy) {
 		if (energy > 100) energy = 100;
 		this.energy = Math.max(energy, 0);
+		this.resourcesManager.hud.setEnergy(this.energy);
 	}
 
 	protected void createAndConnectPhysics(final BoundCamera camera, PhysicsWorld physicsWorld) {

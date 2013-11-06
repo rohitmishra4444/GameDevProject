@@ -1,5 +1,6 @@
 package gamedev.game;
 
+import gamedev.hud.SceneHUD;
 import gamedev.objects.Player;
 
 import org.andengine.engine.Engine;
@@ -42,6 +43,7 @@ public class ResourcesManager
     public VertexBufferObjectManager vbom;
     public TextureManager textureManager;
     public Player player;
+    public SceneHUD hud;
     
     //---------------------------------------------
     // TEXTURES & TEXTURE REGIONS
@@ -78,9 +80,6 @@ public class ResourcesManager
     public void loadPlayerGraphics() {
     }
     
-    public void loadPhysics() {
-    	this.physicsWorld = new FixedStepPhysicsWorld(30, new Vector2(0, 0), false, 8, 1);
-    }
     
     public void loadMenuResources()
     {
@@ -91,10 +90,16 @@ public class ResourcesManager
     
     public void loadGameResources()
     {
-		loadPhysics();
+    	this.physicsWorld = new FixedStepPhysicsWorld(30, new Vector2(0, 0), false, 8, 1);
         loadGameGraphics();
+        loadHUD();
 		// loadGameFonts();
 		// loadGameAudio();
+    }
+    
+    private void loadHUD() {
+    	this.hud = new SceneHUD();
+    	this.camera.setHUD(this.hud);
     }
     
     private void loadMenuGraphics()

@@ -28,6 +28,9 @@ public class Dinosaur extends AnimatedSprite {
 	protected DinosaurState currentState;
 	protected float animationElapsedTime = 0;
 	protected float animationTime = 10;
+	protected float attackElapsedTime = 0;
+	protected float attackBlockTime = 2;
+	protected boolean firstAttack = false;
 	
 	protected int direction = Direction.WEST;
 	protected int life = 100;
@@ -37,7 +40,7 @@ public class Dinosaur extends AnimatedSprite {
 	// Current vector to move to
 	protected Vector2 moveTo;
 	protected float radius = 5;
-	
+		
 	public enum DinosaurState {
 		WALKING,
 		RUNNING,
@@ -149,6 +152,13 @@ public class Dinosaur extends AnimatedSprite {
         float distance = this.body.getPosition().dst(playerPos); 
         if (distance < 0.5) {
         	if (this.currentState != DinosaurState.ATTACK) this.setState(DinosaurState.ATTACK);
+        	// TODO Damage should be based on distance...
+        	this.attackElapsedTime += pSecondsElapsed;
+        	if (!firstAttack || this.attackElapsedTime > this.attackBlockTime) {
+        		this.firstAttack = true;
+            	this.resourcesManager.player.setLife(this.resourcesManager.player.getLife() - 10);
+            	this.attackElapsedTime = 0;
+        	}
         	return;
         } else if (distance < this.radius) {
         	this.moveTo(playerPos.x, playerPos.y, DinosaurState.CHASE_PLAYER);
