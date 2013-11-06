@@ -16,16 +16,19 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
 public class Player extends AnimatedSprite {
 	
-	public final static long[] ANIMATION_DURATION = { 30, 30, 30, 30, 30, 30, 30, 30};
+	public final static long[] ANIMATION_DURATION = { 50, 50, 50, 50, 50, 50, 50, 50};
 	
 	public Body body;
 	public PhysicsHandler physicsHandler;
-
+	
 	protected ResourcesManager resourcesManager;
 	protected PlayerState currentState = PlayerState.IDLE;
-	
 	protected int direction = Direction.NORTH;
+	
+	protected float velocity = 4f;	
+	protected float factorRunning = 1.5f;
 	protected int life = 100;
+	protected int engery = 100;
 	
 	public enum PlayerState {
 		IDLE,
@@ -53,11 +56,15 @@ public class Player extends AnimatedSprite {
 		this.createAndConnectPhysics(this.resourcesManager.camera, this.resourcesManager.physicsWorld);
 	}
 
-	
+	/**
+	 * Display Player animation on current State and Direction
+	 * Also validate some states here, e.g. running is not possible if energy = 0
+	 * @param state new PlayerState
+	 */
 	public void setState(PlayerState state) {
 		this.currentState = state;
-		// Display animation based on current State and direction
 		if (state == PlayerState.IDLE) {
+			this.body.setLinearVelocity(0, 0);
 			this.stopAnimation();
 			return;
 		}
@@ -69,6 +76,29 @@ public class Player extends AnimatedSprite {
 			int startTile = rowIndex*8 + this.direction*8;
 			this.animate(ANIMATION_DURATION, startTile, startTile+7, false);			
 		}
+	}
+	
+	/**
+	 * Set the velocity direction. Speed is calculated based on state
+	 * @param pX
+	 * @param pY
+	 * @param state WALKING|RUNNING
+	 */
+	public void setVelocity(float pX, float pY, PlayerState state) {
+		// Check if enough energy, otherwise we reset to WALKIING
+		if (state == PlayerState.RUNNING && this.engery == 0) state = PlayerState.WALKING;
+		if (state == PlayerState.WALKING) {
+			this.body.setLinearVelocity(pX * this.velocity, pY * this.velocity);
+		} else {
+			this.body.setLinearVelocity(pX * this.velocity * this.factorRunning, pY * this.velocity * this.factorRunning);
+		}
+		this.setState(state);
+	}
+	
+	@Override
+    protected void onManagedUpdate(float pSecondsElapsed) {
+		super.onManagedUpdate(pSecondsElapsed);
+            
 	}
 	
 	public void setDirection(int direction) {
@@ -83,6 +113,30 @@ public class Player extends AnimatedSprite {
 		return new Vector2(this.getX(), this.getY());
 	}
 	
+	public float getFactorRunning() {
+		return factorRunning;
+	}
+
+	public void setFactorRunning(float factorRunning) {
+		this.factorRunning = factorRunning;
+	}
+
+	public int getLife() {
+		return life;
+	}
+
+	public void setLife(int life) {
+		this.life = life;
+	}
+
+	public int getEngery() {
+		return engery;
+	}
+
+	public void setEngery(int engery) {
+		this.engery = engery;
+	}
+
 	protected void createAndConnectPhysics(final BoundCamera camera, PhysicsWorld physicsWorld) {
 		this.body = PhysicsFactory.createBoxBody(physicsWorld, this, BodyType.KinematicBody, PhysicsFactory.createFixtureDef(0, 0, 0));
 		this.body.setUserData("player");	

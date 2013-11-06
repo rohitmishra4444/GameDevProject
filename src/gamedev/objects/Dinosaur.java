@@ -112,7 +112,12 @@ public class Dinosaur extends AnimatedSprite {
 
 	}
 	
-	
+	/**
+	 * Set the position where the dinosaur should move
+	 * @param x
+	 * @param y
+	 * @param state WALKING|RUNNING|CHASE_PLAYER
+	 */
 	public void moveTo(float x, float y, DinosaurState state) {
 		// Store the point where to go
 		this.moveTo = new Vector2(x, y);
@@ -137,52 +142,52 @@ public class Dinosaur extends AnimatedSprite {
 	
 	@Override
     protected void onManagedUpdate(float pSecondsElapsed) {
-            super.onManagedUpdate(pSecondsElapsed);
+		super.onManagedUpdate(pSecondsElapsed);
             
-            // Check if the dino should chase our player
-            Vector2 playerPos = this.resourcesManager.player.body.getPosition();
-            float distance = this.body.getPosition().dst(playerPos); 
-            if (distance < 0.5) {
-            	if (this.currentState != DinosaurState.ATTACK) this.setState(DinosaurState.ATTACK);
-            	return;
-            } else if (distance < this.radius) {
-            	this.moveTo(playerPos.x, playerPos.y, DinosaurState.CHASE_PLAYER);
-            	return;
-            } else {
-            	if (this.currentState == DinosaurState.CHASE_PLAYER) {
-            		// Force calculation  of new state
-            		this.animationTime = 0;
-            	}
-            }
-            
-            // If walking or running, check if we reached our goal
-            if (this.currentState == DinosaurState.WALKING || this.currentState == DinosaurState.RUNNING) {
-            	if (Math.abs(this.body.getPosition().dst(this.moveTo)) < 5) {
-            		// Stop dino and force to calculate a new state
-            		this.body.setLinearVelocity(0, 0);
-            		this.animationTime = 0;
-            	}
-            }
-            
-            // Set a random state after a random time. If the state is walking or running, set a random position where the dino walks.
-            this.animationElapsedTime += pSecondsElapsed;
-            if (this.animationElapsedTime > this.animationTime) {
-            	this.animationElapsedTime = 0;
-            	Random r = new Random();
-            	// Set a random animation time [10...20] for the next animation seconds
-            	this.animationTime = 10 + (r.nextFloat() * 10 + 1);
-            	// Pick a random state, exclude some states
-            	DinosaurState randomState = this.getRandomState();
-            	// If the state is walking, calculate a new random position
-            	if (randomState == DinosaurState.WALKING || randomState == DinosaurState.RUNNING) {
-            		// The new Position should be in Range [-1000...1000] from the current position
-            		float rX = this.body.getPosition().x + (-1000 + (r.nextFloat() * 2000 + 1));
-            		float rY = this.body.getPosition().y + (-1000 + (r.nextFloat() * 2000 + 1));            		            		
-            		this.moveTo(rX, rY, randomState);
-            	} else {
-                	this.setState(randomState);            		
-            	}
-            }
+        // Check if the dino should chase our player
+        Vector2 playerPos = this.resourcesManager.player.body.getPosition();
+        float distance = this.body.getPosition().dst(playerPos); 
+        if (distance < 0.5) {
+        	if (this.currentState != DinosaurState.ATTACK) this.setState(DinosaurState.ATTACK);
+        	return;
+        } else if (distance < this.radius) {
+        	this.moveTo(playerPos.x, playerPos.y, DinosaurState.CHASE_PLAYER);
+        	return;
+        } else {
+        	if (this.currentState == DinosaurState.CHASE_PLAYER) {
+        		// Force calculation  of new state
+        		this.animationTime = 0;
+        	}
+        }
+        
+        // If walking or running, check if we reached our goal
+        if (this.currentState == DinosaurState.WALKING || this.currentState == DinosaurState.RUNNING) {
+        	if (Math.abs(this.body.getPosition().dst(this.moveTo)) < 5) {
+        		// Stop dino and force to calculate a new state
+        		this.body.setLinearVelocity(0, 0);
+        		this.animationTime = 0;
+        	}
+        }
+        
+        // Set a random state after a random time. If the state is walking or running, set a random position where the dino walks.
+        this.animationElapsedTime += pSecondsElapsed;
+        if (this.animationElapsedTime > this.animationTime) {
+        	this.animationElapsedTime = 0;
+        	Random r = new Random();
+        	// Set a random animation time [10...20] for the next animation seconds
+        	this.animationTime = 10 + (r.nextFloat() * 10 + 1);
+        	// Pick a random state, exclude some states
+        	DinosaurState randomState = this.getRandomState();
+        	// If the state is walking, calculate a new random position
+        	if (randomState == DinosaurState.WALKING || randomState == DinosaurState.RUNNING) {
+        		// The new Position should be in Range [-1000...1000] from the current position
+        		float rX = this.body.getPosition().x + (-1000 + (r.nextFloat() * 2000 + 1));
+        		float rY = this.body.getPosition().y + (-1000 + (r.nextFloat() * 2000 + 1));            		            		
+        		this.moveTo(rX, rY, randomState);
+        	} else {
+            	this.setState(randomState);            		
+        	}
+        }
     }
 	
 	protected void createPhysic() {

@@ -186,17 +186,13 @@ public class LevelScene extends BaseScene {
 						pValueX, pValueY));
 				
 				// Set the direction and State
-				// TODO Handle the velocity on a method in the Player class
 				player.setDirection(Direction.getDirectionFromDegree(degree));
 				if (degree == 0) {
 					player.setState(PlayerState.IDLE);
-					player.body.setLinearVelocity(0, 0);
 				} else if (Math.abs(pValueX) > 0.75 || Math.abs(pValueY) > 0.75) {
-					player.setState(PlayerState.RUNNING);
-					player.body.setLinearVelocity(pValueX * 7, pValueY * 7);
+					player.setVelocity(pValueX, pValueY, PlayerState.RUNNING);
 				} else {
-					player.setState(PlayerState.WALKING);
-					player.body.setLinearVelocity(pValueX * 5, pValueY * 5);					
+					player.setVelocity(pValueX, pValueY, PlayerState.WALKING);
 				}
 				
 			}
