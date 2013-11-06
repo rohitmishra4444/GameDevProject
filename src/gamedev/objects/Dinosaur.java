@@ -154,10 +154,14 @@ public class Dinosaur extends AnimatedSprite {
         	if (this.currentState != DinosaurState.ATTACK) this.setState(DinosaurState.ATTACK);
         	// TODO Damage should be based on distance...
         	this.attackElapsedTime += pSecondsElapsed;
-        	if (!firstAttack || this.attackElapsedTime > this.attackBlockTime) {
+        	if (!firstAttack) {
+        		this.resourcesManager.player.setLife(this.resourcesManager.player.getLife() - 10);
         		this.firstAttack = true;
-            	this.resourcesManager.player.setLife(this.resourcesManager.player.getLife() - 10);
-            	this.attackElapsedTime = 0;
+        	} else {
+            	if (this.attackElapsedTime > this.attackBlockTime) {
+                	this.resourcesManager.player.setLife(this.resourcesManager.player.getLife() - 10);
+                	this.attackElapsedTime = 0;
+            	}        		
         	}
         	return;
         } else if (distance < this.radius) {
