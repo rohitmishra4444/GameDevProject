@@ -111,7 +111,7 @@ public class Dinosaur extends AnimatedSprite {
 			break;
 		}
 		int startTile = rowIndex*TILES_PER_LINE + this.direction*FRAMES_PER_ANIMATION;
-		this.animate(ANIMATION_DURATION, startTile, startTile+12, animate);			
+		this.animate(ANIMATION_DURATION, startTile, startTile+FRAMES_PER_ANIMATION-1, animate);			
 
 	}
 	
@@ -153,14 +153,14 @@ public class Dinosaur extends AnimatedSprite {
         if (distance < 0.5) {
         	if (this.currentState != DinosaurState.ATTACK) this.setState(DinosaurState.ATTACK);
         	// TODO Damage should be based on distance...
-        	this.attackElapsedTime += pSecondsElapsed;
         	if (!firstAttack) {
-        		this.resourcesManager.player.setLife(this.resourcesManager.player.getLife() - 10);
+        		this.resourcesManager.player.underAttack(10, this);
         		this.firstAttack = true;
         	} else {
-            	if (this.attackElapsedTime > this.attackBlockTime) {
-                	this.resourcesManager.player.setLife(this.resourcesManager.player.getLife() - 10);
-                	this.attackElapsedTime = 0;
+            	this.attackElapsedTime += pSecondsElapsed;
+        		if (this.attackElapsedTime > this.attackBlockTime) {
+            		this.resourcesManager.player.underAttack(10, this);
+        			this.attackElapsedTime = 0;
             	}        		
         	}
         	return;
@@ -176,7 +176,7 @@ public class Dinosaur extends AnimatedSprite {
         
         // If walking or running, check if we reached our goal
         if (this.currentState == DinosaurState.WALKING || this.currentState == DinosaurState.RUNNING) {
-        	if (Math.abs(this.body.getPosition().dst(this.moveTo)) < 5) {
+        	if (Math.abs(this.body.getPosition().dst(this.moveTo)) < 1) {
         		// Stop dino and force to calculate a new state
         		this.body.setLinearVelocity(0, 0);
         		this.animationTime = 0;

@@ -17,6 +17,8 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 public class Player extends AnimatedSprite {
 	
 	public final static long[] ANIMATION_DURATION = { 50, 50, 50, 50, 50, 50, 50, 50};
+	public final static int FRAMES_PER_ANIMATION = 8;
+	public final static int TILES_PER_LINE = 8;
 	
 	public Body body;
 	public PhysicsHandler physicsHandler;
@@ -34,7 +36,7 @@ public class Player extends AnimatedSprite {
 		IDLE,
 		WALKING,
 		RUNNING,
-		HIT,
+		BEEN_HIT,
 	}
 	
 	/**
@@ -73,11 +75,22 @@ public class Player extends AnimatedSprite {
 			int rowIndex = 0;
 			if (state == PlayerState.WALKING) rowIndex = 0;
 			if (state == PlayerState.RUNNING) rowIndex = 9;
-			if (state == PlayerState.HIT) rowIndex = 18;
-			int startTile = rowIndex*8 + this.direction*8;
-			this.animate(ANIMATION_DURATION, startTile, startTile+7, false);			
+			if (state == PlayerState.BEEN_HIT) rowIndex = 18;
+			int startTile = rowIndex*TILES_PER_LINE + this.direction*FRAMES_PER_ANIMATION;
+			this.animate(ANIMATION_DURATION, startTile, startTile+FRAMES_PER_ANIMATION-1, false);			
 		}
 	}
+	
+	/**
+	 * This method is called by the enemy when the player is attacked
+	 * @param damage
+	 * @param attacker TODO Maybe interesting to know, but not used ATM. Use superclass of our dinos/animals and not Object.
+	 */
+	public void underAttack(int damage, Object attacker) {
+		this.setLife(this.life - damage);
+		this.setState(PlayerState.BEEN_HIT);
+	}
+	
 	
 	/**
 	 * Set the velocity direction. Speed is calculated based on state
