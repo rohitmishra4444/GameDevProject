@@ -149,7 +149,7 @@ public class Dinosaur extends AnimatedSprite {
             
         // Check if the dino should chase our player
         Vector2 playerPos = this.resourcesManager.player.body.getPosition();
-        float distance = this.body.getPosition().dst(playerPos); 
+        float distance = Math.abs(this.body.getPosition().dst(playerPos)); 
         if (distance < 0.5) {
         	if (this.currentState != DinosaurState.ATTACK) this.setState(DinosaurState.ATTACK);
         	// TODO Damage should be based on distance...
@@ -168,7 +168,7 @@ public class Dinosaur extends AnimatedSprite {
         	this.moveTo(playerPos.x, playerPos.y, DinosaurState.CHASE_PLAYER);
         	return;
         } else {
-        	if (this.currentState == DinosaurState.CHASE_PLAYER) {
+        	if (this.currentState == DinosaurState.CHASE_PLAYER || this.currentState == DinosaurState.ATTACK) {
         		// Force calculation  of new state
         		this.animationTime = 0;
         	}
