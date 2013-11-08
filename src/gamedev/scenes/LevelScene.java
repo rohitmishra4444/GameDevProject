@@ -189,12 +189,12 @@ public class LevelScene extends BaseScene {
 						pValueX, pValueY));
 				
 				// Set the direction and State
-				player.setDirection(Direction.getDirectionFromDegree(degree));
+				int direction = Direction.getDirectionFromDegree(degree);
 				if (degree == 0) {
-					player.setState(PlayerState.IDLE);
+					player.setState(PlayerState.IDLE, direction);
 				} else {
 					PlayerState state = resourcesManager.hud.isTouchedSecondaryButton() ? PlayerState.RUNNING : PlayerState.WALKING;
-					player.setVelocity(pValueX, pValueY, state);
+					player.setVelocity(pValueX, pValueY, state, direction);
 				}
 				
 //				else if (Math.abs(pValueX) > 0.75 || Math.abs(pValueY) > 0.75) {

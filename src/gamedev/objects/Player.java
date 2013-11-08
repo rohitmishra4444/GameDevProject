@@ -73,8 +73,12 @@ public class Player extends AnimatedSprite {
 	 * Also validate some states here, e.g. running is not possible if energy = 0
 	 * @param state new PlayerState
 	 */
-	public void setState(PlayerState state) {
+	public void setState(PlayerState state, int direction) {
+		if (state != PlayerState.RUNNING && state != PlayerState.WALKING) {
+			if (this.currentState == state && this.direction == direction) return;			
+		}
 		this.currentState = state;
+		this.direction = direction;
 		if (state == PlayerState.IDLE) {
 			this.body.setLinearVelocity(0, 0);
 			this.stopAnimation();
@@ -101,7 +105,7 @@ public class Player extends AnimatedSprite {
 	 */
 	public void underAttack(int damage, Dinosaur attacker) {
 		this.setLife(this.life - damage);
-		this.setState(PlayerState.BEEN_HIT);
+		this.setState(PlayerState.BEEN_HIT, this.direction);
 		if (!this.attackers.contains(attacker)) {
 			this.attackers.add(attacker);			
 		}
@@ -122,7 +126,7 @@ public class Player extends AnimatedSprite {
 	 * @param pY
 	 * @param state WALKING|RUNNING
 	 */
-	public void setVelocity(float pX, float pY, PlayerState state) {
+	public void setVelocity(float pX, float pY, PlayerState state, int direction) {
 		// Check if enough energy, otherwise we reset to WALKIING
 		if (state == PlayerState.RUNNING && this.energy == 0) state = PlayerState.WALKING;
 		if (state == PlayerState.WALKING) {
@@ -132,7 +136,7 @@ public class Player extends AnimatedSprite {
 			this.body.setLinearVelocity(pX * this.velocity * this.factorRunning, pY * this.velocity * this.factorRunning);
 			this.setEnergy(this.energy-1); // TODO Move to constant / variable
 		}
-		this.setState(state);
+		this.setState(state, direction);
 	}
 	
 	@Override
