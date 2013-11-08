@@ -21,7 +21,6 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.ui.activity.BaseActivity;
 
 import android.graphics.Color;
-import android.graphics.Typeface;
 
 import com.badlogic.gdx.math.Vector2;
 
@@ -128,11 +127,11 @@ public class ResourcesManager {
 				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 
 		fontManager = new FontManager();
-		this.font = new Font(fontManager, mainFontTexture, Typeface.create(
-				Typeface.DEFAULT, Typeface.BOLD), 32, true, Color.WHITE);
-		// font = FontFactory.createFromAsset(fontManager, mainFontTexture,
-		// activity.getAssets(), "font.ttf", 10f, true, Color.WHITE);
-		// font.load();
+		// this.font = new Font(fontManager, mainFontTexture, Typeface.create(
+		// Typeface.DEFAULT, Typeface.BOLD), 32, true, Color.WHITE);
+		font = FontFactory.createFromAsset(fontManager, mainFontTexture,
+				activity.getAssets(), "font.ttf", 50f, true, Color.BLACK);
+		font.load();
 		// this.textureManager.loadTexture(mainFontTexture);
 		this.fontManager.loadFont(font);
 	}
@@ -192,7 +191,7 @@ public class ResourcesManager {
 		splashTextureAtlas = new BitmapTextureAtlas(
 				getInstance().textureManager, 257, 25, TextureOptions.BILINEAR);
 		splash_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
-				splashTextureAtlas, activity, "splash.png", 0, 0);
+				splashTextureAtlas, activity, "splash_edited.png", 0, 0);
 		splashTextureAtlas.load();
 	}
 

@@ -12,9 +12,9 @@ public class LoadingScene extends BaseScene {
 
 	@Override
 	public void createScene() {
-		setBackground(new Background(Color.BLACK));
+		setBackground(new Background(Color.WHITE));
 		String loadingString = "Loading...";
-		Text loadingText = new Text(100, 50, resourcesManager.font,
+		Text loadingText = new Text(50, 50, resourcesManager.font,
 				loadingString, loadingString.length(), new TextOptions(
 						HorizontalAlign.CENTER), vbom);
 		// TODO: Text is not displayed.
