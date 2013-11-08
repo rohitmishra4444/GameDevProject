@@ -149,6 +149,7 @@ public class Dinosaur extends AnimatedSprite {
             
         // Check if the dino should chase our player
         Vector2 playerPos = this.resourcesManager.player.body.getPosition();
+        // TODO Calculation of distance does not always work and then the player is under attack always... why!
         float distance = Math.abs(this.body.getPosition().dst(playerPos)); 
         if (distance < 0.5) {
         	if (this.currentState != DinosaurState.ATTACK) this.setState(DinosaurState.ATTACK);
@@ -159,7 +160,7 @@ public class Dinosaur extends AnimatedSprite {
         	} else {
             	this.attackElapsedTime += pSecondsElapsed;
         		if (this.attackElapsedTime > this.attackBlockTime) {
-            		this.resourcesManager.player.underAttack(10, this);
+        			this.resourcesManager.player.underAttack(10, this);
         			this.attackElapsedTime = 0;
             	}        		
         	}
@@ -206,7 +207,7 @@ public class Dinosaur extends AnimatedSprite {
 	
 	protected void createPhysic() {
 		this.body = PhysicsFactory.createBoxBody(this.resourcesManager.physicsWorld, this, BodyType.KinematicBody, PhysicsFactory.createFixtureDef(0, 0, 0));
-		this.resourcesManager.physicsWorld.registerPhysicsConnector(new PhysicsConnector(this, this.body, true, true));		
+		this.resourcesManager.physicsWorld.registerPhysicsConnector(new PhysicsConnector(this, this.body, true, false));		
 	}
 	
 	private DinosaurState getRandomState() {
