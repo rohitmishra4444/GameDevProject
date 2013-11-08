@@ -51,6 +51,7 @@ public class Dinosaur extends AnimatedSprite {
 		PAUSED,
 		LOOKING,
 		CHASE_PLAYER,
+		DEAD,
 	}
 	
 	public Dinosaur(float pX, float pY) {
@@ -109,6 +110,8 @@ public class Dinosaur extends AnimatedSprite {
 			rowIndex = 28;
 			this.body.setLinearVelocity(0, 0);
 			break;
+		default:
+			break;
 		}
 		int startTile = rowIndex*TILES_PER_LINE + this.direction*FRAMES_PER_ANIMATION;
 		this.animate(ANIMATION_DURATION, startTile, startTile+FRAMES_PER_ANIMATION-1, animate);			
@@ -146,10 +149,25 @@ public class Dinosaur extends AnimatedSprite {
 		this.setState(state);			
 	}
 	
+	
+	public void underAttack(int damage) {
+		this.life -= damage;
+		if (this.life <= 0) {
+			this.setState(DinosaurState.TIPPING_OVER);
+			this.resourcesManager.player.getAttackers().remove(this);
+			this.currentState = DinosaurState.DEAD;
+		} else {
+			this.setState(DinosaurState.BEEN_HIT);			
+		}
+	}
+	
 	@Override
     protected void onManagedUpdate(float pSecondsElapsed) {
 		super.onManagedUpdate(pSecondsElapsed);
-            
+        
+		// TODO Remove object from scene!
+		if (this.currentState == DinosaurState.DEAD) return;
+		
         // Check if the dino should chase our player
         Vector2 playerPos = this.resourcesManager.player.body.getPosition();
         // TODO Calculation of distance does not always work and then the player is under attack always... why!
@@ -170,9 +188,11 @@ public class Dinosaur extends AnimatedSprite {
         	return;
         } else if (distance < this.radius) {
         	this.moveTo(playerPos.x, playerPos.y, DinosaurState.CHASE_PLAYER);
+        	this.resourcesManager.player.removeAttacker(this);
         	return;
         } else {
         	if (this.currentState == DinosaurState.CHASE_PLAYER || this.currentState == DinosaurState.ATTACK) {
+        		this.resourcesManager.player.removeAttacker(this);
         		// Force calculation  of new state
         		this.animationTime = 0;
         	}

@@ -1,11 +1,9 @@
 package gamedev.hud;
 
 import gamedev.game.ResourcesManager;
-import gamedev.objects.Player.PlayerState;
 
 import org.andengine.engine.camera.hud.HUD;
 import org.andengine.entity.primitive.Rectangle;
-import org.andengine.entity.scene.ITouchArea;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.util.color.Color;
 
@@ -37,7 +35,10 @@ public class SceneHUD extends HUD {
 	        {
 				if (touchEvent.isActionUp())
 	            {
-	                // TODO Player attacks
+					if (!resourcesManager.player.getAttackers().isEmpty()) {
+						// Attack the first dinosaur
+						resourcesManager.player.getAttackers().get(0).underAttack(50);
+					}
 	            }
 	            return true;
 	        };
