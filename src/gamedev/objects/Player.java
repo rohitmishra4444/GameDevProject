@@ -1,5 +1,8 @@
 package gamedev.objects;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+
 import gamedev.game.Direction;
 import gamedev.game.ResourcesManager;
 import org.andengine.engine.camera.BoundCamera;
@@ -11,7 +14,6 @@ import org.andengine.extension.physics.box2d.PhysicsWorld;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.MassData;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
 public class Player extends AnimatedSprite {
@@ -31,6 +33,8 @@ public class Player extends AnimatedSprite {
 	protected float factorRunning = 1.5f;
 	protected int life = 100;
 	protected int energy = 100;
+	
+	protected ArrayList<Dinosaur> attackers = new ArrayList<Dinosaur>();
 	
 	public enum PlayerState {
 		IDLE,
@@ -86,9 +90,20 @@ public class Player extends AnimatedSprite {
 	 * @param damage
 	 * @param attacker TODO Maybe interesting to know, but not used ATM. Use superclass of our dinos/animals and not Object.
 	 */
-	public void underAttack(int damage, Object attacker) {
+	public void underAttack(int damage, Dinosaur attacker) {
 		this.setLife(this.life - damage);
 		this.setState(PlayerState.BEEN_HIT);
+		if (!this.attackers.contains(attacker)) {
+			this.attackers.add(attacker);			
+		}
+	}
+	
+	public boolean removeAttacker(Dinosaur attacker) {
+		return this.attackers.remove(attacker);
+	}
+	
+	public ArrayList<Dinosaur> getAttackers() {
+		return this.attackers;
 	}
 	
 	

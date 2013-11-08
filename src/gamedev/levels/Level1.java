@@ -14,7 +14,7 @@ public class Level1 extends LevelScene {
 	
 	public void createScene() {
 		Random r = new Random();
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < 10; i++) {
 			this.attachChild(new Dinosaur(r.nextInt(1024), r
 					.nextInt(1204)));
 		}
