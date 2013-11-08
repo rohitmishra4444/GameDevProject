@@ -142,6 +142,10 @@ public class SceneManager
         return currentScene;
     }
     
+	public BaseScene getMenuScene() {
+		return menuScene;
+	}
+
 	public void setMenuScene() {
     	setScene(menuScene);
 	}

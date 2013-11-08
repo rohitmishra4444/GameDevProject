@@ -2,6 +2,7 @@ package gamedev.scenes;
 
 import gamedev.game.Direction;
 import gamedev.game.GameActivity;
+import gamedev.game.SceneManager;
 import gamedev.game.SceneManager.SceneType;
 import gamedev.objects.Player;
 import gamedev.objects.Player.PlayerState;
@@ -71,8 +72,10 @@ public class LevelScene extends BaseScene {
 
 	@Override
 	public void onBackKeyPressed() {
-		back();
-		// SceneManager.getInstance().setMenuScene();
+		BaseScene menuScene = SceneManager.getInstance().getMenuScene();
+		if (menuScene != null) {
+			setChildScene(menuScene);
+		}
 	}
 
 	@Override

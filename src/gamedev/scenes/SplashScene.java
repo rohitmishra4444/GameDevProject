@@ -41,8 +41,8 @@ public class SplashScene extends BaseScene {
 
 	@Override
 	public void disposeScene() {
-		splash.detachSelf();
-		splash.dispose();
+		// splash.detachSelf();
+		// splash.dispose();
 		this.detachSelf();
 		this.dispose();
 	}

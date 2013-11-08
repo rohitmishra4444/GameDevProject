@@ -21,6 +21,7 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.ui.activity.BaseActivity;
 
 import android.graphics.Color;
+import android.graphics.Typeface;
 
 import com.badlogic.gdx.math.Vector2;
 
@@ -29,32 +30,31 @@ import com.badlogic.gdx.math.Vector2;
  * @author www.matim-dev.com
  * @version 1.0
  */
-public class ResourcesManager
-{
-    //---------------------------------------------
-    // VARIABLES
-    //---------------------------------------------
-    
-    private static final ResourcesManager INSTANCE = new ResourcesManager();
-    
-    public Engine engine;
-    public BaseActivity activity;
-    public BoundCamera camera;
-    public VertexBufferObjectManager vbom;
-    public TextureManager textureManager;
-    public Player player;
-    public SceneHUD hud;
-    
-    //---------------------------------------------
-    // TEXTURES & TEXTURE REGIONS
-    //---------------------------------------------
+public class ResourcesManager {
+	// ---------------------------------------------
+	// VARIABLES
+	// ---------------------------------------------
 
-    public BitmapTextureAtlas playerAtlas;
-    public ITiledTextureRegion playerRegion;
-    public BitmapTextureAtlas dinosaurGreenAtlas;
-    public ITiledTextureRegion dinosaurGreenRegion;
-    public BitmapTextureAtlas landscapeAtlas;
-    
+	private static final ResourcesManager INSTANCE = new ResourcesManager();
+
+	public Engine engine;
+	public BaseActivity activity;
+	public BoundCamera camera;
+	public VertexBufferObjectManager vbom;
+	public TextureManager textureManager;
+	public Player player;
+	public SceneHUD hud;
+
+	// ---------------------------------------------
+	// TEXTURES & TEXTURE REGIONS
+	// ---------------------------------------------
+
+	public BitmapTextureAtlas playerAtlas;
+	public ITiledTextureRegion playerRegion;
+	public BitmapTextureAtlas dinosaurGreenAtlas;
+	public ITiledTextureRegion dinosaurGreenRegion;
+	public BitmapTextureAtlas landscapeAtlas;
+
 	// Texture for splash scene
 	public ITextureRegion splash_region;
 	private BitmapTextureAtlas splashTextureAtlas;
@@ -64,46 +64,42 @@ public class ResourcesManager
 	public ITiledTextureRegion buttons_region;
 	private BitmapTextureAtlas menuTextureAtlas;
 	public Font font;
-    
-    //---------------------------------------------
-    // Physic
-    //---------------------------------------------
-    
+	private FontManager fontManager;
+
+	// ---------------------------------------------
+	// Physic
+	// ---------------------------------------------
+
 	public PhysicsWorld physicsWorld;
 
+	// ---------------------------------------------
+	// CLASS LOGIC
+	// ---------------------------------------------
 
-    
-    //---------------------------------------------
-    // CLASS LOGIC
-    //---------------------------------------------
-    
-    public void loadPlayerGraphics() {
-    }
-    
-    
-    public void loadMenuResources()
-    {
-        loadMenuGraphics();
+	public void loadPlayerGraphics() {
+	}
+
+	public void loadMenuResources() {
+		loadMenuGraphics();
 		// loadMenuAudio();
 		loadMenuFonts();
-    }
-    
-    public void loadGameResources()
-    {
-    	this.physicsWorld = new FixedStepPhysicsWorld(30, new Vector2(0, 0), false, 8, 1);
-        loadGameGraphics();
-        loadHUD();
+	}
+
+	public void loadGameResources() {
+		this.physicsWorld = new FixedStepPhysicsWorld(30, new Vector2(0, 0),
+				false, 8, 1);
+		loadGameGraphics();
+		loadHUD();
 		// loadGameFonts();
 		// loadGameAudio();
-    }
-    
-    private void loadHUD() {
-    	this.hud = new SceneHUD();
-    	this.camera.setHUD(this.hud);
-    }
-    
-    private void loadMenuGraphics()
-    {
+	}
+
+	private void loadHUD() {
+		this.hud = new SceneHUD();
+		this.camera.setHUD(this.hud);
+	}
+
+	private void loadMenuGraphics() {
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/menu/");
 
 		this.menuTextureAtlas = new BitmapTextureAtlas(textureManager, 800,
@@ -111,21 +107,19 @@ public class ResourcesManager
 
 		this.menu_background_region = BitmapTextureAtlasTextureRegionFactory
 				.createTiledFromAsset(this.menuTextureAtlas,
-						getInstance().activity,
-						"menubackground.png", 0, 0, 1, 1);
+						getInstance().activity, "menubackground.png", 0, 0, 1,
+						1);
 		this.buttons_region = BitmapTextureAtlasTextureRegionFactory
 				.createTiledFromAsset(this.menuTextureAtlas,
-						getInstance().activity,
-						"menubuttons.png", 0, 0, 1, 3);
+						getInstance().activity, "menubuttons.png", 0, 0, 1, 3);
 
 		this.menuTextureAtlas.load();
 
-    }
-    
-    private void loadMenuAudio()
-    {
-        
-    }
+	}
+
+	private void loadMenuAudio() {
+
+	}
 
 	private void loadMenuFonts() {
 		FontFactory.setAssetBasePath("font/");
@@ -133,10 +127,14 @@ public class ResourcesManager
 				getInstance().textureManager, 256, 256,
 				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 
-		font = FontFactory.createStrokeFromAsset(new FontManager(),
-				mainFontTexture, activity.getAssets(), "font.ttf", 50f, true,
-				Color.WHITE, 2f, Color.BLACK);
-		font.load();
+		fontManager = new FontManager();
+		this.font = new Font(fontManager, mainFontTexture, Typeface.create(
+				Typeface.DEFAULT, Typeface.BOLD), 32, true, Color.WHITE);
+		// font = FontFactory.createFromAsset(fontManager, mainFontTexture,
+		// activity.getAssets(), "font.ttf", 10f, true, Color.WHITE);
+		// font.load();
+		// this.textureManager.loadTexture(mainFontTexture);
+		this.fontManager.loadFont(font);
 	}
 
 	public void unloadMenuTextures() {
@@ -147,19 +145,18 @@ public class ResourcesManager
 		menuTextureAtlas.load();
 	}
 
-    private void loadGameGraphics()
-    {
-    	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
-    	
-    	// Player
-    	this.playerAtlas = new BitmapTextureAtlas(
-				getInstance().textureManager, 768, 2400, TextureOptions.DEFAULT);
+	private void loadGameGraphics() {
+		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
 
-    	this.playerRegion = BitmapTextureAtlasTextureRegionFactory
+		// Player
+		this.playerAtlas = new BitmapTextureAtlas(getInstance().textureManager,
+				768, 2400, TextureOptions.DEFAULT);
+
+		this.playerRegion = BitmapTextureAtlasTextureRegionFactory
 				.createTiledFromAsset(this.playerAtlas, getInstance().activity,
 						"player_sprite.png", 0, 0, 8, 25);
-    	this.playerAtlas.load();
-    	
+		this.playerAtlas.load();
+
 		this.dinosaurGreenAtlas = new BitmapTextureAtlas(
 				getInstance().textureManager, 1664, 2048,
 				TextureOptions.DEFAULT);
@@ -174,24 +171,22 @@ public class ResourcesManager
 		// this.landscapeAtlas = new BitmapTextureAtlas(
 		// getInstance().textureManager, 512, 1204);
 		// this.landscapeAtlas.load();
-    }
-    
+	}
+
 	public ITextureRegion getRandomTreeTexture() {
 		return BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(
 				this.landscapeAtlas, getInstance().activity, "trees.png", 0, 0,
 				8, 4);
 	}
-    
-    private void loadGameFonts()
-    {
-        
-    }
-    
-    private void loadGameAudio()
-    {
-        
-    }
-    
+
+	private void loadGameFonts() {
+
+	}
+
+	private void loadGameAudio() {
+
+	}
+
 	public void loadSplashScreen() {
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
 		splashTextureAtlas = new BitmapTextureAtlas(
@@ -199,41 +194,44 @@ public class ResourcesManager
 		splash_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
 				splashTextureAtlas, activity, "splash.png", 0, 0);
 		splashTextureAtlas.load();
-    }
-    
+	}
+
 	public void unloadSplashScreen() {
 		splashTextureAtlas.unload();
 		splash_region = null;
-    }
-    
-    /**
-     * @param engine
-     * @param activity
-     * @param camera
-     * @param vbom
-     * <br><br>
-     * We use this method at beginning of game loading, to prepare Resources Manager properly,
-     * setting all needed parameters, so we can latter access them from different classes (eg. scenes)
-     */
-    public static void prepareManager(Engine engine, BaseActivity activity, BoundCamera camera, VertexBufferObjectManager vbom, TextureManager textureManager)
-    {
-        getInstance().engine = engine;
-        getInstance().activity = activity;
-        getInstance().camera = camera;
-        getInstance().vbom = vbom;
-        getInstance().textureManager = textureManager;
-        
-        // We also load physics and player.. //TODO Move out from here, since a Menu scene does not require them in memory
+	}
+
+	/**
+	 * @param engine
+	 * @param activity
+	 * @param camera
+	 * @param vbom
+	 * <br>
+	 * <br>
+	 *            We use this method at beginning of game loading, to prepare
+	 *            Resources Manager properly, setting all needed parameters, so
+	 *            we can latter access them from different classes (eg. scenes)
+	 */
+	public static void prepareManager(Engine engine, BaseActivity activity,
+			BoundCamera camera, VertexBufferObjectManager vbom,
+			TextureManager textureManager) {
+		getInstance().engine = engine;
+		getInstance().activity = activity;
+		getInstance().camera = camera;
+		getInstance().vbom = vbom;
+		getInstance().textureManager = textureManager;
+
+		// We also load physics and player.. //TODO Move out from here, since a
+		// Menu scene does not require them in memory
 		// getInstance().loadPhysics();
 		// getInstance().loadGameResources();
-    }
-    
-    //---------------------------------------------
-    // GETTERS AND SETTERS
-    //---------------------------------------------
-    
-    public static ResourcesManager getInstance()
-    {
-        return INSTANCE;
-    }
+	}
+
+	// ---------------------------------------------
+	// GETTERS AND SETTERS
+	// ---------------------------------------------
+
+	public static ResourcesManager getInstance() {
+		return INSTANCE;
+	}
 }
