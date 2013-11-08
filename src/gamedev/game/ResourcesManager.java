@@ -9,7 +9,6 @@ import org.andengine.extension.physics.box2d.FixedStepPhysicsWorld;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.opengl.font.Font;
 import org.andengine.opengl.font.FontFactory;
-import org.andengine.opengl.font.FontManager;
 import org.andengine.opengl.texture.ITexture;
 import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.texture.TextureOptions;
@@ -17,6 +16,7 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
+import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.ui.activity.BaseActivity;
 
@@ -54,7 +54,12 @@ public class ResourcesManager {
 	public ITiledTextureRegion dinosaurGreenRegion;
 	public BitmapTextureAtlas landscapeAtlas;
 
-	// Texture for splash scene
+	// Textures for controls
+	public BitmapTextureAtlas controlTexture;
+	public TextureRegion controlBaseTextureRegion;
+	public TextureRegion controlKnobTextureRegion;
+
+	// Textures for splash scene
 	public ITextureRegion splash_region;
 	private BitmapTextureAtlas splashTextureAtlas;
 
@@ -63,7 +68,6 @@ public class ResourcesManager {
 	public ITiledTextureRegion buttons_region;
 	private BitmapTextureAtlas menuTextureAtlas;
 	public Font font;
-	private FontManager fontManager;
 
 	// ---------------------------------------------
 	// Physic
@@ -126,14 +130,10 @@ public class ResourcesManager {
 				getInstance().textureManager, 256, 256,
 				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 
-		fontManager = new FontManager();
-		// this.font = new Font(fontManager, mainFontTexture, Typeface.create(
-		// Typeface.DEFAULT, Typeface.BOLD), 32, true, Color.WHITE);
-		font = FontFactory.createFromAsset(fontManager, mainFontTexture,
-				activity.getAssets(), "font.ttf", 50f, true, Color.BLACK);
+		font = FontFactory.createFromAsset(
+				((GameActivity) activity).getFontManager(), mainFontTexture,
+				activity.getAssets(), "font.ttf", 30f, true, Color.WHITE);
 		font.load();
-		// this.textureManager.loadTexture(mainFontTexture);
-		this.fontManager.loadFont(font);
 	}
 
 	public void unloadMenuTextures() {
@@ -146,6 +146,17 @@ public class ResourcesManager {
 
 	private void loadGameGraphics() {
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
+
+		// Controls
+		this.controlTexture = new BitmapTextureAtlas(this.textureManager, 256,
+				128, TextureOptions.BILINEAR);
+		this.controlBaseTextureRegion = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(this.controlTexture, this.activity,
+						"onscreen_control_base.png", 0, 0);
+		this.controlKnobTextureRegion = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(this.controlTexture, this.activity,
+						"onscreen_control_knob.png", 128, 0);
+		this.controlTexture.load();
 
 		// Player
 		this.playerAtlas = new BitmapTextureAtlas(getInstance().textureManager,

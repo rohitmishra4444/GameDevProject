@@ -23,9 +23,6 @@ import org.andengine.extension.tmx.TMXTileProperty;
 import org.andengine.extension.tmx.TMXTiledMap;
 import org.andengine.extension.tmx.util.exception.TMXLoadException;
 import org.andengine.opengl.texture.TextureOptions;
-import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
-import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
-import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.util.debug.Debug;
 import org.andengine.util.math.MathUtils;
 
@@ -47,9 +44,6 @@ public class LevelScene extends BaseScene {
 	
 	// Controls
 	protected AnalogOnScreenControl pad;
-	protected BitmapTextureAtlas controlTexture;
-	protected TextureRegion controlBaseTextureRegion;
-	protected TextureRegion controlKnobTextureRegion;
 
 	// Player. Each level has to create the Player and its position in the world
 	protected Player player;
@@ -155,16 +149,10 @@ public class LevelScene extends BaseScene {
 	}
 	
 	protected void createControls() {
-		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
-		this.controlTexture = new BitmapTextureAtlas(
-				this.textureManager, 256, 128, TextureOptions.BILINEAR);
-		this.controlBaseTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.controlTexture, this.activity, "onscreen_control_base.png", 0, 0);
-		this.controlKnobTextureRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.controlTexture, this.activity, "onscreen_control_knob.png", 128, 0);
-		this.controlTexture.load();
-		
 		this.pad = new AnalogOnScreenControl(0, GameActivity.HEIGHT
-				- this.controlBaseTextureRegion.getHeight(), this.camera,
-				this.controlBaseTextureRegion, this.controlKnobTextureRegion,
+				- resourcesManager.controlBaseTextureRegion.getHeight(),
+				this.camera, resourcesManager.controlBaseTextureRegion,
+				resourcesManager.controlKnobTextureRegion,
 				0.1f, 200, this.vbom, createControlListener(this.player));
 
 		this.pad.getControlBase().setBlendFunction(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
