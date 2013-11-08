@@ -78,36 +78,36 @@ public class Dinosaur extends AnimatedSprite {
 		
 		switch (state) {
 		case WALKING:
-			rowIndex = 0;
+			rowIndex = 28;
 			break;
 		case TIPPING_OVER:
-			rowIndex = 4;
+			rowIndex = 24;
 			this.body.setLinearVelocity(0, 0);
 			animate = false;
 			break;
 		case RUNNING:
 		case CHASE_PLAYER:
-			rowIndex = 8;
+			rowIndex = 20;
 			break;
 		case ROARING:
-			rowIndex = 12;
-			this.body.setLinearVelocity(0, 0);
-			break;
-		case PAUSED:
 			rowIndex = 16;
 			this.body.setLinearVelocity(0, 0);
 			break;
+		case PAUSED:
+			rowIndex = 12;
+			this.body.setLinearVelocity(0, 0);
+			break;
 		case LOOKING:
-			rowIndex = 20;
+			rowIndex = 8;
 			this.body.setLinearVelocity(0, 0);
 			break;
 		case BEEN_HIT:
-			rowIndex = 24;
+			rowIndex = 4;
 			this.body.setLinearVelocity(0, 0);
 			animate = false;
 			break;
 		case ATTACK:
-			rowIndex = 28;
+			rowIndex = 0;
 			this.body.setLinearVelocity(0, 0);
 			break;
 		default:

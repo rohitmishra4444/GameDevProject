@@ -18,9 +18,9 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
 public class Player extends AnimatedSprite {
 	
-	public final static long[] ANIMATION_DURATION = { 50, 50, 50, 50, 50, 50, 50, 50};
-	public final static int FRAMES_PER_ANIMATION = 8;
-	public final static int TILES_PER_LINE = 8;
+	public final static long[] ANIMATION_DURATION = { 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50};
+	public final static int FRAMES_PER_ANIMATION = 11;
+	public final static int TILES_PER_LINE = 22;
 	
 	public Body body;
 	public PhysicsHandler physicsHandler;
@@ -41,6 +41,8 @@ public class Player extends AnimatedSprite {
 		WALKING,
 		RUNNING,
 		BEEN_HIT,
+		ATTACK,
+		TIPPING_OVER,
 	}
 	
 	/**
@@ -53,6 +55,8 @@ public class Player extends AnimatedSprite {
 		this.resourcesManager = ResourcesManager.getInstance();
 		this.resourcesManager.camera.setChaseEntity(this);
 		this.createAndConnectPhysics(this.resourcesManager.camera, this.resourcesManager.physicsWorld);
+		this.mScaleX = this.mScaleX * 2;
+		this.mScaleY = this.mScaleY * 2;
 	}
 	
 	public Player() {
@@ -60,6 +64,8 @@ public class Player extends AnimatedSprite {
 		this.resourcesManager = ResourcesManager.getInstance();
 		this.resourcesManager.camera.setChaseEntity(this);
 		this.createAndConnectPhysics(this.resourcesManager.camera, this.resourcesManager.physicsWorld);
+		this.mScaleX = this.mScaleX * 2;
+		this.mScaleY = this.mScaleY * 2;
 	}
 
 	/**
@@ -77,11 +83,14 @@ public class Player extends AnimatedSprite {
 		}
 		if (!this.isAnimationRunning()) {
 			int rowIndex = 0;
-			if (state == PlayerState.WALKING) rowIndex = 0;
-			if (state == PlayerState.RUNNING) rowIndex = 9;
-			if (state == PlayerState.BEEN_HIT) rowIndex = 18;
+			if (state == PlayerState.ATTACK) rowIndex = 0;
+			if (state == PlayerState.BEEN_HIT) rowIndex = 4;
+			if (state == PlayerState.RUNNING) rowIndex = 8;
+			if (state == PlayerState.TIPPING_OVER) rowIndex = 12;
+			if (state == PlayerState.WALKING) rowIndex = 16;
+			boolean animate = (state == PlayerState.RUNNING || state == PlayerState.WALKING) ? false : true;
 			int startTile = rowIndex*TILES_PER_LINE + this.direction*FRAMES_PER_ANIMATION;
-			this.animate(ANIMATION_DURATION, startTile, startTile+FRAMES_PER_ANIMATION-1, false);			
+			this.animate(ANIMATION_DURATION, startTile, startTile+FRAMES_PER_ANIMATION-1, animate);			
 		}
 	}
 	

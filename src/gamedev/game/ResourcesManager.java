@@ -150,11 +150,11 @@ public class ResourcesManager {
 
 		// Player
 		this.playerAtlas = new BitmapTextureAtlas(getInstance().textureManager,
-				768, 2400, TextureOptions.DEFAULT);
+				1056, 960, TextureOptions.DEFAULT);
 
 		this.playerRegion = BitmapTextureAtlasTextureRegionFactory
 				.createTiledFromAsset(this.playerAtlas, getInstance().activity,
-						"player_sprite.png", 0, 0, 8, 25);
+						"grey_caveman_0.5_asc.png", 0, 0, 22, 20);
 		this.playerAtlas.load();
 
 		this.dinosaurGreenAtlas = new BitmapTextureAtlas(
@@ -163,7 +163,7 @@ public class ResourcesManager {
 
 		this.dinosaurGreenRegion = BitmapTextureAtlasTextureRegionFactory
 				.createTiledFromAsset(this.dinosaurGreenAtlas,
-						getInstance().activity, "green_dino_0.5.png", 0, 0, 26,
+						getInstance().activity, "green_dino_0.5_asc.png", 0, 0, 26,
 						32);
 
 		this.dinosaurGreenAtlas.load();

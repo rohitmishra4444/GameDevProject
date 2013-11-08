@@ -10,14 +10,14 @@ public class Direction {
 	
 	// 8 possible directions. Note that the order is important, it is the same order as used
 	// for the animation in the tilesets
-	public static final int WEST = 0;
-	public static final int SOUTH_WEST = 1;
-	public static final int SOUTH_EAST = 2;
-	public static final int SOUTH = 3;
-	public static final int NORTH_WEST = 4;
-	public static final int NORTH_EAST = 5;
-	public static final int NORTH = 6;
-	public static final int EAST = 7;
+	public static final int WEST = 7;
+	public static final int SOUTH_WEST = 6;
+	public static final int SOUTH_EAST = 5;
+	public static final int SOUTH = 4;
+	public static final int NORTH_WEST = 3;
+	public static final int NORTH_EAST = 2;
+	public static final int NORTH = 1;
+	public static final int EAST = 0;
 
 	/**
 	 * Calculate the direction of from the given vector
