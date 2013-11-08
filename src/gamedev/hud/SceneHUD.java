@@ -70,12 +70,14 @@ public class SceneHUD extends HUD {
 		// };
 		//
 		// this.secondaryButton.setColor(Color.WHITE);
-		// this.attachChild(life);
-		// this.attachChild(energy);
+		//
 		// this.attachChild(primaryButton);
 		// this.attachChild(secondaryButton);
 		// this.registerTouchArea(primaryButton);
 		// this.registerTouchArea(secondaryButton);
+
+		this.attachChild(life);
+		this.attachChild(energy);
 
 		createButtons();
 	}

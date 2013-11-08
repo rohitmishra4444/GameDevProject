@@ -65,8 +65,9 @@ public class ResourcesManager {
 
 	// Textures for menu scene
 	public ITextureRegion menu_background_region;
-	public ITiledTextureRegion buttons_region;
-	private BitmapTextureAtlas menuTextureAtlas;
+	public ITiledTextureRegion menu_buttons_region;
+	private BitmapTextureAtlas menuBackgroundTextureAtlas;
+	private BitmapTextureAtlas menuButtonsTextureAtlas;
 	public Font font;
 
 	// ---------------------------------------------
@@ -105,19 +106,22 @@ public class ResourcesManager {
 	private void loadMenuGraphics() {
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/menu/");
 
-		this.menuTextureAtlas = new BitmapTextureAtlas(textureManager, 800,
-				600, TextureOptions.DEFAULT);
-
+		// Menu background
+		this.menuBackgroundTextureAtlas = new BitmapTextureAtlas(
+				textureManager, 800, 600, TextureOptions.DEFAULT);
 		this.menu_background_region = BitmapTextureAtlasTextureRegionFactory
-				.createTiledFromAsset(this.menuTextureAtlas,
+				.createTiledFromAsset(this.menuBackgroundTextureAtlas,
 						getInstance().activity, "menubackground.png", 0, 0, 1,
 						1);
-		this.buttons_region = BitmapTextureAtlasTextureRegionFactory
-				.createTiledFromAsset(this.menuTextureAtlas,
+		this.menuBackgroundTextureAtlas.load();
+
+		// Menu buttons
+		this.menuButtonsTextureAtlas = new BitmapTextureAtlas(textureManager,
+				800, 600, TextureOptions.DEFAULT);
+		this.menu_buttons_region = BitmapTextureAtlasTextureRegionFactory
+				.createTiledFromAsset(this.menuButtonsTextureAtlas,
 						getInstance().activity, "menubuttons.png", 0, 0, 1, 3);
-
-		this.menuTextureAtlas.load();
-
+		this.menuButtonsTextureAtlas.load();
 	}
 
 	private void loadMenuAudio() {
@@ -137,11 +141,11 @@ public class ResourcesManager {
 	}
 
 	public void unloadMenuTextures() {
-		menuTextureAtlas.unload();
+		menuBackgroundTextureAtlas.unload();
 	}
 
 	public void loadMenuTextures() {
-		menuTextureAtlas.load();
+		menuBackgroundTextureAtlas.load();
 	}
 
 	private void loadGameGraphics() {
@@ -173,8 +177,8 @@ public class ResourcesManager {
 
 		this.dinosaurGreenRegion = BitmapTextureAtlasTextureRegionFactory
 				.createTiledFromAsset(this.dinosaurGreenAtlas,
-						getInstance().activity, "green_dino_0.5_asc.png", 0, 0, 26,
-						32);
+						getInstance().activity, "green_dino_0.5_asc.png", 0, 0,
+						26, 32);
 
 		this.dinosaurGreenAtlas.load();
 

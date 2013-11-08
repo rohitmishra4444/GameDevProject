@@ -12,7 +12,7 @@ public class LoadingScene extends BaseScene {
 	public void createScene() {
 		setBackground(new Background(Color.BLACK));
 		String loadingString = "Loading...";
-		float centerX = camera.getWidth() / 2 - 30;
+		float centerX = camera.getWidth() / 2 - loadingString.length() * 4;
 		float centerY = camera.getHeight() / 2
 				- resourcesManager.font.getLineHeight() / 2;
 		Text loadingText = new Text(centerX, centerY, resourcesManager.font,
