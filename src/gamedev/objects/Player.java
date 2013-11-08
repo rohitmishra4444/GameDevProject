@@ -74,7 +74,7 @@ public class Player extends AnimatedSprite {
 	 * @param state new PlayerState
 	 */
 	public void setState(PlayerState state, int direction) {
-		if (state != PlayerState.RUNNING && state != PlayerState.WALKING) {
+		if (state != PlayerState.RUNNING && state != PlayerState.WALKING && state != PlayerState.IDLE) {
 			if (this.currentState == state && this.direction == direction) return;			
 		}
 		this.currentState = state;
