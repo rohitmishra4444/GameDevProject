@@ -79,7 +79,6 @@ public class GameActivity extends BaseGameActivity
 
                 }
         }));
-
 		pOnPopulateSceneCallback.onPopulateSceneFinished();
 	}
 	

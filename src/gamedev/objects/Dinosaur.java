@@ -135,12 +135,15 @@ public class Dinosaur extends AnimatedSprite {
 			this.body.setLinearVelocity(v.x * this.velocity * this.factorRunning, v.y * this.velocity * this.factorRunning);						
 		}
 		Vector2Pool.recycle(v);
-		if (state == DinosaurState.CHASE_PLAYER && direction == this.direction) {
-			
-		} else {
-			this.setDirection(direction);
-			this.setState(state);			
-		}
+		
+		if (this.currentState == DinosaurState.CHASE_PLAYER && state == DinosaurState.CHASE_PLAYER) {
+			if (this.direction == direction) {
+				// No need to update the animation, still same State + same Direction
+				return;
+			}
+		} 
+		this.setDirection(direction);
+		this.setState(state);			
 	}
 	
 	@Override
