@@ -37,18 +37,16 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
  */
 public class LevelScene extends BaseScene {
 
-
 	// TMX Map containing the Level
 	protected TMXTiledMap mTMXTiledMap;
 	protected String tmxFileName;
-	
+
 	// Controls
 	protected AnalogOnScreenControl pad;
 
 	// Player. Each level has to create the Player and its position in the world
 	protected Player player;
-	
-	
+
 	public LevelScene(String tmxFileName) {
 		super();
 		this.connectPhysics();
@@ -66,10 +64,7 @@ public class LevelScene extends BaseScene {
 
 	@Override
 	public void onBackKeyPressed() {
-		BaseScene menuScene = SceneManager.getInstance().getMenuScene();
-		if (menuScene != null) {
-			setChildScene(menuScene);
-		}
+		SceneManager.getInstance().loadMenuScene(engine);
 	}
 
 	@Override
@@ -79,20 +74,19 @@ public class LevelScene extends BaseScene {
 
 	@Override
 	public void disposeScene() {
-		// TODO Unload resources
-
+		// TODO: Code responsible for disposing scene removing all game scene
+		// objects.
 	}
 
 	protected void connectPhysics() {
 		this.registerUpdateHandler(this.resourcesManager.physicsWorld);
 	}
-	
+
 	protected void createMap() {
 		try {
-			final TMXLoader tmxLoader = new TMXLoader(this.activity.getAssets(),
-					this.engine.getTextureManager(),
-					TextureOptions.BILINEAR_PREMULTIPLYALPHA,
-					this.vbom,
+			final TMXLoader tmxLoader = new TMXLoader(
+					this.activity.getAssets(), this.engine.getTextureManager(),
+					TextureOptions.BILINEAR_PREMULTIPLYALPHA, this.vbom,
 					new ITMXTilePropertiesListener() {
 						@Override
 						public void onTMXTileWithPropertiesCreated(
@@ -104,42 +98,47 @@ public class LevelScene extends BaseScene {
 					});
 
 			// Load the TMXTiledMap from tmx asset.
-			this.mTMXTiledMap = tmxLoader.loadFromAsset("tmx/" + this.tmxFileName);
+			this.mTMXTiledMap = tmxLoader.loadFromAsset("tmx/"
+					+ this.tmxFileName);
 
 		} catch (final TMXLoadException e) {
 			Debug.e(e);
 		}
-		
-		
+
 		TMXLayer tmxLayerZero = null;
-		
+
 		// Attach other layers from the TMXTiledMap, if it has more than one.
-		for (int i=0; i<this.mTMXTiledMap.getTMXLayers().size(); i++) {
+		for (int i = 0; i < this.mTMXTiledMap.getTMXLayers().size(); i++) {
 			TMXLayer tmxLayer = this.mTMXTiledMap.getTMXLayers().get(i);
-			if (i == 0) tmxLayerZero = tmxLayer;
+			if (i == 0)
+				tmxLayerZero = tmxLayer;
 			// Only add non-object layers
-			if (!tmxLayer.getTMXLayerProperties().containsTMXProperty("boundaries", "true")) {
+			if (!tmxLayer.getTMXLayerProperties().containsTMXProperty(
+					"boundaries", "true")) {
 				this.attachChild(tmxLayer);
 			}
 		}
-		
-		this.camera.setBounds(0, 0, tmxLayerZero.getWidth(), tmxLayerZero.getHeight());
+
+		this.camera.setBounds(0, 0, tmxLayerZero.getWidth(),
+				tmxLayerZero.getHeight());
 		this.camera.setBoundsEnabled(true);
 		this.createUnwalkableObjects(this.mTMXTiledMap);
 	}
-	
+
 	protected void createUnwalkableObjects(TMXTiledMap map) {
-		for (final TMXObjectGroup group : this.mTMXTiledMap.getTMXObjectGroups()) {
+		for (final TMXObjectGroup group : this.mTMXTiledMap
+				.getTMXObjectGroups()) {
 			if (group.getTMXObjectGroupProperties().containsTMXProperty(
 					"boundaries", "true")) {
 				// This is our "wall" layer. Create the boxes from it
 				for (final TMXObject object : group.getTMXObjects()) {
 					final Rectangle rect = new Rectangle(object.getX(),
 							object.getY(), object.getWidth(),
-							object.getHeight(),
-							this.resourcesManager.vbom);
-					final FixtureDef boxFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0);
-					PhysicsFactory.createBoxBody(this.resourcesManager.physicsWorld, rect,
+							object.getHeight(), this.resourcesManager.vbom);
+					final FixtureDef boxFixtureDef = PhysicsFactory
+							.createFixtureDef(0, 0, 0);
+					PhysicsFactory.createBoxBody(
+							this.resourcesManager.physicsWorld, rect,
 							BodyType.StaticBody, boxFixtureDef);
 					rect.setVisible(false);
 					this.attachChild(rect);
@@ -147,15 +146,16 @@ public class LevelScene extends BaseScene {
 			}
 		}
 	}
-	
+
 	protected void createControls() {
 		this.pad = new AnalogOnScreenControl(0, GameActivity.HEIGHT
 				- resourcesManager.controlBaseTextureRegion.getHeight(),
 				this.camera, resourcesManager.controlBaseTextureRegion,
-				resourcesManager.controlKnobTextureRegion,
-				0.1f, 200, this.vbom, createControlListener(this.player));
+				resourcesManager.controlKnobTextureRegion, 0.1f, 200,
+				this.vbom, createControlListener(this.player));
 
-		this.pad.getControlBase().setBlendFunction(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
+		this.pad.getControlBase().setBlendFunction(GLES20.GL_SRC_ALPHA,
+				GLES20.GL_ONE_MINUS_SRC_ALPHA);
 		this.pad.getControlBase().setAlpha(0.5f);
 		this.pad.getControlBase().setScaleCenter(0, 128);
 		this.pad.getControlBase().setScale(1.25f);
@@ -164,44 +164,47 @@ public class LevelScene extends BaseScene {
 		this.setChildScene(this.pad);
 	}
 
-	private IAnalogOnScreenControlListener createControlListener(final Player player) {
-		
+	private IAnalogOnScreenControlListener createControlListener(
+			final Player player) {
+
 		return new IAnalogOnScreenControlListener() {
 			@Override
 			public void onControlChange(
 					final BaseOnScreenControl pBaseOnScreenControl,
 					final float pValueX, final float pValueY) {
-				
+
 				// Compute direction in degree (from -180° to +180°).
-				float degree = MathUtils.radToDeg((float) Math.atan2(
-						pValueX, pValueY));
-				
+				float degree = MathUtils.radToDeg((float) Math.atan2(pValueX,
+						pValueY));
+
 				// Set the direction and State
 				int direction = Direction.getDirectionFromDegree(degree);
 				if (degree == 0) {
 					player.setState(PlayerState.IDLE, direction);
 				} else {
-					PlayerState state = resourcesManager.hud.isTouchedSecondaryButton() ? PlayerState.RUNNING : PlayerState.WALKING;
+					PlayerState state = resourcesManager.hud
+							.isTouchedSecondaryButton() ? PlayerState.RUNNING
+							: PlayerState.WALKING;
 					player.setVelocity(pValueX, pValueY, state, direction);
 				}
-				
-//				else if (Math.abs(pValueX) > 0.75 || Math.abs(pValueY) > 0.75) {
-//					player.setVelocity(pValueX, pValueY, PlayerState.RUNNING);
-//				} else {
-//					player.setVelocity(pValueX, pValueY, PlayerState.WALKING);
-//				}
-				
+
+				// else if (Math.abs(pValueX) > 0.75 || Math.abs(pValueY) >
+				// 0.75) {
+				// player.setVelocity(pValueX, pValueY, PlayerState.RUNNING);
+				// } else {
+				// player.setVelocity(pValueX, pValueY, PlayerState.WALKING);
+				// }
+
 			}
 
 			@Override
 			public void onControlClick(
 					AnalogOnScreenControl pAnalogOnScreenControl) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 		};
 	}
 
-	
 }

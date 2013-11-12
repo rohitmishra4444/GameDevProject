@@ -63,7 +63,11 @@ public class MainMenuScene extends BaseScene implements
 
 	@Override
 	public void onBackKeyPressed() {
-		back();
+		if (SceneManager.getInstance().isLevelSceneCreated()) {
+			SceneManager.getInstance().loadLevelScene(engine);
+		} else {
+			System.exit(0);
+		}
 	}
 
 	@Override
@@ -83,12 +87,18 @@ public class MainMenuScene extends BaseScene implements
 
 		switch (pMenuItem.getID()) {
 		case MENU_PLAY:
-			SceneManager.getInstance().createLevelScene(engine, 1);
+			if (SceneManager.getInstance().isLevelSceneCreated()) {
+				SceneManager.getInstance().loadLevelScene(engine);
+			} else {
+				SceneManager.getInstance().createLevelScene(engine, 1);
+			}
+
 			return true;
 		case MENU_EXIT:
 			System.exit(0);
 			return true;
 		case MENU_BACK:
+			onBackKeyPressed();
 			return true;
 		default:
 			return false;

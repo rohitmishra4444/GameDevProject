@@ -24,11 +24,6 @@ import android.graphics.Color;
 
 import com.badlogic.gdx.math.Vector2;
 
-/**
- * @author Mateusz Mysliwiec
- * @author www.matim-dev.com
- * @version 1.0
- */
 public class ResourcesManager {
 	// ---------------------------------------------
 	// VARIABLES
@@ -48,6 +43,7 @@ public class ResourcesManager {
 	// TEXTURES & TEXTURE REGIONS
 	// ---------------------------------------------
 
+	// Textures for player, dinosaurs
 	public BitmapTextureAtlas playerAtlas;
 	public ITiledTextureRegion playerRegion;
 	public BitmapTextureAtlas dinosaurGreenAtlas;
@@ -80,27 +76,32 @@ public class ResourcesManager {
 	// CLASS LOGIC
 	// ---------------------------------------------
 
-	public void loadPlayerGraphics() {
+	// ---------------------------------------------
+	// Splash Screen
+	// ---------------------------------------------
+
+	public void loadSplashScreen() {
+		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
+		splashTextureAtlas = new BitmapTextureAtlas(
+				getInstance().textureManager, 257, 25, TextureOptions.BILINEAR);
+		splash_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
+				splashTextureAtlas, activity, "splash_edited.png", 0, 0);
+		splashTextureAtlas.load();
 	}
+
+	public void unloadSplashScreen() {
+		splashTextureAtlas.unload();
+		splash_region = null;
+	}
+
+	// ---------------------------------------------
+	// Menu Screen
+	// ---------------------------------------------
 
 	public void loadMenuResources() {
 		loadMenuGraphics();
-		// loadMenuAudio();
+		loadMenuAudio();
 		loadMenuFonts();
-	}
-
-	public void loadGameResources() {
-		this.physicsWorld = new FixedStepPhysicsWorld(30, new Vector2(0, 0),
-				false, 8, 1);
-		loadGameGraphics();
-		loadHUD();
-		// loadGameFonts();
-		// loadGameAudio();
-	}
-
-	private void loadHUD() {
-		this.hud = new SceneHUD();
-		this.camera.setHUD(this.hud);
 	}
 
 	private void loadMenuGraphics() {
@@ -125,7 +126,7 @@ public class ResourcesManager {
 	}
 
 	private void loadMenuAudio() {
-
+		// TODO
 	}
 
 	private void loadMenuFonts() {
@@ -140,12 +141,37 @@ public class ResourcesManager {
 		font.load();
 	}
 
+	public void loadMenuTextures() {
+		menuBackgroundTextureAtlas.load();
+	}
+
 	public void unloadMenuTextures() {
 		menuBackgroundTextureAtlas.unload();
 	}
 
-	public void loadMenuTextures() {
-		menuBackgroundTextureAtlas.load();
+	// ---------------------------------------------
+	// Game Screen
+	// ---------------------------------------------
+
+	public void loadGameResources() {
+		this.physicsWorld = new FixedStepPhysicsWorld(30, new Vector2(0, 0),
+				false, 8, 1);
+		loadGameGraphics();
+		loadHUD();
+		loadGameFonts();
+		loadGameAudio();
+	}
+
+	public void loadHUD() {
+		this.hud = new SceneHUD();
+		this.camera.setHUD(this.hud);
+	}
+
+	public void unloadHUD() {
+		camera.setHUD(null);
+	}
+
+	public void loadPlayerGraphics() {
 	}
 
 	private void loadGameGraphics() {
@@ -160,7 +186,6 @@ public class ResourcesManager {
 		this.controlKnobTextureRegion = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(this.controlTexture, this.activity,
 						"onscreen_control_knob.png", 128, 0);
-		this.controlTexture.load();
 
 		// Player
 		this.playerAtlas = new BitmapTextureAtlas(getInstance().textureManager,
@@ -169,8 +194,8 @@ public class ResourcesManager {
 		this.playerRegion = BitmapTextureAtlasTextureRegionFactory
 				.createTiledFromAsset(this.playerAtlas, getInstance().activity,
 						"grey_caveman_0.5_asc.png", 0, 0, 22, 20);
-		this.playerAtlas.load();
 
+		// Dinosaurs
 		this.dinosaurGreenAtlas = new BitmapTextureAtlas(
 				getInstance().textureManager, 1664, 2048,
 				TextureOptions.DEFAULT);
@@ -180,39 +205,38 @@ public class ResourcesManager {
 						getInstance().activity, "green_dino_0.5_asc.png", 0, 0,
 						26, 32);
 
-		this.dinosaurGreenAtlas.load();
-
+		// Landscape
 		// this.landscapeAtlas = new BitmapTextureAtlas(
 		// getInstance().textureManager, 512, 1204);
 		// this.landscapeAtlas.load();
+
+		loadGameTextures();
+	}
+
+	private void loadGameAudio() {
+		// TODO
+	}
+
+	private void loadGameFonts() {
+		// TODO
+	}
+
+	public void loadGameTextures() {
+		controlTexture.load();
+		playerAtlas.load();
+		dinosaurGreenAtlas.load();
+	}
+
+	public void unloadGameTextures() {
+		controlTexture.unload();
+		playerAtlas.unload();
+		dinosaurGreenAtlas.unload();
 	}
 
 	public ITextureRegion getRandomTreeTexture() {
 		return BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(
 				this.landscapeAtlas, getInstance().activity, "trees.png", 0, 0,
 				8, 4);
-	}
-
-	private void loadGameFonts() {
-
-	}
-
-	private void loadGameAudio() {
-
-	}
-
-	public void loadSplashScreen() {
-		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
-		splashTextureAtlas = new BitmapTextureAtlas(
-				getInstance().textureManager, 257, 25, TextureOptions.BILINEAR);
-		splash_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
-				splashTextureAtlas, activity, "splash_edited.png", 0, 0);
-		splashTextureAtlas.load();
-	}
-
-	public void unloadSplashScreen() {
-		splashTextureAtlas.unload();
-		splash_region = null;
 	}
 
 	/**
@@ -234,11 +258,6 @@ public class ResourcesManager {
 		getInstance().camera = camera;
 		getInstance().vbom = vbom;
 		getInstance().textureManager = textureManager;
-
-		// We also load physics and player.. //TODO Move out from here, since a
-		// Menu scene does not require them in memory
-		// getInstance().loadPhysics();
-		// getInstance().loadGameResources();
 	}
 
 	// ---------------------------------------------
