@@ -27,6 +27,7 @@ public class LoadingScene extends BaseScene implements IProgressListener {
 				loadingInitialString, loadingInitialString.length(), vbom);
 		attachChild(loadingText);
 
+		// TODO: Improve loading progress. Is not displayed right at the moment.
 		registerUpdateHandler(new TimerHandler(1 / 20.0f, true,
 				new ITimerCallback() {
 					// Starts a timer for updating out progress
