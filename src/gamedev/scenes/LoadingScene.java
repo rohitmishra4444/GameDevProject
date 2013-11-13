@@ -16,12 +16,10 @@ public class LoadingScene extends BaseScene implements IProgressListener {
 	@Override
 	public void createScene() {
 		setBackground(new Background(Color.BLACK));
-		String loadingInitialString = "Loading: 0%";
+		String loadingInitialString = "Loading: 0%   ";
 
-		float centerX = camera.getWidth() / 2 - loadingInitialString.length()
-				* 4;
-		float centerY = camera.getHeight() / 2
-				- resourcesManager.font.getLineHeight() / 2;
+		float centerX = camera.getCenterX();
+		float centerY = camera.getCenterY();
 
 		loadingText = new Text(centerX, centerY, resourcesManager.font,
 				loadingInitialString, loadingInitialString.length(), vbom);

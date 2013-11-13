@@ -14,6 +14,7 @@ import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
+import org.andengine.opengl.texture.atlas.bitmap.BuildableBitmapTextureAtlas;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.texture.region.TextureRegion;
@@ -66,6 +67,11 @@ public class ResourcesManager {
 	private BitmapTextureAtlas menuButtonsTextureAtlas;
 	public Font font;
 
+	// Textures for level-complete window
+	public ITextureRegion complete_window_region;
+	public ITiledTextureRegion complete_stars_region;
+	public BuildableBitmapTextureAtlas complete_window_atlas;
+
 	// ---------------------------------------------
 	// Physic
 	// ---------------------------------------------
@@ -85,7 +91,7 @@ public class ResourcesManager {
 		splashTextureAtlas = new BitmapTextureAtlas(
 				getInstance().textureManager, 257, 25, TextureOptions.BILINEAR);
 		splash_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
-				splashTextureAtlas, activity, "splash_edited.png", 0, 0);
+				splashTextureAtlas, activity, "splash_edited.jpg", 0, 0);
 		splashTextureAtlas.load();
 	}
 
@@ -175,7 +181,17 @@ public class ResourcesManager {
 	}
 
 	private void loadGameGraphics() {
-		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
+		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
+
+		// level-complete window
+		complete_window_atlas = new BuildableBitmapTextureAtlas(textureManager,
+				650, 400);
+		this.complete_window_region = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(complete_window_atlas,
+						activity.getBaseContext(), "levelCompleteWindow.png");
+		this.complete_stars_region = BitmapTextureAtlasTextureRegionFactory
+				.createTiledFromAsset(complete_window_atlas,
+						activity.getBaseContext(), "star.png", 2, 1);
 
 		// Controls
 		this.controlTexture = new BitmapTextureAtlas(this.textureManager, 256,
@@ -231,6 +247,14 @@ public class ResourcesManager {
 		controlTexture.unload();
 		playerAtlas.unload();
 		dinosaurGreenAtlas.unload();
+	}
+
+	public void loadLevelCompletedTextures() {
+		complete_window_atlas.load();
+	}
+
+	public void unloadLevelCompletedTextures() {
+		complete_window_atlas.unload();
 	}
 
 	public ITextureRegion getRandomTreeTexture() {

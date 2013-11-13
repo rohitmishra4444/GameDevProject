@@ -7,10 +7,16 @@ import gamedev.game.SceneManager.SceneType;
 import gamedev.objects.Player;
 import gamedev.objects.Player.PlayerState;
 
+import java.io.IOException;
+
 import org.andengine.engine.camera.hud.controls.AnalogOnScreenControl;
 import org.andengine.engine.camera.hud.controls.AnalogOnScreenControl.IAnalogOnScreenControlListener;
 import org.andengine.engine.camera.hud.controls.BaseOnScreenControl;
+import org.andengine.entity.IEntity;
+import org.andengine.entity.modifier.LoopEntityModifier;
+import org.andengine.entity.modifier.ScaleModifier;
 import org.andengine.entity.primitive.Rectangle;
+import org.andengine.entity.sprite.Sprite;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.tmx.TMXLayer;
 import org.andengine.extension.tmx.TMXLoader;
@@ -23,8 +29,13 @@ import org.andengine.extension.tmx.TMXTileProperty;
 import org.andengine.extension.tmx.TMXTiledMap;
 import org.andengine.extension.tmx.util.exception.TMXLoadException;
 import org.andengine.opengl.texture.TextureOptions;
+import org.andengine.util.SAXUtils;
 import org.andengine.util.debug.Debug;
+import org.andengine.util.level.IEntityLoader;
+import org.andengine.util.level.LevelLoader;
+import org.andengine.util.level.constants.LevelConstants;
 import org.andengine.util.math.MathUtils;
+import org.xml.sax.Attributes;
 
 import android.opengl.GLES20;
 
@@ -41,21 +52,43 @@ public class LevelScene extends BaseScene {
 	protected TMXTiledMap mTMXTiledMap;
 	protected String tmxFileName;
 
+	// Load level by xml. Remove if not used.
+	private static final String TAG_LEVEL = "level";
+	private static final String TAG_ENTITY = "entity";
+	private static final String TAG_ENTITY_ATTRIBUTE_X = "x";
+	private static final String TAG_ENTITY_ATTRIBUTE_Y = "y";
+	private static final String TAG_ENTITY_ATTRIBUTE_TYPE = "type";
+	//
+
+	private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_PLAYER = "player";
+	private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_LEVEL_COMPLETE = "levelComplete";
+	// private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_PLATFORM1 =
+	// "platform1";
+	// private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_PLATFORM2 =
+	// "platform2";
+	// private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_PLATFORM3 =
+	// "platform3";
+	// private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_COIN =
+	// "coin";
+
 	// Controls
 	protected AnalogOnScreenControl pad;
 
 	// Player. Each level has to create the Player and its position in the world
 	protected Player player;
 
-	public LevelScene(String tmxFileName) {
+	public LevelScene(int levelId) {
 		super();
 		this.connectPhysics();
 		this.player = new Player();
 		this.resourcesManager.player = player;
-		this.tmxFileName = tmxFileName;
+		this.tmxFileName = "level" + levelId + ".tmx";
 		this.createMap();
 		this.createControls();
-		this.attachChild(this.player);
+
+		// This is done by LevelLoader
+		// this.attachChild(this.player);
+		this.loadLevel(levelId);
 	}
 
 	@Override
@@ -69,7 +102,7 @@ public class LevelScene extends BaseScene {
 
 	@Override
 	public SceneType getSceneType() {
-		return SceneType.SCENE_GAME;
+		return SceneType.SCENE_LEVEL;
 	}
 
 	@Override
@@ -205,6 +238,154 @@ public class LevelScene extends BaseScene {
 			}
 
 		};
+	}
+
+	// private void setLevelCompleteObject() {
+	// levelCompleteObject = new Sprite(0, 0,
+	// resourcesManager.complete_stars_region, vbom) {
+	// @Override
+	// protected void onManagedUpdate(float pSecondsElapsed) {
+	// super.onManagedUpdate(pSecondsElapsed);
+	//
+	// if (player.collidesWith(this)) {
+	// levelCompleteWindow.display(StarsCount.TWO,
+	// LevelScene.this, camera);
+	// this.setVisible(false);
+	// this.setIgnoreUpdate(true);
+	// }
+	// }
+	// };
+	// levelCompleteObject.registerEntityModifier(new LoopEntityModifier(
+	// new ScaleModifier(1, 1, 1.3f)));
+	// }
+
+	// TODO: This method could be used to load trees and other objects into a
+	// level from a xml-file.
+	// Also look at: http://www.matim-dev.com/full-game-tutorial---part-11.html
+	//
+	private void loadLevel(int levelID) {
+		final LevelLoader levelLoader = new LevelLoader();
+
+		final FixtureDef FIXTURE_DEF = PhysicsFactory.createFixtureDef(0,
+				0.01f, 0.5f);
+
+		levelLoader.registerEntityLoader(TAG_LEVEL, new IEntityLoader() {
+
+			@Override
+			public IEntity onLoadEntity(String pEntityName,
+					Attributes pAttributes) {
+				final int width = SAXUtils.getIntAttributeOrThrow(pAttributes,
+						LevelConstants.TAG_LEVEL_ATTRIBUTE_WIDTH);
+				final int height = SAXUtils.getIntAttributeOrThrow(pAttributes,
+						LevelConstants.TAG_LEVEL_ATTRIBUTE_HEIGHT);
+
+				return LevelScene.this;
+			}
+		});
+
+		levelLoader.registerEntityLoader(TAG_ENTITY, new IEntityLoader() {
+
+			@Override
+			public IEntity onLoadEntity(String pEntityName,
+					Attributes pAttributes) {
+
+				final int x = SAXUtils.getIntAttributeOrThrow(pAttributes,
+						TAG_ENTITY_ATTRIBUTE_X);
+				final int y = SAXUtils.getIntAttributeOrThrow(pAttributes,
+						TAG_ENTITY_ATTRIBUTE_Y);
+				final String type = SAXUtils.getAttributeOrThrow(pAttributes,
+						TAG_ENTITY_ATTRIBUTE_TYPE);
+
+				final Sprite levelObject;
+
+				if (type.equals(TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_LEVEL_COMPLETE)) {
+					levelObject = new Sprite(x, y,
+							resourcesManager.complete_stars_region, vbom) {
+						@Override
+						protected void onManagedUpdate(float pSecondsElapsed) {
+							super.onManagedUpdate(pSecondsElapsed);
+
+							if (player.collidesWith(this)) {
+								SceneManager.getInstance()
+										.loadLevelCompleteScene(engine);
+							}
+						}
+					};
+					levelObject.registerEntityModifier(new LoopEntityModifier(
+							new ScaleModifier(1, 1, 1.3f)));
+				} else if (type.equals(TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_PLAYER)) {
+					player.setPosition(x, y);
+					levelObject = player;
+				}
+				// else if (type
+				// .equals(TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_PLATFORM1)) {
+				// levelObject = new Sprite(x, y,
+				// resourcesManager.platform1_region, vbom);
+				// PhysicsFactory.createBoxBody(
+				// resourcesManager.physicsWorld, levelObject,
+				// BodyType.StaticBody, FIXTURE_DEF)
+				// .setUserData("platform1");
+				// } else if (type
+				// .equals(TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_PLATFORM2)) {
+				// levelObject = new Sprite(x, y,
+				// resourcesManager.platform2_region, vbom);
+				// final Body body = PhysicsFactory.createBoxBody(
+				// resourcesManager.physicsWorld, levelObject,
+				// BodyType.StaticBody, FIXTURE_DEF);
+				// body.setUserData("platform2");
+				// physicsWorld
+				// .registerPhysicsConnector(new PhysicsConnector(
+				// levelObject, body, true, false));
+				// } else if (type
+				// .equals(TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_PLATFORM3)) {
+				// levelObject = new Sprite(x, y,
+				// resourcesManager.platform3_region, vbom);
+				// final Body body = PhysicsFactory.createBoxBody(
+				// resourcesManager.physicsWorld, levelObject,
+				// BodyType.StaticBody, FIXTURE_DEF);
+				// body.setUserData("platform3");
+				// resourcesManager.physicsWorld
+				// .registerPhysicsConnector(new PhysicsConnector(
+				// levelObject, body, true, false));
+				// } else if (type
+				// .equals(TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_COIN)) {
+				// levelObject = new Sprite(x, y,
+				// resourcesManager.coin_region, vbom) {
+				// @Override
+				// protected void onManagedUpdate(
+				// float pSecondsElapsed) {
+				// super.onManagedUpdate(pSecondsElapsed);
+				//
+				// /**
+				// * TODO we will later check if player
+				// * collide with this (coin) and if it does,
+				// * we will increase score and hide coin it
+				// * will be completed in next articles (after
+				// * creating player code)
+				// */
+				// }
+				// };
+				// levelObject
+				// .registerEntityModifier(new LoopEntityModifier(
+				// new ScaleModifier(1, 1, 1.3f)));
+				// }
+				else {
+					throw new IllegalArgumentException();
+				}
+
+				levelObject.setCullingEnabled(true);
+
+				return levelObject;
+			}
+		});
+
+		try {
+			levelLoader.loadLevelFromAsset(activity.getAssets(), "level/"
+					+ levelID + ".lvl");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 }

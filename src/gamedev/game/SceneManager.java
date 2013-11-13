@@ -2,6 +2,7 @@ package gamedev.game;
 
 import gamedev.levels.Level1;
 import gamedev.scenes.BaseScene;
+import gamedev.scenes.LevelCompleteScene;
 import gamedev.scenes.LoadingScene;
 import gamedev.scenes.MainMenuScene;
 import gamedev.scenes.SplashScene;
@@ -19,6 +20,7 @@ public class SceneManager {
 	private BaseScene splashScene;
 	private BaseScene menuScene;
 	private BaseScene levelScene;
+	private BaseScene levelCompleteScene;
 	private BaseScene loadingScene;
 
 	// ---------------------------------------------
@@ -34,7 +36,7 @@ public class SceneManager {
 	private Engine engine = ResourcesManager.getInstance().engine;
 
 	public enum SceneType {
-		SCENE_SPLASH, SCENE_MENU, SCENE_GAME, SCENE_LOADING,
+		SCENE_SPLASH, SCENE_MENU, SCENE_LEVEL, SCENE_LEVEL_COMPLETE, SCENE_LOADING,
 	}
 
 	// ---------------------------------------------
@@ -52,8 +54,11 @@ public class SceneManager {
 		case SCENE_MENU:
 			setScene(menuScene);
 			break;
-		case SCENE_GAME:
+		case SCENE_LEVEL:
 			setScene(levelScene);
+			break;
+		case SCENE_LEVEL_COMPLETE:
+			setScene(levelCompleteScene);
 			break;
 		case SCENE_SPLASH:
 			setScene(splashScene);
@@ -111,12 +116,22 @@ public class SceneManager {
 	}
 
 	public void loadMenuScene(final Engine mEngine) {
-		setScene(loadingScene);
-		if (!levelScene.isDisposed()) {
-			levelScene.disposeScene();
+
+		if (currentSceneType.equals(SceneType.SCENE_LEVEL)) {
+			if (!levelScene.isDisposed()) {
+				levelScene.disposeScene();
+			}
+			ResourcesManager.getInstance().unloadHUD();
+			ResourcesManager.getInstance().unloadGameTextures();
+		} else if (currentSceneType.equals(SceneType.SCENE_LEVEL_COMPLETE)) {
+			if (!levelCompleteScene.isDisposed()) {
+				levelCompleteScene.disposeScene();
+			}
+			ResourcesManager.getInstance().unloadLevelCompletedTextures();
 		}
-		ResourcesManager.getInstance().unloadHUD();
-		ResourcesManager.getInstance().unloadGameTextures();
+
+		setScene(loadingScene);
+
 		mEngine.registerUpdateHandler(new TimerHandler(0.1f,
 				new ITimerCallback() {
 					public void onTimePassed(final TimerHandler pTimerHandler) {
@@ -150,6 +165,25 @@ public class SceneManager {
 				}));
 	}
 
+	public void loadLevelCompleteScene(final Engine mEngine) {
+		if (levelCompleteScene == null) {
+			levelCompleteScene = new LevelCompleteScene();
+		}
+		ResourcesManager.getInstance().loadLevelCompletedTextures();
+		if (!levelScene.isDisposed()) {
+			levelScene.disposeScene();
+		}
+		ResourcesManager.getInstance().unloadHUD();
+		ResourcesManager.getInstance().unloadGameTextures();
+		mEngine.registerUpdateHandler(new TimerHandler(0.1f,
+				new ITimerCallback() {
+					public void onTimePassed(final TimerHandler pTimerHandler) {
+						mEngine.unregisterUpdateHandler(pTimerHandler);
+						setScene(levelCompleteScene);
+					}
+				}));
+	}
+
 	// ---------------------------------------------
 	// GETTERS AND SETTERS
 	// ---------------------------------------------
@@ -169,4 +203,5 @@ public class SceneManager {
 	public boolean isLevelSceneCreated() {
 		return levelScene != null;
 	}
+
 }
