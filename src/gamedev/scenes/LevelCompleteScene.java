@@ -34,7 +34,7 @@ public class LevelCompleteScene extends BaseScene {
 			}
 		};
 
-		levelCompleteSprite.setVisible(false);
+		// levelCompleteSprite.setVisible(false);
 		levelCompleteSprite.setIgnoreUpdate(true);
 
 		// Attach our level complete panel in the middle of camera

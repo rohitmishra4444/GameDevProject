@@ -11,7 +11,6 @@ public class Level1 extends LevelScene {
 		// Level as integer. The filename is then created with:
 		// "level" + levelId + ".tmx"
 		super(1);
-		// this.player.setPosition(10, 10);
 		this.createScene();
 	}
 

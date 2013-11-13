@@ -222,7 +222,8 @@ public class LevelScene extends BaseScene {
 					levelObject.registerEntityModifier(new LoopEntityModifier(
 							new ScaleModifier(1, 1, 1.3f)));
 				} else if (type.equals(TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_PLAYER)) {
-					player.setPosition(x, y);
+					// 32 is the PIXEL_TO_METER_RATIO_DEFAULT from AndEngine
+					player.body.setTransform(x / 32, y / 32, 0);
 					levelObject = player;
 				}
 				// else if (type

@@ -1,21 +1,16 @@
 package gamedev.hud;
 
-import gamedev.game.Direction;
 import gamedev.game.GameActivity;
 import gamedev.game.ResourcesManager;
-import gamedev.objects.Player.PlayerState;
 
 import org.andengine.engine.camera.hud.HUD;
 import org.andengine.engine.camera.hud.controls.AnalogOnScreenControl;
-import org.andengine.engine.camera.hud.controls.AnalogOnScreenControl.IAnalogOnScreenControlListener;
-import org.andengine.engine.camera.hud.controls.BaseOnScreenControl;
 import org.andengine.entity.modifier.ScaleModifier;
 import org.andengine.entity.modifier.SequenceEntityModifier;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.util.color.Color;
-import org.andengine.util.math.MathUtils;
 
 import android.opengl.GLES20;
 
@@ -96,12 +91,13 @@ public class SceneHUD extends HUD {
 	}
 
 	protected void createControls() {
+		AnalogOnScreenControlListener controlListener = new AnalogOnScreenControlListener();
 		this.pad = new AnalogOnScreenControl(0, GameActivity.HEIGHT
 				- resourcesManager.controlBaseTextureRegion.getHeight(),
 				resourcesManager.camera,
 				resourcesManager.controlBaseTextureRegion,
 				resourcesManager.controlKnobTextureRegion, 0.1f, 200,
-				resourcesManager.vbom, createControlListener());
+				resourcesManager.vbom, controlListener);
 
 		this.pad.getControlBase().setBlendFunction(GLES20.GL_SRC_ALPHA,
 				GLES20.GL_ONE_MINUS_SRC_ALPHA);
@@ -112,56 +108,6 @@ public class SceneHUD extends HUD {
 		this.pad.refreshControlKnobPosition();
 		this.setChildScene(this.pad);
 
-	}
-
-	private IAnalogOnScreenControlListener createControlListener() {
-
-		return new IAnalogOnScreenControlListener() {
-			@Override
-			public void onControlChange(
-					final BaseOnScreenControl pBaseOnScreenControl,
-					final float pValueX, final float pValueY) {
-
-				// Avoid nullpointer, needs to be resourcesManager.player, since
-				// it is final here
-				if (resourcesManager.player == null) {
-					return;
-				}
-
-				// Compute direction in degree (from -180° to +180°).
-				float degree = MathUtils.radToDeg((float) Math.atan2(pValueX,
-						pValueY));
-
-				// Set the direction and State
-				int direction = Direction.getDirectionFromDegree(degree);
-				if (degree == 0) {
-					resourcesManager.player.setState(PlayerState.IDLE,
-							direction);
-				} else {
-					PlayerState state = resourcesManager.hud
-							.isTouchedSecondaryButton() ? PlayerState.RUNNING
-							: PlayerState.WALKING;
-					resourcesManager.player.setVelocity(pValueX, pValueY,
-							state, direction);
-				}
-
-				// else if (Math.abs(pValueX) > 0.75 || Math.abs(pValueY) >
-				// 0.75) {
-				// player.setVelocity(pValueX, pValueY, PlayerState.RUNNING);
-				// } else {
-				// player.setVelocity(pValueX, pValueY, PlayerState.WALKING);
-				// }
-
-			}
-
-			@Override
-			public void onControlClick(
-					AnalogOnScreenControl pAnalogOnScreenControl) {
-				// TODO Auto-generated method stub
-
-			}
-
-		};
 	}
 
 	private void createButtons() {
