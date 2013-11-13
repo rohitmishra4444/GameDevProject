@@ -8,7 +8,6 @@ import org.andengine.engine.camera.Camera;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.sprite.TiledSprite;
 import org.andengine.opengl.util.GLState;
-import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 public class LevelCompleteScene extends BaseScene {
 
@@ -25,7 +24,16 @@ public class LevelCompleteScene extends BaseScene {
 	@Override
 	public void createScene() {
 
-		levelCompleteSprite = new Sprite(0, 0, 650, 400,
+		float centerX = camera.getWidth()
+				/ 2
+				- ResourcesManager.getInstance().complete_window_region
+						.getWidth() / 2;
+		float centerY = camera.getHeight()
+				/ 2
+				- ResourcesManager.getInstance().complete_window_region
+						.getHeight() / 2;
+
+		levelCompleteSprite = new Sprite(centerX, centerY, 650, 400,
 				ResourcesManager.getInstance().complete_window_region, vbom) {
 			@Override
 			protected void preDraw(GLState pGLState, Camera pCamera) {
@@ -34,21 +42,9 @@ public class LevelCompleteScene extends BaseScene {
 			}
 		};
 
-		// levelCompleteSprite.setVisible(false);
-		// levelCompleteSprite.setIgnoreUpdate(true);
+		attachStars();
 
-		// Attach our level complete panel in the middle of camera
-		// setPosition(
-		// camera.getWidth()
-		// / 2
-		// - ResourcesManager.getInstance().complete_window_region.getWidth()
-		// / 2,
-		// camera.getHeight()
-		// / 2
-		// - ResourcesManager.getInstance().complete_window_region
-		// .getHeight() / 2);
-
-		attachStars(vbom);
+		// TODO: Define based on goals how many stars to give.
 		display(StarsCount.TWO);
 
 		attachChild(levelCompleteSprite);
@@ -70,20 +66,17 @@ public class LevelCompleteScene extends BaseScene {
 		this.dispose();
 	}
 
-	private void attachStars(VertexBufferObjectManager pSpriteVertexBufferObject) {
-		star1 = new TiledSprite(150, 150,
-				ResourcesManager.getInstance().complete_stars_region,
-				pSpriteVertexBufferObject);
-		star2 = new TiledSprite(325, 150,
-				ResourcesManager.getInstance().complete_stars_region,
-				pSpriteVertexBufferObject);
-		star3 = new TiledSprite(500, 150,
-				ResourcesManager.getInstance().complete_stars_region,
-				pSpriteVertexBufferObject);
+	private void attachStars() {
+		star1 = new TiledSprite(55, 150,
+				ResourcesManager.getInstance().complete_stars_region, vbom);
+		star2 = new TiledSprite(235, 150,
+				ResourcesManager.getInstance().complete_stars_region, vbom);
+		star3 = new TiledSprite(415, 150,
+				ResourcesManager.getInstance().complete_stars_region, vbom);
 
-		attachChild(star1);
-		attachChild(star2);
-		attachChild(star3);
+		levelCompleteSprite.attachChild(star1);
+		levelCompleteSprite.attachChild(star2);
+		levelCompleteSprite.attachChild(star3);
 	}
 
 	/**

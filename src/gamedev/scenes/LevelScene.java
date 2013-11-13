@@ -217,6 +217,12 @@ public class LevelScene extends BaseScene {
 								SceneManager.getInstance()
 										.loadLevelCompleteScene(engine);
 							}
+
+							// if (player.body.getPosition().dst(
+							// new Vector2(this.getX(), this.getY())) < 1) {
+							// SceneManager.getInstance()
+							// .loadLevelCompleteScene(engine);
+							// }
 						}
 					};
 					levelObject.registerEntityModifier(new LoopEntityModifier(
@@ -296,5 +302,4 @@ public class LevelScene extends BaseScene {
 		}
 
 	}
-
 }

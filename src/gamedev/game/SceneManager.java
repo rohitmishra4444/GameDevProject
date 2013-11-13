@@ -173,16 +173,18 @@ public class SceneManager {
 		if (levelCompleteScene == null) {
 			levelCompleteScene = new LevelCompleteScene();
 		}
-		ResourcesManager.getInstance().loadLevelCompletedTextures();
-		// if (!levelScene.isDisposed()) {
-		// levelScene.disposeScene();
-		// }
+
+		if (!levelScene.isDisposed()) {
+			levelScene.disposeScene();
+		}
+		ResourcesManager.getInstance().unloadGameTextures();
 		ResourcesManager.getInstance().unloadHUD();
-		// ResourcesManager.getInstance().unloadGameTextures();
 		mEngine.registerUpdateHandler(new TimerHandler(0.1f,
 				new ITimerCallback() {
 					public void onTimePassed(final TimerHandler pTimerHandler) {
 						mEngine.unregisterUpdateHandler(pTimerHandler);
+						ResourcesManager.getInstance()
+								.loadLevelCompletedTextures();
 						setScene(levelCompleteScene);
 					}
 				}));

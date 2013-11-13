@@ -14,7 +14,6 @@ import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
-import org.andengine.opengl.texture.atlas.bitmap.BuildableBitmapTextureAtlas;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.texture.region.TextureRegion;
@@ -70,7 +69,8 @@ public class ResourcesManager {
 	// Textures for level-complete window
 	public ITextureRegion complete_window_region;
 	public ITiledTextureRegion complete_stars_region;
-	public BuildableBitmapTextureAtlas complete_window_atlas;
+	public BitmapTextureAtlas complete_window_atlas;
+	public BitmapTextureAtlas complete_stars_atlas;
 
 	// ---------------------------------------------
 	// Physic
@@ -167,6 +167,7 @@ public class ResourcesManager {
 		loadGameFonts();
 		loadGameAudio();
 		loadHUD();
+		loadLevelCompletedGraphics();
 	}
 
 	public void loadHUD() {
@@ -184,6 +185,8 @@ public class ResourcesManager {
 	}
 
 	public void loadHUDGraphics() {
+		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
+
 		this.controlTexture = new BitmapTextureAtlas(textureManager, 256, 128,
 				TextureOptions.BILINEAR);
 		this.controlBaseTextureRegion = BitmapTextureAtlasTextureRegionFactory
@@ -199,16 +202,6 @@ public class ResourcesManager {
 
 	private void loadGameGraphics() {
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
-
-		// level-complete window
-		complete_window_atlas = new BuildableBitmapTextureAtlas(textureManager,
-				650, 400, TextureOptions.DEFAULT);
-		this.complete_window_region = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(complete_window_atlas,
-						activity.getBaseContext(), "levelCompleteWindow.png");
-		this.complete_stars_region = BitmapTextureAtlasTextureRegionFactory
-				.createTiledFromAsset(complete_window_atlas,
-						activity.getBaseContext(), "star.png", 2, 1);
 
 		// Player
 		this.playerAtlas = new BitmapTextureAtlas(textureManager, 1056, 960,
@@ -250,12 +243,30 @@ public class ResourcesManager {
 		dinosaurGreenAtlas.unload();
 	}
 
+	public void loadLevelCompletedGraphics() {
+		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
+
+		complete_window_atlas = new BitmapTextureAtlas(textureManager, 650,
+				400, TextureOptions.DEFAULT);
+		complete_window_region = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(complete_window_atlas, activity,
+						"levelCompleteWindow.png", 0, 0);
+
+		complete_stars_atlas = new BitmapTextureAtlas(textureManager, 650, 400,
+				TextureOptions.DEFAULT);
+		complete_stars_region = BitmapTextureAtlasTextureRegionFactory
+				.createTiledFromAsset(complete_stars_atlas, activity,
+						"star.png", 0, 0, 2, 1);
+	}
+
 	public void loadLevelCompletedTextures() {
 		complete_window_atlas.load();
+		complete_stars_atlas.load();
 	}
 
 	public void unloadLevelCompletedTextures() {
 		complete_window_atlas.unload();
+		complete_stars_atlas.unload();
 	}
 
 	public ITextureRegion getRandomTreeTexture() {
