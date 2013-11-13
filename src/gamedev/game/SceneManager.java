@@ -107,6 +107,7 @@ public class SceneManager {
 					public void onTimePassed(final TimerHandler pTimerHandler) {
 						mEngine.unregisterUpdateHandler(pTimerHandler);
 						ResourcesManager.getInstance().loadGameResources();
+						ResourcesManager.getInstance().loadHUD();
 						levelScene = new Level1(); // TODO Load level dynamic
 													// based on provided level
 													// variable

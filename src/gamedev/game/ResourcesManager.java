@@ -170,12 +170,28 @@ public class ResourcesManager {
 	}
 
 	public void loadHUD() {
+		if (controlTexture == null) {
+			loadHUDGraphics();
+		}
+		controlTexture.load();
 		this.hud = new SceneHUD();
 		this.camera.setHUD(this.hud);
 	}
 
 	public void unloadHUD() {
 		camera.setHUD(null);
+		controlTexture.unload();
+	}
+
+	public void loadHUDGraphics() {
+		this.controlTexture = new BitmapTextureAtlas(textureManager, 256, 128,
+				TextureOptions.BILINEAR);
+		this.controlBaseTextureRegion = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(this.controlTexture, activity,
+						"onscreen_control_base.png", 0, 0);
+		this.controlKnobTextureRegion = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(this.controlTexture, activity,
+						"onscreen_control_knob.png", 128, 0);
 	}
 
 	public void loadPlayerGraphics() {
@@ -186,7 +202,7 @@ public class ResourcesManager {
 
 		// level-complete window
 		complete_window_atlas = new BuildableBitmapTextureAtlas(textureManager,
-				650, 400);
+				650, 400, TextureOptions.DEFAULT);
 		this.complete_window_region = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(complete_window_atlas,
 						activity.getBaseContext(), "levelCompleteWindow.png");
@@ -194,33 +210,21 @@ public class ResourcesManager {
 				.createTiledFromAsset(complete_window_atlas,
 						activity.getBaseContext(), "star.png", 2, 1);
 
-		// Controls
-		this.controlTexture = new BitmapTextureAtlas(this.textureManager, 256,
-				128, TextureOptions.BILINEAR);
-		this.controlBaseTextureRegion = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(this.controlTexture, this.activity,
-						"onscreen_control_base.png", 0, 0);
-		this.controlKnobTextureRegion = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(this.controlTexture, this.activity,
-						"onscreen_control_knob.png", 128, 0);
-
 		// Player
-		this.playerAtlas = new BitmapTextureAtlas(getInstance().textureManager,
-				1056, 960, TextureOptions.DEFAULT);
+		this.playerAtlas = new BitmapTextureAtlas(textureManager, 1056, 960,
+				TextureOptions.DEFAULT);
 
 		this.playerRegion = BitmapTextureAtlasTextureRegionFactory
-				.createTiledFromAsset(this.playerAtlas, getInstance().activity,
+				.createTiledFromAsset(this.playerAtlas, activity,
 						"grey_caveman_0.5_asc.png", 0, 0, 22, 20);
 
 		// Dinosaurs
-		this.dinosaurGreenAtlas = new BitmapTextureAtlas(
-				getInstance().textureManager, 1664, 2048,
-				TextureOptions.DEFAULT);
+		this.dinosaurGreenAtlas = new BitmapTextureAtlas(textureManager, 1664,
+				2048, TextureOptions.DEFAULT);
 
 		this.dinosaurGreenRegion = BitmapTextureAtlasTextureRegionFactory
-				.createTiledFromAsset(this.dinosaurGreenAtlas,
-						getInstance().activity, "green_dino_0.5_asc.png", 0, 0,
-						26, 32);
+				.createTiledFromAsset(this.dinosaurGreenAtlas, activity,
+						"green_dino_0.5_asc.png", 0, 0, 26, 32);
 
 		// Landscape
 		// this.landscapeAtlas = new BitmapTextureAtlas(
@@ -237,13 +241,11 @@ public class ResourcesManager {
 	}
 
 	public void loadGameTextures() {
-		controlTexture.load();
 		playerAtlas.load();
 		dinosaurGreenAtlas.load();
 	}
 
 	public void unloadGameTextures() {
-		controlTexture.unload();
 		playerAtlas.unload();
 		dinosaurGreenAtlas.unload();
 	}
@@ -258,8 +260,7 @@ public class ResourcesManager {
 
 	public ITextureRegion getRandomTreeTexture() {
 		return BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(
-				this.landscapeAtlas, getInstance().activity, "trees.png", 0, 0,
-				8, 4);
+				this.landscapeAtlas, activity, "trees.png", 0, 0, 8, 4);
 	}
 
 	/**

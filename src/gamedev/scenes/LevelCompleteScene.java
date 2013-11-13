@@ -35,23 +35,23 @@ public class LevelCompleteScene extends BaseScene {
 		};
 
 		// levelCompleteSprite.setVisible(false);
-		levelCompleteSprite.setIgnoreUpdate(true);
+		// levelCompleteSprite.setIgnoreUpdate(true);
 
 		// Attach our level complete panel in the middle of camera
-		setPosition(
-				camera.getWidth()
-						/ 2
-						- ResourcesManager.getInstance().complete_window_region.getWidth()
-						/ 2,
-				camera.getHeight()
-						/ 2
-						- ResourcesManager.getInstance().complete_window_region
-								.getHeight() / 2);
-
-		attachChild(levelCompleteSprite);
+		// setPosition(
+		// camera.getWidth()
+		// / 2
+		// - ResourcesManager.getInstance().complete_window_region.getWidth()
+		// / 2,
+		// camera.getHeight()
+		// / 2
+		// - ResourcesManager.getInstance().complete_window_region
+		// .getHeight() / 2);
 
 		attachStars(vbom);
 		display(StarsCount.TWO);
+
+		attachChild(levelCompleteSprite);
 	}
 
 	@Override
