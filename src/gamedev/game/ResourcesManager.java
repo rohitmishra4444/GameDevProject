@@ -163,9 +163,10 @@ public class ResourcesManager {
 		this.physicsWorld = new FixedStepPhysicsWorld(30, new Vector2(0, 0),
 				false, 8, 1);
 		loadGameGraphics();
-		loadHUD();
+		loadGameTextures();
 		loadGameFonts();
 		loadGameAudio();
+		loadHUD();
 	}
 
 	public void loadHUD() {
@@ -225,8 +226,6 @@ public class ResourcesManager {
 		// this.landscapeAtlas = new BitmapTextureAtlas(
 		// getInstance().textureManager, 512, 1204);
 		// this.landscapeAtlas.load();
-
-		loadGameTextures();
 	}
 
 	private void loadGameAudio() {

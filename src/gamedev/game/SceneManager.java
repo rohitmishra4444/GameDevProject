@@ -98,6 +98,9 @@ public class SceneManager {
 
 	public void createLevelScene(final Engine mEngine, int level) {
 		setScene(loadingScene);
+		if (!menuScene.isDisposed()) {
+			menuScene.disposeScene();
+		}
 		ResourcesManager.getInstance().unloadMenuTextures();
 		mEngine.registerUpdateHandler(new TimerHandler(0.1f,
 				new ITimerCallback() {

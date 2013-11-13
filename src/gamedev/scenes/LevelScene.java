@@ -1,17 +1,11 @@
 package gamedev.scenes;
 
-import gamedev.game.Direction;
-import gamedev.game.GameActivity;
 import gamedev.game.SceneManager;
 import gamedev.game.SceneManager.SceneType;
 import gamedev.objects.Player;
-import gamedev.objects.Player.PlayerState;
 
 import java.io.IOException;
 
-import org.andengine.engine.camera.hud.controls.AnalogOnScreenControl;
-import org.andengine.engine.camera.hud.controls.AnalogOnScreenControl.IAnalogOnScreenControlListener;
-import org.andengine.engine.camera.hud.controls.BaseOnScreenControl;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.LoopEntityModifier;
 import org.andengine.entity.modifier.ScaleModifier;
@@ -34,10 +28,7 @@ import org.andengine.util.debug.Debug;
 import org.andengine.util.level.IEntityLoader;
 import org.andengine.util.level.LevelLoader;
 import org.andengine.util.level.constants.LevelConstants;
-import org.andengine.util.math.MathUtils;
 import org.xml.sax.Attributes;
-
-import android.opengl.GLES20;
 
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -71,9 +62,6 @@ public class LevelScene extends BaseScene {
 	// private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_COIN =
 	// "coin";
 
-	// Controls
-	protected AnalogOnScreenControl pad;
-
 	// Player. Each level has to create the Player and its position in the world
 	protected Player player;
 
@@ -84,7 +72,6 @@ public class LevelScene extends BaseScene {
 		this.resourcesManager.player = player;
 		this.tmxFileName = "level" + levelId + ".tmx";
 		this.createMap();
-		this.createControls();
 
 		// This is done by LevelLoader
 		// this.attachChild(this.player);
@@ -179,85 +166,6 @@ public class LevelScene extends BaseScene {
 			}
 		}
 	}
-
-	protected void createControls() {
-		this.pad = new AnalogOnScreenControl(0, GameActivity.HEIGHT
-				- resourcesManager.controlBaseTextureRegion.getHeight(),
-				this.camera, resourcesManager.controlBaseTextureRegion,
-				resourcesManager.controlKnobTextureRegion, 0.1f, 200,
-				this.vbom, createControlListener(this.player));
-
-		this.pad.getControlBase().setBlendFunction(GLES20.GL_SRC_ALPHA,
-				GLES20.GL_ONE_MINUS_SRC_ALPHA);
-		this.pad.getControlBase().setAlpha(0.5f);
-		this.pad.getControlBase().setScaleCenter(0, 128);
-		this.pad.getControlBase().setScale(1.25f);
-		this.pad.getControlKnob().setScale(1.25f);
-		this.pad.refreshControlKnobPosition();
-		this.setChildScene(this.pad);
-	}
-
-	private IAnalogOnScreenControlListener createControlListener(
-			final Player player) {
-
-		return new IAnalogOnScreenControlListener() {
-			@Override
-			public void onControlChange(
-					final BaseOnScreenControl pBaseOnScreenControl,
-					final float pValueX, final float pValueY) {
-
-				// Compute direction in degree (from -180° to +180°).
-				float degree = MathUtils.radToDeg((float) Math.atan2(pValueX,
-						pValueY));
-
-				// Set the direction and State
-				int direction = Direction.getDirectionFromDegree(degree);
-				if (degree == 0) {
-					player.setState(PlayerState.IDLE, direction);
-				} else {
-					PlayerState state = resourcesManager.hud
-							.isTouchedSecondaryButton() ? PlayerState.RUNNING
-							: PlayerState.WALKING;
-					player.setVelocity(pValueX, pValueY, state, direction);
-				}
-
-				// else if (Math.abs(pValueX) > 0.75 || Math.abs(pValueY) >
-				// 0.75) {
-				// player.setVelocity(pValueX, pValueY, PlayerState.RUNNING);
-				// } else {
-				// player.setVelocity(pValueX, pValueY, PlayerState.WALKING);
-				// }
-
-			}
-
-			@Override
-			public void onControlClick(
-					AnalogOnScreenControl pAnalogOnScreenControl) {
-				// TODO Auto-generated method stub
-
-			}
-
-		};
-	}
-
-	// private void setLevelCompleteObject() {
-	// levelCompleteObject = new Sprite(0, 0,
-	// resourcesManager.complete_stars_region, vbom) {
-	// @Override
-	// protected void onManagedUpdate(float pSecondsElapsed) {
-	// super.onManagedUpdate(pSecondsElapsed);
-	//
-	// if (player.collidesWith(this)) {
-	// levelCompleteWindow.display(StarsCount.TWO,
-	// LevelScene.this, camera);
-	// this.setVisible(false);
-	// this.setIgnoreUpdate(true);
-	// }
-	// }
-	// };
-	// levelCompleteObject.registerEntityModifier(new LoopEntityModifier(
-	// new ScaleModifier(1, 1, 1.3f)));
-	// }
 
 	// TODO: This method could be used to load trees and other objects into a
 	// level from a xml-file.
