@@ -178,12 +178,6 @@ public class Dinosaur extends AnimatedSprite {
 		if (this.currentState == DinosaurState.DEAD) return;
 		
 		Vector2 bodyPos = this.body.getPosition();
-//		if (bodyPos.x < 0 || bodyPos.y < 0) {
-//			// Temporary fix! Need boundaries in level...
-//			this.body.setTransform(Math.max(bodyPos.x, 0), Math.max(bodyPos.y,0), this.body.getAngle());
-//			this.setState(DinosaurState.LOOKING);
-//			return;
-//		}
 
 		// Check if the dino should chase our player
         Vector2 playerPos = this.resourcesManager.player.body.getPosition();
@@ -217,12 +211,15 @@ public class Dinosaur extends AnimatedSprite {
         
         // If walking or running, check if we reached our goal
         if (this.currentState == DinosaurState.WALKING || this.currentState == DinosaurState.RUNNING) {
-        	if (Math.abs(this.body.getPosition().dst(this.moveTo)) < 1) {
+        	if (Math.abs(bodyPos.dst(this.moveTo)) < 1) {
         		// Stop dino and force to calculate a new state
         		this.body.setLinearVelocity(0, 0);
         		this.animationTime = 0;
+        	} else {
+            	// Still walking or running
+        		return;
         	}
-        }
+        } 
         
         // Set a random state after a random time. If the state is walking or running, set a random position where the dino walks.
         this.animationElapsedTime += pSecondsElapsed;
@@ -238,7 +235,7 @@ public class Dinosaur extends AnimatedSprite {
         		// The new Position should be in Range [-1000...1000] from the current position
         		float rX = this.body.getPosition().x + (-1000 + (r.nextFloat() * 2000 + 1));
         		float rY = this.body.getPosition().y + (-1000 + (r.nextFloat() * 2000 + 1));            		            		
-        		this.moveTo(rX, rY, randomState);
+//        		this.moveTo(rX, rY, randomState);
         	} else {
             	this.setState(randomState);            		
         	}

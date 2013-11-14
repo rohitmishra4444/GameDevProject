@@ -76,9 +76,10 @@ public class Player extends AnimatedSprite {
 	 * @param direction the direction of the animation. Pass "-1" if you don't need to compute/change the direction
 	 */
 	public void setState(PlayerState state, int direction) {
-		if (state != PlayerState.RUNNING && state != PlayerState.WALKING && state != PlayerState.IDLE && state != PlayerState.ATTACK) {
-			if (this.currentState == state && (this.direction == -1 || this.direction == direction)) return;			
-		}
+		
+//		if (state != PlayerState.RUNNING && state != PlayerState.WALKING && state != PlayerState.IDLE && state != PlayerState.ATTACK) {
+//			if (this.currentState == state && (this.direction == -1 || this.direction == direction)) return;			
+//		}
 		this.currentState = state;
 		if (direction > -1) this.direction = direction;
 		if (state == PlayerState.IDLE) {
@@ -97,6 +98,7 @@ public class Player extends AnimatedSprite {
 			boolean animate = (state == PlayerState.RUNNING || state == PlayerState.WALKING) ? false : true;
 			int startTile = rowIndex*TILES_PER_LINE + this.direction*FRAMES_PER_ANIMATION;
 			this.animate(ANIMATION_DURATION, startTile, startTile+FRAMES_PER_ANIMATION-1, animate);
+			System.out.println("Playing animation: " + state + ", at direction" + this.direction);
 		}
 	}
 	
