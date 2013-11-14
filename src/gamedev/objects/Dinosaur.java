@@ -6,6 +6,7 @@ import gamedev.game.ResourcesManager;
 import java.util.Random;
 
 import org.andengine.engine.handler.physics.PhysicsHandler;
+import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
@@ -17,13 +18,15 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
 public class Dinosaur extends AnimatedSprite {
 	
+	private static int nDinosaurs = 0;
 	public final static long[] ANIMATION_DURATION = { 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120};
 	public final static int FRAMES_PER_ANIMATION = 13;
 	public final static int TILES_PER_LINE = 26;
 	
 	public Body body;
 	public PhysicsHandler physicsHandler;
-
+	
+	protected int id;
 	protected ResourcesManager resourcesManager;
 	protected DinosaurState currentState;
 	protected float animationElapsedTime = 0;
@@ -63,7 +66,8 @@ public class Dinosaur extends AnimatedSprite {
 		// Scale it up, so it has normal size.
 		this.mScaleX = this.mScaleX * 2;
 		this.mScaleY = this.mScaleY * 2;
-
+		this.id = nDinosaurs++;
+		this.attachChild(new Rectangle(this.body.getPosition().x, this.body.getPosition().y, 10, 10, this.resourcesManager.vbom));
 	}
 
 	public void setDirection(int direction) {
@@ -156,26 +160,39 @@ public class Dinosaur extends AnimatedSprite {
 			this.setState(DinosaurState.TIPPING_OVER);
 			this.resourcesManager.player.getAttackers().remove(this);
 			this.currentState = DinosaurState.DEAD;
+			this.detachSelf();
+			this.dispose();
 		} else {
 			this.setState(DinosaurState.BEEN_HIT);			
 		}
+	}
+	
+	public String toString() {
+		return "[Dinosaur "+this.id+", currentState="+this.currentState+", pos="+this.body.getPosition()+"]";
 	}
 	
 	@Override
     protected void onManagedUpdate(float pSecondsElapsed) {
 		super.onManagedUpdate(pSecondsElapsed);
         
-		// TODO Remove object from scene!
 		if (this.currentState == DinosaurState.DEAD) return;
 		
-        // Check if the dino should chase our player
+		Vector2 bodyPos = this.body.getPosition();
+//		if (bodyPos.x < 0 || bodyPos.y < 0) {
+//			// Temporary fix! Need boundaries in level...
+//			this.body.setTransform(Math.max(bodyPos.x, 0), Math.max(bodyPos.y,0), this.body.getAngle());
+//			this.setState(DinosaurState.LOOKING);
+//			return;
+//		}
+
+		// Check if the dino should chase our player
         Vector2 playerPos = this.resourcesManager.player.body.getPosition();
         // TODO Calculation of distance does not always work and then the player is under attack always... why!
-        float distance = Math.abs(this.body.getPosition().dst(playerPos)); 
+        float distance = Math.abs(bodyPos.dst(playerPos)); 
         if (distance < 0.5) {
         	if (this.currentState != DinosaurState.ATTACK) this.setState(DinosaurState.ATTACK);
         	// TODO Damage should be based on distance...
-        	if (!firstAttack) {
+        	if (!this.firstAttack) {
         		this.resourcesManager.player.underAttack(10, this);
         		this.firstAttack = true;
         	} else {
@@ -230,7 +247,7 @@ public class Dinosaur extends AnimatedSprite {
 	
 	protected void createPhysic() {
 		this.body = PhysicsFactory.createBoxBody(this.resourcesManager.physicsWorld, this, BodyType.KinematicBody, PhysicsFactory.createFixtureDef(0, 0, 0));
-		this.resourcesManager.physicsWorld.registerPhysicsConnector(new PhysicsConnector(this, this.body, true, false));		
+		this.resourcesManager.physicsWorld.registerPhysicsConnector(new PhysicsConnector(this, this.body, true, true));		
 	}
 	
 	private DinosaurState getRandomState() {

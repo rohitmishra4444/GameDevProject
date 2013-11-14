@@ -96,7 +96,7 @@ public class Player extends AnimatedSprite {
 			if (state == PlayerState.WALKING) rowIndex = 16;
 			boolean animate = (state == PlayerState.RUNNING || state == PlayerState.WALKING) ? false : true;
 			int startTile = rowIndex*TILES_PER_LINE + this.direction*FRAMES_PER_ANIMATION;
-			this.animate(ANIMATION_DURATION, startTile, startTile+FRAMES_PER_ANIMATION-1, animate);			
+			this.animate(ANIMATION_DURATION, startTile, startTile+FRAMES_PER_ANIMATION-1, animate);
 		}
 	}
 	
@@ -111,6 +111,8 @@ public class Player extends AnimatedSprite {
 		if (!this.attackers.contains(attacker)) {
 			this.attackers.add(attacker);			
 		}
+		System.out.println(attacker);
+		System.out.println("PlayerPos: " + this.body.getPosition());
 	}
 	
 	public boolean removeAttacker(Dinosaur attacker) {
@@ -196,7 +198,7 @@ public class Player extends AnimatedSprite {
 		this.physicsHandler = new PhysicsHandler(this);
 		this.registerUpdateHandler(this.physicsHandler);
 		physicsWorld.registerPhysicsConnector(new PhysicsConnector(
-				this, this.body, true, false) {
+				this, this.body, true, true) {
 			@Override
 			public void onUpdate(float pSecondsElapsed) {
 				super.onUpdate(pSecondsElapsed);
