@@ -2,6 +2,7 @@ package gamedev.hud;
 
 import gamedev.game.GameActivity;
 import gamedev.game.ResourcesManager;
+import gamedev.objects.Player.PlayerState;
 
 import org.andengine.engine.camera.hud.HUD;
 import org.andengine.engine.camera.hud.controls.AnalogOnScreenControl;
@@ -122,10 +123,10 @@ public class SceneHUD extends HUD {
 								0.25f, 1f, 1.25f)));
 
 				if (touchEvent.isActionUp()) {
+					resourcesManager.player.setState(PlayerState.ATTACK, -1);
 					if (!resourcesManager.player.getAttackers().isEmpty()) {
 						// Attack the first dinosaur
-						resourcesManager.player.getAttackers().get(0)
-								.underAttack(50);
+						resourcesManager.player.getAttackers().get(0).underAttack(50);
 					}
 				}
 

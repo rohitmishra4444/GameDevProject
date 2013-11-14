@@ -22,28 +22,13 @@ public class AnalogOnScreenControlListener implements
 			return;
 		}
 
-		// Compute direction in degree (from -180° to +180°).
-		float degree = MathUtils.radToDeg((float) Math.atan2(pValueX, pValueY));
-
-		// Set the direction and State
-		int direction = Direction.getDirectionFromDegree(degree);
-		if (degree == 0) {
-			ResourcesManager.getInstance().player.setState(PlayerState.IDLE,
-					direction);
+		
+		if (pValueX == 0 && pValueY == 0) {
+			ResourcesManager.getInstance().player.setState(PlayerState.IDLE, -1);
 		} else {
-			PlayerState state = ResourcesManager.getInstance().hud
-					.isTouchedSecondaryButton() ? PlayerState.RUNNING
-					: PlayerState.WALKING;
-			ResourcesManager.getInstance().player.setVelocity(pValueX, pValueY,
-					state, direction);
+			PlayerState state = ResourcesManager.getInstance().hud.isTouchedSecondaryButton() ? PlayerState.RUNNING: PlayerState.WALKING;
+			ResourcesManager.getInstance().player.setVelocity(pValueX, pValueY,state);
 		}
-
-		// else if (Math.abs(pValueX) > 0.75 || Math.abs(pValueY) >
-		// 0.75) {
-		// player.setVelocity(pValueX, pValueY, PlayerState.RUNNING);
-		// } else {
-		// player.setVelocity(pValueX, pValueY, PlayerState.WALKING);
-		// }
 
 	}
 

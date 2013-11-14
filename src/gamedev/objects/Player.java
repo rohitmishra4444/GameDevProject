@@ -11,6 +11,7 @@ import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
+import org.andengine.util.math.MathUtils;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -72,17 +73,18 @@ public class Player extends AnimatedSprite {
 	 * Display Player animation on current State and Direction
 	 * Also validate some states here, e.g. running is not possible if energy = 0
 	 * @param state new PlayerState
+	 * @param direction the direction of the animation. Pass "-1" if you don't need to compute/change the direction
 	 */
 	public void setState(PlayerState state, int direction) {
-		if (state != PlayerState.RUNNING && state != PlayerState.WALKING && state != PlayerState.IDLE) {
-			if (this.currentState == state && this.direction == direction) return;			
+		if (state != PlayerState.RUNNING && state != PlayerState.WALKING && state != PlayerState.IDLE && state != PlayerState.ATTACK) {
+			if (this.currentState == state && (this.direction == -1 || this.direction == direction)) return;			
 		}
 		this.currentState = state;
-		this.direction = direction;
+		if (direction > -1) this.direction = direction;
 		if (state == PlayerState.IDLE) {
 			this.body.setLinearVelocity(0, 0);
 			this.stopAnimation();
-			this.setEnergy(this.energy+2);
+			this.setEnergy(this.energy+1);
 			return;
 		}
 		if (!this.isAnimationRunning()) {
@@ -126,12 +128,14 @@ public class Player extends AnimatedSprite {
 	 * @param pY
 	 * @param state WALKING|RUNNING
 	 */
-	public void setVelocity(float pX, float pY, PlayerState state, int direction) {
+	public void setVelocity(float pX, float pY, PlayerState state) {
+		// Compute direction
+		float degree = MathUtils.radToDeg((float) Math.atan2(pX, pY));
+		int direction = Direction.getDirectionFromDegree(degree);
 		// Check if enough energy, otherwise we reset to WALKIING
 		if (state == PlayerState.RUNNING && this.energy == 0) state = PlayerState.WALKING;
 		if (state == PlayerState.WALKING) {
 			this.body.setLinearVelocity(pX * this.velocity, pY * this.velocity);
-			//this.setEnergy(this.energy+1);
 		} else {
 			this.body.setLinearVelocity(pX * this.velocity * this.factorRunning, pY * this.velocity * this.factorRunning);
 			this.setEnergy(this.energy-1); // TODO Move to constant / variable
@@ -199,6 +203,10 @@ public class Player extends AnimatedSprite {
 				camera.updateChaseEntity();
 			}
 		});		
+	}
+
+	public int getDirection() {
+		return this.direction;
 	}
 	
 }
