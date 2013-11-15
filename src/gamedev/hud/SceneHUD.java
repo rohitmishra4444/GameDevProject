@@ -17,23 +17,24 @@ import android.opengl.GLES20;
 
 public class SceneHUD extends HUD {
 
+	final protected ResourcesManager resourcesManager = ResourcesManager
+			.getInstance();
+
 	// Controls
 	protected AnalogOnScreenControl pad;
 
 	protected Rectangle life;
 	protected Rectangle energy;
-	// final protected Rectangle primaryButton;
-	// final protected Rectangle secondaryButton;
-	final protected ResourcesManager resourcesManager = ResourcesManager
-			.getInstance();
+
 	protected boolean isTouchedPrimary = false;
 	protected boolean isTouchedSecondary = false;
 
 	float cameraWidth = this.resourcesManager.camera.getWidth();
 	float cameraHeight = this.resourcesManager.camera.getHeight();
 
+	private Thread attackThread;
+
 	public SceneHUD() {
-		// TODO Refactor
 		super();
 
 		this.life = new Rectangle(cameraWidth - 150, 20, 100, 20,
@@ -44,45 +45,6 @@ public class SceneHUD extends HUD {
 				this.resourcesManager.vbom);
 		this.energy.setColor(Color.BLUE);
 		this.energy.setAlpha(0.6f);
-
-		// this.primaryButton = new Rectangle(cameraWidth - 120, cameraHeight -
-		// 100, 80, 80, this.resourcesManager.vbom) {
-		// public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y)
-		// {
-		// if (touchEvent.isActionUp())
-		// {
-		// if (!resourcesManager.player.getAttackers().isEmpty()) {
-		// // Attack the first dinosaur
-		// resourcesManager.player.getAttackers().get(0).underAttack(50);
-		// }
-		// }
-		// return true;
-		// };
-		// };
-		// this.primaryButton.setColor(Color.BLACK);
-		// this.primaryButton.setAlpha(0.7f);
-		//
-		// this.secondaryButton = new Rectangle(cameraWidth - 120, cameraHeight
-		// - 200, 80, 80, this.resourcesManager.vbom) {
-		// public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y)
-		// {
-		// if (touchEvent.isActionDown()) {
-		// isTouchedSecondary = true;
-		// System.out.println("Touched=true");
-		// } else if (touchEvent.isActionUp()) {
-		// isTouchedSecondary = false;
-		// System.out.println("Touched=false");
-		// }
-		// return true;
-		// }
-		// };
-		//
-		// this.secondaryButton.setColor(Color.WHITE);
-		//
-		// this.attachChild(primaryButton);
-		// this.attachChild(secondaryButton);
-		// this.registerTouchArea(primaryButton);
-		// this.registerTouchArea(secondaryButton);
 
 		this.attachChild(life);
 		this.attachChild(energy);
@@ -123,10 +85,19 @@ public class SceneHUD extends HUD {
 								0.25f, 1f, 1.25f)));
 
 				if (touchEvent.isActionUp()) {
+
+					// Stop the currently animation if it is not already
+					// attacking.
+					if (!resourcesManager.player.getState().equals(
+							PlayerState.ATTACK)) {
+						resourcesManager.player.stopAnimation();
+					}
+
 					resourcesManager.player.setState(PlayerState.ATTACK, -1);
 					if (!resourcesManager.player.getAttackers().isEmpty()) {
 						// Attack the first dinosaur
-						resourcesManager.player.getAttackers().get(0).underAttack(50);
+						resourcesManager.player.getAttackers().get(0)
+								.underAttack(50);
 					}
 				}
 

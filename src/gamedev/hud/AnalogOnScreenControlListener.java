@@ -1,16 +1,17 @@
 package gamedev.hud;
 
-import gamedev.game.Direction;
 import gamedev.game.ResourcesManager;
 import gamedev.objects.Player.PlayerState;
 
 import org.andengine.engine.camera.hud.controls.AnalogOnScreenControl;
 import org.andengine.engine.camera.hud.controls.AnalogOnScreenControl.IAnalogOnScreenControlListener;
 import org.andengine.engine.camera.hud.controls.BaseOnScreenControl;
-import org.andengine.util.math.MathUtils;
 
 public class AnalogOnScreenControlListener implements
 		IAnalogOnScreenControlListener {
+
+	protected ResourcesManager resourcesManager = ResourcesManager
+			.getInstance();
 
 	@Override
 	public void onControlChange(final BaseOnScreenControl pBaseOnScreenControl,
@@ -18,16 +19,24 @@ public class AnalogOnScreenControlListener implements
 
 		// Avoid nullpointer, needs to be resourcesManager.player, since
 		// it is final here
-		if (ResourcesManager.getInstance().player == null) {
+		if (resourcesManager.player == null) {
 			return;
 		}
 
-		
 		if (pValueX == 0 && pValueY == 0) {
-			ResourcesManager.getInstance().player.setState(PlayerState.IDLE, -1);
+			// Only set the player to idle if state is not attack or animation
+			// is not running. This is needed, because when the state is attack
+			// x and y can also be 0.
+			if (!resourcesManager.player.getState().equals(PlayerState.ATTACK)
+					|| !resourcesManager.player.isAnimationRunning()) {
+				resourcesManager.player.setState(PlayerState.IDLE, -1);
+			}
 		} else {
-			PlayerState state = ResourcesManager.getInstance().hud.isTouchedSecondaryButton() ? PlayerState.RUNNING: PlayerState.WALKING;
-			ResourcesManager.getInstance().player.setVelocity(pValueX, pValueY,state);
+			// TODO: Refactor! Here, only the direction should be given to the
+			// player.
+			PlayerState state = resourcesManager.hud.isTouchedSecondaryButton() ? PlayerState.RUNNING
+					: PlayerState.WALKING;
+			resourcesManager.player.setVelocity(pValueX, pValueY, state);
 		}
 
 	}
