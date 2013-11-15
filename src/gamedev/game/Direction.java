@@ -26,9 +26,7 @@ public class Direction {
 	 * @return
 	 */
 	public static int getDirectionFromVectors(Vector2 v1, Vector2 v2) {
-		v2.sub(v1).nor();
-		float degree = MathUtils.radToDeg((float) Math.atan2(v2.x, v2.y));
-		return getDirectionFromDegree(degree);
+		return getDirection(v1.x, v2.x, v1.y, v2.y);
 	}
 	
 	public static int getDirection(float xFrom, float xTo, float yFrom, float yTo) {

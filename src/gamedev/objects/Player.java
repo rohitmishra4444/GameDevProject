@@ -98,7 +98,7 @@ public class Player extends AnimatedSprite {
 			boolean animate = (state == PlayerState.RUNNING || state == PlayerState.WALKING) ? false : true;
 			int startTile = rowIndex*TILES_PER_LINE + this.direction*FRAMES_PER_ANIMATION;
 			this.animate(ANIMATION_DURATION, startTile, startTile+FRAMES_PER_ANIMATION-1, animate);
-			System.out.println("Playing animation: " + state + ", at direction" + this.direction);
+//			System.out.println("Playing animation: " + state + ", at direction" + this.direction);
 		}
 	}
 	
