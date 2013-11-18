@@ -51,8 +51,8 @@ public class Dinosaur extends AnimatedSprite {
 	}
 
 	public Dinosaur(float pX, float pY) {
-		super(pX, pY, ResourcesManager.getInstance().dinosaurGreenRegion,
-				ResourcesManager.getInstance().vbom);
+		super(pX, pY, ResourcesManager.getInstance().dinosaurGreenRegion
+				.deepCopy(), ResourcesManager.getInstance().vbom);
 		this.resourcesManager = ResourcesManager.getInstance();
 		this.direction = Direction.getRandomDirection();
 		// Scale it up, so it has normal size.
