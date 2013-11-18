@@ -67,15 +67,15 @@ public class LevelScene extends BaseScene {
 
 	public LevelScene(int levelId) {
 		super();
-		this.connectPhysics();
+
 		this.player = new Player();
 		this.resourcesManager.player = player;
 		this.tmxFileName = "level" + levelId + ".tmx";
 		this.createMap();
-
-		// This is done by LevelLoader
-		// this.attachChild(this.player);
+		this.connectPhysics();
 		this.loadLevel(levelId);
+		// This is done by LevelLoader:
+		// this.attachChild(this.player);
 	}
 
 	@Override
