@@ -1,5 +1,7 @@
 package gamedev.levels;
 
+import java.util.Random;
+
 import gamedev.objects.Dinosaur;
 import gamedev.scenes.LevelScene;
 
@@ -13,15 +15,10 @@ public class Level1 extends LevelScene {
 	}
 
 	public void createScene() {
-		// Random r = new Random();
-		for (int i = 0; i < 5; i++) {
-			// this.attachChild(new Dinosaur(r.nextInt(1024), r.nextInt(1204)));
-			Dinosaur tempDino = new Dinosaur(i * 200, 500);
-			// if (tempDino.getId() == i) {
-			this.attachChild(tempDino);
-			// }
+		Random r = new Random();
+		for (int i = 0; i < 10; i++) {
+			this.attachChild(new Dinosaur(r.nextInt(1024), r.nextInt(1204)));
 		}
-		// this.attachChild(new Tree(300, 300));
 	}
 
 }

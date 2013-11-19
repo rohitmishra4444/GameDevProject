@@ -60,9 +60,6 @@ public class Dinosaur extends AnimatedSprite {
 		this.mScaleY = this.mScaleY * 2;
 		this.id = nDinosaurs++;
 
-		// TODO: Remove.
-		System.out.println("Constructor called for Dino: " + this.id);
-
 		this.createPhysic();
 		this.setState(DinosaurState.LOOKING);
 		// this.attachChild(new Rectangle(this.body.getPosition().x,
@@ -140,7 +137,6 @@ public class Dinosaur extends AnimatedSprite {
 		// Store the point where to go
 		this.moveTo = new Vector2(x, y);
 		Vector2 bodyPos = this.body.getPosition();
-		System.out.println("Move from " + bodyPos + "to " + this.moveTo);
 
 		// Calculate the direction for the sprite animation
 		int direction = Direction.getDirectionFromVectors(bodyPos, this.moveTo);

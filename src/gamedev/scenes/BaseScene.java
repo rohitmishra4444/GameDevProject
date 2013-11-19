@@ -36,7 +36,7 @@ public abstract class BaseScene extends Scene
         this.vbom = resourcesManager.vbom;
         this.camera = resourcesManager.camera;
         this.textureManager = resourcesManager.textureManager;
-		createScene();
+//		createScene();
     }
     
     //---------------------------------------------
