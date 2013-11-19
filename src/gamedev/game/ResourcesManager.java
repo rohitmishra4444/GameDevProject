@@ -198,18 +198,21 @@ public class ResourcesManager {
 	}
 
 	public void loadPlayerGraphics() {
-	}
-
-	private void loadGameGraphics() {
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
 
-		// Player
 		this.playerAtlas = new BitmapTextureAtlas(textureManager, 1056, 960,
 				TextureOptions.DEFAULT);
 
 		this.playerRegion = BitmapTextureAtlasTextureRegionFactory
 				.createTiledFromAsset(this.playerAtlas, activity,
 						"grey_caveman_0.5_asc.png", 0, 0, 22, 20);
+	}
+
+	private void loadGameGraphics() {
+		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
+
+		// Player
+		loadPlayerGraphics();
 
 		// Dinosaurs
 		this.dinosaurGreenAtlas = new BitmapTextureAtlas(textureManager, 1664,
