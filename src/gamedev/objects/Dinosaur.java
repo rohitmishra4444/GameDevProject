@@ -68,7 +68,6 @@ public class Dinosaur extends AnimatedSprite {
 		this.id = nDinosaurs++;
 		this.createPhysic();
 		this.setState(DinosaurState.LOOKING);
-		//this.attachChild(new Rectangle(this.body.getPosition().x, this.body.getPosition().y, 10, 10, this.resourcesManager.vbom));
 		this.attachChild(new Text(this.body.getPosition().x, this.body.getPosition().y,resourcesManager.font,Integer.toString(this.id),2,resourcesManager.vbom));
 	}
 
