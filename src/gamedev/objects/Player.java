@@ -265,7 +265,7 @@ public class Player extends AnimatedSprite {
 		this.physicsHandler = new PhysicsHandler(this);
 		this.registerUpdateHandler(this.physicsHandler);
 		physicsWorld.registerPhysicsConnector(new PhysicsConnector(this,
-				this.body, true, true) {
+				this.body, true, false) {
 			@Override
 			public void onUpdate(float pSecondsElapsed) {
 				super.onUpdate(pSecondsElapsed);

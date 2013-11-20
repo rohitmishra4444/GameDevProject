@@ -2,7 +2,11 @@ package gamedev.levels;
 
 import java.util.Random;
 
+import org.andengine.entity.sprite.Sprite;
+
+import gamedev.game.ResourcesManager;
 import gamedev.objects.Dinosaur;
+import gamedev.objects.Tree;
 import gamedev.scenes.LevelScene;
 
 public class Level1 extends LevelScene {
@@ -18,6 +22,9 @@ public class Level1 extends LevelScene {
 		Random r = new Random();
 		for (int i = 0; i < 10; i++) {
 			this.attachChild(new Dinosaur(r.nextInt(1024), r.nextInt(1204)));
+		}
+		for (int i = 0; i<50; i++) {
+			this.attachChild(new Tree(r.nextInt(2048), r.nextInt(2048), r.nextInt(20)));
 		}
 	}
 

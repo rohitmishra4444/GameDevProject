@@ -17,6 +17,7 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegion
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.texture.region.TextureRegion;
+import org.andengine.opengl.texture.region.TextureRegionFactory;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.ui.activity.BaseActivity;
 
@@ -43,12 +44,13 @@ public class ResourcesManager {
 	// TEXTURES & TEXTURE REGIONS
 	// ---------------------------------------------
 
-	// Textures for player, dinosaurs
+	// Textures for player, dinosaurs and environment
 	public BitmapTextureAtlas playerAtlas;
 	public ITiledTextureRegion playerRegion;
 	public BitmapTextureAtlas dinosaurGreenAtlas;
 	public ITiledTextureRegion dinosaurGreenRegion;
-	public BitmapTextureAtlas landscapeAtlas;
+	public BitmapTextureAtlas treesAtlas;
+	public ITextureRegion[] treeRegions = new ITextureRegion[20];
 
 	// Textures for controls
 	public BitmapTextureAtlas controlTexture;
@@ -222,10 +224,23 @@ public class ResourcesManager {
 				.createTiledFromAsset(this.dinosaurGreenAtlas, activity,
 						"green_dino_0.5_asc.png", 0, 0, 26, 32);
 
-		// Landscape
-		// this.landscapeAtlas = new BitmapTextureAtlas(
-		// getInstance().textureManager, 512, 1204);
-		// this.landscapeAtlas.load();
+		// Trees
+		 this.treesAtlas = new BitmapTextureAtlas(textureManager, 512, 640);
+		 BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.treesAtlas, activity, "trees.png", 0, 0);
+		 int x = 0;
+		 int y = 0;
+		 for (int i=1;i<=20;i++) {
+			 //this.treeRegions[i-1] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.treesAtlas, activity, "trees.png", x, y);
+			 this.treeRegions[i-1] = TextureRegionFactory.extractFromTexture(this.treesAtlas, x, y, 128, 128);
+			 System.out.println("Created texture " + i);
+			 x = x + 128;
+			 if (i % 4 == 0) {
+				 x = 0;
+				 y = y + 128; 
+			 }
+		 }
+		 this.treesAtlas.load();
+		 
 	}
 
 	private void loadGameAudio() {
@@ -274,7 +289,7 @@ public class ResourcesManager {
 
 	public ITextureRegion getRandomTreeTexture() {
 		return BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(
-				this.landscapeAtlas, activity, "trees.png", 0, 0, 8, 4);
+				this.treesAtlas, activity, "trees.png", 0, 0, 8, 4);
 	}
 
 	/**
