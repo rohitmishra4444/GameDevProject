@@ -12,11 +12,7 @@ import org.andengine.util.progress.IProgressListener;
 public class LoadingScene extends BaseScene implements IProgressListener {
 
 	private Text loadingText;
-	
-	public LoadingScene() {
-		this.createScene();
-	}
-	
+
 	@Override
 	public void createScene() {
 		setBackground(new Background(Color.BLACK));

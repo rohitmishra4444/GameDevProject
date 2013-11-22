@@ -64,22 +64,26 @@ public class LevelScene extends BaseScene {
 
 	// Player. Each level has to create the Player and its position in the world
 	protected Player player;
+	private int levelId;
 
 	public LevelScene(int levelId) {
 		super();
-
 		this.player = new Player();
 		this.resourcesManager.player = player;
-		this.tmxFileName = "level" + levelId + ".tmx";
+		this.levelId = levelId;
+
+		this.tmxFileName = "level" + this.levelId + ".tmx";
 		this.createMap();
 		this.connectPhysics();
-		this.loadLevel(levelId);
+		this.loadLevel(this.levelId);
+
 		// This is done by LevelLoader:
 		// this.attachChild(this.player);
 	}
 
 	@Override
 	public void createScene() {
+		// IMPORTANT: Do nothing in here!
 	}
 
 	@Override

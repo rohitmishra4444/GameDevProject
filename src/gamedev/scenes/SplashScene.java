@@ -9,11 +9,7 @@ import org.andengine.opengl.util.GLState;
 public class SplashScene extends BaseScene {
 
 	private Sprite splash;
-	
-	public SplashScene() {
-		this.createScene();
-	}
-	
+
 	@Override
 	public void createScene() {
 		splash = new Sprite(800, 480, resourcesManager.splash_region, vbom) {
