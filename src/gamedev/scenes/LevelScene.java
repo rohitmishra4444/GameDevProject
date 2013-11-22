@@ -49,10 +49,12 @@ public class LevelScene extends BaseScene {
 	private static final String TAG_ENTITY_ATTRIBUTE_X = "x";
 	private static final String TAG_ENTITY_ATTRIBUTE_Y = "y";
 	private static final String TAG_ENTITY_ATTRIBUTE_TYPE = "type";
-	//
-
 	private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_PLAYER = "player";
 	private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_LEVEL_COMPLETE = "levelComplete";
+
+	private static final String TAG_COMPLETE_RULE = "completeRule";
+	private static final String TAG_COMPLETE_RULE_ATTRIBUTE_KILL_DINOS = "killDinos";
+
 	// private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_PLATFORM1 =
 	// "platform1";
 	// private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_PLATFORM2 =
@@ -65,6 +67,9 @@ public class LevelScene extends BaseScene {
 	// Player. Each level has to create the Player and its position in the world
 	protected Player player;
 	private int levelId;
+
+	private int dinosToKillPerRule = 0;
+	private int dinosKilled = 0;
 
 	public LevelScene(int levelId) {
 		super();
@@ -171,6 +176,17 @@ public class LevelScene extends BaseScene {
 		}
 	}
 
+	public void killedDino() {
+		this.dinosKilled++;
+	}
+
+	private boolean areLevelRulesCompleted() {
+		if (dinosKilled >= dinosToKillPerRule) {
+			return true;
+		}
+		return false;
+	}
+
 	// TODO: This method could be used to load trees and other objects into a
 	// level from a xml-file.
 	// Also look at: http://www.matim-dev.com/full-game-tutorial---part-11.html
@@ -195,6 +211,22 @@ public class LevelScene extends BaseScene {
 			}
 		});
 
+		levelLoader.registerEntityLoader(TAG_COMPLETE_RULE,
+				new IEntityLoader() {
+
+					@Override
+					public IEntity onLoadEntity(String pEntityName,
+							Attributes pAttributes) {
+						// TODO Auto-generated method stub
+						final int killDinos = SAXUtils.getIntAttributeOrThrow(
+								pAttributes,
+								TAG_COMPLETE_RULE_ATTRIBUTE_KILL_DINOS);
+						dinosToKillPerRule = killDinos;
+						return null;
+					}
+
+				});
+
 		levelLoader.registerEntityLoader(TAG_ENTITY, new IEntityLoader() {
 
 			@Override
@@ -217,7 +249,8 @@ public class LevelScene extends BaseScene {
 						protected void onManagedUpdate(float pSecondsElapsed) {
 							super.onManagedUpdate(pSecondsElapsed);
 
-							if (player.collidesWith(this)) {
+							if (player.collidesWith(this)
+									&& areLevelRulesCompleted()) {
 								SceneManager.getInstance()
 										.loadLevelCompleteScene(engine);
 							}

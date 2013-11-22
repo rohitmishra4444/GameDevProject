@@ -3,6 +3,7 @@ package gamedev.game;
 import gamedev.levels.Level1;
 import gamedev.scenes.BaseScene;
 import gamedev.scenes.LevelCompleteScene;
+import gamedev.scenes.LevelScene;
 import gamedev.scenes.LoadingScene;
 import gamedev.scenes.MainMenuScene;
 import gamedev.scenes.SplashScene;
@@ -204,6 +205,10 @@ public class SceneManager {
 
 	public BaseScene getCurrentScene() {
 		return currentScene;
+	}
+
+	public LevelScene getCurrentLevelScene() {
+		return (LevelScene) levelScene;
 	}
 
 	public boolean isLevelSceneCreated() {
