@@ -20,11 +20,7 @@ public class MainMenuScene extends BaseScene implements
 	private final int MENU_PLAY = 0;
 	private final int MENU_EXIT = 1;
 	private final int MENU_BACK = 2;
-	
-	public MainMenuScene() {
-		this.createScene();
-	}
-	
+		
 	@Override
 	public void createScene() {
 		menuChildScene = new MenuScene(camera);

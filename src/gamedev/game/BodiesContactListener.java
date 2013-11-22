@@ -34,9 +34,7 @@ public class BodiesContactListener implements ContactListener {
 
 	@Override
 	public void preSolve(Contact contact, Manifold oldManifold) {
-		// TODO Auto-generated method stub
-		System.out.println("preSolve");
-		
+		// TODO Auto-generated method stub		
 	}
 
 	@Override

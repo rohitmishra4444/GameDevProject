@@ -236,7 +236,6 @@ public class ResourcesManager {
 		 for (int i=1;i<=20;i++) {
 			 //this.treeRegions[i-1] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.treesAtlas, activity, "trees.png", x, y);
 			 this.treeRegions[i-1] = TextureRegionFactory.extractFromTexture(this.treesAtlas, x, y, 128, 128);
-			 System.out.println("Created texture " + i);
 			 x = x + 128;
 			 if (i % 4 == 0) {
 				 x = 0;

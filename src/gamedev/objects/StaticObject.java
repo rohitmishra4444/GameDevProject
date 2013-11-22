@@ -14,6 +14,10 @@ abstract class StaticObject extends Sprite {
 		
 	protected ResourcesManager resourcesManager;
 	protected Body body;
+	
+	/**
+	 * The identifier for the constactListener. Subclasses can override this string if needed...
+	 */
 	protected String bodyUserData;
 	
 	public StaticObject(float pX, float pY, ITextureRegion textureRegion) {

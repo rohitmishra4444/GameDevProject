@@ -12,6 +12,9 @@ public class Tree extends StaticObject {
 	
 	private final static float BODY_WIDTH = 10;
 	private final static float BODY_HEIGHT = 10;
+	private final static float SPRITE_HEIGHT = 128;
+	private final static float SPRITE_WIDTH = 128;
+	
 	
 	/**
 	 * 
@@ -28,7 +31,8 @@ public class Tree extends StaticObject {
 	@Override
 	protected void createPhysics() {
 		// Use a invisible rectangle to define the body, because the tree sprite is too big
-	    final Rectangle rect = new Rectangle(this.getX() + 128/2, this.getY()+128-BODY_HEIGHT/2, BODY_WIDTH,
+		// The rectangle should be at the bottom and in the middle of the sprite
+	    final Rectangle rect = new Rectangle(this.getX() + SPRITE_WIDTH/2, this.getY()+SPRITE_HEIGHT-BODY_HEIGHT/2, BODY_WIDTH,
 				BODY_HEIGHT, this.resourcesManager.vbom);
 		final FixtureDef boxFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0);
 		this.body = PhysicsFactory.createBoxBody(this.resourcesManager.physicsWorld, rect, BodyType.StaticBody, boxFixtureDef);

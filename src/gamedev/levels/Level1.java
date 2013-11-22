@@ -6,24 +6,19 @@ import gamedev.objects.Tree;
 import gamedev.scenes.LevelScene;
 
 public class Level1 extends LevelScene {
-
+	
+	private final static int LEVEL_ID = 1;
+	
 	public Level1() {
 		// Level as integer. The filename is then created with:
 		// "level" + levelId + ".tmx"
 		super(1);
 		this.player.body.setTransform(2, 2, 0);
-//		this.createScene();
 	}
 
-//	public void createScene() {
-//		Random r = new Random();
-//		for (int i = 0; i < 10; i++) {
-//			this.attachChild(new Dinosaur(r.nextInt(1024), r.nextInt(1204)));
-//		}
-//		for (int i = 0; i<50; i++) {
-//			this.attachChild(new Tree(r.nextInt(2048), r.nextInt(2048), r.nextInt(20)));
-//		}
-		
-//	}
+	public void createScene() {
+		super.createScene();
+		// Now define quests or other stuff not already loaded with the tmx File
+	}
 
 }

@@ -67,13 +67,15 @@ public class LevelScene extends BaseScene {
 	protected Player player;
 
 	public LevelScene(int levelId) {
-		super();
+		// Call BaseScene without calling createScene because here we need some stuff initialized before
+		super(false);
 		this.player = this.resourcesManager.player;
 		this.tmxFileName = "level" + levelId + ".tmx";
-		// Create scene does now create map and objects in the level, all definded in tmx file
+		// CreateScene creates the world and its objects defined in the TMX-Map.
+		// TODO We need to check which method to use. Here, we have a "graphical Editor" to place objects which is very easy.
 		this.createScene();
-//		this.createMap();
 		this.connectPhysics();
+		// XML - Way to load the levels
 //		this.loadLevel(levelId);
 		this.attachChild(this.player);
 	}
@@ -132,70 +134,6 @@ public class LevelScene extends BaseScene {
 		this.registerUpdateHandler(this.resourcesManager.physicsWorld);
 	}
 
-//	protected void createMap() {
-//		try {
-//			final TMXLoader tmxLoader = new TMXLoader(
-//					this.activity.getAssets(), this.engine.getTextureManager(),
-//					TextureOptions.BILINEAR_PREMULTIPLYALPHA, this.vbom,
-//					new ITMXTilePropertiesListener() {
-//						@Override
-//						public void onTMXTileWithPropertiesCreated(
-//								final TMXTiledMap pTMXTiledMap,
-//								final TMXLayer pTMXLayer,
-//								final TMXTile pTMXTile,
-//								final TMXProperties<TMXTileProperty> pTMXTileProperties) {
-//						}
-//					});
-//
-//			// Load the TMXTiledMap from tmx asset.
-//			this.mTMXTiledMap = tmxLoader.loadFromAsset("tmx/"
-//					+ this.tmxFileName);
-//
-//		} catch (final TMXLoadException e) {
-//			Debug.e(e);
-//		}
-//
-//		TMXLayer tmxLayerZero = null;
-//
-//		// Attach other layers from the TMXTiledMap, if it has more than one.
-//		for (int i = 0; i < this.mTMXTiledMap.getTMXLayers().size(); i++) {
-//			TMXLayer tmxLayer = this.mTMXTiledMap.getTMXLayers().get(i);
-//			if (i == 0)
-//				tmxLayerZero = tmxLayer;
-//			// Only add non-object layers
-//			if (!tmxLayer.getTMXLayerProperties().containsTMXProperty(
-//					"boundaries", "true")) {
-//				this.attachChild(tmxLayer);
-//			}
-//		}
-//
-//		this.camera.setBounds(0, 0, tmxLayerZero.getWidth(),
-//				tmxLayerZero.getHeight());
-//		this.camera.setBoundsEnabled(true);
-//		this.createUnwalkableObjects(this.mTMXTiledMap);
-//	}
-
-	protected void createUnwalkableObjects(TMXTiledMap map) {
-		for (final TMXObjectGroup group : this.mTMXTiledMap
-				.getTMXObjectGroups()) {
-			if (group.getTMXObjectGroupProperties().containsTMXProperty(
-					"boundaries", "true")) {
-				// This is our "wall" layer. Create the boxes from it
-				for (final TMXObject object : group.getTMXObjects()) {
-					final Rectangle rect = new Rectangle(object.getX(),
-							object.getY(), object.getWidth(),
-							object.getHeight(), this.resourcesManager.vbom);
-					final FixtureDef boxFixtureDef = PhysicsFactory
-							.createFixtureDef(0, 0, 0);
-					PhysicsFactory.createBoxBody(
-							this.resourcesManager.physicsWorld, rect,
-							BodyType.StaticBody, boxFixtureDef);
-					rect.setVisible(false);
-					this.attachChild(rect);
-				}
-			}
-		}
-	}
 
 	// TODO: This method could be used to load trees and other objects into a
 	// level from a xml-file.
