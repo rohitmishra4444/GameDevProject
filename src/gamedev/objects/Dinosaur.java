@@ -6,11 +6,13 @@ import gamedev.game.ResourcesManager;
 import java.util.Random;
 
 import org.andengine.engine.handler.physics.PhysicsHandler;
+import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.entity.text.Text;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.util.Vector2Pool;
+import org.andengine.util.color.Color;
 import org.andengine.util.math.MathUtils;
 
 import com.badlogic.gdx.math.Vector2;
@@ -28,6 +30,8 @@ public class Dinosaur extends AnimatedSprite {
 	protected Body body;
 	protected PhysicsHandler physicsHandler;
 
+	protected Rectangle lifeRectangle;
+
 	protected int id;
 	protected ResourcesManager resourcesManager;
 	protected DinosaurState currentState;
@@ -38,7 +42,8 @@ public class Dinosaur extends AnimatedSprite {
 	protected boolean firstAttack = false;
 
 	protected int direction = Direction.WEST;
-	protected int life = 100;
+	protected static final int STARTING_LIFE = 100;
+	protected int life = STARTING_LIFE;
 	protected float velocity = 2f;
 	protected float factorRunning = 2f;
 
@@ -62,6 +67,7 @@ public class Dinosaur extends AnimatedSprite {
 
 		this.createPhysic();
 		this.setState(DinosaurState.LOOKING);
+		this.createLifeBar();
 		// this.attachChild(new Rectangle(this.body.getPosition().x,
 		// this.body.getPosition().y, 10, 10, this.resourcesManager.vbom));
 		Text dinoNumber = new Text(this.body.getPosition().x,
@@ -69,6 +75,20 @@ public class Dinosaur extends AnimatedSprite {
 				Integer.toString(this.id), 2, resourcesManager.vbom);
 		dinoNumber.setScale(0.6f);
 		this.attachChild(dinoNumber);
+	}
+
+	public void createLifeBar() {
+		this.lifeRectangle = new Rectangle(this.body.getPosition().x - 5,
+				this.body.getPosition().y - 5, 100, 10,
+				this.resourcesManager.vbom);
+		this.lifeRectangle.setColor(Color.RED);
+		this.lifeRectangle.setAlpha(0.6f);
+		this.lifeRectangle.setScale(0.3f);
+		// Show life bar only if dino is not 100% healthy.
+		// if (this.life == STARTING_LIFE) {
+		// this.lifeRectangle.setVisible(false);
+		// }
+		this.attachChild(lifeRectangle);
 	}
 
 	public void setDirection(int direction) {
@@ -177,6 +197,7 @@ public class Dinosaur extends AnimatedSprite {
 
 	public void underAttack(int damage) {
 		this.life -= damage;
+		setLifeBar(this.life);
 		if (this.life <= 0) {
 			this.setState(DinosaurState.TIPPING_OVER);
 			this.resourcesManager.player.getAttackers().remove(this);
@@ -187,6 +208,19 @@ public class Dinosaur extends AnimatedSprite {
 		} else {
 			this.setState(DinosaurState.BEEN_HIT);
 		}
+	}
+
+	/**
+	 * Update the life bar
+	 * 
+	 * @param percent
+	 *            value between {0..100}
+	 */
+	public void setLifeBar(int life) {
+		// if (this.life != STARTING_LIFE) {
+		// this.lifeRectangle.setVisible(true);
+		// }
+		this.lifeRectangle.setWidth(life);
 	}
 
 	public String toString() {
