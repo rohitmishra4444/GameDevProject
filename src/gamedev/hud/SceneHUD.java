@@ -117,10 +117,10 @@ public class SceneHUD extends HUD {
 
 				if (touchEvent.isActionDown()) {
 					isTouchedSecondary = true;
-					System.out.println("Touched=true");
+//					System.out.println("Touched=true");
 				} else if (touchEvent.isActionUp()) {
 					isTouchedSecondary = false;
-					System.out.println("Touched=false");
+//					System.out.println("Touched=false");
 				}
 				return true;
 			}

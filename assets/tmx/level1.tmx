@@ -38,7 +38,10 @@
    eJztmDdPxEAUhF8BR+jIoeMIPbHnCAfXHRk6cvj/P4Bx5SksWaM9a7XSfNJXrG3JWzxpRm8YEVfwGo7gsJDzAJ7Bc3rPz5rOXdznET7BZ/hS0PkG3sI7es/Pms5d3Ocb/sBf+FfQ+Q2+ww96z8+azl3cZxr2wigswEW4BFfgat7rFMcW7MNtuAv38l6nOPbhATyEx/Ak73WKg+fvAl7mvU5x8Pzdw4e81ykOnr9P+JX3OsXB8zcV7jAqPH/L4Q6jwvO3E+4wKjx/R+EOo8LzV+0m3GE0eP6q3YQ7jAbPX7WbcIfR4Plzf9Hh+XN/0TmNerft/qIzjnq37f6i8xr1btv9RYf3z+4vOpy/7i863r+kwfnr/qLD+ev+osP56/6iw/nr/qLj/Usa3r+kwfnr/qLD+ev+osP56/6iw/nr/qLD+ev+osP56/6iw/nr/qLD+Wt0OH+NDuev0eH8NTqcv0aH89foOH/TcP6m4fxNw/mbBufvDJyFc3C+5ax8O4lzZPpnG5y/a3AdbsDNlrPy7STOkemfbXD+/gO0uIyR
   </data>
  </layer>
- <objectgroup name="Boundaries" width="80" height="50">
+ <objectgroup name="LevelBoundaries" width="80" height="50" visible="0">
+  <properties>
+   <property name="boundaries" value="true"/>
+  </properties>
   <object x="9" y="3" width="2549" height="92"/>
   <object x="2490" y="100" width="70" height="1498"/>
   <object x="4" y="1532" width="2482" height="64"/>
@@ -46,14 +49,23 @@
  </objectgroup>
  <objectgroup name="Trees" width="80" height="50">
   <properties>
-   <property name="tree" value="true"/>
+   <property name="trees" value="true"/>
   </properties>
   <object x="374" y="278" width="24" height="20"/>
-  <object x="1258" y="542" width="24" height="20"/>
-  <object x="898" y="976" width="22" height="22"/>
-  <object x="1380" y="1156" width="22" height="20"/>
-  <object x="1570" y="386" width="20" height="24"/>
-  <object x="1816" y="518" width="28" height="28"/>
-  <object x="1264" y="1080" width="28" height="30"/>
+  <object x="360" y="346" width="24" height="20"/>
+  <object x="736" y="482" width="22" height="22"/>
+  <object x="740" y="668" width="22" height="20"/>
+  <object x="626" y="522" width="20" height="24"/>
+  <object x="442" y="300" width="28" height="28"/>
+  <object x="722" y="312" width="28" height="30"/>
+ </objectgroup>
+ <objectgroup name="GreenDinosaurs" width="80" height="50">
+  <object x="1120" y="370" width="4" height="4"/>
+  <object x="1114" y="488" width="4" height="6"/>
+  <object x="818" y="864" width="8" height="4"/>
+  <object x="292" y="968" width="2" height="6"/>
+  <object x="1002" y="1148" width="8" height="10"/>
+  <object x="1766" y="504" width="2" height="8"/>
+  <object x="518" y="556" width="4" height="4"/>
  </objectgroup>
 </map>

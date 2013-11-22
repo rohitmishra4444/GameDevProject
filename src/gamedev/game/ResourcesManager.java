@@ -1,5 +1,7 @@
 package gamedev.game;
 
+import java.util.ArrayList;
+
 import gamedev.hud.SceneHUD;
 import gamedev.objects.Player;
 
@@ -73,7 +75,7 @@ public class ResourcesManager {
 	public ITiledTextureRegion complete_stars_region;
 	public BitmapTextureAtlas complete_window_atlas;
 	public BitmapTextureAtlas complete_stars_atlas;
-
+		
 	// ---------------------------------------------
 	// Physic
 	// ---------------------------------------------
@@ -170,6 +172,8 @@ public class ResourcesManager {
 		loadGameAudio();
 		loadHUD();
 		loadLevelCompletedGraphics();
+		this.player = new Player();
+		this.physicsWorld.setContactListener(new BodiesContactListener());
 	}
 
 	public void loadHUD() {

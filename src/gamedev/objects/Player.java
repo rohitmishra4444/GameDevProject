@@ -57,8 +57,8 @@ public class Player extends AnimatedSprite {
 		this.resourcesManager.camera.setChaseEntity(this);
 		this.createAndConnectPhysics(this.resourcesManager.camera,
 				this.resourcesManager.physicsWorld);
-		this.mScaleX = this.mScaleX * 2;
-		this.mScaleY = this.mScaleY * 2;
+		this.mScaleX = this.mScaleX * 1.5f;
+		this.mScaleY = this.mScaleY * 1.5f;
 	}
 
 	public Player() {
@@ -68,8 +68,8 @@ public class Player extends AnimatedSprite {
 		this.resourcesManager.camera.setChaseEntity(this);
 		this.createAndConnectPhysics(this.resourcesManager.camera,
 				this.resourcesManager.physicsWorld);
-		this.mScaleX = this.mScaleX * 2;
-		this.mScaleY = this.mScaleY * 2;
+		this.mScaleX = this.mScaleX * 1.5f;
+		this.mScaleY = this.mScaleY * 1.5f;
 	}
 
 	/**
@@ -259,9 +259,9 @@ public class Player extends AnimatedSprite {
 	protected void createAndConnectPhysics(final BoundCamera camera,
 			PhysicsWorld physicsWorld) {
 		this.body = PhysicsFactory.createBoxBody(physicsWorld, this,
-				BodyType.KinematicBody,
+				BodyType.DynamicBody,
 				PhysicsFactory.createFixtureDef(0, 0, 0));
-		this.body.setUserData("player");
+		this.body.setUserData("Player");
 		this.physicsHandler = new PhysicsHandler(this);
 		this.registerUpdateHandler(this.physicsHandler);
 		physicsWorld.registerPhysicsConnector(new PhysicsConnector(this,

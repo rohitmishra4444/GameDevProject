@@ -2,6 +2,7 @@ package gamedev.scenes;
 
 import gamedev.game.SceneManager;
 import gamedev.game.SceneManager.SceneType;
+import gamedev.game.TmxLevelLoader;
 import gamedev.objects.Player;
 
 import java.io.IOException;
@@ -67,19 +68,48 @@ public class LevelScene extends BaseScene {
 
 	public LevelScene(int levelId) {
 		super();
-
-		this.player = new Player();
-		this.resourcesManager.player = player;
+		this.player = this.resourcesManager.player;
 		this.tmxFileName = "level" + levelId + ".tmx";
-		this.createMap();
+		// Create scene does now create map and objects in the level, all definded in tmx file
+		this.createScene();
+//		this.createMap();
 		this.connectPhysics();
-		this.loadLevel(levelId);
-		// This is done by LevelLoader:
-		// this.attachChild(this.player);
+//		this.loadLevel(levelId);
+		this.attachChild(this.player);
 	}
 
 	@Override
 	public void createScene() {
+		// Try to load the tmx file
+		try {
+			final TMXLoader tmxLoader = new TMXLoader(
+					this.activity.getAssets(), this.engine.getTextureManager(),
+					TextureOptions.BILINEAR_PREMULTIPLYALPHA, this.vbom,
+					new ITMXTilePropertiesListener() {
+						@Override
+						public void onTMXTileWithPropertiesCreated(
+								final TMXTiledMap pTMXTiledMap,
+								final TMXLayer pTMXLayer,
+								final TMXTile pTMXTile,
+								final TMXProperties<TMXTileProperty> pTMXTileProperties) {
+						}
+					});
+
+			this.mTMXTiledMap = tmxLoader.loadFromAsset("tmx/"
+					+ this.tmxFileName);
+
+		} catch (final TMXLoadException e) {
+			Debug.e(e);
+		}
+		
+		// Set camera bounds
+		TMXLayer tmxLayerZero = this.mTMXTiledMap.getTMXLayers().get(0);
+		this.camera.setBounds(0, 0, tmxLayerZero.getWidth(), tmxLayerZero.getHeight());
+		this.camera.setBoundsEnabled(true);
+		
+		// Load all the objects, boundaries of our level. This is handled in a new class
+		TmxLevelLoader loader = new TmxLevelLoader(this.mTMXTiledMap, this);
+		loader.createWorldAndObjects();
 	}
 
 	@Override
@@ -102,48 +132,48 @@ public class LevelScene extends BaseScene {
 		this.registerUpdateHandler(this.resourcesManager.physicsWorld);
 	}
 
-	protected void createMap() {
-		try {
-			final TMXLoader tmxLoader = new TMXLoader(
-					this.activity.getAssets(), this.engine.getTextureManager(),
-					TextureOptions.BILINEAR_PREMULTIPLYALPHA, this.vbom,
-					new ITMXTilePropertiesListener() {
-						@Override
-						public void onTMXTileWithPropertiesCreated(
-								final TMXTiledMap pTMXTiledMap,
-								final TMXLayer pTMXLayer,
-								final TMXTile pTMXTile,
-								final TMXProperties<TMXTileProperty> pTMXTileProperties) {
-						}
-					});
-
-			// Load the TMXTiledMap from tmx asset.
-			this.mTMXTiledMap = tmxLoader.loadFromAsset("tmx/"
-					+ this.tmxFileName);
-
-		} catch (final TMXLoadException e) {
-			Debug.e(e);
-		}
-
-		TMXLayer tmxLayerZero = null;
-
-		// Attach other layers from the TMXTiledMap, if it has more than one.
-		for (int i = 0; i < this.mTMXTiledMap.getTMXLayers().size(); i++) {
-			TMXLayer tmxLayer = this.mTMXTiledMap.getTMXLayers().get(i);
-			if (i == 0)
-				tmxLayerZero = tmxLayer;
-			// Only add non-object layers
-			if (!tmxLayer.getTMXLayerProperties().containsTMXProperty(
-					"boundaries", "true")) {
-				this.attachChild(tmxLayer);
-			}
-		}
-
-		this.camera.setBounds(0, 0, tmxLayerZero.getWidth(),
-				tmxLayerZero.getHeight());
-		this.camera.setBoundsEnabled(true);
-		this.createUnwalkableObjects(this.mTMXTiledMap);
-	}
+//	protected void createMap() {
+//		try {
+//			final TMXLoader tmxLoader = new TMXLoader(
+//					this.activity.getAssets(), this.engine.getTextureManager(),
+//					TextureOptions.BILINEAR_PREMULTIPLYALPHA, this.vbom,
+//					new ITMXTilePropertiesListener() {
+//						@Override
+//						public void onTMXTileWithPropertiesCreated(
+//								final TMXTiledMap pTMXTiledMap,
+//								final TMXLayer pTMXLayer,
+//								final TMXTile pTMXTile,
+//								final TMXProperties<TMXTileProperty> pTMXTileProperties) {
+//						}
+//					});
+//
+//			// Load the TMXTiledMap from tmx asset.
+//			this.mTMXTiledMap = tmxLoader.loadFromAsset("tmx/"
+//					+ this.tmxFileName);
+//
+//		} catch (final TMXLoadException e) {
+//			Debug.e(e);
+//		}
+//
+//		TMXLayer tmxLayerZero = null;
+//
+//		// Attach other layers from the TMXTiledMap, if it has more than one.
+//		for (int i = 0; i < this.mTMXTiledMap.getTMXLayers().size(); i++) {
+//			TMXLayer tmxLayer = this.mTMXTiledMap.getTMXLayers().get(i);
+//			if (i == 0)
+//				tmxLayerZero = tmxLayer;
+//			// Only add non-object layers
+//			if (!tmxLayer.getTMXLayerProperties().containsTMXProperty(
+//					"boundaries", "true")) {
+//				this.attachChild(tmxLayer);
+//			}
+//		}
+//
+//		this.camera.setBounds(0, 0, tmxLayerZero.getWidth(),
+//				tmxLayerZero.getHeight());
+//		this.camera.setBoundsEnabled(true);
+//		this.createUnwalkableObjects(this.mTMXTiledMap);
+//	}
 
 	protected void createUnwalkableObjects(TMXTiledMap map) {
 		for (final TMXObjectGroup group : this.mTMXTiledMap

@@ -286,7 +286,8 @@ public class Dinosaur extends AnimatedSprite {
 			this.body = PhysicsFactory.createBoxBody(
 					this.resourcesManager.physicsWorld, this,
 					BodyType.KinematicBody,
-					PhysicsFactory.createFixtureDef(0, 0, 0));
+					PhysicsFactory.createFixtureDef(0, 0, 0, true));
+			this.body.setUserData("Dinosaur");
 			this.resourcesManager.physicsWorld
 					.registerPhysicsConnector(new PhysicsConnector(this,
 							this.body, true, false));
