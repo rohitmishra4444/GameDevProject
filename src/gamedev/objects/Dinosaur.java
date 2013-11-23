@@ -2,15 +2,19 @@ package gamedev.objects;
 
 import gamedev.game.Direction;
 import gamedev.game.ResourcesManager;
+import gamedev.game.SceneManager;
+import gamedev.scenes.LevelScene;
 
 import java.util.Random;
 
 import org.andengine.engine.handler.physics.PhysicsHandler;
+import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.entity.text.Text;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.util.Vector2Pool;
+import org.andengine.util.color.Color;
 import org.andengine.util.math.MathUtils;
 
 import com.badlogic.gdx.math.Vector2;
@@ -28,6 +32,8 @@ public class Dinosaur extends AnimatedSprite {
 	protected Body body;
 	protected PhysicsHandler physicsHandler;
 
+	protected Rectangle lifeRectangle;
+
 	protected int id;
 	protected ResourcesManager resourcesManager;
 	protected DinosaurState currentState;
@@ -38,7 +44,8 @@ public class Dinosaur extends AnimatedSprite {
 	protected boolean firstAttack = false;
 
 	protected int direction = Direction.WEST;
-	protected int life = 100;
+	protected static final int STARTING_LIFE = 100;
+	protected int life = STARTING_LIFE;
 	protected float velocity = 2f;
 	protected float factorRunning = 2f;
 
@@ -56,14 +63,50 @@ public class Dinosaur extends AnimatedSprite {
 				.deepCopy(), ResourcesManager.getInstance().vbom);
 		this.init();
 	}
-	
+
 	public Dinosaur(float pX, float pY, float randomWalkRadius) {
 		super(pX, pY, ResourcesManager.getInstance().dinosaurGreenRegion
 				.deepCopy(), ResourcesManager.getInstance().vbom);
 		this.randomWalkRadius = randomWalkRadius;
-		this.init();	
+		this.init();
 	}
-	
+
+	/**
+	 * Init variables - called in different Constructors
+	 */
+	protected void init() {
+		this.resourcesManager = ResourcesManager.getInstance();
+		this.direction = Direction.getRandomDirection();
+		// Scale it up, so it has normal size.
+		this.mScaleX = this.mScaleX * 2;
+		this.mScaleY = this.mScaleY * 2;
+		this.id = nDinosaurs++;
+
+		this.createPhysic();
+		this.setState(DinosaurState.LOOKING);
+		this.createLifeBar();
+
+		Text dinoNumber = new Text(this.body.getPosition().x,
+				this.body.getPosition().y, resourcesManager.font,
+				Integer.toString(this.id), 2, resourcesManager.vbom);
+		dinoNumber.setScale(0.6f);
+		this.attachChild(dinoNumber);
+	}
+
+	public void createLifeBar() {
+		this.lifeRectangle = new Rectangle(this.body.getPosition().x - 5,
+				this.body.getPosition().y - 5, 100, 10,
+				this.resourcesManager.vbom);
+		this.lifeRectangle.setColor(Color.RED);
+		this.lifeRectangle.setAlpha(0.6f);
+		this.lifeRectangle.setScale(0.3f);
+		// Show life bar only if dino is not 100% healthy.
+		// if (this.life == STARTING_LIFE) {
+		// this.lifeRectangle.setVisible(false);
+		// }
+		this.attachChild(lifeRectangle);
+	}
+
 	public void setDirection(int direction) {
 		this.direction = direction;
 	}
@@ -149,14 +192,16 @@ public class Dinosaur extends AnimatedSprite {
 		if (this.currentState == DinosaurState.CHASE_PLAYER
 				&& state == DinosaurState.CHASE_PLAYER) {
 			if (this.direction == direction) {
-				// No need to update the animation, still same State + same Direction
+				// No need to update the animation, still same State + same
+				// Direction
 				return;
 			}
 		}
 		this.setDirection(direction);
 		this.setState(state);
 
-		// If state is WALKING||RUNNING, calculate the animationTime needed in seconds
+		// If state is WALKING||RUNNING, calculate the animationTime needed in
+		// seconds
 		if (state == DinosaurState.WALKING || state == DinosaurState.RUNNING) {
 			this.animationTime = MathUtils.distance(bodyPos.x, bodyPos.y,
 					this.moveTo.x, this.moveTo.y)
@@ -168,16 +213,33 @@ public class Dinosaur extends AnimatedSprite {
 
 	public void underAttack(int damage) {
 		this.life -= damage;
+		setLifeBar(this.life);
 		if (this.life <= 0) {
 			this.setState(DinosaurState.TIPPING_OVER);
 			this.resourcesManager.player.getAttackers().remove(this);
 			this.currentState = DinosaurState.DEAD;
 			this.detachSelf();
 			this.dispose();
+			LevelScene levelScene = SceneManager.getInstance()
+					.getCurrentLevelScene();
+			levelScene.killedDino();
 			// TODO Add "dead" sprite
 		} else {
 			this.setState(DinosaurState.BEEN_HIT);
 		}
+	}
+
+	/**
+	 * Update the life bar
+	 * 
+	 * @param percent
+	 *            value between {0..100}
+	 */
+	public void setLifeBar(int life) {
+		// if (this.life != STARTING_LIFE) {
+		// this.lifeRectangle.setVisible(true);
+		// }
+		this.lifeRectangle.setWidth(life);
 	}
 
 	public String toString() {
@@ -185,29 +247,7 @@ public class Dinosaur extends AnimatedSprite {
 				+ ", Bodypos=" + this.body.getPosition() + ", SpritePos=["
 				+ this.getX() + "," + this.getY() + "]";
 	}
-	
-	/**
-	 * Init variables - called in different Constructors
-	 */
-	protected void init() {
-		this.resourcesManager = ResourcesManager.getInstance();
-		this.direction = Direction.getRandomDirection();
-		// Scale it up, so it has normal size.
-		this.mScaleX = this.mScaleX * 2;
-		this.mScaleY = this.mScaleY * 2;
-		this.id = nDinosaurs++;
 
-		this.createPhysic();
-		this.setState(DinosaurState.LOOKING);
-		// this.attachChild(new Rectangle(this.body.getPosition().x,
-		// this.body.getPosition().y, 10, 10, this.resourcesManager.vbom));
-		Text dinoNumber = new Text(this.body.getPosition().x,
-				this.body.getPosition().y, resourcesManager.font,
-				Integer.toString(this.id), 2, resourcesManager.vbom);
-		dinoNumber.setScale(0.6f);
-		this.attachChild(dinoNumber);	
-	}
-	
 	@Override
 	protected void onManagedUpdate(float pSecondsElapsed) {
 		super.onManagedUpdate(pSecondsElapsed);
@@ -269,9 +309,11 @@ public class Dinosaur extends AnimatedSprite {
 			if (randomState == DinosaurState.WALKING
 					|| randomState == DinosaurState.RUNNING) {
 				float rX = this.body.getPosition().x
-						+ (-this.randomWalkRadius + (r.nextFloat() * this.randomWalkRadius*2 + 1));
+						+ (-this.randomWalkRadius + (r.nextFloat()
+								* this.randomWalkRadius * 2 + 1));
 				float rY = this.body.getPosition().y
-						+ (-this.randomWalkRadius + (r.nextFloat() * this.randomWalkRadius*2 + 1));
+						+ (-this.randomWalkRadius + (r.nextFloat()
+								* this.randomWalkRadius * 2 + 1));
 				this.moveTo(rX, rY, randomState);
 			} else {
 				// Set a random animation time [10...20] for the next animation
@@ -283,18 +325,19 @@ public class Dinosaur extends AnimatedSprite {
 	}
 
 	protected void createPhysic() {
-			this.body = PhysicsFactory.createBoxBody(
-					this.resourcesManager.physicsWorld, this,
-					BodyType.KinematicBody,
-					PhysicsFactory.createFixtureDef(0, 0, 0, true));
-			this.body.setUserData("Dinosaur");
-			this.resourcesManager.physicsWorld
-					.registerPhysicsConnector(new PhysicsConnector(this,
-							this.body, true, false));
+		this.body = PhysicsFactory.createBoxBody(
+				this.resourcesManager.physicsWorld, this,
+				BodyType.KinematicBody,
+				PhysicsFactory.createFixtureDef(0, 0, 0, true));
+		this.body.setUserData("Dinosaur");
+		this.resourcesManager.physicsWorld
+				.registerPhysicsConnector(new PhysicsConnector(this, this.body,
+						true, false));
 	}
-	
+
 	/**
 	 * Get a random state. Only state at index 0 - 4 are valid :)
+	 * 
 	 * @return
 	 */
 	private DinosaurState getRandomState() {

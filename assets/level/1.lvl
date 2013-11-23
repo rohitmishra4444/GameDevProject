@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<level width="2560" height="1600">    
-    <entity x="300" y="300" type="levelComplete"/>
-    <entity x="100" y="100" type="player"/>
+<level>   
+	<completeRule killDinos="3"/>
+	<entity x="1000" y="300" type="levelComplete"/>
+	<entity x="100" y="100" type="player"/>
 </level>

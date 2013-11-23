@@ -20,7 +20,7 @@ public class MainMenuScene extends BaseScene implements
 	private final int MENU_PLAY = 0;
 	private final int MENU_EXIT = 1;
 	private final int MENU_BACK = 2;
-		
+
 	@Override
 	public void createScene() {
 		menuChildScene = new MenuScene(camera);
@@ -88,7 +88,8 @@ public class MainMenuScene extends BaseScene implements
 		switch (pMenuItem.getID()) {
 		case MENU_PLAY:
 			if (SceneManager.getInstance().isLevelSceneCreated()) {
-				SceneManager.getInstance().loadLevelScene(engine);
+				// SceneManager.getInstance().loadLevelScene(engine);
+				SceneManager.getInstance().restartLevelScene(engine);
 			} else {
 				SceneManager.getInstance().createLevelScene(engine, 1);
 			}

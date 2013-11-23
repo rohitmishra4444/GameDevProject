@@ -1,19 +1,16 @@
 package gamedev.levels;
 
-import java.util.Random;
-import gamedev.objects.Dinosaur;
-import gamedev.objects.Tree;
 import gamedev.scenes.LevelScene;
 
 public class Level1 extends LevelScene {
-	
-	private final static int LEVEL_ID = 1;
-	
+
+	private static final int LEVEL_ID = 1;
+
 	public Level1() {
 		// Level as integer. The filename is then created with:
 		// "level" + levelId + ".tmx"
-		super(1);
-		this.player.body.setTransform(2, 2, 0);
+		super(LEVEL_ID);
+		// this.player.body.setTransform(2, 2, 0);
 	}
 
 	public void createScene() {
