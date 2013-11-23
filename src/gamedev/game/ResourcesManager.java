@@ -40,7 +40,17 @@ public class ResourcesManager {
 	public Player player;
 	public SceneHUD hud;
 
-	private boolean gameResourcesCreated = false;
+	private static boolean gameGraphicsCreated = false;
+	private static boolean playerAtlasLoaded = false;
+	private static boolean dinosaurGreenAtlasLoaded = false;
+	private static boolean treesAtlasLoaded = false;
+	private static boolean controlTextureLoaded = false;
+	private static boolean splashTextureAtlasLoaded = false;
+	private static boolean menuBackgroundTextureAtlasLoaded = false;
+	private static boolean menuButtonsTextureAtlasLoaded = false;
+	private static boolean menuFontLoaded = false;
+	private static boolean complete_window_atlasLoaded = false;
+	private static boolean complete_stars_atlasLoaded = false;
 
 	// ---------------------------------------------
 	// TEXTURES & TEXTURE REGIONS
@@ -94,15 +104,19 @@ public class ResourcesManager {
 		if (splashTextureAtlas == null) {
 			createSplashScreen();
 		}
-		if (!splashTextureAtlas.isLoadedToHardware()) {
+
+		if (splashTextureAtlasLoaded == false) {
 			splashTextureAtlas.load();
+			splashTextureAtlasLoaded = true;
 		}
 	}
 
 	public void unloadSplashScreen() {
 		splashTextureAtlas.unload();
+		splashTextureAtlasLoaded = false;
 		// The splash screen is no more used after the game has started.
 		splash_region = null;
+		System.gc();
 	}
 
 	private void createSplashScreen() {
@@ -152,17 +166,23 @@ public class ResourcesManager {
 		if (menuButtonsTextureAtlas == null) {
 			createMenuGraphics();
 		}
-		if (!menuButtonsTextureAtlas.isLoadedToHardware()) {
+		if (menuButtonsTextureAtlasLoaded == false) {
 			menuButtonsTextureAtlas.load();
+			menuButtonsTextureAtlasLoaded = true;
 		}
-		if (!menuBackgroundTextureAtlas.isLoadedToHardware()) {
+		if (menuBackgroundTextureAtlasLoaded == false) {
 			menuBackgroundTextureAtlas.load();
+			menuBackgroundTextureAtlasLoaded = true;
 		}
 	}
 
 	private void unloadMenuGraphics() {
 		menuButtonsTextureAtlas.unload();
+		menuButtonsTextureAtlasLoaded = false;
+
 		menuBackgroundTextureAtlas.unload();
+		menuBackgroundTextureAtlasLoaded = false;
+		System.gc();
 	}
 
 	private void createMenuFonts() {
@@ -180,11 +200,16 @@ public class ResourcesManager {
 		if (font == null) {
 			createMenuFonts();
 		}
-		font.load();
+		if (menuFontLoaded == false) {
+			font.load();
+			menuFontLoaded = true;
+		}
 	}
 
 	private void unloadMenuFonts() {
 		font.unload();
+		menuFontLoaded = false;
+		System.gc();
 	}
 
 	// ---------------------------------------------
@@ -197,14 +222,19 @@ public class ResourcesManager {
 		// loadGameFonts();
 		// loadGameAudio();
 		loadHUDResources();
+
+		// TODO: This should not be loaded here! Attention:
+		// level_complete_region depends on this.
 		loadLevelCompleteResources();
 
 		// TODO: Refactor. This should not be created here, rather in
 		// LevelScene.
-		physicsWorld = new FixedStepPhysicsWorld(30, new Vector2(0, 0), false,
-				8, 1);
-		physicsWorld.setContactListener(new BodiesContactListener());
-		player = new Player();
+		if (physicsWorld == null || player == null) {
+			physicsWorld = new FixedStepPhysicsWorld(30, new Vector2(0, 0),
+					false, 8, 1);
+			physicsWorld.setContactListener(new BodiesContactListener());
+			player = new Player();
+		}
 	}
 
 	public void unloadGameResources() {
@@ -219,7 +249,7 @@ public class ResourcesManager {
 		createPlayerGraphics();
 		createDinoGraphics();
 		createTreeGraphics();
-		gameResourcesCreated = true;
+		gameGraphicsCreated = true;
 	}
 
 	private void createPlayerGraphics() {
@@ -268,25 +298,35 @@ public class ResourcesManager {
 
 	private void loadGameGraphics() {
 		if (playerAtlas == null || dinosaurGreenAtlas == null
-				|| treesAtlas == null) {
+				|| treesAtlas == null || gameGraphicsCreated == false) {
 			createGameGraphics();
 		}
 
-		if (!playerAtlas.isLoadedToHardware()) {
+		if (playerAtlasLoaded == false) {
 			playerAtlas.load();
+			playerAtlasLoaded = true;
 		}
-		if (!dinosaurGreenAtlas.isLoadedToHardware()) {
+		if (dinosaurGreenAtlasLoaded == false) {
 			dinosaurGreenAtlas.load();
+			dinosaurGreenAtlasLoaded = true;
 		}
-		if (!treesAtlas.isLoadedToHardware()) {
+		if (treesAtlasLoaded == false) {
 			treesAtlas.load();
+			treesAtlasLoaded = true;
 		}
 	}
 
 	private void unloadGameGraphics() {
 		playerAtlas.unload();
+		playerAtlasLoaded = false;
+
 		dinosaurGreenAtlas.unload();
+		dinosaurGreenAtlasLoaded = false;
+
 		treesAtlas.unload();
+		treesAtlasLoaded = false;
+
+		System.gc();
 	}
 
 	// ---------------------------------------------
@@ -321,13 +361,16 @@ public class ResourcesManager {
 		if (controlTexture == null) {
 			createHUDGraphics();
 		}
-		if (!controlTexture.isLoadedToHardware()) {
+		if (controlTextureLoaded == false) {
 			controlTexture.load();
+			controlTextureLoaded = true;
 		}
 	}
 
 	private void unloadHUDGraphics() {
 		controlTexture.unload();
+		controlTextureLoaded = false;
+		System.gc();
 	}
 
 	// ---------------------------------------------
@@ -362,15 +405,23 @@ public class ResourcesManager {
 		if (complete_window_atlas == null || complete_stars_atlas == null) {
 			createLevelCompletedGraphics();
 		}
-		if (!complete_window_atlas.isLoadedToHardware()) {
-		complete_window_atlas.load(); }
-		if (!complete_stars_atlas.isLoadedToHardware()) {
-		complete_stars_atlas.load();}
+		if (complete_window_atlasLoaded == false) {
+			complete_window_atlas.load();
+			complete_window_atlasLoaded = true;
+		}
+		if (complete_stars_atlasLoaded == false) {
+			complete_stars_atlas.load();
+			complete_stars_atlasLoaded = true;
+		}
 	}
 
 	private void unloadLevelCompletedTextures() {
 		complete_window_atlas.unload();
+		complete_window_atlasLoaded = false;
+
 		complete_stars_atlas.unload();
+		complete_stars_atlasLoaded = false;
+		System.gc();
 	}
 
 	/**
@@ -403,6 +454,6 @@ public class ResourcesManager {
 	}
 
 	public boolean areGameResourcesCreated() {
-		return gameResourcesCreated;
+		return gameGraphicsCreated;
 	}
 }

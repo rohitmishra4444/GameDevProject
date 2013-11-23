@@ -238,8 +238,9 @@ public class LevelScene extends BaseScene {
 					throw new IllegalArgumentException();
 				}
 
-				levelObject.setCullingEnabled(true);
-
+				if (levelObject != null) {
+					levelObject.setCullingEnabled(true);
+				}
 				return levelObject;
 			}
 		});

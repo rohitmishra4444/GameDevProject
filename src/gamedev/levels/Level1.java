@@ -18,4 +18,8 @@ public class Level1 extends LevelScene {
 		// Now define quests or other stuff not already loaded with the tmx File
 	}
 
+	public void disposeScene() {
+		super.disposeScene();
+	}
+
 }

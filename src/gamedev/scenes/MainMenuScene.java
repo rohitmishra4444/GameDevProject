@@ -87,11 +87,11 @@ public class MainMenuScene extends BaseScene implements
 
 		switch (pMenuItem.getID()) {
 		case MENU_PLAY:
+			boolean restart = false;
 			if (SceneManager.getInstance().isLevelSceneCreated()) {
-				SceneManager.getInstance().restartLevelScene(1);
-			} else {
-				SceneManager.getInstance().createLevelScene(engine, 1);
+				restart = true;
 			}
+			SceneManager.getInstance().createLevelScene(engine, 1, restart);
 			return true;
 		case MENU_EXIT:
 			System.exit(0);

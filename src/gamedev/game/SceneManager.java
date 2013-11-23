@@ -34,7 +34,8 @@ public class SceneManager {
 
 	private BaseScene currentScene;
 
-	private Engine engine = ResourcesManager.getInstance().engine;
+	private ResourcesManager resourcesManager = ResourcesManager.getInstance();
+	private Engine engine = resourcesManager.engine;
 
 	public enum SceneType {
 		SCENE_SPLASH, SCENE_MENU, SCENE_LEVEL, SCENE_LEVEL_COMPLETE, SCENE_LOADING,
@@ -80,14 +81,14 @@ public class SceneManager {
 	// Splash Scene
 	// ---------------------------------------------
 	public void createSplashScene(OnCreateSceneCallback pOnCreateSceneCallback) {
-		ResourcesManager.getInstance().loadSplashScreen();
+		resourcesManager.loadSplashScreen();
 		splashScene = new SplashScene();
 		currentScene = splashScene;
 		pOnCreateSceneCallback.onCreateSceneFinished(splashScene);
 	}
 
 	private void disposeSplashScene() {
-		ResourcesManager.getInstance().unloadSplashScreen();
+		resourcesManager.unloadSplashScreen();
 		splashScene.disposeScene();
 		splashScene = null;
 	}
@@ -102,7 +103,7 @@ public class SceneManager {
 	// Menu Scene
 	// ---------------------------------------------
 	public void createMenuScene() {
-		ResourcesManager.getInstance().loadMenuResources();
+		resourcesManager.loadMenuResources();
 		menuScene = new MainMenuScene();
 		loadingScene = new LoadingScene();
 		setScene(menuScene);
@@ -113,17 +114,17 @@ public class SceneManager {
 		if (!menuScene.isDisposed()) {
 			menuScene.disposeScene();
 		}
-		ResourcesManager.getInstance().unloadMenuResources();
+		resourcesManager.unloadMenuResources();
 	}
 
 	public void loadMenuScene(final Engine mEngine) {
-		disposeCurrentScene(false);
+		disposeCurrentScene(true);
 
 		mEngine.registerUpdateHandler(new TimerHandler(0.1f,
 				new ITimerCallback() {
 					public void onTimePassed(final TimerHandler pTimerHandler) {
 						mEngine.unregisterUpdateHandler(pTimerHandler);
-						ResourcesManager.getInstance().loadMenuResources();
+						resourcesManager.loadMenuResources();
 						setScene(menuScene);
 						disposeLoadingScene();
 					}
@@ -134,8 +135,19 @@ public class SceneManager {
 	// Level Scene
 	// ---------------------------------------------
 
-	public void createLevelScene(final Engine mEngine, int levelId) {
-		loadGameResources();
+	public void createLevelScene(final Engine mEngine, int levelId,
+			boolean restart) {
+		if (restart) {
+			levelScene = null;
+			resourcesManager.unloadGameResources();
+		} else if (restart == false && levelScene != null) {
+			loadLevelScene(engine);
+			return;
+		}
+
+		if (resourcesManager.areGameResourcesCreated() == false) {
+			resourcesManager.loadGameResources();
+		}
 
 		switch (levelId) {
 		case 1:
@@ -155,36 +167,25 @@ public class SceneManager {
 		if (!levelScene.isDisposed()) {
 			levelScene.disposeScene();
 		}
-		ResourcesManager.getInstance().unloadGameResources();
+		resourcesManager.unloadGameResources();
 	}
 
 	public void loadLevelScene(final Engine mEngine) {
 		disposeCurrentScene(true);
+		resourcesManager.loadGameResources();
 
 		mEngine.registerUpdateHandler(new TimerHandler(0.1f,
 				new ITimerCallback() {
 					public void onTimePassed(final TimerHandler pTimerHandler) {
 						if (levelScene != null) {
 							mEngine.unregisterUpdateHandler(pTimerHandler);
-							loadGameResources();
 							setScene(levelScene);
 							disposeLoadingScene();
 						} else {
-							createLevelScene(engine, 1);
+							createLevelScene(engine, 1, true);
 						}
 					}
 				}));
-	}
-
-	public void restartLevelScene(int levelId) {
-		levelScene = null;
-		createLevelScene(engine, levelId);
-	}
-
-	public void loadGameResources() {
-		if (ResourcesManager.getInstance().areGameResourcesCreated() == false) {
-			ResourcesManager.getInstance().loadGameResources();
-		}
 	}
 
 	// ---------------------------------------------
@@ -201,8 +202,7 @@ public class SceneManager {
 				new ITimerCallback() {
 					public void onTimePassed(final TimerHandler pTimerHandler) {
 						mEngine.unregisterUpdateHandler(pTimerHandler);
-						ResourcesManager.getInstance()
-								.loadLevelCompleteResources();
+						resourcesManager.loadLevelCompleteResources();
 						setScene(levelCompleteScene);
 					}
 				}));
@@ -212,7 +212,7 @@ public class SceneManager {
 		if (!levelCompleteScene.isDisposed()) {
 			levelCompleteScene.disposeScene();
 		}
-		ResourcesManager.getInstance().unloadLevelCompleteResources();
+		resourcesManager.unloadLevelCompleteResources();
 	}
 
 	/**
