@@ -76,14 +76,9 @@ public class SceneManager {
 	// Creating and Disposing of the different scenes
 	// ---------------------------------------------
 
-	public void createMenuScene() {
-		ResourcesManager.getInstance().loadMenuResources();
-		menuScene = new MainMenuScene();
-		loadingScene = new LoadingScene();
-		setScene(menuScene);
-		disposeSplashScene();
-	}
-
+	// ---------------------------------------------
+	// Splash Scene
+	// ---------------------------------------------
 	public void createSplashScene(OnCreateSceneCallback pOnCreateSceneCallback) {
 		ResourcesManager.getInstance().loadSplashScreen();
 		splashScene = new SplashScene();
@@ -97,135 +92,147 @@ public class SceneManager {
 		splashScene = null;
 	}
 
-	public void createLevelScene(final Engine mEngine, int level) {
-		setScene(loadingScene);
+	public void disposeLoadingScene() {
+		if (!loadingScene.isDisposed()) {
+			loadingScene.disposeScene();
+		}
+	}
 
+	// ---------------------------------------------
+	// Menu Scene
+	// ---------------------------------------------
+	public void createMenuScene() {
+		ResourcesManager.getInstance().loadMenuResources();
+		menuScene = new MainMenuScene();
+		loadingScene = new LoadingScene();
+		setScene(menuScene);
+		disposeSplashScene();
+	}
+
+	public void disposeMenuScene() {
 		if (!menuScene.isDisposed()) {
 			menuScene.disposeScene();
 		}
-		ResourcesManager.getInstance().unloadMenuTextures();
-
-		mEngine.registerUpdateHandler(new TimerHandler(0.1f,
-				new ITimerCallback() {
-					public void onTimePassed(final TimerHandler pTimerHandler) {
-						mEngine.unregisterUpdateHandler(pTimerHandler);
-						ResourcesManager.getInstance().loadGameResources();
-						ResourcesManager.getInstance().loadHUD();
-						levelScene = new Level1(); // TODO Load level dynamic
-													// based on provided level
-													// variable
-						setScene(levelScene);
-						if (!loadingScene.isDisposed()) {
-							loadingScene.disposeScene();
-						}
-					}
-				}));
+		ResourcesManager.getInstance().unloadMenuResources();
 	}
 
 	public void loadMenuScene(final Engine mEngine) {
-		setScene(loadingScene);
-
-		if (currentSceneType.equals(SceneType.SCENE_LEVEL)) {
-			if (!levelScene.isDisposed()) {
-				levelScene.disposeScene();
-			}
-			ResourcesManager.getInstance().unloadHUD();
-			ResourcesManager.getInstance().unloadGameTextures();
-		} else if (currentSceneType.equals(SceneType.SCENE_LEVEL_COMPLETE)) {
-			if (!levelCompleteScene.isDisposed()) {
-				levelCompleteScene.disposeScene();
-			}
-			ResourcesManager.getInstance().unloadLevelCompletedTextures();
-		}
+		disposeCurrentScene(false);
 
 		mEngine.registerUpdateHandler(new TimerHandler(0.1f,
 				new ITimerCallback() {
 					public void onTimePassed(final TimerHandler pTimerHandler) {
 						mEngine.unregisterUpdateHandler(pTimerHandler);
-						ResourcesManager.getInstance().loadMenuTextures();
+						ResourcesManager.getInstance().loadMenuResources();
 						setScene(menuScene);
-						if (!loadingScene.isDisposed()) {
-							loadingScene.disposeScene();
-						}
+						disposeLoadingScene();
 					}
 				}));
+	}
+
+	// ---------------------------------------------
+	// Level Scene
+	// ---------------------------------------------
+
+	public void createLevelScene(final Engine mEngine, int levelId) {
+		loadGameResources();
+
+		switch (levelId) {
+		case 1:
+			levelScene = new Level1();
+			break;
+		case 2:
+			// TODO: More levels ;)
+			break;
+		default:
+			break;
+		}
+
+		loadLevelScene(engine);
+	}
+
+	public void disposeLevelScene() {
+		if (!levelScene.isDisposed()) {
+			levelScene.disposeScene();
+		}
+		ResourcesManager.getInstance().unloadGameResources();
 	}
 
 	public void loadLevelScene(final Engine mEngine) {
-		setScene(loadingScene);
-		if (!menuScene.isDisposed()) {
-			menuScene.disposeScene();
-		}
-		ResourcesManager.getInstance().unloadMenuTextures();
+		disposeCurrentScene(true);
+
 		mEngine.registerUpdateHandler(new TimerHandler(0.1f,
 				new ITimerCallback() {
 					public void onTimePassed(final TimerHandler pTimerHandler) {
-						mEngine.unregisterUpdateHandler(pTimerHandler);
-						ResourcesManager.getInstance().loadGameTextures();
-						ResourcesManager.getInstance().loadHUD();
-						setScene(levelScene);
-						if (!loadingScene.isDisposed()) {
-							loadingScene.disposeScene();
+						if (levelScene != null) {
+							mEngine.unregisterUpdateHandler(pTimerHandler);
+							loadGameResources();
+							setScene(levelScene);
+							disposeLoadingScene();
+						} else {
+							createLevelScene(engine, 1);
 						}
 					}
 				}));
 	}
 
-	public void restartLevelScene(final Engine mEngine) {
-		setScene(loadingScene);
-		if (currentSceneType.equals(SceneType.SCENE_LEVEL)) {
-			if (!levelScene.isDisposed()) {
-				levelScene.disposeScene();
-			}
-			ResourcesManager.getInstance().unloadHUD();
-			ResourcesManager.getInstance().unloadGameTextures();
-		} else if (currentSceneType.equals(SceneType.SCENE_LEVEL_COMPLETE)) {
-			if (!levelCompleteScene.isDisposed()) {
-				levelCompleteScene.disposeScene();
-			}
-			ResourcesManager.getInstance().unloadLevelCompletedTextures();
-		} else if (currentSceneType.equals(SceneType.SCENE_MENU)) {
-			if (!menuScene.isDisposed()) {
-				menuScene.disposeScene();
-			}
-			ResourcesManager.getInstance().unloadMenuTextures();
-		}
-
-		mEngine.registerUpdateHandler(new TimerHandler(0.1f,
-				new ITimerCallback() {
-					public void onTimePassed(final TimerHandler pTimerHandler) {
-						mEngine.unregisterUpdateHandler(pTimerHandler);
-						levelScene = new Level1();
-						ResourcesManager.getInstance().loadGameTextures();
-						ResourcesManager.getInstance().loadHUD();
-						setScene(levelScene);
-						if (!loadingScene.isDisposed()) {
-							loadingScene.disposeScene();
-						}
-					}
-				}));
+	public void restartLevelScene(int levelId) {
+		levelScene = null;
+		createLevelScene(engine, levelId);
 	}
 
+	public void loadGameResources() {
+		if (ResourcesManager.getInstance().areGameResourcesCreated() == false) {
+			ResourcesManager.getInstance().loadGameResources();
+		}
+	}
+
+	// ---------------------------------------------
+	// LevelComplete Scene
+	// ---------------------------------------------
 	public void loadLevelCompleteScene(final Engine mEngine) {
 		if (levelCompleteScene == null) {
 			levelCompleteScene = new LevelCompleteScene();
 		}
 
-		if (!levelScene.isDisposed()) {
-			levelScene.disposeScene();
-		}
-		ResourcesManager.getInstance().unloadGameTextures();
-		ResourcesManager.getInstance().unloadHUD();
+		disposeCurrentScene(false);
 
 		mEngine.registerUpdateHandler(new TimerHandler(0.1f,
 				new ITimerCallback() {
 					public void onTimePassed(final TimerHandler pTimerHandler) {
 						mEngine.unregisterUpdateHandler(pTimerHandler);
 						ResourcesManager.getInstance()
-								.loadLevelCompletedTextures();
+								.loadLevelCompleteResources();
 						setScene(levelCompleteScene);
 					}
 				}));
+	}
+
+	public void disposeLevelCompleteScene() {
+		if (!levelCompleteScene.isDisposed()) {
+			levelCompleteScene.disposeScene();
+		}
+		ResourcesManager.getInstance().unloadLevelCompleteResources();
+	}
+
+	/**
+	 * 
+	 * @param setLoadingScene
+	 *            true, if you want to show the loading scene
+	 */
+	public void disposeCurrentScene(boolean setLoadingScene) {
+		if (setLoadingScene) {
+			setScene(loadingScene);
+		}
+
+		if (currentSceneType.equals(SceneType.SCENE_LEVEL)) {
+			disposeLevelScene();
+		} else if (currentSceneType.equals(SceneType.SCENE_LEVEL_COMPLETE)) {
+			disposeLevelCompleteScene();
+		} else if (currentSceneType.equals(SceneType.SCENE_MENU)) {
+			disposeMenuScene();
+		}
+
 	}
 
 	// ---------------------------------------------

@@ -59,6 +59,7 @@ public class LevelScene extends BaseScene {
 		// Call BaseScene without calling createScene because here we need some
 		// stuff initialized before
 		super(false);
+
 		this.player = this.resourcesManager.player;
 		this.levelId = levelId;
 
@@ -134,8 +135,8 @@ public class LevelScene extends BaseScene {
 
 	@Override
 	public void disposeScene() {
-		// TODO: Code responsible for disposing scene removing all game scene
-		// objects.
+		this.detachSelf();
+		this.dispose();
 	}
 
 	public void killedDino() {
@@ -184,7 +185,6 @@ public class LevelScene extends BaseScene {
 						dinosToKillPerRule = killDinos;
 						return null;
 					}
-
 				});
 
 		levelLoader.registerEntityLoader(TAG_ENTITY, new IEntityLoader() {
@@ -203,28 +203,26 @@ public class LevelScene extends BaseScene {
 				final Sprite levelObject;
 
 				if (type.equals(TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_LEVEL_COMPLETE)) {
+
+					// TODO: Remove dependency on levelCompleteGraphics!
 					levelObject = new Sprite(x, y,
 							resourcesManager.complete_stars_region, vbom) {
 						@Override
 						protected void onManagedUpdate(float pSecondsElapsed) {
 							super.onManagedUpdate(pSecondsElapsed);
-
 							if (player.collidesWith(this)
 									&& areLevelRulesCompleted()) {
 								SceneManager.getInstance()
 										.loadLevelCompleteScene(engine);
 							}
-
-							// if (player.body.getPosition().dst(
-							// new Vector2(this.getX(), this.getY())) < 1) {
-							// SceneManager.getInstance()
-							// .loadLevelCompleteScene(engine);
-							// }
 						}
 					};
+					levelObject.setAlpha(0.2f);
 					levelObject.registerEntityModifier(new LoopEntityModifier(
 							new ScaleModifier(1, 0.9f, 1.1f)));
+
 				} else if (type.equals(TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_PLAYER)) {
+					assert (player != null);
 					// Check if the player is already has a parent (avoid
 					// assertEntityHasNoParent IllegalStateException)
 					if (player.hasParent()) {

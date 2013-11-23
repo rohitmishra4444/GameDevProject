@@ -5,12 +5,10 @@ import gamedev.game.ResourcesManager;
 
 import java.util.ArrayList;
 
-import org.andengine.engine.camera.BoundCamera;
 import org.andengine.engine.handler.physics.PhysicsHandler;
 import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
-import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.util.math.MathUtils;
 
 import com.badlogic.gdx.math.Vector2;
@@ -55,8 +53,7 @@ public class Player extends AnimatedSprite {
 				ResourcesManager.getInstance().vbom);
 		this.resourcesManager = ResourcesManager.getInstance();
 		this.resourcesManager.camera.setChaseEntity(this);
-		this.createAndConnectPhysics(this.resourcesManager.camera,
-				this.resourcesManager.physicsWorld);
+		this.createAndConnectPhysics();
 		this.mScaleX = this.mScaleX * 1.5f;
 		this.mScaleY = this.mScaleY * 1.5f;
 	}
@@ -66,8 +63,7 @@ public class Player extends AnimatedSprite {
 				ResourcesManager.getInstance().vbom);
 		this.resourcesManager = ResourcesManager.getInstance();
 		this.resourcesManager.camera.setChaseEntity(this);
-		this.createAndConnectPhysics(this.resourcesManager.camera,
-				this.resourcesManager.physicsWorld);
+		this.createAndConnectPhysics();
 		this.mScaleX = this.mScaleX * 1.5f;
 		this.mScaleY = this.mScaleY * 1.5f;
 	}
@@ -256,22 +252,23 @@ public class Player extends AnimatedSprite {
 		this.resourcesManager.hud.setEnergy(this.energy);
 	}
 
-	protected void createAndConnectPhysics(final BoundCamera camera,
-			PhysicsWorld physicsWorld) {
-		this.body = PhysicsFactory.createBoxBody(physicsWorld, this,
-				BodyType.DynamicBody,
+	protected void createAndConnectPhysics() {
+		this.body = PhysicsFactory.createBoxBody(resourcesManager.physicsWorld,
+				this, BodyType.DynamicBody,
 				PhysicsFactory.createFixtureDef(0, 0, 0));
 		this.body.setUserData("Player");
 		this.physicsHandler = new PhysicsHandler(this);
 		this.registerUpdateHandler(this.physicsHandler);
-		physicsWorld.registerPhysicsConnector(new PhysicsConnector(this,
-				this.body, true, false) {
-			@Override
-			public void onUpdate(float pSecondsElapsed) {
-				super.onUpdate(pSecondsElapsed);
-				camera.updateChaseEntity();
-			}
-		});
+
+		resourcesManager.physicsWorld
+				.registerPhysicsConnector(new PhysicsConnector(this, this.body,
+						true, false) {
+					@Override
+					public void onUpdate(float pSecondsElapsed) {
+						super.onUpdate(pSecondsElapsed);
+						resourcesManager.camera.updateChaseEntity();
+					}
+				});
 	}
 
 	public int getDirection() {

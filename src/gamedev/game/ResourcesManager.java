@@ -1,7 +1,5 @@
 package gamedev.game;
 
-import java.util.ArrayList;
-
 import gamedev.hud.SceneHUD;
 import gamedev.objects.Player;
 
@@ -42,6 +40,8 @@ public class ResourcesManager {
 	public Player player;
 	public SceneHUD hud;
 
+	private boolean gameResourcesCreated = false;
+
 	// ---------------------------------------------
 	// TEXTURES & TEXTURE REGIONS
 	// ---------------------------------------------
@@ -75,7 +75,7 @@ public class ResourcesManager {
 	public ITiledTextureRegion complete_stars_region;
 	public BitmapTextureAtlas complete_window_atlas;
 	public BitmapTextureAtlas complete_stars_atlas;
-		
+
 	// ---------------------------------------------
 	// Physic
 	// ---------------------------------------------
@@ -87,34 +87,49 @@ public class ResourcesManager {
 	// ---------------------------------------------
 
 	// ---------------------------------------------
-	// Splash Screen
+	// Splash resources
 	// ---------------------------------------------
 
 	public void loadSplashScreen() {
+		if (splashTextureAtlas == null) {
+			createSplashScreen();
+		}
+		if (!splashTextureAtlas.isLoadedToHardware()) {
+			splashTextureAtlas.load();
+		}
+	}
+
+	public void unloadSplashScreen() {
+		splashTextureAtlas.unload();
+		// The splash screen is no more used after the game has started.
+		splash_region = null;
+	}
+
+	private void createSplashScreen() {
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
 		splashTextureAtlas = new BitmapTextureAtlas(
 				getInstance().textureManager, 257, 25, TextureOptions.BILINEAR);
 		splash_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
 				splashTextureAtlas, activity, "splash_edited.jpg", 0, 0);
-		splashTextureAtlas.load();
-	}
-
-	public void unloadSplashScreen() {
-		splashTextureAtlas.unload();
-		splash_region = null;
 	}
 
 	// ---------------------------------------------
-	// Menu Screen
+	// Menu resources
 	// ---------------------------------------------
 
 	public void loadMenuResources() {
 		loadMenuGraphics();
-		loadMenuAudio();
+		// loadMenuAudio();
 		loadMenuFonts();
 	}
 
-	private void loadMenuGraphics() {
+	public void unloadMenuResources() {
+		unloadMenuGraphics();
+		// unloadMenuAudio();
+		unloadMenuFonts();
+	}
+
+	private void createMenuGraphics() {
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/menu/");
 
 		// Menu background
@@ -124,7 +139,6 @@ public class ResourcesManager {
 				.createTiledFromAsset(this.menuBackgroundTextureAtlas,
 						getInstance().activity, "menubackground.png", 0, 0, 1,
 						1);
-		this.menuBackgroundTextureAtlas.load();
 
 		// Menu buttons
 		this.menuButtonsTextureAtlas = new BitmapTextureAtlas(textureManager,
@@ -132,14 +146,26 @@ public class ResourcesManager {
 		this.menu_buttons_region = BitmapTextureAtlasTextureRegionFactory
 				.createTiledFromAsset(this.menuButtonsTextureAtlas,
 						getInstance().activity, "menubuttons.png", 0, 0, 1, 3);
-		this.menuButtonsTextureAtlas.load();
 	}
 
-	private void loadMenuAudio() {
-		// TODO
+	private void loadMenuGraphics() {
+		if (menuButtonsTextureAtlas == null) {
+			createMenuGraphics();
+		}
+		if (!menuButtonsTextureAtlas.isLoadedToHardware()) {
+			menuButtonsTextureAtlas.load();
+		}
+		if (!menuBackgroundTextureAtlas.isLoadedToHardware()) {
+			menuBackgroundTextureAtlas.load();
+		}
 	}
 
-	private void loadMenuFonts() {
+	private void unloadMenuGraphics() {
+		menuButtonsTextureAtlas.unload();
+		menuBackgroundTextureAtlas.unload();
+	}
+
+	private void createMenuFonts() {
 		FontFactory.setAssetBasePath("font/");
 		final ITexture mainFontTexture = new BitmapTextureAtlas(
 				getInstance().textureManager, 256, 256,
@@ -148,49 +174,137 @@ public class ResourcesManager {
 		font = FontFactory.createFromAsset(
 				((GameActivity) activity).getFontManager(), mainFontTexture,
 				activity.getAssets(), "font.ttf", 30f, true, Color.WHITE);
+	}
+
+	private void loadMenuFonts() {
+		if (font == null) {
+			createMenuFonts();
+		}
 		font.load();
 	}
 
-	public void loadMenuTextures() {
-		menuBackgroundTextureAtlas.load();
-	}
-
-	public void unloadMenuTextures() {
-		menuBackgroundTextureAtlas.unload();
+	private void unloadMenuFonts() {
+		font.unload();
 	}
 
 	// ---------------------------------------------
-	// Game Screen
+	// Game resources
 	// ---------------------------------------------
 
 	public void loadGameResources() {
-		this.physicsWorld = new FixedStepPhysicsWorld(30, new Vector2(0, 0),
-				false, 8, 1);
 		loadGameGraphics();
-		loadGameTextures();
-		loadGameFonts();
-		loadGameAudio();
-		loadHUD();
-		loadLevelCompletedGraphics();
-		this.player = new Player();
-		this.physicsWorld.setContactListener(new BodiesContactListener());
+		// TODO:
+		// loadGameFonts();
+		// loadGameAudio();
+		loadHUDResources();
+		loadLevelCompleteResources();
+
+		// TODO: Refactor. This should not be created here, rather in
+		// LevelScene.
+		physicsWorld = new FixedStepPhysicsWorld(30, new Vector2(0, 0), false,
+				8, 1);
+		physicsWorld.setContactListener(new BodiesContactListener());
+		player = new Player();
 	}
 
-	public void loadHUD() {
-		if (controlTexture == null) {
-			loadHUDGraphics();
+	public void unloadGameResources() {
+		unloadGameGraphics();
+		// TODO:
+		// unloadGameFonts();
+		// unloadGameAudio();
+		unloadHUDResources();
+	}
+
+	private void createGameGraphics() {
+		createPlayerGraphics();
+		createDinoGraphics();
+		createTreeGraphics();
+		gameResourcesCreated = true;
+	}
+
+	private void createPlayerGraphics() {
+		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
+
+		this.playerAtlas = new BitmapTextureAtlas(textureManager, 1056, 960,
+				TextureOptions.DEFAULT);
+
+		this.playerRegion = BitmapTextureAtlasTextureRegionFactory
+				.createTiledFromAsset(this.playerAtlas, activity,
+						"grey_caveman_0.5_asc.png", 0, 0, 22, 20);
+	}
+
+	private void createDinoGraphics() {
+		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
+
+		this.dinosaurGreenAtlas = new BitmapTextureAtlas(textureManager, 1664,
+				2048, TextureOptions.DEFAULT);
+
+		this.dinosaurGreenRegion = BitmapTextureAtlasTextureRegionFactory
+				.createTiledFromAsset(this.dinosaurGreenAtlas, activity,
+						"green_dino_0.5_asc.png", 0, 0, 26, 32);
+	}
+
+	private void createTreeGraphics() {
+		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
+
+		this.treesAtlas = new BitmapTextureAtlas(textureManager, 512, 640);
+		BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.treesAtlas,
+				activity, "trees.png", 0, 0);
+		int x = 0;
+		int y = 0;
+		for (int i = 1; i <= 20; i++) {
+			// this.treeRegions[i-1] =
+			// BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.treesAtlas,
+			// activity, "trees.png", x, y);
+			this.treeRegions[i - 1] = TextureRegionFactory.extractFromTexture(
+					this.treesAtlas, x, y, 128, 128);
+			x = x + 128;
+			if (i % 4 == 0) {
+				x = 0;
+				y = y + 128;
+			}
 		}
-		controlTexture.load();
+	}
+
+	private void loadGameGraphics() {
+		if (playerAtlas == null || dinosaurGreenAtlas == null
+				|| treesAtlas == null) {
+			createGameGraphics();
+		}
+
+		if (!playerAtlas.isLoadedToHardware()) {
+			playerAtlas.load();
+		}
+		if (!dinosaurGreenAtlas.isLoadedToHardware()) {
+			dinosaurGreenAtlas.load();
+		}
+		if (!treesAtlas.isLoadedToHardware()) {
+			treesAtlas.load();
+		}
+	}
+
+	private void unloadGameGraphics() {
+		playerAtlas.unload();
+		dinosaurGreenAtlas.unload();
+		treesAtlas.unload();
+	}
+
+	// ---------------------------------------------
+	// HUD resources
+	// ---------------------------------------------
+
+	public void loadHUDResources() {
+		loadHUDGraphics();
 		this.hud = new SceneHUD();
 		this.camera.setHUD(this.hud);
 	}
 
-	public void unloadHUD() {
+	public void unloadHUDResources() {
 		camera.setHUD(null);
-		controlTexture.unload();
+		unloadHUDGraphics();
 	}
 
-	public void loadHUDGraphics() {
+	private void createHUDGraphics() {
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
 
 		this.controlTexture = new BitmapTextureAtlas(textureManager, 256, 128,
@@ -203,68 +317,32 @@ public class ResourcesManager {
 						"onscreen_control_knob.png", 128, 0);
 	}
 
-	public void loadPlayerGraphics() {
-		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
-
-		this.playerAtlas = new BitmapTextureAtlas(textureManager, 1056, 960,
-				TextureOptions.DEFAULT);
-
-		this.playerRegion = BitmapTextureAtlasTextureRegionFactory
-				.createTiledFromAsset(this.playerAtlas, activity,
-						"grey_caveman_0.5_asc.png", 0, 0, 22, 20);
+	private void loadHUDGraphics() {
+		if (controlTexture == null) {
+			createHUDGraphics();
+		}
+		if (!controlTexture.isLoadedToHardware()) {
+			controlTexture.load();
+		}
 	}
 
-	private void loadGameGraphics() {
-		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
-
-		// Player
-		loadPlayerGraphics();
-
-		// Dinosaurs
-		this.dinosaurGreenAtlas = new BitmapTextureAtlas(textureManager, 1664,
-				2048, TextureOptions.DEFAULT);
-
-		this.dinosaurGreenRegion = BitmapTextureAtlasTextureRegionFactory
-				.createTiledFromAsset(this.dinosaurGreenAtlas, activity,
-						"green_dino_0.5_asc.png", 0, 0, 26, 32);
-
-		// Trees
-		 this.treesAtlas = new BitmapTextureAtlas(textureManager, 512, 640);
-		 BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.treesAtlas, activity, "trees.png", 0, 0);
-		 int x = 0;
-		 int y = 0;
-		 for (int i=1;i<=20;i++) {
-			 //this.treeRegions[i-1] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.treesAtlas, activity, "trees.png", x, y);
-			 this.treeRegions[i-1] = TextureRegionFactory.extractFromTexture(this.treesAtlas, x, y, 128, 128);
-			 x = x + 128;
-			 if (i % 4 == 0) {
-				 x = 0;
-				 y = y + 128; 
-			 }
-		 }
-		 this.treesAtlas.load();
-		 
+	private void unloadHUDGraphics() {
+		controlTexture.unload();
 	}
 
-	private void loadGameAudio() {
-		// TODO
+	// ---------------------------------------------
+	// LevelComplete resources
+	// ---------------------------------------------
+
+	public void loadLevelCompleteResources() {
+		loadLevelCompletedTextures();
 	}
 
-	private void loadGameFonts() {
-		// TODO
+	public void unloadLevelCompleteResources() {
+		unloadLevelCompletedTextures();
 	}
 
-	public void loadGameTextures() {
-		playerAtlas.load();
-		dinosaurGreenAtlas.load();
-	}
-
-	public void unloadGameTextures() {
-		playerAtlas.unload();
-		dinosaurGreenAtlas.unload();
-	}
-
-	public void loadLevelCompletedGraphics() {
+	private void createLevelCompletedGraphics() {
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
 
 		complete_window_atlas = new BitmapTextureAtlas(textureManager, 650,
@@ -280,19 +358,19 @@ public class ResourcesManager {
 						"star.png", 0, 0, 2, 1);
 	}
 
-	public void loadLevelCompletedTextures() {
-		complete_window_atlas.load();
-		complete_stars_atlas.load();
+	private void loadLevelCompletedTextures() {
+		if (complete_window_atlas == null || complete_stars_atlas == null) {
+			createLevelCompletedGraphics();
+		}
+		if (!complete_window_atlas.isLoadedToHardware()) {
+		complete_window_atlas.load(); }
+		if (!complete_stars_atlas.isLoadedToHardware()) {
+		complete_stars_atlas.load();}
 	}
 
-	public void unloadLevelCompletedTextures() {
+	private void unloadLevelCompletedTextures() {
 		complete_window_atlas.unload();
 		complete_stars_atlas.unload();
-	}
-
-	public ITextureRegion getRandomTreeTexture() {
-		return BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(
-				this.treesAtlas, activity, "trees.png", 0, 0, 8, 4);
 	}
 
 	/**
@@ -322,5 +400,9 @@ public class ResourcesManager {
 
 	public static ResourcesManager getInstance() {
 		return INSTANCE;
+	}
+
+	public boolean areGameResourcesCreated() {
+		return gameResourcesCreated;
 	}
 }

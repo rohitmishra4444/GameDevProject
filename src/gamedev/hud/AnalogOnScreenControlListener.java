@@ -32,8 +32,6 @@ public class AnalogOnScreenControlListener implements
 				resourcesManager.player.setState(PlayerState.IDLE, -1);
 			}
 		} else {
-			// TODO: Refactor! Here, only the direction should be given to the
-			// player.
 			PlayerState state = resourcesManager.hud.isTouchedSecondaryButton() ? PlayerState.RUNNING
 					: PlayerState.WALKING;
 			resourcesManager.player.setVelocity(pValueX, pValueY, state);
