@@ -70,6 +70,7 @@ public class LevelScene extends BaseScene {
 		// TODO We need to check which method to use. Here, we have a
 		// "graphical Editor" to place objects which is very easy.
 		this.createScene();
+		this.resourcesManager.level = this;
 	}
 
 	@Override

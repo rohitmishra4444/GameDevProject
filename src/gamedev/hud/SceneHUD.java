@@ -92,13 +92,14 @@ public class SceneHUD extends HUD {
 							PlayerState.ATTACK)) {
 						resourcesManager.player.stopAnimation();
 					}
-
+					
 					resourcesManager.player.setState(PlayerState.ATTACK, -1);
 					if (!resourcesManager.player.getAttackers().isEmpty()) {
 						// Attack the first dinosaur
 						resourcesManager.player.getAttackers().get(0)
 								.underAttack(50);
 					}
+										
 				}
 
 				return true;

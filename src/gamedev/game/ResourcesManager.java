@@ -2,6 +2,7 @@ package gamedev.game;
 
 import gamedev.hud.SceneHUD;
 import gamedev.objects.Player;
+import gamedev.scenes.LevelScene;
 
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.BoundCamera;
@@ -39,6 +40,7 @@ public class ResourcesManager {
 	public TextureManager textureManager;
 	public Player player;
 	public SceneHUD hud;
+	public LevelScene level;
 
 	private static boolean gameGraphicsCreated = false;
 	private static boolean playerAtlasLoaded = false;
@@ -63,6 +65,8 @@ public class ResourcesManager {
 	public ITiledTextureRegion dinosaurGreenRegion;
 	public BitmapTextureAtlas treesAtlas;
 	public ITextureRegion[] treeRegions = new ITextureRegion[20];
+	public BitmapTextureAtlas spearsAtlas;
+	public ITextureRegion[] spearsRegions = new ITextureRegion[8];	
 
 	// Textures for controls
 	public BitmapTextureAtlas controlTexture;
@@ -258,6 +262,7 @@ public class ResourcesManager {
 		createPlayerGraphics();
 		createDinoGraphics();
 		createTreeGraphics();
+		createSpearGraphics();
 		gameGraphicsCreated = true;
 	}
 
@@ -282,7 +287,18 @@ public class ResourcesManager {
 				.createTiledFromAsset(this.dinosaurGreenAtlas, activity,
 						"green_dino_0.5_asc.png", 0, 0, 26, 32);
 	}
-
+	
+	private void createSpearGraphics() {
+		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
+		this.spearsAtlas = new BitmapTextureAtlas(textureManager, 512, 48);
+		BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.spearsAtlas,
+				activity, "spears.png", 0, 0);
+		for (int i = 0; i <= 7; i++) {
+			this.spearsRegions[i] = TextureRegionFactory.extractFromTexture(
+					this.spearsAtlas, i*64, 0, 64, 48);
+		}		
+	}
+	
 	private void createTreeGraphics() {
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
 
@@ -323,6 +339,7 @@ public class ResourcesManager {
 			treesAtlas.load();
 			treesAtlasLoaded = true;
 		}
+		spearsAtlas.load();
 	}
 
 	private void unloadGameGraphics() {

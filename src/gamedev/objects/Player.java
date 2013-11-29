@@ -6,6 +6,7 @@ import gamedev.game.ResourcesManager;
 import java.util.ArrayList;
 
 import org.andengine.engine.handler.physics.PhysicsHandler;
+import org.andengine.entity.modifier.MoveModifier;
 import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
@@ -255,6 +256,16 @@ public class Player extends AnimatedSprite {
 
 	public int getDirection() {
 		return this.direction;
+	}
+
+	public void throwSpear(float x, float y) {
+		float pX = this.body.getPosition().x;
+		float pY = this.body.getPosition().y;
+		Spear spear = new Spear(pX, pY, Direction.getDirection(pX, x, pY, y));
+		// TOOD: Dispose spear when  modifier is finished...
+		spear.registerEntityModifier(new MoveModifier(1, pX*32, x*32, pY*32, y*32));
+		this.resourcesManager.level.attachChild(spear);
+		//System.out.println("Throwing spear from ["+pX+","+pY+"] to ["+x+","+y+"]");
 	}
 
 }
