@@ -77,9 +77,9 @@ public class Dinosaur extends AnimatedSprite {
 	protected void init() {
 		this.resourcesManager = ResourcesManager.getInstance();
 		this.direction = Direction.getRandomDirection();
-		// Scale it up, so it has normal size.
-		this.mScaleX = this.mScaleX * 2;
-		this.mScaleY = this.mScaleY * 2;
+		// Scale it up. Texture has scale 0.2
+		this.mScaleX = this.mScaleX * 4f;
+		this.mScaleY = this.mScaleY * 4f;
 		this.id = nDinosaurs++;
 
 		this.createPhysic();

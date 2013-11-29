@@ -2,6 +2,7 @@ package gamedev.game;
 
 import gamedev.levels.Level1;
 import gamedev.scenes.BaseScene;
+import gamedev.scenes.IntroScene;
 import gamedev.scenes.LevelCompleteScene;
 import gamedev.scenes.LevelScene;
 import gamedev.scenes.LoadingScene;
@@ -23,6 +24,7 @@ public class SceneManager {
 	private BaseScene levelScene;
 	private BaseScene levelCompleteScene;
 	private BaseScene loadingScene;
+	private BaseScene introScene;
 
 	// ---------------------------------------------
 	// VARIABLES
@@ -38,7 +40,7 @@ public class SceneManager {
 	private Engine engine = resourcesManager.engine;
 
 	public enum SceneType {
-		SCENE_SPLASH, SCENE_MENU, SCENE_LEVEL, SCENE_LEVEL_COMPLETE, SCENE_LOADING,
+		SCENE_SPLASH, SCENE_MENU, SCENE_LEVEL, SCENE_LEVEL_COMPLETE, SCENE_LOADING, SCENE_INTRO
 	}
 
 	// ---------------------------------------------
@@ -53,6 +55,15 @@ public class SceneManager {
 
 	public void setScene(SceneType sceneType) {
 		switch (sceneType) {
+		case SCENE_SPLASH:
+			setScene(splashScene);
+			break;
+		case SCENE_LOADING:
+			setScene(loadingScene);
+			break;
+		case SCENE_INTRO:
+			setScene(introScene);
+			break;
 		case SCENE_MENU:
 			setScene(menuScene);
 			break;
@@ -61,12 +72,6 @@ public class SceneManager {
 			break;
 		case SCENE_LEVEL_COMPLETE:
 			setScene(levelCompleteScene);
-			break;
-		case SCENE_SPLASH:
-			setScene(splashScene);
-			break;
-		case SCENE_LOADING:
-			setScene(loadingScene);
 			break;
 		default:
 			break;
@@ -127,6 +132,43 @@ public class SceneManager {
 						resourcesManager.loadMenuResources();
 						setScene(menuScene);
 						disposeLoadingScene();
+					}
+				}));
+	}
+
+	// ---------------------------------------------
+	// Intro Scene
+	// ---------------------------------------------
+	public void createIntroScene(OnCreateSceneCallback pOnCreateSceneCallback) {
+		resourcesManager.loadIntroResources();
+		introScene = new IntroScene();
+		currentScene = introScene;
+		pOnCreateSceneCallback.onCreateSceneFinished(introScene);
+	}
+
+	public void disposeIntroScene() {
+		if (!introScene.isDisposed()) {
+			introScene.disposeScene();
+		}
+		resourcesManager.unloadIntroResources();
+	}
+
+	// TODO: Probably its better for memory, when we create the intro new and
+	// delete it after disposing.
+	public void loadIntroScene(final Engine mEngine) {
+		disposeCurrentScene(true);
+		resourcesManager.loadIntroResources();
+
+		mEngine.registerUpdateHandler(new TimerHandler(0.1f,
+				new ITimerCallback() {
+					public void onTimePassed(final TimerHandler pTimerHandler) {
+						if (introScene != null) {
+							mEngine.unregisterUpdateHandler(pTimerHandler);
+							setScene(introScene);
+							disposeLoadingScene();
+						} else {
+							introScene = new IntroScene();
+						}
 					}
 				}));
 	}

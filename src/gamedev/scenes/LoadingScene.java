@@ -44,6 +44,7 @@ public class LoadingScene extends BaseScene implements IProgressListener {
 
 	@Override
 	public void onBackKeyPressed() {
+		// Do nothing.
 		return;
 	}
 

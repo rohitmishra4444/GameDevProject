@@ -116,7 +116,6 @@ public class ResourcesManager {
 		splashTextureAtlasLoaded = false;
 		// The splash screen is no more used after the game has started.
 		splash_region = null;
-		System.gc();
 	}
 
 	private void createSplashScreen() {
@@ -182,7 +181,6 @@ public class ResourcesManager {
 
 		menuBackgroundTextureAtlas.unload();
 		menuBackgroundTextureAtlasLoaded = false;
-		System.gc();
 	}
 
 	private void createMenuFonts() {
@@ -209,7 +207,18 @@ public class ResourcesManager {
 	private void unloadMenuFonts() {
 		font.unload();
 		menuFontLoaded = false;
-		System.gc();
+	}
+
+	// ---------------------------------------------
+	// Intro resources
+	// ---------------------------------------------
+
+	public void loadIntroResources() {
+		// TODO
+	}
+
+	public void unloadIntroResources() {
+		// TODO
 	}
 
 	// ---------------------------------------------
@@ -255,23 +264,23 @@ public class ResourcesManager {
 	private void createPlayerGraphics() {
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
 
-		this.playerAtlas = new BitmapTextureAtlas(textureManager, 1056, 960,
+		this.playerAtlas = new BitmapTextureAtlas(textureManager, 704, 640,
 				TextureOptions.DEFAULT);
 
 		this.playerRegion = BitmapTextureAtlasTextureRegionFactory
 				.createTiledFromAsset(this.playerAtlas, activity,
-						"grey_caveman_0.5_asc.png", 0, 0, 22, 20);
+						"grey_caveman_0.333_asc.png", 0, 0, 22, 20);
 	}
 
 	private void createDinoGraphics() {
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
 
-		this.dinosaurGreenAtlas = new BitmapTextureAtlas(textureManager, 1664,
-				2048, TextureOptions.DEFAULT);
+		this.dinosaurGreenAtlas = new BitmapTextureAtlas(textureManager, 676,
+				832, TextureOptions.DEFAULT);
 
 		this.dinosaurGreenRegion = BitmapTextureAtlasTextureRegionFactory
 				.createTiledFromAsset(this.dinosaurGreenAtlas, activity,
-						"green_dino_0.5_asc.png", 0, 0, 26, 32);
+						"green_dino_0.2_asc.png", 0, 0, 26, 32);
 	}
 
 	private void createTreeGraphics() {
@@ -325,8 +334,6 @@ public class ResourcesManager {
 
 		treesAtlas.unload();
 		treesAtlasLoaded = false;
-
-		System.gc();
 	}
 
 	// ---------------------------------------------
@@ -370,7 +377,6 @@ public class ResourcesManager {
 	private void unloadHUDGraphics() {
 		controlTexture.unload();
 		controlTextureLoaded = false;
-		System.gc();
 	}
 
 	// ---------------------------------------------
@@ -421,7 +427,6 @@ public class ResourcesManager {
 
 		complete_stars_atlas.unload();
 		complete_stars_atlasLoaded = false;
-		System.gc();
 	}
 
 	/**
