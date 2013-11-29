@@ -77,9 +77,9 @@ public class Dinosaur extends AnimatedSprite {
 	protected void init() {
 		this.resourcesManager = ResourcesManager.getInstance();
 		this.direction = Direction.getRandomDirection();
-		// Scale it up. Texture has scale 0.25
-		this.mScaleX = this.mScaleX * 3f;
-		this.mScaleY = this.mScaleY * 3f;
+		// Scale it up. Texture has scale 0.5
+		this.mScaleX = this.mScaleX * 2f;
+		this.mScaleY = this.mScaleY * 2f;
 		this.id = nDinosaurs++;
 
 		this.createPhysic();
@@ -218,8 +218,11 @@ public class Dinosaur extends AnimatedSprite {
 			this.setState(DinosaurState.TIPPING_OVER);
 			this.resourcesManager.player.getAttackers().remove(this);
 			this.currentState = DinosaurState.DEAD;
+
 			this.detachSelf();
 			this.dispose();
+			this.body.setActive(false);
+
 			LevelScene levelScene = SceneManager.getInstance()
 					.getCurrentLevelScene();
 			levelScene.killedDino();

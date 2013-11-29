@@ -54,9 +54,6 @@ public class Player extends AnimatedSprite {
 		this.resourcesManager = ResourcesManager.getInstance();
 		this.resourcesManager.camera.setChaseEntity(this);
 		this.createAndConnectPhysics();
-		// Scale it up. Texture has scale 0.48.
-		// this.mScaleX = this.mScaleX * 1.2f;
-		// this.mScaleY = this.mScaleY * 1.2f;
 	}
 
 	public Player() {
@@ -82,14 +79,6 @@ public class Player extends AnimatedSprite {
 	 */
 	public void setState(PlayerState state, int direction) {
 
-		// TODO: Remove if unused.
-		// if (state != PlayerState.RUNNING && state != PlayerState.WALKING
-		// && state != PlayerState.IDLE && state != PlayerState.ATTACK) {
-		// if (this.currentState == state
-		// && (this.direction == -1 || this.direction == direction))
-		// return;
-		// }
-
 		boolean stateHasChanged = false;
 		if (this.currentState != state && !this.isAnimationRunning()) {
 			this.currentState = state;
@@ -110,8 +99,6 @@ public class Player extends AnimatedSprite {
 			this.direction = direction;
 			directionHasChanged = true;
 		}
-		// TODO: Remove.
-		// System.out.println(directionHasChanged);
 
 		// Change animation if no animation is running or if the direction has
 		// changed.
@@ -128,9 +115,6 @@ public class Player extends AnimatedSprite {
 				rowIndex = 12;
 			if (state == PlayerState.WALKING)
 				rowIndex = 16;
-			// boolean loopAnimation = (state == PlayerState.RUNNING || state ==
-			// PlayerState.WALKING) ? false
-			// : true;
 
 			// Do not loop animation since it will be looped automatically when
 			// the animation is over.
@@ -140,10 +124,6 @@ public class Player extends AnimatedSprite {
 					* FRAMES_PER_ANIMATION;
 			this.animate(ANIMATION_DURATION, startTile, startTile
 					+ FRAMES_PER_ANIMATION - 1, loopAnimation);
-
-			// TODO: Remove.
-			// System.out.println("Playing animation: " + state
-			// + ", at direction: " + this.direction);
 		}
 	}
 
