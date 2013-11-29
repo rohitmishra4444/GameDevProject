@@ -59,14 +59,14 @@ public class Dinosaur extends AnimatedSprite {
 	}
 
 	public Dinosaur(float pX, float pY) {
-		super(pX, pY, ResourcesManager.getInstance().dinosaurGreenRegion
-				.deepCopy(), ResourcesManager.getInstance().vbom);
+		super(pX, pY, ResourcesManager.getInstance().dinosaurGreenRegion,
+				ResourcesManager.getInstance().vbom);
 		this.init();
 	}
 
 	public Dinosaur(float pX, float pY, float randomWalkRadius) {
-		super(pX, pY, ResourcesManager.getInstance().dinosaurGreenRegion
-				.deepCopy(), ResourcesManager.getInstance().vbom);
+		super(pX, pY, ResourcesManager.getInstance().dinosaurGreenRegion,
+				ResourcesManager.getInstance().vbom);
 		this.randomWalkRadius = randomWalkRadius;
 		this.init();
 	}
@@ -221,7 +221,7 @@ public class Dinosaur extends AnimatedSprite {
 
 			this.detachSelf();
 			this.dispose();
-			this.body.setActive(false);
+			// this.body.setActive(false);
 
 			LevelScene levelScene = SceneManager.getInstance()
 					.getCurrentLevelScene();
