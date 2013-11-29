@@ -24,14 +24,13 @@ public class LevelCompleteScene extends BaseScene {
 	@Override
 	public void createScene() {
 
-		float centerX = camera.getWidth()
-				/ 2
-				- ResourcesManager.getInstance().complete_window_region
-						.getWidth() / 2;
-		float centerY = camera.getHeight()
-				/ 2
-				- ResourcesManager.getInstance().complete_window_region
-						.getHeight() / 2;
+		float centerX = ResourcesManager.getInstance().complete_window_region
+				.getWidth() / 2;
+		float centerY = ResourcesManager.getInstance().complete_window_region
+				.getHeight() / 2;
+
+		centerX = 0;
+		centerY = 0;
 
 		levelCompleteSprite = new Sprite(centerX, centerY, 650, 400,
 				ResourcesManager.getInstance().complete_window_region, vbom) {
@@ -62,6 +61,14 @@ public class LevelCompleteScene extends BaseScene {
 
 	@Override
 	public void disposeScene() {
+		this.levelCompleteSprite.detachSelf();
+		this.levelCompleteSprite.dispose();
+		this.star1.detachSelf();
+		this.star1.dispose();
+		this.star2.detachSelf();
+		this.star2.dispose();
+		this.star3.detachSelf();
+		this.star3.dispose();
 		this.detachSelf();
 		this.dispose();
 	}

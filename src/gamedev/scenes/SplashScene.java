@@ -44,7 +44,7 @@ public class SplashScene extends BaseScene {
 	public void disposeScene() {
 		this.detachSelf();
 		this.dispose();
+		splash.detachSelf();
 		splash.dispose();
 	}
-
 }

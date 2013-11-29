@@ -77,6 +77,8 @@ public class MainMenuScene extends BaseScene implements
 
 	@Override
 	public void disposeScene() {
+		menuChildScene.detachSelf();
+		menuChildScene.dispose();
 		this.detachSelf();
 		this.dispose();
 	}

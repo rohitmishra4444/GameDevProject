@@ -110,7 +110,6 @@ public class SceneManager {
 	public void createMenuScene() {
 		resourcesManager.loadMenuResources();
 		menuScene = new MainMenuScene();
-		loadingScene = new LoadingScene();
 		setScene(menuScene);
 		disposeSplashScene();
 	}
@@ -264,7 +263,7 @@ public class SceneManager {
 	 */
 	public void disposeCurrentScene(boolean setLoadingScene) {
 		if (setLoadingScene) {
-			setScene(loadingScene);
+			setLoadingScene();
 		}
 
 		if (currentSceneType.equals(SceneType.SCENE_LEVEL)) {
@@ -273,8 +272,16 @@ public class SceneManager {
 			disposeLevelCompleteScene();
 		} else if (currentSceneType.equals(SceneType.SCENE_MENU)) {
 			disposeMenuScene();
+		} else if (currentSceneType.equals(SceneType.SCENE_INTRO)) {
+			disposeIntroScene();
 		}
+	}
 
+	public void setLoadingScene() {
+		if (loadingScene == null) {
+			loadingScene = new LoadingScene();
+		}
+		setScene(loadingScene);
 	}
 
 	// ---------------------------------------------
