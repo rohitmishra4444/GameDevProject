@@ -19,8 +19,8 @@ public class Player extends AnimatedSprite {
 
 	public final static long[] ANIMATION_DURATION = { 50, 50, 50, 50, 50, 50,
 			50, 50, 50, 50, 50 };
-	public final static int FRAMES_PER_ANIMATION = 11;
-	public final static int TILES_PER_LINE = 22;
+	public final static int FRAMES_PER_ANIMATION = 8;
+	public final static int TILES_PER_LINE = 16;
 
 	public Body body;
 	public PhysicsHandler physicsHandler;
