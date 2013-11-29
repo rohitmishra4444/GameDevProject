@@ -18,7 +18,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 public class Player extends AnimatedSprite {
 
 	public final static long[] ANIMATION_DURATION = { 50, 50, 50, 50, 50, 50,
-			50, 50, 50, 50, 50 };
+			50, 50 };
 	public final static int FRAMES_PER_ANIMATION = 8;
 	public final static int TILES_PER_LINE = 16;
 
