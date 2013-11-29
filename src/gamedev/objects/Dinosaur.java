@@ -77,29 +77,29 @@ public class Dinosaur extends AnimatedSprite {
 	protected void init() {
 		this.resourcesManager = ResourcesManager.getInstance();
 		this.direction = Direction.getRandomDirection();
-		// Scale it up. Texture has scale 0.2
-		this.mScaleX = this.mScaleX * 4f;
-		this.mScaleY = this.mScaleY * 4f;
+		// Scale it up. Texture has scale 0.25
+		this.mScaleX = this.mScaleX * 3f;
+		this.mScaleY = this.mScaleY * 3f;
 		this.id = nDinosaurs++;
 
 		this.createPhysic();
 		this.setState(DinosaurState.LOOKING);
 		this.createLifeBar();
 
-		Text dinoNumber = new Text(this.body.getPosition().x,
-				this.body.getPosition().y, resourcesManager.font,
+		Text dinoNumber = new Text(this.body.getPosition().x / 32,
+				this.body.getPosition().y / 32, resourcesManager.font,
 				Integer.toString(this.id), 2, resourcesManager.vbom);
-		dinoNumber.setScale(0.4f);
+		dinoNumber.setScale(0.3f);
 		this.attachChild(dinoNumber);
 	}
 
 	public void createLifeBar() {
-		this.lifeRectangle = new Rectangle(this.body.getPosition().x - 5,
-				this.body.getPosition().y - 5, 100, 10,
+		this.lifeRectangle = new Rectangle(this.body.getPosition().x / 32 - 32,
+				this.body.getPosition().y / 32, 100, 10,
 				this.resourcesManager.vbom);
 		this.lifeRectangle.setColor(Color.RED);
 		this.lifeRectangle.setAlpha(0.6f);
-		this.lifeRectangle.setScale(0.3f);
+		this.lifeRectangle.setScale(0.2f);
 		// Show life bar only if dino is not 100% healthy.
 		// if (this.life == STARTING_LIFE) {
 		// this.lifeRectangle.setVisible(false);

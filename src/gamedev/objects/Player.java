@@ -54,9 +54,9 @@ public class Player extends AnimatedSprite {
 		this.resourcesManager = ResourcesManager.getInstance();
 		this.resourcesManager.camera.setChaseEntity(this);
 		this.createAndConnectPhysics();
-		// Scale it up. Texture has scale 0.333.
-		this.mScaleX = this.mScaleX * 2f;
-		this.mScaleY = this.mScaleY * 2f;
+		// Scale it up. Texture has scale 0.48.
+		// this.mScaleX = this.mScaleX * 1.2f;
+		// this.mScaleY = this.mScaleY * 1.2f;
 	}
 
 	public Player() {
@@ -65,9 +65,9 @@ public class Player extends AnimatedSprite {
 		this.resourcesManager = ResourcesManager.getInstance();
 		this.resourcesManager.camera.setChaseEntity(this);
 		this.createAndConnectPhysics();
-		// Scale it up. Texture has scale 0.333.
-		this.mScaleX = this.mScaleX * 2f;
-		this.mScaleY = this.mScaleY * 2f;
+		// Scale it up. Texture has scale 0.48.
+		// this.mScaleX = this.mScaleX * 1.2f;
+		// this.mScaleY = this.mScaleY * 1.2f;
 	}
 
 	/**
