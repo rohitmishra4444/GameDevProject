@@ -89,7 +89,7 @@ public class Dinosaur extends AnimatedSprite {
 		Text dinoNumber = new Text(this.body.getPosition().x,
 				this.body.getPosition().y, resourcesManager.font,
 				Integer.toString(this.id), 2, resourcesManager.vbom);
-		dinoNumber.setScale(0.6f);
+		dinoNumber.setScale(0.4f);
 		this.attachChild(dinoNumber);
 	}
 
