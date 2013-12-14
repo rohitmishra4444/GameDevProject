@@ -206,7 +206,7 @@ public class LevelScene extends BaseScene {
 
 					// TODO: Remove dependency on levelCompleteGraphics!
 					levelObject = new Sprite(x, y,
-							resourcesManager.complete_stars_region, vbom) {
+							resourcesManager.levelEndRegion, vbom) {
 						@Override
 						protected void onManagedUpdate(float pSecondsElapsed) {
 							super.onManagedUpdate(pSecondsElapsed);
@@ -217,9 +217,10 @@ public class LevelScene extends BaseScene {
 							}
 						}
 					};
-					levelObject.setAlpha(0.2f);
+					levelObject.setAlpha(0.9f);
+					levelObject.setScale(0.1f);
 					levelObject.registerEntityModifier(new LoopEntityModifier(
-							new ScaleModifier(1, 0.9f, 1.1f)));
+							new ScaleModifier(2, 0.95f, 1.05f)));
 
 				} else if (type.equals(TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_PLAYER)) {
 					assert (player != null);

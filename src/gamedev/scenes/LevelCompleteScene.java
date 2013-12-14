@@ -23,11 +23,8 @@ public class LevelCompleteScene extends BaseScene {
 
 	@Override
 	public void createScene() {
-
-		float centerX = ResourcesManager.getInstance().complete_window_region
-				.getWidth() / 2;
-		float centerY = ResourcesManager.getInstance().complete_window_region
-				.getHeight() / 2;
+		float centerX = camera.getBoundsWidth() - 650;
+		float centerY = camera.getBoundsHeight() - 400;
 
 		centerX = 0;
 		centerY = 0;

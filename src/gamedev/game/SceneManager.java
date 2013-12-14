@@ -233,17 +233,16 @@ public class SceneManager {
 	// LevelComplete Scene
 	// ---------------------------------------------
 	public void loadLevelCompleteScene(final Engine mEngine) {
-		if (levelCompleteScene == null) {
-			levelCompleteScene = new LevelCompleteScene();
-		}
-
 		disposeCurrentScene(false);
+		resourcesManager.loadLevelCompleteResources();
 
 		mEngine.registerUpdateHandler(new TimerHandler(0.1f,
 				new ITimerCallback() {
 					public void onTimePassed(final TimerHandler pTimerHandler) {
 						mEngine.unregisterUpdateHandler(pTimerHandler);
-						resourcesManager.loadLevelCompleteResources();
+						if (levelCompleteScene == null) {
+							levelCompleteScene = new LevelCompleteScene();
+						}
 						setScene(levelCompleteScene);
 					}
 				}));

@@ -41,6 +41,7 @@ public class ResourcesManager {
 	public SceneHUD hud;
 
 	private static boolean gameGraphicsCreated = false;
+	private static boolean levelEndAtlasLoaded = false;
 	private static boolean playerAtlasLoaded = false;
 	private static boolean dinosaurGreenAtlasLoaded = false;
 	private static boolean treesAtlasLoaded = false;
@@ -63,6 +64,9 @@ public class ResourcesManager {
 	public ITiledTextureRegion dinosaurGreenRegion;
 	public BitmapTextureAtlas treesAtlas;
 	public ITextureRegion[] treeRegions = new ITextureRegion[20];
+
+	public BitmapTextureAtlas levelEndAtlas;
+	public ITextureRegion levelEndRegion;
 
 	// Textures for controls
 	public BitmapTextureAtlas controlTexture;
@@ -232,10 +236,6 @@ public class ResourcesManager {
 		// loadGameAudio();
 		loadHUDResources();
 
-		// TODO: This should not be loaded here! Attention:
-		// level_complete_region depends on this.
-		loadLevelCompleteResources();
-
 		// TODO: Refactor. This should not be created here, rather in
 		// LevelScene.
 		if (physicsWorld == null || player == null) {
@@ -255,10 +255,21 @@ public class ResourcesManager {
 	}
 
 	private void createGameGraphics() {
+		createLevelEndGraphics();
 		createPlayerGraphics();
 		createDinoGraphics();
 		createTreeGraphics();
 		gameGraphicsCreated = true;
+	}
+
+	private void createLevelEndGraphics() {
+		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
+
+		this.levelEndAtlas = new BitmapTextureAtlas(textureManager, 600, 379,
+				TextureOptions.DEFAULT);
+
+		this.levelEndRegion = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(levelEndAtlas, activity, "caveExit.png", 0, 0);
 	}
 
 	private void createPlayerGraphics() {
@@ -311,6 +322,11 @@ public class ResourcesManager {
 			createGameGraphics();
 		}
 
+		if (levelEndAtlasLoaded == false) {
+			levelEndAtlas.load();
+			levelEndAtlasLoaded = true;
+		}
+
 		if (playerAtlasLoaded == false) {
 			playerAtlas.load();
 			playerAtlasLoaded = true;
@@ -326,6 +342,9 @@ public class ResourcesManager {
 	}
 
 	private void unloadGameGraphics() {
+		levelEndAtlas.unload();
+		levelEndAtlasLoaded = false;
+
 		playerAtlas.unload();
 		playerAtlasLoaded = false;
 
@@ -400,7 +419,7 @@ public class ResourcesManager {
 				.createFromAsset(complete_window_atlas, activity,
 						"levelCompleteWindow.png", 0, 0);
 
-		complete_stars_atlas = new BitmapTextureAtlas(textureManager, 650, 400,
+		complete_stars_atlas = new BitmapTextureAtlas(textureManager, 300, 150,
 				TextureOptions.DEFAULT);
 		complete_stars_region = BitmapTextureAtlasTextureRegionFactory
 				.createTiledFromAsset(complete_stars_atlas, activity,
