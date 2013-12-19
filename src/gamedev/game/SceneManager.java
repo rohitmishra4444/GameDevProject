@@ -2,8 +2,8 @@ package gamedev.game;
 
 import gamedev.levels.Level1;
 import gamedev.scenes.BaseScene;
+import gamedev.scenes.GameEndScene;
 import gamedev.scenes.IntroScene;
-import gamedev.scenes.LevelCompleteScene;
 import gamedev.scenes.LevelScene;
 import gamedev.scenes.LoadingScene;
 import gamedev.scenes.MainMenuScene;
@@ -22,7 +22,7 @@ public class SceneManager {
 	private BaseScene splashScene;
 	private BaseScene menuScene;
 	private BaseScene levelScene;
-	private BaseScene levelCompleteScene;
+	private BaseScene gameEndScene;
 	private BaseScene loadingScene;
 	private BaseScene introScene;
 
@@ -40,7 +40,7 @@ public class SceneManager {
 	private Engine engine = resourcesManager.engine;
 
 	public enum SceneType {
-		SCENE_SPLASH, SCENE_MENU, SCENE_LEVEL, SCENE_LEVEL_COMPLETE, SCENE_LOADING, SCENE_INTRO
+		SCENE_SPLASH, SCENE_MENU, SCENE_LEVEL, SCENE_GAME_END, SCENE_LOADING, SCENE_INTRO
 	}
 
 	// ---------------------------------------------
@@ -70,8 +70,8 @@ public class SceneManager {
 		case SCENE_LEVEL:
 			setScene(levelScene);
 			break;
-		case SCENE_LEVEL_COMPLETE:
-			setScene(levelCompleteScene);
+		case SCENE_GAME_END:
+			setScene(gameEndScene);
 			break;
 		default:
 			break;
@@ -230,29 +230,29 @@ public class SceneManager {
 	}
 
 	// ---------------------------------------------
-	// LevelComplete Scene
+	// GameEnd Scene
 	// ---------------------------------------------
-	public void loadLevelCompleteScene(final Engine mEngine) {
+	public void loadGameEndScene(final Engine mEngine) {
 		disposeCurrentScene(false);
-		resourcesManager.loadLevelCompleteResources();
+		resourcesManager.loadGameEndResources();
 
 		mEngine.registerUpdateHandler(new TimerHandler(0.1f,
 				new ITimerCallback() {
 					public void onTimePassed(final TimerHandler pTimerHandler) {
 						mEngine.unregisterUpdateHandler(pTimerHandler);
-						if (levelCompleteScene == null) {
-							levelCompleteScene = new LevelCompleteScene();
+						if (gameEndScene == null) {
+							gameEndScene = new GameEndScene();
 						}
-						setScene(levelCompleteScene);
+						setScene(gameEndScene);
 					}
 				}));
 	}
 
-	public void disposeLevelCompleteScene() {
-		if (!levelCompleteScene.isDisposed()) {
-			levelCompleteScene.disposeScene();
+	public void disposeGameEndScene() {
+		if (!gameEndScene.isDisposed()) {
+			gameEndScene.disposeScene();
 		}
-		resourcesManager.unloadLevelCompleteResources();
+		resourcesManager.unloadGameEndResources();
 	}
 
 	/**
@@ -267,8 +267,8 @@ public class SceneManager {
 
 		if (currentSceneType.equals(SceneType.SCENE_LEVEL)) {
 			disposeLevelScene();
-		} else if (currentSceneType.equals(SceneType.SCENE_LEVEL_COMPLETE)) {
-			disposeLevelCompleteScene();
+		} else if (currentSceneType.equals(SceneType.SCENE_GAME_END)) {
+			disposeGameEndScene();
 		} else if (currentSceneType.equals(SceneType.SCENE_MENU)) {
 			disposeMenuScene();
 		} else if (currentSceneType.equals(SceneType.SCENE_INTRO)) {

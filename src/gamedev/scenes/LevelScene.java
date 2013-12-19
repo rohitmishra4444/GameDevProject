@@ -5,8 +5,6 @@ import gamedev.game.SceneManager.SceneType;
 import gamedev.game.TmxLevelLoader;
 import gamedev.objects.Player;
 
-import java.io.IOException;
-
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.LoopEntityModifier;
 import org.andengine.entity.modifier.ScaleModifier;
@@ -20,11 +18,7 @@ import org.andengine.extension.tmx.TMXTileProperty;
 import org.andengine.extension.tmx.TMXTiledMap;
 import org.andengine.extension.tmx.util.exception.TMXLoadException;
 import org.andengine.opengl.texture.TextureOptions;
-import org.andengine.util.SAXUtils;
 import org.andengine.util.debug.Debug;
-import org.andengine.util.level.IEntityLoader;
-import org.andengine.util.level.LevelLoader;
-import org.xml.sax.Attributes;
 
 /**
  * Base class for all levels
@@ -36,23 +30,13 @@ public class LevelScene extends BaseScene {
 	protected TMXTiledMap mTMXTiledMap;
 	protected String tmxFileName;
 
-	// Load level by xml. Remove if not used.
-	private static final String TAG_LEVEL = "level";
-	private static final String TAG_ENTITY = "entity";
-	private static final String TAG_ENTITY_ATTRIBUTE_X = "x";
-	private static final String TAG_ENTITY_ATTRIBUTE_Y = "y";
-	private static final String TAG_ENTITY_ATTRIBUTE_TYPE = "type";
-	private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_PLAYER = "player";
-	private static final Object TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_LEVEL_COMPLETE = "levelComplete";
-
-	private static final String TAG_COMPLETE_RULE = "completeRule";
-	private static final String TAG_COMPLETE_RULE_ATTRIBUTE_KILL_DINOS = "killDinos";
-
 	// Player. Each level has to create the Player and its position in the world
 	protected Player player;
 	private int levelId;
 
-	private int dinosToKillPerRule = 0;
+	private Sprite gameEndPortal;
+
+	private static final int MIN_DINOS_TO_KILL = 1;
 	private int dinosKilled = 0;
 
 	public LevelScene(int levelId) {
@@ -78,10 +62,37 @@ public class LevelScene extends BaseScene {
 		this.connectPhysics();
 
 		// Load level-rules from xml.
-		this.loadLevel(this.levelId);
+		// this.loadLevel(this.levelId);
 
-		// This is done by LevelLoader:
-		// this.attachChild(this.player);
+		assert (player != null);
+		// Check if the player is already has a parent (avoid
+		// assertEntityHasNoParent IllegalStateException)
+		if (player.hasParent()) {
+			IEntity parentEntity = player.getParent();
+			parentEntity.detachChild(player);
+		}
+		// 32 is the PIXEL_TO_METER_RATIO_DEFAULT from AndEngine
+		player.body.setTransform(100 / 32, 100 / 32, 0);
+
+		this.attachChild(player);
+
+		// TODO: Define player and portal positions as constant.
+		gameEndPortal = new Sprite(1000, 300,
+				resourcesManager.gameEndPortalRegion, vbom) {
+			@Override
+			protected void onManagedUpdate(float pSecondsElapsed) {
+				super.onManagedUpdate(pSecondsElapsed);
+				if (player.collidesWith(this) && areLevelRulesCompleted()) {
+					SceneManager.getInstance().loadGameEndScene(engine);
+				}
+			}
+		};
+		gameEndPortal.setAlpha(0.9f);
+		gameEndPortal.setScale(0.1f);
+		gameEndPortal.registerEntityModifier(new LoopEntityModifier(
+				new ScaleModifier(2, 0.95f, 1.05f)));
+
+		this.attachChild(gameEndPortal);
 	}
 
 	protected void connectPhysics() {
@@ -144,114 +155,10 @@ public class LevelScene extends BaseScene {
 	}
 
 	private boolean areLevelRulesCompleted() {
-		if (dinosKilled >= dinosToKillPerRule) {
+		if (dinosKilled >= MIN_DINOS_TO_KILL) {
 			return true;
 		}
 		return false;
 	}
 
-	/**
-	 * LoadLevel is used to load level specific things like the
-	 * level-complete-rules, the starting position of the player or the place of
-	 * the level-complete-region.
-	 * 
-	 * @see {@link http://www.matim-dev.com/full-game-tutorial---part-11.html }
-	 * 
-	 * @param levelID
-	 *            level id respectively file to load from
-	 */
-	private void loadLevel(int levelID) {
-		final LevelLoader levelLoader = new LevelLoader();
-
-		levelLoader.registerEntityLoader(TAG_LEVEL, new IEntityLoader() {
-
-			@Override
-			public IEntity onLoadEntity(String pEntityName,
-					Attributes pAttributes) {
-				// Do nothing. Map is loaded from tmx-file.
-				return LevelScene.this;
-			}
-		});
-
-		levelLoader.registerEntityLoader(TAG_COMPLETE_RULE,
-				new IEntityLoader() {
-
-					@Override
-					public IEntity onLoadEntity(String pEntityName,
-							Attributes pAttributes) {
-						final int killDinos = SAXUtils.getIntAttributeOrThrow(
-								pAttributes,
-								TAG_COMPLETE_RULE_ATTRIBUTE_KILL_DINOS);
-						dinosToKillPerRule = killDinos;
-						return null;
-					}
-				});
-
-		levelLoader.registerEntityLoader(TAG_ENTITY, new IEntityLoader() {
-
-			@Override
-			public IEntity onLoadEntity(String pEntityName,
-					Attributes pAttributes) {
-
-				final int x = SAXUtils.getIntAttributeOrThrow(pAttributes,
-						TAG_ENTITY_ATTRIBUTE_X);
-				final int y = SAXUtils.getIntAttributeOrThrow(pAttributes,
-						TAG_ENTITY_ATTRIBUTE_Y);
-				final String type = SAXUtils.getAttributeOrThrow(pAttributes,
-						TAG_ENTITY_ATTRIBUTE_TYPE);
-
-				final Sprite levelObject;
-
-				if (type.equals(TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_LEVEL_COMPLETE)) {
-
-					// TODO: Remove dependency on levelCompleteGraphics!
-					levelObject = new Sprite(x, y,
-							resourcesManager.levelEndRegion, vbom) {
-						@Override
-						protected void onManagedUpdate(float pSecondsElapsed) {
-							super.onManagedUpdate(pSecondsElapsed);
-							if (player.collidesWith(this)
-									&& areLevelRulesCompleted()) {
-								SceneManager.getInstance()
-										.loadLevelCompleteScene(engine);
-							}
-						}
-					};
-					levelObject.setAlpha(0.9f);
-					levelObject.setScale(0.1f);
-					levelObject.registerEntityModifier(new LoopEntityModifier(
-							new ScaleModifier(2, 0.95f, 1.05f)));
-
-				} else if (type.equals(TAG_ENTITY_ATTRIBUTE_TYPE_VALUE_PLAYER)) {
-					assert (player != null);
-					// Check if the player is already has a parent (avoid
-					// assertEntityHasNoParent IllegalStateException)
-					if (player.hasParent()) {
-						IEntity parentEntity = player.getParent();
-						parentEntity.detachChild(player);
-					}
-					// 32 is the PIXEL_TO_METER_RATIO_DEFAULT from AndEngine
-					player.body.setTransform(x / 32, y / 32, 0);
-					levelObject = player;
-				}
-
-				else {
-					throw new IllegalArgumentException();
-				}
-
-				if (levelObject != null) {
-					levelObject.setCullingEnabled(true);
-				}
-				return levelObject;
-			}
-		});
-
-		try {
-			levelLoader.loadLevelFromAsset(activity.getAssets(), "level/"
-					+ levelID + ".lvl");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-	}
 }

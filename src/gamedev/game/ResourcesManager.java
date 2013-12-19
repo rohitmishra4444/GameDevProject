@@ -41,7 +41,7 @@ public class ResourcesManager {
 	public SceneHUD hud;
 
 	private static boolean gameGraphicsCreated = false;
-	private static boolean levelEndAtlasLoaded = false;
+	private static boolean gameEndPortalAtlasLoaded = false;
 	private static boolean playerAtlasLoaded = false;
 	private static boolean dinosaurGreenAtlasLoaded = false;
 	private static boolean treesAtlasLoaded = false;
@@ -65,8 +65,8 @@ public class ResourcesManager {
 	public BitmapTextureAtlas treesAtlas;
 	public ITextureRegion[] treeRegions = new ITextureRegion[20];
 
-	public BitmapTextureAtlas levelEndAtlas;
-	public ITextureRegion levelEndRegion;
+	public BitmapTextureAtlas gameEndPortalAtlas;
+	public ITextureRegion gameEndPortalRegion;
 
 	// Textures for controls
 	public BitmapTextureAtlas controlTexture;
@@ -255,21 +255,22 @@ public class ResourcesManager {
 	}
 
 	private void createGameGraphics() {
-		createLevelEndGraphics();
+		createGameEndPortalGraphics();
 		createPlayerGraphics();
 		createDinoGraphics();
 		createTreeGraphics();
 		gameGraphicsCreated = true;
 	}
 
-	private void createLevelEndGraphics() {
+	// TODO: Create here the graphics for the portal.
+	private void createGameEndPortalGraphics() {
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
 
-		this.levelEndAtlas = new BitmapTextureAtlas(textureManager, 600, 379,
+		this.gameEndPortalAtlas = new BitmapTextureAtlas(textureManager, 600, 379,
 				TextureOptions.DEFAULT);
 
-		this.levelEndRegion = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(levelEndAtlas, activity, "caveExit.png", 0, 0);
+		this.gameEndPortalRegion = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(gameEndPortalAtlas, activity, "caveExit.png", 0, 0);
 	}
 
 	private void createPlayerGraphics() {
@@ -322,9 +323,9 @@ public class ResourcesManager {
 			createGameGraphics();
 		}
 
-		if (levelEndAtlasLoaded == false) {
-			levelEndAtlas.load();
-			levelEndAtlasLoaded = true;
+		if (gameEndPortalAtlasLoaded == false) {
+			gameEndPortalAtlas.load();
+			gameEndPortalAtlasLoaded = true;
 		}
 
 		if (playerAtlasLoaded == false) {
@@ -342,8 +343,8 @@ public class ResourcesManager {
 	}
 
 	private void unloadGameGraphics() {
-		levelEndAtlas.unload();
-		levelEndAtlasLoaded = false;
+		gameEndPortalAtlas.unload();
+		gameEndPortalAtlasLoaded = false;
 
 		playerAtlas.unload();
 		playerAtlasLoaded = false;
@@ -402,15 +403,15 @@ public class ResourcesManager {
 	// LevelComplete resources
 	// ---------------------------------------------
 
-	public void loadLevelCompleteResources() {
-		loadLevelCompletedTextures();
+	public void loadGameEndResources() {
+		loadGameEndTextures();
 	}
 
-	public void unloadLevelCompleteResources() {
-		unloadLevelCompletedTextures();
+	public void unloadGameEndResources() {
+		unloadGameEndTextures();
 	}
 
-	private void createLevelCompletedGraphics() {
+	private void createGameEndGraphics() {
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
 
 		complete_window_atlas = new BitmapTextureAtlas(textureManager, 650,
@@ -426,9 +427,9 @@ public class ResourcesManager {
 						"star.png", 0, 0, 2, 1);
 	}
 
-	private void loadLevelCompletedTextures() {
+	private void loadGameEndTextures() {
 		if (complete_window_atlas == null || complete_stars_atlas == null) {
-			createLevelCompletedGraphics();
+			createGameEndGraphics();
 		}
 		if (complete_window_atlasLoaded == false) {
 			complete_window_atlas.load();
@@ -440,7 +441,7 @@ public class ResourcesManager {
 		}
 	}
 
-	private void unloadLevelCompletedTextures() {
+	private void unloadGameEndTextures() {
 		complete_window_atlas.unload();
 		complete_window_atlasLoaded = false;
 
