@@ -51,7 +51,6 @@ public class ResourcesManager {
 	private static boolean menuButtonsTextureAtlasLoaded = false;
 	private static boolean menuFontLoaded = false;
 	private static boolean complete_window_atlasLoaded = false;
-	private static boolean complete_stars_atlasLoaded = false;
 
 	// ---------------------------------------------
 	// TEXTURES & TEXTURE REGIONS
@@ -86,9 +85,7 @@ public class ResourcesManager {
 
 	// Textures for level-complete window
 	public ITextureRegion complete_window_region;
-	public ITiledTextureRegion complete_stars_region;
 	public BitmapTextureAtlas complete_window_atlas;
-	public BitmapTextureAtlas complete_stars_atlas;
 
 	// ---------------------------------------------
 	// Physic
@@ -420,34 +417,21 @@ public class ResourcesManager {
 		complete_window_region = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(complete_window_atlas, activity,
 						"levelCompleteWindow.png", 0, 0);
-
-		complete_stars_atlas = new BitmapTextureAtlas(textureManager, 300, 150,
-				TextureOptions.DEFAULT);
-		complete_stars_region = BitmapTextureAtlasTextureRegionFactory
-				.createTiledFromAsset(complete_stars_atlas, activity,
-						"star.png", 0, 0, 2, 1);
 	}
 
 	private void loadGameEndTextures() {
-		if (complete_window_atlas == null || complete_stars_atlas == null) {
+		if (complete_window_atlas == null) {
 			createGameEndGraphics();
 		}
 		if (complete_window_atlasLoaded == false) {
 			complete_window_atlas.load();
 			complete_window_atlasLoaded = true;
 		}
-		if (complete_stars_atlasLoaded == false) {
-			complete_stars_atlas.load();
-			complete_stars_atlasLoaded = true;
-		}
 	}
 
 	private void unloadGameEndTextures() {
 		complete_window_atlas.unload();
 		complete_window_atlasLoaded = false;
-
-		complete_stars_atlas.unload();
-		complete_stars_atlasLoaded = false;
 	}
 
 	/**
