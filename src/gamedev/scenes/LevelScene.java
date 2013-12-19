@@ -93,6 +93,7 @@ public class LevelScene extends BaseScene {
 				new ScaleModifier(2, 0.95f, 1.05f)));
 
 		this.attachChild(gameEndPortal);
+
 	}
 
 	protected void connectPhysics() {

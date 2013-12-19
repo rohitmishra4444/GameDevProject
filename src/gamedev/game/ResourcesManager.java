@@ -125,9 +125,9 @@ public class ResourcesManager {
 	private void createSplashScreen() {
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
 		splashTextureAtlas = new BitmapTextureAtlas(
-				getInstance().textureManager, 257, 25, TextureOptions.BILINEAR);
+				getInstance().textureManager, 480, 320, TextureOptions.BILINEAR);
 		splash_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
-				splashTextureAtlas, activity, "splash_edited.jpg", 0, 0);
+				splashTextureAtlas, activity, "splash_andengine.png", 0, 0);
 	}
 
 	// ---------------------------------------------
@@ -266,11 +266,12 @@ public class ResourcesManager {
 	private void createGameEndPortalGraphics() {
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
 
-		this.gameEndPortalAtlas = new BitmapTextureAtlas(textureManager, 600, 379,
-				TextureOptions.DEFAULT);
+		this.gameEndPortalAtlas = new BitmapTextureAtlas(textureManager, 600,
+				379, TextureOptions.DEFAULT);
 
 		this.gameEndPortalRegion = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(gameEndPortalAtlas, activity, "caveExit.png", 0, 0);
+				.createFromAsset(gameEndPortalAtlas, activity, "caveExit.png",
+						0, 0);
 	}
 
 	private void createPlayerGraphics() {
