@@ -35,6 +35,7 @@ public class LevelScene extends BaseScene {
 	private int levelId;
 
 	private Sprite gameEndPortal;
+	private Sprite cave;
 
 	private static final int MIN_DINOS_TO_KILL = 1;
 	private int dinosKilled = 0;
@@ -73,10 +74,10 @@ public class LevelScene extends BaseScene {
 		}
 		// 32 is the PIXEL_TO_METER_RATIO_DEFAULT from AndEngine
 		player.body.setTransform(100 / 32, 100 / 32, 0);
-
 		this.attachChild(player);
 
 		// TODO: Define player and portal positions as constant.
+		// TODO: Game end portal should be created in TmxLevelLoader class.
 		gameEndPortal = new Sprite(1000, 300,
 				resourcesManager.gameEndPortalRegion, vbom) {
 			@Override
@@ -91,9 +92,7 @@ public class LevelScene extends BaseScene {
 		gameEndPortal.setScale(0.1f);
 		gameEndPortal.registerEntityModifier(new LoopEntityModifier(
 				new ScaleModifier(2, 0.95f, 1.05f)));
-
 		this.attachChild(gameEndPortal);
-
 	}
 
 	protected void connectPhysics() {
