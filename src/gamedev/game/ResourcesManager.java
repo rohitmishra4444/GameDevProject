@@ -263,8 +263,8 @@ public class ResourcesManager {
 	private void createGameEndPortalGraphics() {
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
 
-		this.gameEndPortalAtlas = new BitmapTextureAtlas(textureManager, 600,
-				379, TextureOptions.DEFAULT);
+		this.gameEndPortalAtlas = new BitmapTextureAtlas(textureManager, 200,
+				126, TextureOptions.DEFAULT);
 
 		this.gameEndPortalRegion = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(gameEndPortalAtlas, activity, "caveExit.png",
@@ -412,11 +412,10 @@ public class ResourcesManager {
 	private void createGameEndGraphics() {
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
 
-		game_end_atlas = new BitmapTextureAtlas(textureManager, 1024,
-				576, TextureOptions.DEFAULT);
+		game_end_atlas = new BitmapTextureAtlas(textureManager, 1024, 576,
+				TextureOptions.DEFAULT);
 		game_end_region = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(game_end_atlas, activity,
-						"game_end.png", 0, 0);
+				.createFromAsset(game_end_atlas, activity, "game_end.png", 0, 0);
 	}
 
 	private void loadGameEndTextures() {

@@ -78,7 +78,7 @@ public class LevelScene extends BaseScene {
 
 		// TODO: Define player and portal positions as constant.
 		// TODO: Game end portal should be created in TmxLevelLoader class.
-		gameEndPortal = new Sprite(1000, 300,
+		gameEndPortal = new Sprite(1200, 300,
 				resourcesManager.gameEndPortalRegion, vbom) {
 			@Override
 			protected void onManagedUpdate(float pSecondsElapsed) {
@@ -89,7 +89,6 @@ public class LevelScene extends BaseScene {
 			}
 		};
 		gameEndPortal.setAlpha(0.9f);
-		gameEndPortal.setScale(0.1f);
 		gameEndPortal.registerEntityModifier(new LoopEntityModifier(
 				new ScaleModifier(2, 0.95f, 1.05f)));
 		this.attachChild(gameEndPortal);

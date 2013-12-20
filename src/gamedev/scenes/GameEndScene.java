@@ -67,6 +67,9 @@ public class GameEndScene extends BaseScene {
 		this.setOnAreaTouchListener(new IOnAreaTouchListener() {
 
 			long lastTouchTime = 0;
+			// Wait time in ms. Needed for the touch input, otherwise it is
+			// proceeding to fast.
+			final long WAIT_TIME = 800;
 
 			@Override
 			public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
@@ -76,28 +79,36 @@ public class GameEndScene extends BaseScene {
 				long touchTime = pSceneTouchEvent.getMotionEvent()
 						.getEventTime();
 
-				if (touchTime > lastTouchTime + 1000
-						&& pTouchArea.equals(gameEndText)) {
+				if (touchTime > lastTouchTime + WAIT_TIME
+						&& pTouchArea.equals(gameEndText)
+						&& gameEndText.hasParent()) {
+					System.out.println("GameEndText touched.");
+					detachChild(gameEndText);
 
-					detachChild(gameDevelopersText);
-					attachChild(gameEndSprite);
+					if (!gameEndSprite.hasParent()) {
+						attachChild(gameEndSprite);
+					}
 
 					lastTouchTime = touchTime;
 				}
 
-				if (touchTime > lastTouchTime + 1000
+				if (touchTime > lastTouchTime + WAIT_TIME
 						&& pTouchArea.equals(gameEndSprite)
 						&& gameEndSprite.hasParent()) {
-
+					System.out.println("GameEndSprite touched.");
 					detachChild(gameEndSprite);
-					attachChild(gameDevelopersText);
+
+					if (!gameDevelopersText.hasParent()) {
+						attachChild(gameDevelopersText);
+					}
 
 					lastTouchTime = touchTime;
 				}
 
-				if (touchTime > lastTouchTime + 1000
+				if (touchTime > lastTouchTime + WAIT_TIME
 						&& pTouchArea.equals(gameDevelopersText)
 						&& gameDevelopersText.hasParent()) {
+					System.out.println("GameDevelopersText touched.");
 					SceneManager.getInstance().loadMenuScene(engine);
 
 					lastTouchTime = touchTime;
