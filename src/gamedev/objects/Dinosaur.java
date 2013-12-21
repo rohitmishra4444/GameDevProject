@@ -3,7 +3,7 @@ package gamedev.objects;
 import gamedev.game.Direction;
 import gamedev.game.ResourcesManager;
 import gamedev.game.SceneManager;
-import gamedev.scenes.LevelScene;
+import gamedev.scenes.GameMapScene;
 
 import java.util.Random;
 
@@ -59,14 +59,14 @@ public class Dinosaur extends AnimatedSprite {
 	}
 
 	public Dinosaur(float pX, float pY) {
-		super(pX, pY, ResourcesManager.getInstance().dinosaurGreenRegion
-				.deepCopy(), ResourcesManager.getInstance().vbom);
+		super(pX, pY, ResourcesManager.getInstance().dinosaurGreenRegion,
+				ResourcesManager.getInstance().vbom);
 		this.init();
 	}
 
 	public Dinosaur(float pX, float pY, float randomWalkRadius) {
-		super(pX, pY, ResourcesManager.getInstance().dinosaurGreenRegion
-				.deepCopy(), ResourcesManager.getInstance().vbom);
+		super(pX, pY, ResourcesManager.getInstance().dinosaurGreenRegion,
+				ResourcesManager.getInstance().vbom);
 		this.randomWalkRadius = randomWalkRadius;
 		this.init();
 	}
@@ -217,13 +217,12 @@ public class Dinosaur extends AnimatedSprite {
 		if (this.life <= 0) {
 			this.setState(DinosaurState.TIPPING_OVER);
 			this.resourcesManager.player.getAttackers().remove(this);
-			this.currentState = DinosaurState.DEAD;
 
+			this.currentState = DinosaurState.DEAD;
 			this.detachSelf();
 			this.dispose();
-			// this.body.setActive(false);
 
-			LevelScene levelScene = SceneManager.getInstance()
+			GameMapScene levelScene = SceneManager.getInstance()
 					.getCurrentLevelScene();
 			levelScene.killedDino();
 			// TODO Add "dead" sprite

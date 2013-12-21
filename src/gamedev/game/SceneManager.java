@@ -1,10 +1,9 @@
 package gamedev.game;
 
-import gamedev.levels.Level1;
 import gamedev.scenes.BaseScene;
+import gamedev.scenes.GameEndScene;
+import gamedev.scenes.GameMapScene;
 import gamedev.scenes.IntroScene;
-import gamedev.scenes.LevelCompleteScene;
-import gamedev.scenes.LevelScene;
 import gamedev.scenes.LoadingScene;
 import gamedev.scenes.MainMenuScene;
 import gamedev.scenes.SplashScene;
@@ -21,8 +20,8 @@ public class SceneManager {
 
 	private BaseScene splashScene;
 	private BaseScene menuScene;
-	private BaseScene levelScene;
-	private BaseScene levelCompleteScene;
+	private BaseScene gameMapScene;
+	private BaseScene gameEndScene;
 	private BaseScene loadingScene;
 	private BaseScene introScene;
 
@@ -40,7 +39,7 @@ public class SceneManager {
 	private Engine engine = resourcesManager.engine;
 
 	public enum SceneType {
-		SCENE_SPLASH, SCENE_MENU, SCENE_LEVEL, SCENE_LEVEL_COMPLETE, SCENE_LOADING, SCENE_INTRO
+		SCENE_SPLASH, SCENE_MENU, SCENE_GAME_MAP, SCENE_GAME_END, SCENE_LOADING, SCENE_INTRO
 	}
 
 	// ---------------------------------------------
@@ -67,11 +66,11 @@ public class SceneManager {
 		case SCENE_MENU:
 			setScene(menuScene);
 			break;
-		case SCENE_LEVEL:
-			setScene(levelScene);
+		case SCENE_GAME_MAP:
+			setScene(gameMapScene);
 			break;
-		case SCENE_LEVEL_COMPLETE:
-			setScene(levelCompleteScene);
+		case SCENE_GAME_END:
+			setScene(gameEndScene);
 			break;
 		default:
 			break;
@@ -110,7 +109,6 @@ public class SceneManager {
 	public void createMenuScene() {
 		resourcesManager.loadMenuResources();
 		menuScene = new MainMenuScene();
-		loadingScene = new LoadingScene();
 		setScene(menuScene);
 		disposeSplashScene();
 	}
@@ -177,12 +175,13 @@ public class SceneManager {
 	// Level Scene
 	// ---------------------------------------------
 
-	public void createLevelScene(final Engine mEngine, int levelId,
-			boolean restart) {
+	public void createLevelScene(final Engine mEngine, boolean restart) {
+		disposeCurrentScene(true);
+
 		if (restart) {
-			levelScene = null;
+			gameMapScene = null;
 			resourcesManager.unloadGameResources();
-		} else if (restart == false && levelScene != null) {
+		} else if (restart == false && gameMapScene != null) {
 			loadLevelScene(engine);
 			return;
 		}
@@ -191,90 +190,90 @@ public class SceneManager {
 			resourcesManager.loadGameResources();
 		}
 
-		switch (levelId) {
-		case 1:
-			levelScene = new Level1();
-			break;
-		case 2:
-			// TODO: More levels ;)
-			break;
-		default:
-			break;
-		}
+		gameMapScene = new GameMapScene();
 
 		loadLevelScene(engine);
 	}
 
 	public void disposeLevelScene() {
-		if (!levelScene.isDisposed()) {
-			levelScene.disposeScene();
+		if (!gameMapScene.isDisposed()) {
+			gameMapScene.disposeScene();
 		}
 		resourcesManager.unloadGameResources();
 	}
 
 	public void loadLevelScene(final Engine mEngine) {
-		disposeCurrentScene(true);
+		if (!currentSceneType.equals(SceneType.SCENE_LOADING)) {
+			disposeCurrentScene(true);
+		}
 		resourcesManager.loadGameResources();
 
 		mEngine.registerUpdateHandler(new TimerHandler(0.1f,
 				new ITimerCallback() {
 					public void onTimePassed(final TimerHandler pTimerHandler) {
-						if (levelScene != null) {
+						if (gameMapScene != null) {
 							mEngine.unregisterUpdateHandler(pTimerHandler);
-							setScene(levelScene);
+							setScene(gameMapScene);
 							disposeLoadingScene();
 						} else {
-							createLevelScene(engine, 1, true);
+							createLevelScene(engine, true);
 						}
 					}
 				}));
 	}
 
 	// ---------------------------------------------
-	// LevelComplete Scene
+	// GameEnd Scene
 	// ---------------------------------------------
-	public void loadLevelCompleteScene(final Engine mEngine) {
-		if (levelCompleteScene == null) {
-			levelCompleteScene = new LevelCompleteScene();
-		}
-
+	public void loadGameEndScene(final Engine mEngine) {
 		disposeCurrentScene(false);
+		resourcesManager.loadGameEndResources();
 
 		mEngine.registerUpdateHandler(new TimerHandler(0.1f,
 				new ITimerCallback() {
 					public void onTimePassed(final TimerHandler pTimerHandler) {
 						mEngine.unregisterUpdateHandler(pTimerHandler);
-						resourcesManager.loadLevelCompleteResources();
-						setScene(levelCompleteScene);
+						if (gameEndScene == null) {
+							gameEndScene = new GameEndScene();
+						}
+						setScene(gameEndScene);
 					}
 				}));
 	}
 
-	public void disposeLevelCompleteScene() {
-		if (!levelCompleteScene.isDisposed()) {
-			levelCompleteScene.disposeScene();
+	public void disposeGameEndScene() {
+		if (!gameEndScene.isDisposed()) {
+			gameEndScene.disposeScene();
 		}
-		resourcesManager.unloadLevelCompleteResources();
+		resourcesManager.unloadGameEndResources();
 	}
 
 	/**
 	 * 
-	 * @param setLoadingScene
+	 * @param setLoadingSceneNeeded
 	 *            true, if you want to show the loading scene
 	 */
-	public void disposeCurrentScene(boolean setLoadingScene) {
-		if (setLoadingScene) {
-			setScene(loadingScene);
+	public void disposeCurrentScene(boolean setLoadingSceneNeeded) {
+		if (setLoadingSceneNeeded) {
+			setLoadingScene();
 		}
 
-		if (currentSceneType.equals(SceneType.SCENE_LEVEL)) {
+		if (currentSceneType.equals(SceneType.SCENE_GAME_MAP)) {
 			disposeLevelScene();
-		} else if (currentSceneType.equals(SceneType.SCENE_LEVEL_COMPLETE)) {
-			disposeLevelCompleteScene();
+		} else if (currentSceneType.equals(SceneType.SCENE_GAME_END)) {
+			disposeGameEndScene();
 		} else if (currentSceneType.equals(SceneType.SCENE_MENU)) {
 			disposeMenuScene();
+		} else if (currentSceneType.equals(SceneType.SCENE_INTRO)) {
+			disposeIntroScene();
 		}
+	}
 
+	public void setLoadingScene() {
+		if (loadingScene == null) {
+			loadingScene = new LoadingScene();
+		}
+		setScene(loadingScene);
 	}
 
 	// ---------------------------------------------
@@ -293,12 +292,12 @@ public class SceneManager {
 		return currentScene;
 	}
 
-	public LevelScene getCurrentLevelScene() {
-		return (LevelScene) levelScene;
+	public GameMapScene getCurrentLevelScene() {
+		return (GameMapScene) gameMapScene;
 	}
 
 	public boolean isLevelSceneCreated() {
-		return levelScene != null;
+		return (gameMapScene != null && !gameMapScene.isDisposed());
 	}
 
 }

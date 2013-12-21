@@ -66,6 +66,7 @@ public class MainMenuScene extends BaseScene implements
 		if (SceneManager.getInstance().isLevelSceneCreated()) {
 			SceneManager.getInstance().loadLevelScene(engine);
 		} else {
+			// TODO: Warn before quitting the application.
 			System.exit(0);
 		}
 	}
@@ -77,6 +78,8 @@ public class MainMenuScene extends BaseScene implements
 
 	@Override
 	public void disposeScene() {
+		menuChildScene.detachSelf();
+		menuChildScene.dispose();
 		this.detachSelf();
 		this.dispose();
 	}
@@ -91,7 +94,7 @@ public class MainMenuScene extends BaseScene implements
 			if (SceneManager.getInstance().isLevelSceneCreated()) {
 				restart = true;
 			}
-			SceneManager.getInstance().createLevelScene(engine, 1, restart);
+			SceneManager.getInstance().createLevelScene(engine, restart);
 			return true;
 		case MENU_EXIT:
 			System.exit(0);

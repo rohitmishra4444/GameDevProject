@@ -55,6 +55,8 @@ public class LoadingScene extends BaseScene implements IProgressListener {
 
 	@Override
 	public void disposeScene() {
+		loadingText.detachSelf();
+		loadingText.dispose();
 		this.detachSelf();
 		this.dispose();
 	}

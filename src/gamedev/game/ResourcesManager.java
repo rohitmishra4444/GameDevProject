@@ -2,7 +2,7 @@ package gamedev.game;
 
 import gamedev.hud.SceneHUD;
 import gamedev.objects.Player;
-import gamedev.scenes.LevelScene;
+import gamedev.scenes.GameMapScene;
 
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.BoundCamera;
@@ -40,9 +40,10 @@ public class ResourcesManager {
 	public TextureManager textureManager;
 	public Player player;
 	public SceneHUD hud;
-	public LevelScene level;
+	public GameMapScene level;
 
 	private static boolean gameGraphicsCreated = false;
+	private static boolean gameEndPortalAtlasLoaded = false;
 	private static boolean playerAtlasLoaded = false;
 	private static boolean dinosaurGreenAtlasLoaded = false;
 	private static boolean treesAtlasLoaded = false;
@@ -51,8 +52,7 @@ public class ResourcesManager {
 	private static boolean menuBackgroundTextureAtlasLoaded = false;
 	private static boolean menuButtonsTextureAtlasLoaded = false;
 	private static boolean menuFontLoaded = false;
-	private static boolean complete_window_atlasLoaded = false;
-	private static boolean complete_stars_atlasLoaded = false;
+	private static boolean game_end_atlasLoaded = false;
 
 	// ---------------------------------------------
 	// TEXTURES & TEXTURE REGIONS
@@ -66,7 +66,10 @@ public class ResourcesManager {
 	public BitmapTextureAtlas treesAtlas;
 	public ITextureRegion[] treeRegions = new ITextureRegion[20];
 	public BitmapTextureAtlas spearsAtlas;
-	public ITextureRegion[] spearsRegions = new ITextureRegion[8];	
+	public ITextureRegion[] spearsRegions = new ITextureRegion[8];
+
+	public BitmapTextureAtlas gameEndPortalAtlas;
+	public ITextureRegion gameEndPortalRegion;
 
 	// Textures for controls
 	public BitmapTextureAtlas controlTexture;
@@ -85,10 +88,8 @@ public class ResourcesManager {
 	public Font font;
 
 	// Textures for level-complete window
-	public ITextureRegion complete_window_region;
-	public ITiledTextureRegion complete_stars_region;
-	public BitmapTextureAtlas complete_window_atlas;
-	public BitmapTextureAtlas complete_stars_atlas;
+	public ITextureRegion game_end_region;
+	public BitmapTextureAtlas game_end_atlas;
 
 	// ---------------------------------------------
 	// Physic
@@ -125,9 +126,9 @@ public class ResourcesManager {
 	private void createSplashScreen() {
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
 		splashTextureAtlas = new BitmapTextureAtlas(
-				getInstance().textureManager, 257, 25, TextureOptions.BILINEAR);
+				getInstance().textureManager, 480, 320, TextureOptions.BILINEAR);
 		splash_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
-				splashTextureAtlas, activity, "splash_edited.jpg", 0, 0);
+				splashTextureAtlas, activity, "splash_andengine.png", 0, 0);
 	}
 
 	// ---------------------------------------------
@@ -236,10 +237,6 @@ public class ResourcesManager {
 		// loadGameAudio();
 		loadHUDResources();
 
-		// TODO: This should not be loaded here! Attention:
-		// level_complete_region depends on this.
-		loadLevelCompleteResources();
-
 		// TODO: Refactor. This should not be created here, rather in
 		// LevelScene.
 		if (physicsWorld == null || player == null) {
@@ -259,11 +256,24 @@ public class ResourcesManager {
 	}
 
 	private void createGameGraphics() {
+		createGameEndPortalGraphics();
 		createPlayerGraphics();
 		createDinoGraphics();
 		createTreeGraphics();
 		createSpearGraphics();
 		gameGraphicsCreated = true;
+	}
+
+	// TODO: Create here the graphics for the portal.
+	private void createGameEndPortalGraphics() {
+		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
+
+		this.gameEndPortalAtlas = new BitmapTextureAtlas(textureManager, 200,
+				126, TextureOptions.DEFAULT);
+
+		this.gameEndPortalRegion = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(gameEndPortalAtlas, activity, "caveExit.png",
+						0, 0);
 	}
 
 	private void createPlayerGraphics() {
@@ -287,18 +297,18 @@ public class ResourcesManager {
 				.createTiledFromAsset(this.dinosaurGreenAtlas, activity,
 						"green_dino_0.5_asc.png", 0, 0, 26, 32);
 	}
-	
+
 	private void createSpearGraphics() {
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
 		this.spearsAtlas = new BitmapTextureAtlas(textureManager, 512, 48);
-		BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.spearsAtlas,
-				activity, "spears.png", 0, 0);
+		BitmapTextureAtlasTextureRegionFactory.createFromAsset(
+				this.spearsAtlas, activity, "spears.png", 0, 0);
 		for (int i = 0; i <= 7; i++) {
 			this.spearsRegions[i] = TextureRegionFactory.extractFromTexture(
-					this.spearsAtlas, i*64, 0, 64, 48);
-		}		
+					this.spearsAtlas, i * 64, 0, 64, 48);
+		}
 	}
-	
+
 	private void createTreeGraphics() {
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
 
@@ -327,6 +337,11 @@ public class ResourcesManager {
 			createGameGraphics();
 		}
 
+		if (gameEndPortalAtlasLoaded == false) {
+			gameEndPortalAtlas.load();
+			gameEndPortalAtlasLoaded = true;
+		}
+
 		if (playerAtlasLoaded == false) {
 			playerAtlas.load();
 			playerAtlasLoaded = true;
@@ -343,6 +358,9 @@ public class ResourcesManager {
 	}
 
 	private void unloadGameGraphics() {
+		gameEndPortalAtlas.unload();
+		gameEndPortalAtlasLoaded = false;
+
 		playerAtlas.unload();
 		playerAtlasLoaded = false;
 
@@ -400,50 +418,36 @@ public class ResourcesManager {
 	// LevelComplete resources
 	// ---------------------------------------------
 
-	public void loadLevelCompleteResources() {
-		loadLevelCompletedTextures();
+	public void loadGameEndResources() {
+		loadGameEndTextures();
 	}
 
-	public void unloadLevelCompleteResources() {
-		unloadLevelCompletedTextures();
+	public void unloadGameEndResources() {
+		unloadGameEndTextures();
 	}
 
-	private void createLevelCompletedGraphics() {
+	private void createGameEndGraphics() {
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
 
-		complete_window_atlas = new BitmapTextureAtlas(textureManager, 650,
-				400, TextureOptions.DEFAULT);
-		complete_window_region = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(complete_window_atlas, activity,
-						"levelCompleteWindow.png", 0, 0);
-
-		complete_stars_atlas = new BitmapTextureAtlas(textureManager, 650, 400,
+		game_end_atlas = new BitmapTextureAtlas(textureManager, 1024, 576,
 				TextureOptions.DEFAULT);
-		complete_stars_region = BitmapTextureAtlasTextureRegionFactory
-				.createTiledFromAsset(complete_stars_atlas, activity,
-						"star.png", 0, 0, 2, 1);
+		game_end_region = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(game_end_atlas, activity, "game_end.png", 0, 0);
 	}
 
-	private void loadLevelCompletedTextures() {
-		if (complete_window_atlas == null || complete_stars_atlas == null) {
-			createLevelCompletedGraphics();
+	private void loadGameEndTextures() {
+		if (game_end_atlas == null) {
+			createGameEndGraphics();
 		}
-		if (complete_window_atlasLoaded == false) {
-			complete_window_atlas.load();
-			complete_window_atlasLoaded = true;
-		}
-		if (complete_stars_atlasLoaded == false) {
-			complete_stars_atlas.load();
-			complete_stars_atlasLoaded = true;
+		if (game_end_atlasLoaded == false) {
+			game_end_atlas.load();
+			game_end_atlasLoaded = true;
 		}
 	}
 
-	private void unloadLevelCompletedTextures() {
-		complete_window_atlas.unload();
-		complete_window_atlasLoaded = false;
-
-		complete_stars_atlas.unload();
-		complete_stars_atlasLoaded = false;
+	private void unloadGameEndTextures() {
+		game_end_atlas.unload();
+		game_end_atlasLoaded = false;
 	}
 
 	/**

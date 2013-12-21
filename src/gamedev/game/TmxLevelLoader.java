@@ -48,6 +48,9 @@ public class TmxLevelLoader {
 				this.createDinosaurs(group.getTMXObjects());
 			}
 		}
+
+		// TODO: Create portal object from tmx map.
+		// TODO: Create cave object from tmx map.
 	}
 
 	protected void createBoundaries(ArrayList<TMXObject> objects) {
