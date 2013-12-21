@@ -226,6 +226,10 @@ public class ResourcesManager {
 		// TODO
 	}
 
+	private void createIntroResources() {
+		// TODO
+	}
+
 	// ---------------------------------------------
 	// Game resources
 	// ---------------------------------------------
@@ -253,6 +257,46 @@ public class ResourcesManager {
 		// unloadGameFonts();
 		// unloadGameAudio();
 		unloadHUDResources();
+	}
+
+	private void loadGameGraphics() {
+		if (playerAtlas == null || dinosaurGreenAtlas == null
+				|| treesAtlas == null || gameGraphicsCreated == false) {
+			createGameGraphics();
+		}
+
+		if (gameEndPortalAtlasLoaded == false) {
+			gameEndPortalAtlas.load();
+			gameEndPortalAtlasLoaded = true;
+		}
+
+		if (playerAtlasLoaded == false) {
+			playerAtlas.load();
+			playerAtlasLoaded = true;
+		}
+		if (dinosaurGreenAtlasLoaded == false) {
+			dinosaurGreenAtlas.load();
+			dinosaurGreenAtlasLoaded = true;
+		}
+		if (treesAtlasLoaded == false) {
+			treesAtlas.load();
+			treesAtlasLoaded = true;
+		}
+		spearsAtlas.load();
+	}
+
+	private void unloadGameGraphics() {
+		gameEndPortalAtlas.unload();
+		gameEndPortalAtlasLoaded = false;
+
+		playerAtlas.unload();
+		playerAtlasLoaded = false;
+
+		dinosaurGreenAtlas.unload();
+		dinosaurGreenAtlasLoaded = false;
+
+		treesAtlas.unload();
+		treesAtlasLoaded = false;
 	}
 
 	private void createGameGraphics() {
@@ -300,9 +344,12 @@ public class ResourcesManager {
 
 	private void createSpearGraphics() {
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
+
 		this.spearsAtlas = new BitmapTextureAtlas(textureManager, 512, 48);
+
 		BitmapTextureAtlasTextureRegionFactory.createFromAsset(
 				this.spearsAtlas, activity, "spears.png", 0, 0);
+
 		for (int i = 0; i <= 7; i++) {
 			this.spearsRegions[i] = TextureRegionFactory.extractFromTexture(
 					this.spearsAtlas, i * 64, 0, 64, 48);
@@ -313,6 +360,7 @@ public class ResourcesManager {
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
 
 		this.treesAtlas = new BitmapTextureAtlas(textureManager, 512, 640);
+
 		BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.treesAtlas,
 				activity, "trees.png", 0, 0);
 		int x = 0;
@@ -329,46 +377,6 @@ public class ResourcesManager {
 				y = y + 128;
 			}
 		}
-	}
-
-	private void loadGameGraphics() {
-		if (playerAtlas == null || dinosaurGreenAtlas == null
-				|| treesAtlas == null || gameGraphicsCreated == false) {
-			createGameGraphics();
-		}
-
-		if (gameEndPortalAtlasLoaded == false) {
-			gameEndPortalAtlas.load();
-			gameEndPortalAtlasLoaded = true;
-		}
-
-		if (playerAtlasLoaded == false) {
-			playerAtlas.load();
-			playerAtlasLoaded = true;
-		}
-		if (dinosaurGreenAtlasLoaded == false) {
-			dinosaurGreenAtlas.load();
-			dinosaurGreenAtlasLoaded = true;
-		}
-		if (treesAtlasLoaded == false) {
-			treesAtlas.load();
-			treesAtlasLoaded = true;
-		}
-		spearsAtlas.load();
-	}
-
-	private void unloadGameGraphics() {
-		gameEndPortalAtlas.unload();
-		gameEndPortalAtlasLoaded = false;
-
-		playerAtlas.unload();
-		playerAtlasLoaded = false;
-
-		dinosaurGreenAtlas.unload();
-		dinosaurGreenAtlasLoaded = false;
-
-		treesAtlas.unload();
-		treesAtlasLoaded = false;
 	}
 
 	// ---------------------------------------------
