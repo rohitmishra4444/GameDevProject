@@ -1,10 +1,9 @@
 package gamedev.game;
 
-import gamedev.levels.Level1;
 import gamedev.scenes.BaseScene;
 import gamedev.scenes.GameEndScene;
+import gamedev.scenes.GameMapScene;
 import gamedev.scenes.IntroScene;
-import gamedev.scenes.LevelScene;
 import gamedev.scenes.LoadingScene;
 import gamedev.scenes.MainMenuScene;
 import gamedev.scenes.SplashScene;
@@ -21,7 +20,7 @@ public class SceneManager {
 
 	private BaseScene splashScene;
 	private BaseScene menuScene;
-	private BaseScene levelScene;
+	private BaseScene gameMapScene;
 	private BaseScene gameEndScene;
 	private BaseScene loadingScene;
 	private BaseScene introScene;
@@ -40,7 +39,7 @@ public class SceneManager {
 	private Engine engine = resourcesManager.engine;
 
 	public enum SceneType {
-		SCENE_SPLASH, SCENE_MENU, SCENE_LEVEL, SCENE_GAME_END, SCENE_LOADING, SCENE_INTRO
+		SCENE_SPLASH, SCENE_MENU, SCENE_GAME_MAP, SCENE_GAME_END, SCENE_LOADING, SCENE_INTRO
 	}
 
 	// ---------------------------------------------
@@ -67,8 +66,8 @@ public class SceneManager {
 		case SCENE_MENU:
 			setScene(menuScene);
 			break;
-		case SCENE_LEVEL:
-			setScene(levelScene);
+		case SCENE_GAME_MAP:
+			setScene(gameMapScene);
 			break;
 		case SCENE_GAME_END:
 			setScene(gameEndScene);
@@ -176,12 +175,13 @@ public class SceneManager {
 	// Level Scene
 	// ---------------------------------------------
 
-	public void createLevelScene(final Engine mEngine, int levelId,
-			boolean restart) {
+	public void createLevelScene(final Engine mEngine, boolean restart) {
+		disposeCurrentScene(true);
+
 		if (restart) {
-			levelScene = null;
+			gameMapScene = null;
 			resourcesManager.unloadGameResources();
-		} else if (restart == false && levelScene != null) {
+		} else if (restart == false && gameMapScene != null) {
 			loadLevelScene(engine);
 			return;
 		}
@@ -190,40 +190,33 @@ public class SceneManager {
 			resourcesManager.loadGameResources();
 		}
 
-		switch (levelId) {
-		case 1:
-			levelScene = new Level1();
-			break;
-		case 2:
-			// TODO: More levels ;)
-			break;
-		default:
-			break;
-		}
+		gameMapScene = new GameMapScene();
 
 		loadLevelScene(engine);
 	}
 
 	public void disposeLevelScene() {
-		if (!levelScene.isDisposed()) {
-			levelScene.disposeScene();
+		if (!gameMapScene.isDisposed()) {
+			gameMapScene.disposeScene();
 		}
 		resourcesManager.unloadGameResources();
 	}
 
 	public void loadLevelScene(final Engine mEngine) {
-		disposeCurrentScene(true);
+		if (!currentSceneType.equals(SceneType.SCENE_LOADING)) {
+			disposeCurrentScene(true);
+		}
 		resourcesManager.loadGameResources();
 
 		mEngine.registerUpdateHandler(new TimerHandler(0.1f,
 				new ITimerCallback() {
 					public void onTimePassed(final TimerHandler pTimerHandler) {
-						if (levelScene != null) {
+						if (gameMapScene != null) {
 							mEngine.unregisterUpdateHandler(pTimerHandler);
-							setScene(levelScene);
+							setScene(gameMapScene);
 							disposeLoadingScene();
 						} else {
-							createLevelScene(engine, 1, true);
+							createLevelScene(engine, true);
 						}
 					}
 				}));
@@ -257,15 +250,15 @@ public class SceneManager {
 
 	/**
 	 * 
-	 * @param setLoadingScene
+	 * @param setLoadingSceneNeeded
 	 *            true, if you want to show the loading scene
 	 */
-	public void disposeCurrentScene(boolean setLoadingScene) {
-		if (setLoadingScene) {
+	public void disposeCurrentScene(boolean setLoadingSceneNeeded) {
+		if (setLoadingSceneNeeded) {
 			setLoadingScene();
 		}
 
-		if (currentSceneType.equals(SceneType.SCENE_LEVEL)) {
+		if (currentSceneType.equals(SceneType.SCENE_GAME_MAP)) {
 			disposeLevelScene();
 		} else if (currentSceneType.equals(SceneType.SCENE_GAME_END)) {
 			disposeGameEndScene();
@@ -299,12 +292,12 @@ public class SceneManager {
 		return currentScene;
 	}
 
-	public LevelScene getCurrentLevelScene() {
-		return (LevelScene) levelScene;
+	public GameMapScene getCurrentLevelScene() {
+		return (GameMapScene) gameMapScene;
 	}
 
 	public boolean isLevelSceneCreated() {
-		return levelScene != null;
+		return (gameMapScene != null && !gameMapScene.isDisposed());
 	}
 
 }

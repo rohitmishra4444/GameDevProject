@@ -24,7 +24,7 @@ import org.andengine.util.debug.Debug;
  * Base class for all levels
  * 
  */
-public class LevelScene extends BaseScene {
+public class GameMapScene extends BaseScene {
 
 	// TMX Map containing the Level
 	protected TMXTiledMap mTMXTiledMap;
@@ -32,7 +32,6 @@ public class LevelScene extends BaseScene {
 
 	// Player. Each level has to create the Player and its position in the world
 	protected Player player;
-	private int levelId;
 
 	private Sprite gameEndPortal;
 	private Sprite cave;
@@ -40,20 +39,17 @@ public class LevelScene extends BaseScene {
 	private static final int MIN_DINOS_TO_KILL = 1;
 	private int dinosKilled = 0;
 
-	public LevelScene(int levelId) {
+	public GameMapScene() {
 		// Call BaseScene without calling createScene because here we need some
 		// stuff initialized before
 		super(false);
 
 		this.player = this.resourcesManager.player;
-		this.levelId = levelId;
 
 		// Load map from tmx-file.
-		this.tmxFileName = "level" + levelId + ".tmx";
+		this.tmxFileName = "map.tmx";
 
 		// CreateScene creates the world and its objects defined in the TMX-Map.
-		// TODO We need to check which method to use. Here, we have a
-		// "graphical Editor" to place objects which is very easy.
 		this.createScene();
 	}
 
@@ -140,7 +136,7 @@ public class LevelScene extends BaseScene {
 
 	@Override
 	public SceneType getSceneType() {
-		return SceneType.SCENE_LEVEL;
+		return SceneType.SCENE_GAME_MAP;
 	}
 
 	@Override

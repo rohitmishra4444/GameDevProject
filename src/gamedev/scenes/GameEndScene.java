@@ -51,6 +51,8 @@ public class GameEndScene extends BaseScene {
 			}
 		};
 		this.registerTouchArea(gameEndSprite);
+		gameEndSprite.setVisible(false);
+		attachChild(gameEndSprite);
 
 		String gameDevelopersString = "This game was designed and developed by"
 				+ "\n" + "Stefan Wanzenried" + "\n" + "David Wettstein"
@@ -63,6 +65,8 @@ public class GameEndScene extends BaseScene {
 				camera.getCenterY() - gameDevelopersText.getHeight() / 2);
 		gameDevelopersText.setHorizontalAlign(HorizontalAlign.CENTER);
 		this.registerTouchArea(gameDevelopersText);
+		gameDevelopersText.setVisible(false);
+		attachChild(gameDevelopersText);
 
 		this.setOnAreaTouchListener(new IOnAreaTouchListener() {
 
@@ -81,36 +85,32 @@ public class GameEndScene extends BaseScene {
 
 				if (touchTime > lastTouchTime + WAIT_TIME
 						&& pTouchArea.equals(gameEndText)
-						&& gameEndText.hasParent()) {
+						&& gameEndText.isVisible()) {
 					System.out.println("GameEndText touched.");
-					detachChild(gameEndText);
-
-					if (!gameEndSprite.hasParent()) {
-						attachChild(gameEndSprite);
-					}
+					gameEndText.setVisible(false);
+					gameEndSprite.setVisible(true);
 
 					lastTouchTime = touchTime;
 				}
 
 				if (touchTime > lastTouchTime + WAIT_TIME
 						&& pTouchArea.equals(gameEndSprite)
-						&& gameEndSprite.hasParent()) {
+						&& gameEndSprite.isVisible()) {
 					System.out.println("GameEndSprite touched.");
-					detachChild(gameEndSprite);
-
-					if (!gameDevelopersText.hasParent()) {
-						attachChild(gameDevelopersText);
-					}
+					gameEndSprite.setVisible(false);
+					gameDevelopersText.setVisible(true);
 
 					lastTouchTime = touchTime;
 				}
 
 				if (touchTime > lastTouchTime + WAIT_TIME
 						&& pTouchArea.equals(gameDevelopersText)
-						&& gameDevelopersText.hasParent()) {
+						&& gameDevelopersText.isVisible()) {
 					System.out.println("GameDevelopersText touched.");
+					gameDevelopersText.setVisible(false);
 					SceneManager.getInstance().loadMenuScene(engine);
-
+					disposeScene();
+					SceneManager.getInstance().disposeLevelScene();
 					lastTouchTime = touchTime;
 				}
 

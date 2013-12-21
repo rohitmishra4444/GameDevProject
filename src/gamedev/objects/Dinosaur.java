@@ -3,7 +3,7 @@ package gamedev.objects;
 import gamedev.game.Direction;
 import gamedev.game.ResourcesManager;
 import gamedev.game.SceneManager;
-import gamedev.scenes.LevelScene;
+import gamedev.scenes.GameMapScene;
 
 import java.util.Random;
 
@@ -222,7 +222,7 @@ public class Dinosaur extends AnimatedSprite {
 			this.detachSelf();
 			this.dispose();
 
-			LevelScene levelScene = SceneManager.getInstance()
+			GameMapScene levelScene = SceneManager.getInstance()
 					.getCurrentLevelScene();
 			levelScene.killedDino();
 			// TODO Add "dead" sprite
