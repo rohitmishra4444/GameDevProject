@@ -47,7 +47,7 @@ public class GameMapScene extends BaseScene {
 		this.player = this.resourcesManager.player;
 
 		// Load map from tmx-file.
-		this.tmxFileName = "map.tmx";
+		this.tmxFileName = "level.tmx";
 
 		// CreateScene creates the world and its objects defined in the TMX-Map.
 		this.createScene();
@@ -70,7 +70,7 @@ public class GameMapScene extends BaseScene {
 			parentEntity.detachChild(player);
 		}
 		// 32 is the PIXEL_TO_METER_RATIO_DEFAULT from AndEngine
-		player.body.setTransform(100 / 32, 100 / 32, 0);
+		player.body.setTransform(200 / 32, 200 / 32, 0);
 		this.attachChild(player);
 
 		// TODO: Define player and portal positions as constant.

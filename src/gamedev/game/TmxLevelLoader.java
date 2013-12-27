@@ -40,7 +40,7 @@ public class TmxLevelLoader {
 		}
 		// Create objects from object layers
 		for (final TMXObjectGroup group : this.map.getTMXObjectGroups()) {
-			if (group.getName().equals("LevelBoundaries")) {
+			if (group.getName().equals("wall")) {
 				this.createBoundaries(group.getTMXObjects());
 			} else if (group.getName().equals("Trees")) {
 				this.createTrees(group.getTMXObjects());
@@ -56,7 +56,7 @@ public class TmxLevelLoader {
 	protected void createBoundaries(ArrayList<TMXObject> objects) {
 		for (final TMXObject object : objects) {
 			final Rectangle rect = new Rectangle(object.getX(), object.getY(),
-					object.getWidth() - 10, object.getHeight() - 10,
+					object.getWidth(), object.getHeight(),
 					this.resourcesManager.vbom);
 			final FixtureDef boxFixtureDef = PhysicsFactory.createFixtureDef(0,
 					0, 0);
