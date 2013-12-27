@@ -28,7 +28,7 @@ abstract class StaticObject extends Sprite {
 	}
 	
 	/**
-	 * Each static object must define its body
+	 * Create physic body. Just leave empty if not needed
 	 */
 	abstract protected void createPhysics();
 	

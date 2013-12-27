@@ -2,6 +2,7 @@ package gamedev.game;
 
 import gamedev.objects.Dinosaur;
 import gamedev.objects.Tree;
+import gamedev.objects.AnimatedObject.GameState;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -14,6 +15,7 @@ import org.andengine.extension.tmx.TMXObject;
 import org.andengine.extension.tmx.TMXObjectGroup;
 import org.andengine.extension.tmx.TMXTiledMap;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 
@@ -30,8 +32,6 @@ public class TmxLevelLoader {
 	}
 
 	public void createWorldAndObjects() {
-		System.out.println("In createWorldAndObjects"
-				+ this.map.getTMXLayers().size());
 
 		// Loop through the layers and attach them as child scene.
 		for (int i = 0; i < this.map.getTMXLayers().size(); i++) {
@@ -40,7 +40,7 @@ public class TmxLevelLoader {
 		}
 		// Create objects from object layers
 		for (final TMXObjectGroup group : this.map.getTMXObjectGroups()) {
-			if (group.getName().equals("wall")) {
+			if (group.getName().equals("Walls")) {
 				this.createBoundaries(group.getTMXObjects());
 			} else if (group.getName().equals("Trees")) {
 				this.createTrees(group.getTMXObjects());
@@ -48,7 +48,13 @@ public class TmxLevelLoader {
 				this.createDinosaurs(group.getTMXObjects());
 			}
 		}
-
+		
+		// TODO REMOVE TEST FOR MOVE-STRATEGIES
+		// Create a dinosaur with a different move strategy. the dino simply walks to point 5,5 (meters = *32 for pixels)
+		Dinosaur d = new Dinosaur(600, 600, Dinosaur.COLOR_GREEN);
+		this.scene.attachChild(d);
+		d.setMoveStrategy(new SimpleMoveStrategy(d, new Vector2(5,5), GameState.WALKING));
+		
 		// TODO: Create portal object from tmx map.
 		// TODO: Create cave object from tmx map.
 	}
@@ -77,7 +83,7 @@ public class TmxLevelLoader {
 
 	protected void createDinosaurs(ArrayList<TMXObject> objects) {
 		for (final TMXObject object : objects) {
-			this.scene.attachChild(new Dinosaur(object.getX(), object.getY()));
+			this.scene.attachChild(new Dinosaur(object.getX(), object.getY(), Dinosaur.COLOR_GREEN));
 		}
 	}
 

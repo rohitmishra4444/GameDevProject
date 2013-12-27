@@ -323,12 +323,12 @@ public class ResourcesManager {
 	private void createPlayerGraphics() {
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
 
-		this.playerAtlas = new BitmapTextureAtlas(textureManager, 1216, 1520,
+		this.playerAtlas = new BitmapTextureAtlas(textureManager, 608, 760,
 				TextureOptions.DEFAULT);
 
 		this.playerRegion = BitmapTextureAtlasTextureRegionFactory
 				.createTiledFromAsset(this.playerAtlas, activity,
-						"caveman.png", 0, 0, 16, 20);
+						"caveman_0.5.png", 0, 0, 16, 20);
 	}
 
 	private void createDinoGraphics() {

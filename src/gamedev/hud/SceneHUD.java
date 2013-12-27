@@ -97,7 +97,7 @@ public class SceneHUD extends HUD {
 					if (!resourcesManager.player.getAttackers().isEmpty()) {
 						// Attack the first dinosaur
 						resourcesManager.player.getAttackers().get(0)
-								.underAttack(50);
+								.attack(50);
 					}
 										
 				}
