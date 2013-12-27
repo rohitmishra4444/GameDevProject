@@ -25,8 +25,6 @@ public class FollowPlayerStrategy extends MoveStrategy {
 		float distance = MathUtils.distance(bodyPos.x, bodyPos.y, playerPos.x, playerPos.y);
 		if (distance <= this.radius) {
 			this.object.moveTo(playerPos, GameState.CHASE_PLAYER);
-			Vector2Pool.recycle(bodyPos);
-			Vector2Pool.recycle(playerPos);
 			return true;
 		} else {
 			this.object.setState(GameState.LOOKING, -1);
