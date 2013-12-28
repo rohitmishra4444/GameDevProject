@@ -16,7 +16,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
-public class Player extends AnimatedSprite {
+public class CopyOfPlayer extends AnimatedSprite {
 
 	public final static long[] ANIMATION_DURATION = { 50, 50, 50, 50, 50, 50,
 			50, 50 };
@@ -49,7 +49,7 @@ public class Player extends AnimatedSprite {
 	 * @param pY
 	 *            y-Position in the World
 	 */
-	public Player(float pX, float pY) {
+	public CopyOfPlayer(float pX, float pY) {
 		super(pX, pY, ResourcesManager.getInstance().playerRegion,
 				ResourcesManager.getInstance().vbom);
 		this.resourcesManager = ResourcesManager.getInstance();
@@ -57,7 +57,7 @@ public class Player extends AnimatedSprite {
 		this.createAndConnectPhysics();
 	}
 
-	public Player() {
+	public CopyOfPlayer() {
 		super(0, 0, ResourcesManager.getInstance().playerRegion,
 				ResourcesManager.getInstance().vbom);
 		this.resourcesManager = ResourcesManager.getInstance();

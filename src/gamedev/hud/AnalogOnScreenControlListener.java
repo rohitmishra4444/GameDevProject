@@ -1,7 +1,7 @@
 package gamedev.hud;
 
 import gamedev.game.ResourcesManager;
-import gamedev.objects.Player.PlayerState;
+import gamedev.objects.AnimatedObject.GameState;
 
 import org.andengine.engine.camera.hud.controls.AnalogOnScreenControl;
 import org.andengine.engine.camera.hud.controls.AnalogOnScreenControl.IAnalogOnScreenControlListener;
@@ -27,13 +27,12 @@ public class AnalogOnScreenControlListener implements
 			// Only set the player to idle if state is not attack or animation
 			// is not running. This is needed, because when the state is attack
 			// x and y can also be 0.
-			if (!resourcesManager.player.getState().equals(PlayerState.ATTACK)
+			if (!resourcesManager.player.getState().equals(GameState.ATTACK)
 					|| !resourcesManager.player.isAnimationRunning()) {
-				resourcesManager.player.setState(PlayerState.IDLE, -1);
+				resourcesManager.player.setState(GameState.IDLE, -1);
 			}
 		} else {
-			PlayerState state = resourcesManager.hud.isTouchedSecondaryButton() ? PlayerState.RUNNING
-					: PlayerState.WALKING;
+			GameState state = resourcesManager.hud.isTouchedSecondaryButton() ? GameState.RUNNING: GameState.WALKING;
 			resourcesManager.player.setVelocity(pValueX, pValueY, state);
 		}
 

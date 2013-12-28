@@ -216,7 +216,7 @@ public class CopyOfDinosaur extends AnimatedSprite {
 		setLifeBar(this.life);
 		if (this.life <= 0) {
 			this.setState(DinosaurState.TIPPING_OVER);
-			this.resourcesManager.player.getAttackers().remove(this);
+//			this.resourcesManager.player.getAttackers().remove(this);
 
 			this.currentState = DinosaurState.DEAD;
 			this.detachSelf();

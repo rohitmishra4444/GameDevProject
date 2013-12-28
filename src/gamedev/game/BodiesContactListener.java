@@ -1,14 +1,13 @@
 package gamedev.game;
 
-import gamedev.objects.Player;
-import gamedev.objects.Player.PlayerState;
+import gamedev.objects.Avatar;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 
 public class BodiesContactListener implements ContactListener {
 	
-	protected Player player = ResourcesManager.getInstance().player;
+	protected Avatar player = ResourcesManager.getInstance().player;
 	
 	@Override
 	public void beginContact(Contact contact) {

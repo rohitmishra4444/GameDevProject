@@ -23,7 +23,7 @@ public abstract class AnimatedObject extends AnimatedSprite {
 	 * Different states. Not each animated object can implement all of these...
 	 */
 	public enum GameState {
-		WALKING, RUNNING, ROARING, LOOKING, PAUSED, BEEN_HIT, TIPPING_OVER, ATTACK, CHASE_PLAYER, DEAD,
+		IDLE, WALKING, RUNNING, ROARING, LOOKING, PAUSED, BEEN_HIT, TIPPING_OVER, ATTACK, CHASE_PLAYER, DEAD,
 	}
 	
 	/** Current direction */
@@ -129,13 +129,17 @@ public abstract class AnimatedObject extends AnimatedSprite {
 		this.moveTo(new Vector2(x, y), state);
 	}
 	
+	public boolean isAlive() {
+		return this.life > 0;
+	}
 	
 	/**
 	 * Getters & Setters
 	 */
 	
 	public void setLife(int life) {
-		this.life = life;
+		if (life > 100) this.life = 100;
+		this.life = Math.max(life, 0);
 	}
 	
 	public int getLife() {

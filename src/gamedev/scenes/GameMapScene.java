@@ -3,7 +3,7 @@ package gamedev.scenes;
 import gamedev.game.SceneManager;
 import gamedev.game.SceneManager.SceneType;
 import gamedev.game.TmxLevelLoader;
-import gamedev.objects.Player;
+import gamedev.objects.Avatar;
 
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.LoopEntityModifier;
@@ -31,7 +31,7 @@ public class GameMapScene extends BaseScene {
 	protected String tmxFileName;
 
 	// Player. Each level has to create the Player and its position in the world
-	protected Player player;
+	protected Avatar player;
 
 //	private Sprite gameEndPortal;
 //	private Sprite cave;
@@ -61,7 +61,7 @@ public class GameMapScene extends BaseScene {
 //			parentEntity.detachChild(player);
 //		}
 		// 32 is the PIXEL_TO_METER_RATIO_DEFAULT from AndEngine
-		player.body.setTransform(200 / 32, 200 / 32, 0);
+		player.getBody().setTransform(200 / 32, 200 / 32, 0);
 		this.attachChild(player);
 
 		// TODO: Define player and portal positions as constant.

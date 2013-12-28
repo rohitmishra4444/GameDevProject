@@ -1,7 +1,7 @@
 package gamedev.game;
 
 import gamedev.hud.SceneHUD;
-import gamedev.objects.Player;
+import gamedev.objects.Avatar;
 import gamedev.scenes.GameMapScene;
 
 import org.andengine.engine.Engine;
@@ -38,7 +38,7 @@ public class ResourcesManager {
 	public BoundCamera camera;
 	public VertexBufferObjectManager vbom;
 	public TextureManager textureManager;
-	public Player player;
+	public Avatar player;
 	public SceneHUD hud;
 	public GameMapScene level;
 
@@ -247,7 +247,7 @@ public class ResourcesManager {
 			physicsWorld = new FixedStepPhysicsWorld(30, new Vector2(0, 0),
 					false, 8, 1);
 			physicsWorld.setContactListener(new BodiesContactListener());
-			player = new Player();
+			player = new Avatar();
 		}
 	}
 

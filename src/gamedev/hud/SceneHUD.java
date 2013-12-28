@@ -2,8 +2,7 @@ package gamedev.hud;
 
 import gamedev.game.GameActivity;
 import gamedev.game.ResourcesManager;
-import gamedev.objects.Player.PlayerState;
-
+import gamedev.objects.AnimatedObject.GameState;
 import org.andengine.engine.camera.hud.HUD;
 import org.andengine.engine.camera.hud.controls.AnalogOnScreenControl;
 import org.andengine.entity.modifier.ScaleModifier;
@@ -88,18 +87,10 @@ public class SceneHUD extends HUD {
 
 					// Stop the currently animation if it is not already
 					// attacking.
-					if (!resourcesManager.player.getState().equals(
-							PlayerState.ATTACK)) {
+					if (resourcesManager.player.getState() != GameState.ATTACK) {
 						resourcesManager.player.stopAnimation();
 					}
-					
-					resourcesManager.player.setState(PlayerState.ATTACK, -1);
-					if (!resourcesManager.player.getAttackers().isEmpty()) {
-						// Attack the first dinosaur
-						resourcesManager.player.getAttackers().get(0)
-								.attack(50);
-					}
-										
+					resourcesManager.player.setState(GameState.ATTACK, -1);										
 				}
 
 				return true;
