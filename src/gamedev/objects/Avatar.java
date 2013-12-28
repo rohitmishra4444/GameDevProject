@@ -70,7 +70,7 @@ public class Avatar extends AnimatedObject {
 				loopAnimation = true;
 				break;
 			default:
-				break;
+				return;
 		}
 		
 		int startTile = rowIndex * TILES_PER_LINE + this.direction * FRAMES_PER_ANIMATION;

@@ -43,7 +43,7 @@ public class GameMapScene extends BaseScene {
 		// Call BaseScene without calling createScene because here we need some
 		// stuff initialized before
 		super(false);
-		this.player = this.resourcesManager.player;
+		this.player = this.resourcesManager.avatar;
 		this.tmxFileName = "level.tmx";
 		this.createScene();
 		this.resourcesManager.level = this;

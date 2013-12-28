@@ -38,7 +38,7 @@ public class ResourcesManager {
 	public BoundCamera camera;
 	public VertexBufferObjectManager vbom;
 	public TextureManager textureManager;
-	public Avatar player;
+	public Avatar avatar;
 	public SceneHUD hud;
 	public GameMapScene level;
 
@@ -243,11 +243,11 @@ public class ResourcesManager {
 
 		// TODO: Refactor. This should not be created here, rather in
 		// LevelScene.
-		if (physicsWorld == null || player == null) {
+		if (physicsWorld == null || avatar == null) {
 			physicsWorld = new FixedStepPhysicsWorld(30, new Vector2(0, 0),
 					false, 8, 1);
 			physicsWorld.setContactListener(new BodiesContactListener());
-			player = new Avatar();
+			avatar = new Avatar();
 		}
 	}
 

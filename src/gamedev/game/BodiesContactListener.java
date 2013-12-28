@@ -7,7 +7,7 @@ import com.badlogic.gdx.physics.box2d.*;
 
 public class BodiesContactListener implements ContactListener {
 	
-	protected Avatar player = ResourcesManager.getInstance().player;
+	protected Avatar player = ResourcesManager.getInstance().avatar;
 	
 	@Override
 	public void beginContact(Contact contact) {

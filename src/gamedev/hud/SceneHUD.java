@@ -87,10 +87,10 @@ public class SceneHUD extends HUD {
 
 					// Stop the currently animation if it is not already
 					// attacking.
-					if (resourcesManager.player.getState() != GameState.ATTACK) {
-						resourcesManager.player.stopAnimation();
+					if (resourcesManager.avatar.getState() != GameState.ATTACK) {
+						resourcesManager.avatar.stopAnimation();
 					}
-					resourcesManager.player.setState(GameState.ATTACK, -1);										
+					resourcesManager.avatar.setState(GameState.ATTACK, -1);										
 				}
 
 				return true;

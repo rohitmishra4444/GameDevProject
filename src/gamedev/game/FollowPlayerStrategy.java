@@ -28,7 +28,7 @@ public class FollowPlayerStrategy extends MoveStrategy {
 	@Override
 	public boolean update(float time) {
 		Vector2 bodyPos = this.object.getBody().getPosition();
-		Vector2 playerPos = this.resourcesManager.player.getBody().getPosition();
+		Vector2 playerPos = this.resourcesManager.avatar.getBody().getPosition();
 		float distance = MathUtils.distance(bodyPos.x, bodyPos.y, playerPos.x, playerPos.y);
 		if (distance <= this.radius) {
 			this.object.moveTo(playerPos, GameState.CHASE_PLAYER);

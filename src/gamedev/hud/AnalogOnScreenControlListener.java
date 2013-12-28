@@ -19,7 +19,7 @@ public class AnalogOnScreenControlListener implements
 
 		// Avoid nullpointer, needs to be resourcesManager.player, since
 		// it is final here
-		if (resourcesManager.player == null) {
+		if (resourcesManager.avatar == null) {
 			return;
 		}
 
@@ -27,13 +27,12 @@ public class AnalogOnScreenControlListener implements
 			// Only set the player to idle if state is not attack or animation
 			// is not running. This is needed, because when the state is attack
 			// x and y can also be 0.
-			if (!resourcesManager.player.getState().equals(GameState.ATTACK)
-					|| !resourcesManager.player.isAnimationRunning()) {
-				resourcesManager.player.setState(GameState.IDLE, -1);
+			if (resourcesManager.avatar.getState() != GameState.ATTACK || !resourcesManager.avatar.isAnimationRunning()) {
+				resourcesManager.avatar.setState(GameState.IDLE, -1);
 			}
 		} else {
 			GameState state = resourcesManager.hud.isTouchedSecondaryButton() ? GameState.RUNNING: GameState.WALKING;
-			resourcesManager.player.setVelocity(pValueX, pValueY, state);
+			resourcesManager.avatar.setVelocity(pValueX, pValueY, state);
 		}
 
 	}
