@@ -236,9 +236,7 @@ public class CopyOfPlayer extends AnimatedSprite {
 	}
 
 	protected void createAndConnectPhysics() {
-		this.body = PhysicsFactory.createBoxBody(resourcesManager.physicsWorld,
-				this, BodyType.DynamicBody,
-				PhysicsFactory.createFixtureDef(0, 0, 0));
+		this.body = PhysicsFactory.createBoxBody(resourcesManager.physicsWorld, this, BodyType.DynamicBody, PhysicsFactory.createFixtureDef(0, 0, 0));
 		this.body.setUserData("Player");
 		this.physicsHandler = new PhysicsHandler(this);
 		this.registerUpdateHandler(this.physicsHandler);

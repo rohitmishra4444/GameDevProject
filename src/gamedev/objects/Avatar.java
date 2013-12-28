@@ -34,53 +34,47 @@ public class Avatar extends AnimatedObject {
 
 	public void setState(GameState state, int direction) {
 		
-		// TODO REFACTOR!
-		boolean stateHasChanged = false;
-		if (this.state != state && !this.isAnimationRunning()) {
-			this.state = state;
-			stateHasChanged = true;
-		}
-
-		// Stop animation if state is idle.
-		if (state == GameState.IDLE) {
-			this.body.setLinearVelocity(0, 0);
-			this.stopAnimation();
-			this.setEnergy(this.energy + 1);
+		if (state == this.state && (direction == -1 || direction == this.direction)) {
 			return;
 		}
-
-		// Check if direction has changed.
-		boolean directionHasChanged = false;
-		if (direction > -1 && this.direction != direction) {
-			this.direction = direction;
-			directionHasChanged = true;
-		}
-
-		// Change animation if no animation is running or if the direction has
-		// changed.
-		if (!this.isAnimationRunning() || directionHasChanged
-				|| stateHasChanged) {
-			int rowIndex = 0;
-			if (state == GameState.ATTACK)
+		
+		this.state = state;
+		if (direction != -1) this.direction = direction;
+		int rowIndex = 0;
+		boolean loopAnimation = false;
+		
+		switch (state) {
+			case IDLE:
+				this.body.setLinearVelocity(0, 0);
+				this.stopAnimation();
+				// TODO Give some amount of energy back after a certain level
+				return;
+			case ATTACK:
 				rowIndex = 0;
-			if (state == GameState.BEEN_HIT)
+				this.body.setLinearVelocity(0, 0);
+				break;
+			case BEEN_HIT:
 				rowIndex = 4;
-			if (state == GameState.RUNNING)
+				this.body.setLinearVelocity(0, 0);
+				break;
+			case RUNNING:
 				rowIndex = 8;
-			if (state == GameState.TIPPING_OVER)
+				loopAnimation = true;
+				break;
+			case TIPPING_OVER:
 				rowIndex = 12;
-			if (state == GameState.WALKING)
+				this.body.setLinearVelocity(0, 0);
+				break;
+			case WALKING:
 				rowIndex = 16;
-
-			// Do not loop animation since it will be looped automatically when
-			// the animation is over.
-			boolean loopAnimation = false;
-
-			int startTile = rowIndex * TILES_PER_LINE + this.direction
-					* FRAMES_PER_ANIMATION;
-			this.animate(ANIMATION_DURATION, startTile, startTile
-					+ FRAMES_PER_ANIMATION - 1, loopAnimation);
+				loopAnimation = true;
+				break;
+			default:
+				break;
 		}
+		
+		int startTile = rowIndex * TILES_PER_LINE + this.direction * FRAMES_PER_ANIMATION;
+		this.animate(ANIMATION_DURATION, startTile, startTile + FRAMES_PER_ANIMATION - 1, loopAnimation);
 	}
 
 
