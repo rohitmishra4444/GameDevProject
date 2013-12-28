@@ -1,11 +1,8 @@
 package gamedev.objects;
-import org.andengine.extension.physics.box2d.PhysicsConnector;
-import org.andengine.extension.physics.box2d.PhysicsFactory;
 
 import gamedev.game.FollowPlayerStrategy;
+import gamedev.game.RandomMoveStrategy;
 import gamedev.game.ResourcesManager;
-
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
 public class Dinosaur extends AnimatedObject {
 	
@@ -37,7 +34,7 @@ public class Dinosaur extends AnimatedObject {
 			this.factorRunning = 2f;
 			this.radius = 10f;
 		} 
-		this.moveStrategy = new FollowPlayerStrategy(this, 0, this.radius);
+		this.moveStrategy = new FollowPlayerStrategy(this, this.radius, new RandomMoveStrategy(this, 4, 10, 5));
 	}
 
 	@Override

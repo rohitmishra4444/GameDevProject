@@ -55,6 +55,11 @@ public class TmxLevelLoader {
 		this.scene.attachChild(d);
 		d.setMoveStrategy(new SimpleMoveStrategy(d, new Vector2(5,5), GameState.WALKING));
 		
+		Dinosaur d2 = new Dinosaur(800, 800, Dinosaur.COLOR_GREEN);
+		this.scene.attachChild(d2);
+		d2.setMoveStrategy(new RandomMoveStrategy(d2, 3, 5, 3));
+		
+		
 		// TODO: Create portal object from tmx map.
 		// TODO: Create cave object from tmx map.
 	}

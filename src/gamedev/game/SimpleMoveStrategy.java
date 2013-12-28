@@ -1,6 +1,5 @@
 package gamedev.game;
 
-import org.andengine.util.math.MathUtils;
 import gamedev.objects.AnimatedObject;
 import gamedev.objects.AnimatedObject.GameState;
 import com.badlogic.gdx.math.Vector2;
@@ -23,7 +22,8 @@ public class SimpleMoveStrategy extends MoveStrategy {
 		Vector2 bodyPos = this.object.getBody().getPosition();
 		this.object.moveTo(moveTo, state);
 		// Calculate the duration needed for movement
-		this.duration = MathUtils.distance(bodyPos.x, bodyPos.y, moveTo.x, moveTo.y) / this.object.getBody().getLinearVelocity().len();
+		this.duration = calculateDuration(bodyPos, moveTo, this.object.getBody().getLinearVelocity());
+//		System.out.println("Move from " + bodyPos + " to point " + moveTo + ", needed time is " + this.duration);
 	}
 	
 	@Override
@@ -32,7 +32,7 @@ public class SimpleMoveStrategy extends MoveStrategy {
 			return false;
 		}
 		this.time += time;
-		if (this.time > this.duration) {
+		if (this.time >= this.duration) {
 			this.reachedGoal = true;
 			// TODO Maybe make this state configurable?
 			this.object.setState(GameState.LOOKING, -1);
