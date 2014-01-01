@@ -5836,7 +5836,7 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="0"/>
+   <tile gid="328"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -5919,7 +5919,7 @@
    <tile gid="75"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="0"/>
+   <tile gid="328"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -6130,7 +6130,7 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="0"/>
+   <tile gid="328"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -10036,10 +10036,10 @@
    <tile gid="69"/>
    <tile gid="70"/>
    <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
+   <tile gid="177"/>
+   <tile gid="433"/>
+   <tile gid="434"/>
+   <tile gid="182"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -10136,10 +10136,10 @@
    <tile gid="101"/>
    <tile gid="102"/>
    <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
+   <tile gid="177"/>
+   <tile gid="465"/>
+   <tile gid="466"/>
+   <tile gid="182"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -10236,10 +10236,10 @@
    <tile gid="133"/>
    <tile gid="134"/>
    <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
+   <tile gid="209"/>
+   <tile gid="497"/>
+   <tile gid="498"/>
+   <tile gid="214"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -45055,5 +45055,13 @@
  <objectgroup name="GreenDinosaurs" width="100" height="50">
   <object x="913" y="54" width="10" height="11"/>
   <object x="1055" y="518" width="11" height="11"/>
+ </objectgroup>
+ <objectgroup name="ShopCave" width="100" height="50">
+  <object x="778" y="26" width="39" height="56"/>
+ </objectgroup>
+ <objectgroup name="BerriesCollectable" width="100" height="50">
+  <object x="879" y="272"/>
+  <object x="687" y="370"/>
+  <object x="336" y="303"/>
  </objectgroup>
 </map>
