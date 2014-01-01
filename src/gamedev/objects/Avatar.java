@@ -2,6 +2,9 @@ package gamedev.objects;
 
 import gamedev.game.Direction;
 import gamedev.game.ResourcesManager;
+
+import java.util.ArrayList;
+
 import org.andengine.engine.handler.physics.PhysicsHandler;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
@@ -17,6 +20,7 @@ public class Avatar extends AnimatedObject {
 	public final static int TILES_PER_LINE = 16;
 
 	protected int energy = 100;
+	protected ArrayList<Berry> berryInventory = new ArrayList<Berry>();
 
 	public Avatar(float pX, float pY) {
 		super(pX, pY, ResourcesManager.getInstance().playerRegion);
@@ -33,50 +37,53 @@ public class Avatar extends AnimatedObject {
 	}
 
 	public void setState(GameState state, int direction) {
-		
-		if (state == this.state && (direction == -1 || direction == this.direction)) {
+
+		if (state == this.state
+				&& (direction == -1 || direction == this.direction)) {
 			return;
 		}
-		
+
 		this.state = state;
-		if (direction != -1) this.direction = direction;
+		if (direction != -1)
+			this.direction = direction;
 		int rowIndex = 0;
 		boolean loopAnimation = false;
-		
-		switch (state) {
-			case IDLE:
-				this.body.setLinearVelocity(0, 0);
-				this.stopAnimation();
-				// TODO Give some amount of energy back after a certain level
-				return;
-			case ATTACK:
-				rowIndex = 0;
-				this.body.setLinearVelocity(0, 0);
-				break;
-			case BEEN_HIT:
-				rowIndex = 4;
-				this.body.setLinearVelocity(0, 0);
-				break;
-			case RUNNING:
-				rowIndex = 8;
-				loopAnimation = true;
-				break;
-			case TIPPING_OVER:
-				rowIndex = 12;
-				this.body.setLinearVelocity(0, 0);
-				break;
-			case WALKING:
-				rowIndex = 16;
-				loopAnimation = true;
-				break;
-			default:
-				return;
-		}
-		
-		int startTile = rowIndex * TILES_PER_LINE + this.direction * FRAMES_PER_ANIMATION;
-		this.animate(ANIMATION_DURATION, startTile, startTile + FRAMES_PER_ANIMATION - 1, loopAnimation);
-	}
 
+		switch (state) {
+		case IDLE:
+			this.body.setLinearVelocity(0, 0);
+			this.stopAnimation();
+			// TODO Give some amount of energy back after a certain level
+			return;
+		case ATTACK:
+			rowIndex = 0;
+			this.body.setLinearVelocity(0, 0);
+			break;
+		case BEEN_HIT:
+			rowIndex = 4;
+			this.body.setLinearVelocity(0, 0);
+			break;
+		case RUNNING:
+			rowIndex = 8;
+			loopAnimation = true;
+			break;
+		case TIPPING_OVER:
+			rowIndex = 12;
+			this.body.setLinearVelocity(0, 0);
+			break;
+		case WALKING:
+			rowIndex = 16;
+			loopAnimation = true;
+			break;
+		default:
+			return;
+		}
+
+		int startTile = rowIndex * TILES_PER_LINE + this.direction
+				* FRAMES_PER_ANIMATION;
+		this.animate(ANIMATION_DURATION, startTile, startTile
+				+ FRAMES_PER_ANIMATION - 1, loopAnimation);
+	}
 
 	/**
 	 * Set the velocity direction. Speed is calculated based on state
@@ -108,7 +115,7 @@ public class Avatar extends AnimatedObject {
 	public void onManagedUpdate(float pSecondsElapsed) {
 		super.onManagedUpdate(pSecondsElapsed);
 	}
-	
+
 	/**
 	 * Getters & Setters
 	 */
@@ -124,23 +131,29 @@ public class Avatar extends AnimatedObject {
 	}
 
 	public void setEnergy(int energy) {
-		if (energy > 100) energy = 100;
+		if (energy > 100)
+			energy = 100;
 		this.energy = Math.max(energy, 0);
 		this.resourcesManager.hud.setEnergy(this.energy);
 	}
-	
+
 	@Override
 	protected void createPhysic() {
-		this.body = PhysicsFactory.createBoxBody(resourcesManager.physicsWorld, this, BodyType.DynamicBody, PhysicsFactory.createFixtureDef(0, 0, 0));
+		this.body = PhysicsFactory.createBoxBody(resourcesManager.physicsWorld,
+				this, BodyType.DynamicBody,
+				PhysicsFactory.createFixtureDef(0, 0, 0));
+		this.body.setUserData("Avatar");
 		this.physicsHandler = new PhysicsHandler(this);
 		this.registerUpdateHandler(this.physicsHandler);
-		this.resourcesManager.physicsWorld.registerPhysicsConnector(new PhysicsConnector(this, this.body, true, false) {
-			@Override
-			public void onUpdate(float pSecondsElapsed) {
-				super.onUpdate(pSecondsElapsed);
-				resourcesManager.camera.updateChaseEntity();
-			}
-		});
+		this.resourcesManager.physicsWorld
+				.registerPhysicsConnector(new PhysicsConnector(this, this.body,
+						true, false) {
+					@Override
+					public void onUpdate(float pSecondsElapsed) {
+						super.onUpdate(pSecondsElapsed);
+						resourcesManager.camera.updateChaseEntity();
+					}
+				});
 	}
 
 	@Override
@@ -148,4 +161,14 @@ public class Avatar extends AnimatedObject {
 		this.setState(GameState.IDLE, Direction.SOUTH);
 	}
 
+	public void addBerryToInventory(Berry berry) {
+		this.berryInventory.add(berry);
+		System.out.println("Berry added! New size: "
+				+ this.berryInventory.size());
+		resourcesManager.hud.berryCounter.onUpdate(0);
+	}
+
+	public int getBerrySize() {
+		return this.berryInventory.size();
+	}
 }

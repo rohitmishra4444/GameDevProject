@@ -75,6 +75,8 @@ public class ResourcesManager {
 	public BitmapTextureAtlas controlTexture;
 	public TextureRegion controlBaseTextureRegion;
 	public TextureRegion controlKnobTextureRegion;
+	private BitmapTextureAtlas hudBerryAtlas;
+	public TextureRegion hudBerryRegion;
 
 	// Textures for splash scene
 	public ITextureRegion splash_region;
@@ -242,7 +244,7 @@ public class ResourcesManager {
 		loadHUDResources();
 
 		// TODO: Refactor. This should not be created here, rather in
-		// LevelScene.
+		// GameMapScene.
 		if (physicsWorld == null || avatar == null) {
 			physicsWorld = new FixedStepPhysicsWorld(30, new Vector2(0, 0),
 					false, 8, 1);
@@ -390,7 +392,9 @@ public class ResourcesManager {
 	}
 
 	public void unloadHUDResources() {
-		camera.setHUD(null);
+		this.camera.setHUD(null);
+		this.hud.detachSelf();
+		this.hud.dispose();
 		unloadHUDGraphics();
 	}
 
@@ -405,6 +409,12 @@ public class ResourcesManager {
 		this.controlKnobTextureRegion = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(this.controlTexture, activity,
 						"onscreen_control_knob.png", 128, 0);
+
+		this.hudBerryAtlas = new BitmapTextureAtlas(textureManager, 50, 39,
+				TextureOptions.BILINEAR);
+		this.hudBerryRegion = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(this.hudBerryAtlas, activity,
+						"berries_small.png", 0, 0);
 	}
 
 	private void loadHUDGraphics() {
@@ -415,9 +425,11 @@ public class ResourcesManager {
 			controlTexture.load();
 			controlTextureLoaded = true;
 		}
+		hudBerryAtlas.load();
 	}
 
 	private void unloadHUDGraphics() {
+		hudBerryAtlas.unload();
 		controlTexture.unload();
 		controlTextureLoaded = false;
 	}

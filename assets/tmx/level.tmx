@@ -45059,7 +45059,7 @@
  <objectgroup name="ShopCave" width="100" height="50">
   <object x="778" y="26" width="39" height="56"/>
  </objectgroup>
- <objectgroup name="BerriesCollectable" width="100" height="50">
+ <objectgroup name="BerryBushes" width="100" height="50">
   <object x="879" y="272"/>
   <object x="687" y="370"/>
   <object x="336" y="303"/>

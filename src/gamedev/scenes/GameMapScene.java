@@ -6,9 +6,6 @@ import gamedev.game.TmxLevelLoader;
 import gamedev.objects.Avatar;
 
 import org.andengine.entity.IEntity;
-import org.andengine.entity.modifier.LoopEntityModifier;
-import org.andengine.entity.modifier.ScaleModifier;
-import org.andengine.entity.sprite.Sprite;
 import org.andengine.extension.tmx.TMXLayer;
 import org.andengine.extension.tmx.TMXLoader;
 import org.andengine.extension.tmx.TMXLoader.ITMXTilePropertiesListener;
@@ -33,11 +30,11 @@ public class GameMapScene extends BaseScene {
 	// Player. Each level has to create the Player and its position in the world
 	protected Avatar player;
 
-//	private Sprite gameEndPortal;
-//	private Sprite cave;
+	// private Sprite gameEndPortal;
+	// private Sprite cave;
 
-//	private static final int MIN_DINOS_TO_KILL = 1;
-//	private int dinosKilled = 0;
+	// private static final int MIN_DINOS_TO_KILL = 1;
+	// private int dinosKilled = 0;
 
 	public GameMapScene() {
 		// Call BaseScene without calling createScene because here we need some
@@ -53,33 +50,35 @@ public class GameMapScene extends BaseScene {
 	public void createScene() {
 		this.createMap();
 		this.connectPhysics();
-//		assert (player != null);
-//		// Check if the player is already has a parent (avoid
-//		// assertEntityHasNoParent IllegalStateException)
-//		if (player.hasParent()) {
-//			IEntity parentEntity = player.getParent();
-//			parentEntity.detachChild(player);
-//		}
+		assert (player != null);
+		// Check if the player is already has a parent (avoid
+		// assertEntityHasNoParent IllegalStateException)
+		// This is needed for the back button during gameplay (for restarting a
+		// new game).
+		if (player.hasParent()) {
+			IEntity parentEntity = player.getParent();
+			parentEntity.detachChild(player);
+		}
 		// 32 is the PIXEL_TO_METER_RATIO_DEFAULT from AndEngine
 		player.getBody().setTransform(200 / 32, 200 / 32, 0);
 		this.attachChild(player);
 
 		// TODO: Define player and portal positions as constant.
 		// TODO: Game end portal should be created in TmxLevelLoader class.
-//		gameEndPortal = new Sprite(1200, 300,
-//				resourcesManager.gameEndPortalRegion, vbom) {
-//			@Override
-//			protected void onManagedUpdate(float pSecondsElapsed) {
-//				super.onManagedUpdate(pSecondsElapsed);
-//				if (player.collidesWith(this) && areLevelRulesCompleted()) {
-//					SceneManager.getInstance().loadGameEndScene(engine);
-//				}
-//			}
-//		};
-//		gameEndPortal.setAlpha(0.9f);
-//		gameEndPortal.registerEntityModifier(new LoopEntityModifier(
-//				new ScaleModifier(2, 0.95f, 1.05f)));
-//		this.attachChild(gameEndPortal);
+		// gameEndPortal = new Sprite(1200, 300,
+		// resourcesManager.gameEndPortalRegion, vbom) {
+		// @Override
+		// protected void onManagedUpdate(float pSecondsElapsed) {
+		// super.onManagedUpdate(pSecondsElapsed);
+		// if (player.collidesWith(this) && areLevelRulesCompleted()) {
+		// SceneManager.getInstance().loadGameEndScene(engine);
+		// }
+		// }
+		// };
+		// gameEndPortal.setAlpha(0.9f);
+		// gameEndPortal.registerEntityModifier(new LoopEntityModifier(
+		// new ScaleModifier(2, 0.95f, 1.05f)));
+		// this.attachChild(gameEndPortal);
 	}
 
 	protected void connectPhysics() {
@@ -137,15 +136,15 @@ public class GameMapScene extends BaseScene {
 		this.dispose();
 	}
 
-//	public void killedDino() {
-//		this.dinosKilled++;
-//	}
+	// public void killedDino() {
+	// this.dinosKilled++;
+	// }
 
-//	private boolean areLevelRulesCompleted() {
-//		if (dinosKilled >= MIN_DINOS_TO_KILL) {
-//			return true;
-//		}
-//		return false;
-//	}
+	// private boolean areLevelRulesCompleted() {
+	// if (dinosKilled >= MIN_DINOS_TO_KILL) {
+	// return true;
+	// }
+	// return false;
+	// }
 
 }

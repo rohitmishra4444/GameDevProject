@@ -1,8 +1,9 @@
 package gamedev.game;
 
+import gamedev.objects.AnimatedObject.GameState;
+import gamedev.objects.BerryBush;
 import gamedev.objects.Dinosaur;
 import gamedev.objects.Tree;
-import gamedev.objects.AnimatedObject.GameState;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -16,6 +17,7 @@ import org.andengine.extension.tmx.TMXObjectGroup;
 import org.andengine.extension.tmx.TMXTiledMap;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 
@@ -46,20 +48,26 @@ public class TmxLevelLoader {
 				this.createTrees(group.getTMXObjects());
 			} else if (group.getName().equals("GreenDinosaurs")) {
 				this.createDinosaurs(group.getTMXObjects());
+			} else if (group.getName().equals("BerryBushes")) {
+				this.createBerryBushes(group.getTMXObjects());
+			} else if (group.getName().equals("ShopCave")) {
+				this.createShopCave(group.getTMXObjects());
 			}
+
 		}
-		
+
 		// TODO REMOVE TEST FOR MOVE-STRATEGIES
-		// Create a dinosaur with a different move strategy. the dino simply walks to point 5,5 (meters = *32 for pixels)
+		// Create a dinosaur with a different move strategy. the dino simply
+		// walks to point 5,5 (meters = *32 for pixels)
 		Dinosaur d = new Dinosaur(600, 600, Dinosaur.COLOR_GREEN);
 		this.scene.attachChild(d);
-		d.setMoveStrategy(new SimpleMoveStrategy(d, new Vector2(5,5), GameState.WALKING));
-		
+		d.setMoveStrategy(new SimpleMoveStrategy(d, new Vector2(5, 5),
+				GameState.WALKING));
+
 		Dinosaur d2 = new Dinosaur(800, 800, Dinosaur.COLOR_GREEN);
 		this.scene.attachChild(d2);
 		d2.setMoveStrategy(new RandomMoveStrategy(d2, 3, 5, 3));
-		
-		
+
 		// TODO: Create portal object from tmx map.
 		// TODO: Create cave object from tmx map.
 	}
@@ -71,8 +79,10 @@ public class TmxLevelLoader {
 					this.resourcesManager.vbom);
 			final FixtureDef boxFixtureDef = PhysicsFactory.createFixtureDef(0,
 					0, 0);
-			PhysicsFactory.createBoxBody(this.resourcesManager.physicsWorld,
-					rect, BodyType.StaticBody, boxFixtureDef);
+			Body body = PhysicsFactory.createBoxBody(
+					this.resourcesManager.physicsWorld, rect,
+					BodyType.StaticBody, boxFixtureDef);
+			body.setUserData("Boundary");
 			rect.setVisible(false);
 			this.scene.attachChild(rect);
 		}
@@ -88,7 +98,44 @@ public class TmxLevelLoader {
 
 	protected void createDinosaurs(ArrayList<TMXObject> objects) {
 		for (final TMXObject object : objects) {
-			this.scene.attachChild(new Dinosaur(object.getX(), object.getY(), Dinosaur.COLOR_GREEN));
+			this.scene.attachChild(new Dinosaur(object.getX(), object.getY(),
+					Dinosaur.COLOR_GREEN));
+		}
+	}
+
+	protected void createBerryBushes(ArrayList<TMXObject> objects) {
+		for (final TMXObject object : objects) {
+			BerryBush berryBush = new BerryBush(object.getX(), object.getY());
+
+			final Rectangle rect = new Rectangle(object.getX(), object.getY(),
+					object.getWidth(), object.getHeight(),
+					this.resourcesManager.vbom);
+			final FixtureDef boxFixtureDef = PhysicsFactory.createFixtureDef(0,
+					0, 0);
+			Body body = PhysicsFactory.createBoxBody(
+					this.resourcesManager.physicsWorld, rect,
+					BodyType.StaticBody, boxFixtureDef);
+			body.setUserData(berryBush);
+			rect.setVisible(false);
+			this.scene.attachChild(rect);
+			System.out.println("BerryBush created and added to scene!");
+		}
+	}
+
+	protected void createShopCave(ArrayList<TMXObject> objects) {
+		for (final TMXObject object : objects) {
+			final Rectangle rect = new Rectangle(object.getX(), object.getY(),
+					object.getWidth(), object.getHeight(),
+					this.resourcesManager.vbom);
+			final FixtureDef boxFixtureDef = PhysicsFactory.createFixtureDef(0,
+					0, 0);
+			Body body = PhysicsFactory.createBoxBody(
+					this.resourcesManager.physicsWorld, rect,
+					BodyType.StaticBody, boxFixtureDef);
+			body.setUserData("ShopCave");
+			rect.setVisible(false);
+			this.scene.attachChild(rect);
+			System.out.println("ShopCave created and added to scene!");
 		}
 	}
 

@@ -172,17 +172,17 @@ public class SceneManager {
 	}
 
 	// ---------------------------------------------
-	// Level Scene
+	// Game Scene
 	// ---------------------------------------------
 
-	public void createLevelScene(final Engine mEngine, boolean restart) {
+	public void createGameMapScene(final Engine mEngine, boolean restart) {
 		disposeCurrentScene(true);
 
 		if (restart) {
 			gameMapScene = null;
 			resourcesManager.unloadGameResources();
 		} else if (restart == false && gameMapScene != null) {
-			loadLevelScene(engine);
+			loadGameMapScene(engine);
 			return;
 		}
 
@@ -192,17 +192,17 @@ public class SceneManager {
 
 		gameMapScene = new GameMapScene();
 
-		loadLevelScene(engine);
+		loadGameMapScene(engine);
 	}
 
-	public void disposeLevelScene() {
+	public void disposeGameMapScene() {
 		if (!gameMapScene.isDisposed()) {
 			gameMapScene.disposeScene();
 		}
 		resourcesManager.unloadGameResources();
 	}
 
-	public void loadLevelScene(final Engine mEngine) {
+	public void loadGameMapScene(final Engine mEngine) {
 		if (!currentSceneType.equals(SceneType.SCENE_LOADING)) {
 			disposeCurrentScene(true);
 		}
@@ -216,7 +216,7 @@ public class SceneManager {
 							setScene(gameMapScene);
 							disposeLoadingScene();
 						} else {
-							createLevelScene(engine, true);
+							createGameMapScene(engine, true);
 						}
 					}
 				}));
@@ -259,7 +259,7 @@ public class SceneManager {
 		}
 
 		if (currentSceneType.equals(SceneType.SCENE_GAME_MAP)) {
-			disposeLevelScene();
+			disposeGameMapScene();
 		} else if (currentSceneType.equals(SceneType.SCENE_GAME_END)) {
 			disposeGameEndScene();
 		} else if (currentSceneType.equals(SceneType.SCENE_MENU)) {

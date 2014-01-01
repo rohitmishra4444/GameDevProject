@@ -3,12 +3,15 @@ package gamedev.hud;
 import gamedev.game.GameActivity;
 import gamedev.game.ResourcesManager;
 import gamedev.objects.AnimatedObject.GameState;
+
 import org.andengine.engine.camera.hud.HUD;
 import org.andengine.engine.camera.hud.controls.AnalogOnScreenControl;
+import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.entity.modifier.ScaleModifier;
 import org.andengine.entity.modifier.SequenceEntityModifier;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.sprite.ButtonSprite;
+import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.util.color.Color;
 
@@ -24,6 +27,9 @@ public class SceneHUD extends HUD {
 
 	protected Rectangle life;
 	protected Rectangle energy;
+
+	protected ButtonSprite berries;
+	public Text berryCounter;
 
 	protected boolean isTouchedPrimary = false;
 	protected boolean isTouchedSecondary = false;
@@ -48,14 +54,51 @@ public class SceneHUD extends HUD {
 		this.attachChild(life);
 		this.attachChild(energy);
 
+		this.berries = new ButtonSprite(cameraWidth - 115, 120,
+				resourcesManager.hudBerryRegion, resourcesManager.vbom) {
+			public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y) {
+				this.registerEntityModifier(new SequenceEntityModifier(
+						new ScaleModifier(0.25f, 1.25f, 1f), new ScaleModifier(
+								0.25f, 1f, 1.25f)));
+
+				if (touchEvent.isActionUp()) {
+					// TODO: Refill health or energy or both (tbd)...
+				}
+
+				return true;
+			}
+		};
+		this.attachChild(berries);
+		this.registerTouchArea(berries);
+
+		String berryInitialString = " 0";
+		this.berryCounter = new Text(cameraWidth - 140, 120,
+				resourcesManager.font, berryInitialString,
+				berryInitialString.length(), resourcesManager.vbom);
+		this.berryCounter.registerUpdateHandler(new IUpdateHandler() {
+			@Override
+			public void onUpdate(float pSecondsElapsed) {
+				berryCounter.setText(String.valueOf(resourcesManager.avatar
+						.getBerrySize()));
+			}
+
+			@Override
+			public void reset() {
+				berryCounter.setText(" 0");
+			}
+
+		});
+		this.berryCounter.setScale(1.5f);
+		this.attachChild(berryCounter);
+
 		createControls();
 		createButtons();
 	}
 
 	protected void createControls() {
 		AnalogOnScreenControlListener controlListener = new AnalogOnScreenControlListener();
-		this.pad = new AnalogOnScreenControl(0, GameActivity.HEIGHT
-				- resourcesManager.controlBaseTextureRegion.getHeight(),
+		this.pad = new AnalogOnScreenControl(20, GameActivity.HEIGHT
+				- resourcesManager.controlBaseTextureRegion.getHeight() - 20,
 				resourcesManager.camera,
 				resourcesManager.controlBaseTextureRegion,
 				resourcesManager.controlKnobTextureRegion, 0.1f, 200,
@@ -90,7 +133,7 @@ public class SceneHUD extends HUD {
 					if (resourcesManager.avatar.getState() != GameState.ATTACK) {
 						resourcesManager.avatar.stopAnimation();
 					}
-					resourcesManager.avatar.setState(GameState.ATTACK, -1);										
+					resourcesManager.avatar.setState(GameState.ATTACK, -1);
 				}
 
 				return true;
@@ -109,10 +152,10 @@ public class SceneHUD extends HUD {
 
 				if (touchEvent.isActionDown()) {
 					isTouchedSecondary = true;
-//					System.out.println("Touched=true");
+					// System.out.println("Touched=true");
 				} else if (touchEvent.isActionUp()) {
 					isTouchedSecondary = false;
-//					System.out.println("Touched=false");
+					// System.out.println("Touched=false");
 				}
 				return true;
 			}

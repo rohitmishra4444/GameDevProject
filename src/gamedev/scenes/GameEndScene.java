@@ -110,7 +110,7 @@ public class GameEndScene extends BaseScene {
 					gameDevelopersText.setVisible(false);
 					SceneManager.getInstance().loadMenuScene(engine);
 					disposeScene();
-					SceneManager.getInstance().disposeLevelScene();
+					SceneManager.getInstance().disposeGameMapScene();
 					lastTouchTime = touchTime;
 				}
 
