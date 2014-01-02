@@ -110,6 +110,15 @@ public class Dinosaur extends AnimatedObject {
 		this.moveStrategy.update(pSecondsElapsed);
 	}
 
+	public float getRadius() {
+		return radius;
+	}
+
+	public void setRadius(float radius) {
+		this.radius = radius;
+	}
+	
+	
 	// /**
 	// * Get a random state. Only state at index 0 - 4 are valid :)
 	// *

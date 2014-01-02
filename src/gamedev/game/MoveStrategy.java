@@ -7,11 +7,16 @@ import gamedev.objects.AnimatedObject;
 
 public abstract class MoveStrategy {
 	
+	public final static int COORDINATES_PIXEL = 0;
+	public final static int COORDINATES_METERS = 1;
+	
+	/** Coordinates for the points in Pixels or Meters */
+	protected int coordinates = 0;
+	
 	protected ResourcesManager resourcesManager;
 	
 	/** Holds the animated object */
-	protected AnimatedObject object;
-		
+	protected AnimatedObject object;	
 	
 	/** Elapsed total time. Can be used inside the update method to sum up the time... */
 	protected float time = 0;
@@ -22,6 +27,16 @@ public abstract class MoveStrategy {
 		this.object = object;
 	}
 	
+	
+	public int getCoordinates() {
+		return coordinates;
+	}
+
+	public void setCoordinates(int coordinates) {
+		this.coordinates = coordinates;
+	}
+
+
 	/**
 	 * Update the strategy
 	 * This method is called from the onManagedUpdate method from the objects
