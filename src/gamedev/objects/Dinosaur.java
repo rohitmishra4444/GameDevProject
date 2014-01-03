@@ -1,5 +1,10 @@
 package gamedev.objects;
 
+import org.andengine.entity.primitive.DrawMode;
+import org.andengine.entity.shape.IShape;
+import org.andengine.extension.debugdraw.primitives.Ellipse;
+import org.andengine.util.color.Color;
+
 import gamedev.game.FollowPlayerStrategy;
 import gamedev.game.RandomMoveStrategy;
 import gamedev.game.ResourcesManager;
@@ -36,9 +41,13 @@ public class Dinosaur extends AnimatedObject {
 			this.factorRunning = 2f;
 			this.radius = 10f;
 		}
-		this.moveStrategy = new FollowPlayerStrategy(this, this.radius,
-				new RandomMoveStrategy(this, 4, 10, 5));
+		this.moveStrategy = new FollowPlayerStrategy(this, this.radius, new RandomMoveStrategy(this, 4, 10, 5));
 		this.getBody().setUserData("Dinosaur");
+		Ellipse e = new Ellipse(x/32, y/32, this.radius*32, this.radius*32, this.resourcesManager.vbom);
+		e.setColor(Color.RED);
+		e.setDrawMode(DrawMode.TRIANGLE_FAN);
+		e.setAlpha(0.1f);
+		this.attachChild(e);
 	}
 
 	@Override
@@ -109,7 +118,12 @@ public class Dinosaur extends AnimatedObject {
 		super.onManagedUpdate(pSecondsElapsed);
 		this.moveStrategy.update(pSecondsElapsed);
 	}
-
+		
+	
+	/**
+	 *	Getters & Setters 
+	 */
+	
 	public float getRadius() {
 		return radius;
 	}

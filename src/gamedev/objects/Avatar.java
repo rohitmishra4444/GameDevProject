@@ -6,6 +6,7 @@ import gamedev.game.ResourcesManager;
 import java.util.ArrayList;
 
 import org.andengine.engine.handler.physics.PhysicsHandler;
+import org.andengine.entity.shape.IShape;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.util.math.MathUtils;
@@ -116,6 +117,7 @@ public class Avatar extends AnimatedObject {
 		super.onManagedUpdate(pSecondsElapsed);
 	}
 
+	
 	/**
 	 * Getters & Setters
 	 */

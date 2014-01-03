@@ -1,7 +1,10 @@
 package gamedev.game;
 
+import gamedev.game.GameActivity.GameMode;
 import gamedev.objects.Berry;
 import gamedev.objects.BerryBush;
+
+import android.widget.Toast;
 
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
@@ -30,17 +33,12 @@ public class BodiesContactListener implements ContactListener {
 		} else if (x2.getBody().getUserData() instanceof BerryBush) {
 			addBerryToAvatarInventory((BerryBush) x2.getBody().getUserData());
 		}
-
-		// if ((x1.getBody().getUserData().equals("Player") &&
-		// x2.getBody().getUserData().equals("StaticObject"))
-		// || (x2.getBody().getUserData().equals("Player") &&
-		// x1.getBody().getUserData().equals("StaticObject"))) {
-		// System.out.println("Contact between player and StaticObject");
-		// Vector2 a = player.body.getLinearVelocity();
-		// a.x = -a.x/2;
-		// a.y = -a.y/2;
-		// player.body.setLinearVelocity(a);
-		// }
+		
+		if ((x1.getBody().getUserData().equals("Avatar") && x2.getBody().getUserData().equals("Dinosaur")) ||
+			 (x2.getBody().getUserData().equals("Avatar") && x1.getBody().getUserData().equals("Dinosaur"))) {
+			GameActivity.mode = GameMode.FIGHTING;
+		}
+		
 	}
 
 	@Override
@@ -64,6 +62,7 @@ public class BodiesContactListener implements ContactListener {
 		Berry berry = berryBush.getBerry();
 		if (berry != null) {
 			resourcesManager.avatar.addBerryToInventory(berry);
+			resourcesManager.activity.toastOnUIThread("Collected berries", Toast.LENGTH_SHORT);
 		}
 	}
 }

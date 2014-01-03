@@ -16,7 +16,13 @@ import org.andengine.ui.activity.BaseGameActivity;
 import android.view.KeyEvent;
 
 public class GameActivity extends BaseGameActivity {
-
+	
+	public enum GameMode {
+		EXPLORING, FIGHTING,
+	}
+	
+	public static GameMode mode = GameMode.EXPLORING;
+	
 	// Game resolution
 	public final static int WIDTH = 800;
 	public final static int HEIGHT = 480;
@@ -26,7 +32,7 @@ public class GameActivity extends BaseGameActivity {
 
 	// Singleton class to load resources and get objects across different Scenes
 	private ResourcesManager resourcesManager;
-
+	
 	@Override
 	public Engine onCreateEngine(EngineOptions pEngineOptions) {
 		// Try to run our game at 60fps
