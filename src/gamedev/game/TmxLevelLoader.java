@@ -115,6 +115,7 @@ public class TmxLevelLoader {
 			Body body = PhysicsFactory.createBoxBody(
 					this.resourcesManager.physicsWorld, rect,
 					BodyType.StaticBody, boxFixtureDef);
+			rect.setUserData(berryBush);
 			body.setUserData(berryBush);
 			rect.setVisible(false);
 			this.scene.attachChild(rect);

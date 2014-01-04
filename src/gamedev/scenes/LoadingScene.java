@@ -26,18 +26,19 @@ public class LoadingScene extends BaseScene implements IProgressListener {
 		attachChild(loadingText);
 
 		// TODO: Improve loading progress. Is not displayed right at the moment.
-		registerUpdateHandler(new TimerHandler(1 / 20.0f, true,
+		this.registerUpdateHandler(new TimerHandler(1 / 20.0f, true,
 				new ITimerCallback() {
 					// Starts a timer for updating out progress
 					@Override
 					public void onTimePassed(final TimerHandler pTimerHandler) {
-						int seconds = (int) engine.getSecondsElapsedTotal();
-						if (seconds > 100)
+						float timerSeconds = pTimerHandler
+								.getTimerSecondsElapsed();
+						if (timerSeconds > 100)
 							// ProgressListeners require the number to be within
 							// 0 and 100.
 							return;
 						else
-							onProgressChanged(seconds);
+							onProgressChanged((int) timerSeconds);
 					}
 				}));
 	}

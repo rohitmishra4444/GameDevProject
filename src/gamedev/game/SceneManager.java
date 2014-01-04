@@ -292,11 +292,11 @@ public class SceneManager {
 		return currentScene;
 	}
 
-	public GameMapScene getCurrentLevelScene() {
+	public GameMapScene getCurrentGameMapScene() {
 		return (GameMapScene) gameMapScene;
 	}
 
-	public boolean isLevelSceneCreated() {
+	public boolean isGameMapSceneCreated() {
 		return (gameMapScene != null && !gameMapScene.isDisposed());
 	}
 

@@ -63,7 +63,7 @@ public class MainMenuScene extends BaseScene implements
 
 	@Override
 	public void onBackKeyPressed() {
-		if (SceneManager.getInstance().isLevelSceneCreated()) {
+		if (SceneManager.getInstance().isGameMapSceneCreated()) {
 			SceneManager.getInstance().loadGameMapScene(engine);
 		} else {
 			// TODO: Warn before quitting the application.
@@ -91,7 +91,7 @@ public class MainMenuScene extends BaseScene implements
 		switch (pMenuItem.getID()) {
 		case MENU_PLAY:
 			boolean restart = false;
-			if (SceneManager.getInstance().isLevelSceneCreated()) {
+			if (SceneManager.getInstance().isGameMapSceneCreated()) {
 				restart = true;
 			}
 			SceneManager.getInstance().createGameMapScene(engine, restart);

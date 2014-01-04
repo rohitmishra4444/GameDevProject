@@ -2,17 +2,31 @@ package gamedev.game;
 
 import gamedev.objects.Berry;
 import gamedev.objects.BerryBush;
+import gamedev.scenes.BaseScene;
 
+import org.andengine.engine.handler.timer.ITimerCallback;
+import org.andengine.engine.handler.timer.TimerHandler;
+import org.andengine.entity.IEntity;
+import org.andengine.entity.IEntityMatcher;
+import org.andengine.entity.primitive.Rectangle;
+import org.andengine.util.color.Color;
+import org.andengine.util.progress.IProgressListener;
+
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 
-public class BodiesContactListener implements ContactListener {
+public class BodiesContactListener implements ContactListener,
+		IProgressListener {
 
 	protected ResourcesManager resourcesManager = ResourcesManager
 			.getInstance();
+	protected BaseScene currentMapScene;
+	private Rectangle collectingBar;
+	private BerryBush berryBush;
 
 	// protected Avatar player = resourcesManager.avatar;
 
@@ -26,9 +40,11 @@ public class BodiesContactListener implements ContactListener {
 				+ " and " + x2.getBody().getUserData());
 
 		if (x1.getBody().getUserData() instanceof BerryBush) {
-			addBerryToAvatarInventory((BerryBush) x1.getBody().getUserData());
+			berryBush = (BerryBush) x1.getBody().getUserData();
+			addCollectingBarToBody(x1.getBody());
 		} else if (x2.getBody().getUserData() instanceof BerryBush) {
-			addBerryToAvatarInventory((BerryBush) x2.getBody().getUserData());
+			berryBush = (BerryBush) x2.getBody().getUserData();
+			addCollectingBarToBody(x2.getBody());
 		}
 
 		// if ((x1.getBody().getUserData().equals("Player") &&
@@ -45,8 +61,10 @@ public class BodiesContactListener implements ContactListener {
 
 	@Override
 	public void endContact(Contact contact) {
-		// TODO Auto-generated method stub
-
+		if (collectingBar != null) {
+			currentMapScene.detachChild(collectingBar);
+			collectingBar = null;
+		}
 	}
 
 	@Override
@@ -60,10 +78,66 @@ public class BodiesContactListener implements ContactListener {
 
 	}
 
-	private void addBerryToAvatarInventory(BerryBush berryBush) {
-		Berry berry = berryBush.getBerry();
-		if (berry != null) {
-			resourcesManager.avatar.addBerryToInventory(berry);
+	@Override
+	public void onProgressChanged(int pProgress) {
+		if (collectingBar == null) {
+			return;
+		}
+
+		if (collectingBar.getWidth() == 0) {
+			addBerryToAvatarInventory();
+			currentMapScene.detachChild(collectingBar);
+			collectingBar = null;
+		} else {
+			collectingBar.setWidth(collectingBar.getWidth() - 1);
+		}
+	}
+
+	private void addCollectingBarToBody(Body body) {
+		collectingBar = new Rectangle(body.getPosition().x / 32 - 32,
+				body.getPosition().y / 32, 100, 10, resourcesManager.vbom);
+		collectingBar.setColor(Color.GREEN);
+		// collectingBar.setAlpha(0.6f);
+		// collectingBar.setScale(0.2f);
+		collectingBar.setVisible(true);
+		collectingBar.registerUpdateHandler(new TimerHandler(0.05f, true,
+				new ITimerCallback() {
+					// Starts a timer for updating out progress
+					@Override
+					public void onTimePassed(final TimerHandler pTimerHandler) {
+						float timerSeconds = pTimerHandler
+								.getTimerSecondsElapsed();
+						if (timerSeconds > 100)
+							// ProgressListeners require the number to be within
+							// 0 and 100.
+							return;
+						else
+							onProgressChanged((int) timerSeconds);
+					}
+				}));
+
+		currentMapScene = SceneManager.getInstance().getCurrentGameMapScene();
+		IEntity berryBushEntity = currentMapScene
+				.getChildByMatcher(new IEntityMatcher() {
+					@Override
+					public boolean matches(IEntity pEntity) {
+						if (pEntity.getUserData() != null
+								&& pEntity.getUserData().equals(berryBush)) {
+							return true;
+						} else {
+							return false;
+						}
+					}
+				});
+		berryBushEntity.attachChild(collectingBar);
+	}
+
+	private void addBerryToAvatarInventory() {
+		if (berryBush != null) {
+			Berry berry = berryBush.getBerry();
+			if (berry != null) {
+				resourcesManager.avatar.addBerryToInventory(berry);
+			}
 		}
 	}
 }

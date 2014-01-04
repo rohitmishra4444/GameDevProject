@@ -76,10 +76,6 @@ public class GameActivity extends BaseGameActivity {
 						// load menu resources, create menu scene
 						// set menu scene using scene manager
 						SceneManager.getInstance().createMenuScene();
-
-						// disposeSplashScene();
-						// READ NEXT ARTICLE FOR THIS PART.
-
 					}
 				}));
 		pOnPopulateSceneCallback.onPopulateSceneFinished();

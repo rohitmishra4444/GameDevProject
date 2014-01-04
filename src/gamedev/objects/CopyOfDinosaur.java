@@ -223,7 +223,7 @@ public class CopyOfDinosaur extends AnimatedSprite {
 			this.dispose();
 
 			GameMapScene levelScene = SceneManager.getInstance()
-					.getCurrentLevelScene();
+					.getCurrentGameMapScene();
 //			levelScene.killedDino();
 			// TODO Add "dead" sprite
 		} else {
