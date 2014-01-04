@@ -59,15 +59,24 @@ public class TmxLevelLoader {
 		// TODO REMOVE TEST FOR MOVE-STRATEGIES
 		// Create a dinosaur with a different move strategy. the dino simply
 		// walks to point 5,5 (meters = *32 for pixels)
-		Dinosaur d = new Dinosaur(600, 600, Dinosaur.COLOR_GREEN);
-		this.scene.attachChild(d);
-		d.setMoveStrategy(new SimpleMoveStrategy(d, new Vector2(5, 5),
-				GameState.WALKING));
+//		Dinosaur d = new Dinosaur(600, 600, Dinosaur.COLOR_GREEN);
+//		this.scene.attachChild(d);
+//		d.setMoveStrategy(new SimpleMoveStrategy(d, new Vector2(100, 100), GameState.WALKING));
 
 		Dinosaur d2 = new Dinosaur(800, 800, Dinosaur.COLOR_GREEN);
 		this.scene.attachChild(d2);
 		d2.setMoveStrategy(new RandomMoveStrategy(d2, 3, 5, 3));
-
+		
+		Dinosaur d3 = new Dinosaur(400, 400, Dinosaur.COLOR_GREEN);
+		this.scene.attachChild(d3);
+		ArrayList<Vector2> wayPoints = new ArrayList<Vector2>();
+		wayPoints.add(new Vector2(400,100));
+		wayPoints.add(new Vector2(600,100));
+		wayPoints.add(new Vector2(600,200));
+		wayPoints.add(new Vector2(400,200));		
+//		d3.setMoveStrategy(new WaypointMoveStrategy(d3, wayPoints, true));		
+//		d3.setMoveStrategy(new WaypointMoveStrategy(d3, wayPoints, false));
+		d3.setMoveStrategy(new FollowPlayerStrategy(d3, d3.getRadius(), new WaypointMoveStrategy(d3, wayPoints, true)));
 		// TODO: Create portal object from tmx map.
 		// TODO: Create cave object from tmx map.
 	}
