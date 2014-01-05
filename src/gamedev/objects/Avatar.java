@@ -111,12 +111,6 @@ public class Avatar extends AnimatedObject {
 		}
 		this.setState(state, direction);
 	}
-
-	@Override
-	public void onManagedUpdate(float pSecondsElapsed) {
-		super.onManagedUpdate(pSecondsElapsed);
-	}
-
 	
 	/**
 	 * Getters & Setters

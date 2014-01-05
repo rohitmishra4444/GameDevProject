@@ -1,8 +1,11 @@
 package gamedev.objects;
 
 import gamedev.game.Direction;
+import gamedev.game.GameActivity;
 import gamedev.game.MoveStrategy;
 import gamedev.game.ResourcesManager;
+import gamedev.game.GameActivity.GameMode;
+
 import org.andengine.engine.handler.physics.PhysicsHandler;
 import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
@@ -86,9 +89,19 @@ public abstract class AnimatedObject extends AnimatedSprite {
 	@Override
 	public void onManagedUpdate(float pSecondsElapsed) {
 		super.onManagedUpdate(pSecondsElapsed);
-		if (this.state == GameState.DEAD) {
-			return;
+//		if (this.state == GameState.DEAD) {
+//			return;
+//		}
+		this.onCustomUpdate(pSecondsElapsed);
+	}
+	
+	public boolean onCustomUpdate(float pSecondsElapsed) {
+		if (this.state == GameState.DEAD) return false;
+		if (GameActivity.mode == GameMode.FIGHTING) {
+			this.body.setLinearVelocity(0, 0);
+			return false;
 		}
+		return true;
 	}
 	
 	/**

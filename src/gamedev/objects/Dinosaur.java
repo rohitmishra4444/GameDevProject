@@ -27,7 +27,7 @@ public class Dinosaur extends AnimatedObject {
 
 	/** Radius inside the Dinosaur attacks/follows the player */
 	protected float radius;
-
+		
 	public Dinosaur(float x, float y, int color) {
 		// TODO Make dinosaurRegion an array holding green on pos 0, red on pos
 		// 1
@@ -42,7 +42,7 @@ public class Dinosaur extends AnimatedObject {
 			this.radius = 10f;
 		}
 		this.moveStrategy = new FollowPlayerStrategy(this, this.radius, new RandomMoveStrategy(this, 4, 10, 5));
-		this.getBody().setUserData("Dinosaur");
+		this.getBody().setUserData(this);
 		Ellipse e = new Ellipse(x/32, y/32, this.radius*32, this.radius*32, this.resourcesManager.vbom);
 		e.setColor(Color.RED);
 		e.setDrawMode(DrawMode.TRIANGLE_FAN);
@@ -77,6 +77,7 @@ public class Dinosaur extends AnimatedObject {
 			rowIndex = 24;
 			this.body.setLinearVelocity(0, 0);
 			loopAnimation = false;
+			this.detachChildren();
 			break;
 		case RUNNING:
 		case CHASE_PLAYER:
@@ -113,12 +114,21 @@ public class Dinosaur extends AnimatedObject {
 				+ FRAMES_PER_ANIMATION - 1, loopAnimation);
 	}
 
+//	@Override
+//	public void onManagedUpdate(float pSecondsElapsed) {
+//		super.onManagedUpdate(pSecondsElapsed);
+//		this.moveStrategy.update(pSecondsElapsed);
+//	}
+	
 	@Override
-	public void onManagedUpdate(float pSecondsElapsed) {
-		super.onManagedUpdate(pSecondsElapsed);
-		this.moveStrategy.update(pSecondsElapsed);
+	public boolean onCustomUpdate(float pSecondsElapsed) {
+		if (!super.onCustomUpdate(pSecondsElapsed)) {
+			return false;
+		} else {
+			this.moveStrategy.update(pSecondsElapsed);
+			return true;
+		}
 	}
-		
 	
 	/**
 	 *	Getters & Setters 
