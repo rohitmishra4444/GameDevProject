@@ -30,14 +30,14 @@ public class SceneHUD extends HUD {
 
 	protected ButtonSprite berries;
 	public Text berryCounter;
+	private static int lifeAdditionFromBerry = 10;
+	private static int energyAdditionFromBerry = 30;
 
 	protected boolean isTouchedPrimary = false;
 	protected boolean isTouchedSecondary = false;
 
 	float cameraWidth = this.resourcesManager.camera.getWidth();
 	float cameraHeight = this.resourcesManager.camera.getHeight();
-
-	private Thread attackThread;
 
 	public SceneHUD() {
 		super();
@@ -62,7 +62,14 @@ public class SceneHUD extends HUD {
 								0.25f, 1f, 1.25f)));
 
 				if (touchEvent.isActionUp()) {
-					// TODO: Refill health or energy or both (tbd)...
+					if (resourcesManager.avatar.removeBerryFromInventory() == true) {
+						int currentLife = resourcesManager.avatar.getLife();
+						resourcesManager.avatar.setLife(currentLife
+								+ lifeAdditionFromBerry);
+						int currentEnergy = resourcesManager.avatar.getEnergy();
+						resourcesManager.avatar.setEnergy(currentEnergy
+								+ energyAdditionFromBerry);
+					}
 				}
 
 				return true;
@@ -127,7 +134,6 @@ public class SceneHUD extends HUD {
 								0.25f, 1f, 1.25f)));
 
 				if (touchEvent.isActionUp()) {
-
 					// Stop the currently animation if it is not already
 					// attacking.
 					if (resourcesManager.avatar.getState() != GameState.ATTACK) {

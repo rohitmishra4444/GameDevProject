@@ -6,7 +6,6 @@ import gamedev.game.ResourcesManager;
 import java.util.ArrayList;
 
 import org.andengine.engine.handler.physics.PhysicsHandler;
-import org.andengine.entity.shape.IShape;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.util.math.MathUtils;
@@ -111,12 +110,15 @@ public class Avatar extends AnimatedObject {
 		}
 		this.setState(state, direction);
 	}
-	
+
 	/**
 	 * Getters & Setters
 	 */
 
 	public void setLife(int life) {
+		if (life > 100) {
+			life = 100;
+		}
 		super.setLife(life);
 		this.resourcesManager.hud.setLife(this.life);
 		// TODO Game over when life == 0
@@ -127,8 +129,9 @@ public class Avatar extends AnimatedObject {
 	}
 
 	public void setEnergy(int energy) {
-		if (energy > 100)
+		if (energy > 100) {
 			energy = 100;
+		}
 		this.energy = Math.max(energy, 0);
 		this.resourcesManager.hud.setEnergy(this.energy);
 	}
@@ -159,9 +162,21 @@ public class Avatar extends AnimatedObject {
 
 	public void addBerryToInventory(Berry berry) {
 		this.berryInventory.add(berry);
-		System.out.println("Berry added! New size: "
-				+ this.berryInventory.size());
 		resourcesManager.hud.berryCounter.onUpdate(0);
+	}
+
+	/**
+	 * Removes a berry from the berry inventory if not empty.
+	 * 
+	 * @return true, if berry successfully removed false, if inventory is empty
+	 */
+	public boolean removeBerryFromInventory() {
+		if (!this.berryInventory.isEmpty()) {
+			this.berryInventory.remove(0);
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	public int getBerrySize() {
