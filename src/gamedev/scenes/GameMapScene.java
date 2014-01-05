@@ -131,6 +131,7 @@ public class GameMapScene extends BaseScene {
 
 	@Override
 	public void disposeScene() {
+		this.camera.setHUD(null);
 		this.detachSelf();
 		this.dispose();
 	}

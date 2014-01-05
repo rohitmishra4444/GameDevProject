@@ -26,7 +26,7 @@ public class LoadingScene extends BaseScene implements IProgressListener {
 		attachChild(loadingText);
 
 		// TODO: Improve loading progress. Is not displayed right at the moment.
-		this.registerUpdateHandler(new TimerHandler(1 / 20.0f, true,
+		this.registerUpdateHandler(new TimerHandler(0.05f, true,
 				new ITimerCallback() {
 					// Starts a timer for updating out progress
 					@Override

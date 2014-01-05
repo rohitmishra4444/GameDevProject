@@ -23,7 +23,7 @@ public class GameShopScene extends BaseScene {
 
 		// TODO: The sprite is not correctly centered yet.
 		float centerX = camera.getCenterX()
-				- resourcesManager.shopRegion.getWidth() / 2 + 400;
+				- resourcesManager.shopRegion.getWidth() / 2 + 380;
 		float centerY = camera.getCenterY()
 				- resourcesManager.shopRegion.getHeight() / 2;
 

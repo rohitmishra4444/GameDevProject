@@ -64,7 +64,7 @@ public class ResourcesManager {
 	public ITextureRegion gameEndPortalRegion;
 
 	// Textures for controls
-	public BitmapTextureAtlas controlTexture;
+	public BitmapTextureAtlas controlTextureAtlas;
 	public TextureRegion controlBaseTextureRegion;
 	public TextureRegion controlKnobTextureRegion;
 	private BitmapTextureAtlas hudBerryAtlas;
@@ -138,7 +138,6 @@ public class ResourcesManager {
 	public void unloadMenuResources() {
 		unloadMenuGraphics();
 		// unloadMenuAudio();
-		unloadMenuFonts();
 	}
 
 	private void createMenuGraphics() {
@@ -216,10 +215,9 @@ public class ResourcesManager {
 	public void loadGameResources() {
 		loadGameGraphics();
 		// TODO:
-		// loadGameFonts();
+		loadMenuFonts();
 		// loadGameAudio();
 		loadHUDResources();
-		loadGameShopResources();
 
 		// TODO: Refactor. This should not be created here, rather in
 		// GameMapScene.
@@ -234,10 +232,8 @@ public class ResourcesManager {
 	public void unloadGameResources() {
 		unloadGameGraphics();
 		// TODO:
-		// unloadGameFonts();
 		// unloadGameAudio();
 		unloadHUDResources();
-		unloadGameShopResources();
 	}
 
 	private void loadGameGraphics() {
@@ -405,20 +401,22 @@ public class ResourcesManager {
 	public void unloadHUDResources() {
 		this.camera.setHUD(null);
 		this.hud.detachSelf();
-		this.hud.dispose();
+		if (!this.hud.isDisposed()) {
+			this.hud.dispose();
+		}
 		unloadHUDGraphics();
 	}
 
 	private void createHUDGraphics() {
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
 
-		this.controlTexture = new BitmapTextureAtlas(textureManager, 256, 128,
-				TextureOptions.BILINEAR);
+		this.controlTextureAtlas = new BitmapTextureAtlas(textureManager, 256,
+				128, TextureOptions.BILINEAR);
 		this.controlBaseTextureRegion = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(this.controlTexture, activity,
+				.createFromAsset(this.controlTextureAtlas, activity,
 						"onscreen_control_base.png", 0, 0);
 		this.controlKnobTextureRegion = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(this.controlTexture, activity,
+				.createFromAsset(this.controlTextureAtlas, activity,
 						"onscreen_control_knob.png", 128, 0);
 
 		this.hudBerryAtlas = new BitmapTextureAtlas(textureManager, 50, 39,
@@ -429,15 +427,15 @@ public class ResourcesManager {
 	}
 
 	private void loadHUDGraphics() {
-		if (controlTexture == null) {
+		if (controlTextureAtlas == null) {
 			createHUDGraphics();
 		}
-		controlTexture.load();
+		controlTextureAtlas.load();
 		hudBerryAtlas.load();
 	}
 
 	private void unloadHUDGraphics() {
-		controlTexture.unload();
+		controlTextureAtlas.unload();
 		hudBerryAtlas.unload();
 	}
 

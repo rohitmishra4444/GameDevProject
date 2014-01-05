@@ -102,12 +102,6 @@ public class SceneManager {
 		splashScene = null;
 	}
 
-	public void disposeLoadingScene() {
-		if (!loadingScene.isDisposed()) {
-			loadingScene.disposeScene();
-		}
-	}
-
 	// ---------------------------------------------
 	// Menu Scene
 	// ---------------------------------------------
@@ -128,11 +122,15 @@ public class SceneManager {
 	public void loadMenuScene(final Engine mEngine) {
 		disposeCurrentScene(true);
 
+		resourcesManager.loadMenuResources();
+		if (menuScene == null) {
+			menuScene = new MainMenuScene();
+		}
+
 		mEngine.registerUpdateHandler(new TimerHandler(0.1f,
 				new ITimerCallback() {
 					public void onTimePassed(final TimerHandler pTimerHandler) {
 						mEngine.unregisterUpdateHandler(pTimerHandler);
-						resourcesManager.loadMenuResources();
 						setScene(menuScene);
 						disposeLoadingScene();
 					}
@@ -160,18 +158,18 @@ public class SceneManager {
 	// delete it after disposing.
 	public void loadIntroScene(final Engine mEngine) {
 		disposeCurrentScene(true);
+
 		resourcesManager.loadIntroResources();
+		if (introScene == null) {
+			introScene = new IntroScene();
+		}
 
 		mEngine.registerUpdateHandler(new TimerHandler(0.1f,
 				new ITimerCallback() {
 					public void onTimePassed(final TimerHandler pTimerHandler) {
-						if (introScene != null) {
-							mEngine.unregisterUpdateHandler(pTimerHandler);
-							setScene(introScene);
-							disposeLoadingScene();
-						} else {
-							introScene = new IntroScene();
-						}
+						mEngine.unregisterUpdateHandler(pTimerHandler);
+						setScene(introScene);
+						disposeLoadingScene();
 					}
 				}));
 	}
@@ -196,7 +194,6 @@ public class SceneManager {
 		}
 
 		gameMapScene = new GameMapScene();
-		createGameShopScene(mEngine);
 
 		loadGameMapScene(engine);
 	}
@@ -212,18 +209,18 @@ public class SceneManager {
 		if (!currentSceneType.equals(SceneType.SCENE_LOADING)) {
 			disposeCurrentScene(true);
 		}
+
 		resourcesManager.loadGameResources();
+		if (gameMapScene == null) {
+			createGameMapScene(engine, true);
+		}
 
 		mEngine.registerUpdateHandler(new TimerHandler(0.1f,
 				new ITimerCallback() {
 					public void onTimePassed(final TimerHandler pTimerHandler) {
-						if (gameMapScene != null) {
-							mEngine.unregisterUpdateHandler(pTimerHandler);
-							setScene(gameMapScene);
-							disposeLoadingScene();
-						} else {
-							createGameMapScene(engine, true);
-						}
+						mEngine.unregisterUpdateHandler(pTimerHandler);
+						setScene(gameMapScene);
+						disposeLoadingScene();
 					}
 				}));
 	}
@@ -232,26 +229,20 @@ public class SceneManager {
 	// GameShop Scene
 	// ---------------------------------------------
 
-	public void createGameShopScene(final Engine mEngine) {
-		gameShopScene = new GameShopScene();
-	}
-
 	public void loadGameShopScene(final Engine mEngine) {
-		if (!currentSceneType.equals(SceneType.SCENE_LOADING)) {
-			disposeCurrentScene(true);
-		}
+		disposeCurrentScene(true);
+
 		resourcesManager.loadGameShopResources();
+		if (gameShopScene == null) {
+			gameShopScene = new GameShopScene();
+		}
 
 		mEngine.registerUpdateHandler(new TimerHandler(0.1f,
 				new ITimerCallback() {
 					public void onTimePassed(final TimerHandler pTimerHandler) {
-						if (gameShopScene != null) {
-							mEngine.unregisterUpdateHandler(pTimerHandler);
-							setScene(gameShopScene);
-							disposeLoadingScene();
-						} else {
-							gameShopScene = new GameShopScene();
-						}
+						mEngine.unregisterUpdateHandler(pTimerHandler);
+						setScene(gameShopScene);
+						disposeLoadingScene();
 					}
 				}));
 	}
@@ -270,14 +261,14 @@ public class SceneManager {
 	public void loadGameEndScene(final Engine mEngine) {
 		disposeCurrentScene(false);
 		resourcesManager.loadGameEndResources();
+		if (gameEndScene == null) {
+			gameEndScene = new GameEndScene();
+		}
 
 		mEngine.registerUpdateHandler(new TimerHandler(0.1f,
 				new ITimerCallback() {
 					public void onTimePassed(final TimerHandler pTimerHandler) {
 						mEngine.unregisterUpdateHandler(pTimerHandler);
-						if (gameEndScene == null) {
-							gameEndScene = new GameEndScene();
-						}
 						setScene(gameEndScene);
 					}
 				}));
@@ -296,10 +287,6 @@ public class SceneManager {
 	 *            true, if you want to show the loading scene
 	 */
 	public void disposeCurrentScene(boolean setLoadingSceneNeeded) {
-		if (setLoadingSceneNeeded) {
-			setLoadingScene();
-		}
-
 		if (currentSceneType.equals(SceneType.SCENE_GAME_MAP)) {
 			disposeGameMapScene();
 		} else if (currentSceneType.equals(SceneType.SCENE_GAME_END)) {
@@ -311,6 +298,10 @@ public class SceneManager {
 		} else if (currentSceneType.equals(SceneType.SCENE_GAME_SHOP)) {
 			disposeGameShopScene();
 		}
+
+		if (setLoadingSceneNeeded) {
+			setLoadingScene();
+		}
 	}
 
 	public void setLoadingScene() {
@@ -318,6 +309,12 @@ public class SceneManager {
 			loadingScene = new LoadingScene();
 		}
 		setScene(loadingScene);
+	}
+
+	public void disposeLoadingScene() {
+		if (!loadingScene.isDisposed()) {
+			loadingScene.disposeScene();
+		}
 	}
 
 	// ---------------------------------------------
@@ -345,7 +342,7 @@ public class SceneManager {
 	}
 
 	public boolean isGameMapSceneCreated() {
-		return (gameMapScene != null && !gameMapScene.isDisposed());
+		return (gameMapScene != null);
 	}
 
 }

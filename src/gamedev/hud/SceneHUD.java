@@ -42,11 +42,19 @@ public class SceneHUD extends HUD {
 	public SceneHUD() {
 		super();
 
-		this.life = new Rectangle(cameraWidth - 150, 20, 100, 20,
+		int avatarLife = 100;
+		int avatarEnergy = 100;
+
+		if (resourcesManager.avatar != null) {
+			avatarLife = resourcesManager.avatar.getLife();
+			avatarEnergy = resourcesManager.avatar.getEnergy();
+		}
+
+		this.life = new Rectangle(cameraWidth - 150, 20, avatarLife, 20,
 				this.resourcesManager.vbom);
 		this.life.setColor(Color.RED);
 		this.life.setAlpha(0.6f);
-		this.energy = new Rectangle(cameraWidth - 150, 50, 100, 20,
+		this.energy = new Rectangle(cameraWidth - 150, 50, avatarEnergy, 20,
 				this.resourcesManager.vbom);
 		this.energy.setColor(Color.BLUE);
 		this.energy.setAlpha(0.6f);
