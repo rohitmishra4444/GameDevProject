@@ -25,3 +25,4 @@ gdbserver
 idea/workspace.xml
 idea/tasks.xml
 project.properties
+org.eclipse.jdt.ui.prefs
