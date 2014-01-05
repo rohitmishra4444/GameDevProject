@@ -43,7 +43,6 @@ public class GameMapScene extends BaseScene {
 		this.player = this.resourcesManager.avatar;
 		this.tmxFileName = "level.tmx";
 		this.createScene();
-		this.resourcesManager.level = this;
 	}
 
 	@Override

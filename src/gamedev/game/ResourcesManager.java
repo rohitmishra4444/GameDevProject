@@ -2,7 +2,6 @@ package gamedev.game;
 
 import gamedev.hud.SceneHUD;
 import gamedev.objects.Avatar;
-import gamedev.scenes.GameMapScene;
 
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.BoundCamera;
@@ -40,7 +39,6 @@ public class ResourcesManager {
 	public TextureManager textureManager;
 	public Avatar avatar;
 	public SceneHUD hud;
-	public GameMapScene level;
 
 	private static boolean gameGraphicsCreated = false;
 	private static boolean gameEndPortalAtlasLoaded = false;
@@ -282,15 +280,14 @@ public class ResourcesManager {
 			dinosaurGreenAtlas.load();
 			dinosaurGreenAtlasLoaded = true;
 		}
-//		if (treesAtlasLoaded == false) {
-//			treesAtlas.load();
-//			treesAtlasLoaded = true;
-//		}
+		// if (treesAtlasLoaded == false) {
+		// treesAtlas.load();
+		// treesAtlasLoaded = true;
+		// }
 
-		spearAtlas.load();			
+		spearAtlas.load();
 		fightAtlas.load();
 
-		
 	}
 
 	private void unloadGameGraphics() {
@@ -303,16 +300,16 @@ public class ResourcesManager {
 		dinosaurGreenAtlas.unload();
 		dinosaurGreenAtlasLoaded = false;
 
-//		treesAtlas.unload();
-//		treesAtlasLoaded = false;
-		
+		// treesAtlas.unload();
+		// treesAtlasLoaded = false;
+
 	}
 
 	private void createGameGraphics() {
 		createGameEndPortalGraphics();
 		createPlayerGraphics();
 		createDinoGraphics();
-//		createTreeGraphics();
+		// createTreeGraphics();
 		createSpearGraphics();
 		createFightbarGraphics();
 		gameGraphicsCreated = true;
@@ -356,24 +353,26 @@ public class ResourcesManager {
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
 
 		this.spearAtlas = new BitmapTextureAtlas(textureManager, 6, 45);
-		this.spearRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.spearAtlas, activity, "spear.png", 0, 0);
-		
-//		BitmapTextureAtlasTextureRegionFactory.createFromAsset(
-//				this.spearsAtlas, activity, "spear.png", 0, 0);
-//
-//		for (int i = 0; i <= 7; i++) {
-//			this.spearsRegions[i] = TextureRegionFactory.extractFromTexture(
-//					this.spearsAtlas, i * 64, 0, 64, 48);
-//		}
+		this.spearRegion = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(this.spearAtlas, activity, "spear.png", 0, 0);
+
+		// BitmapTextureAtlasTextureRegionFactory.createFromAsset(
+		// this.spearsAtlas, activity, "spear.png", 0, 0);
+		//
+		// for (int i = 0; i <= 7; i++) {
+		// this.spearsRegions[i] = TextureRegionFactory.extractFromTexture(
+		// this.spearsAtlas, i * 64, 0, 64, 48);
+		// }
 	}
 
 	private void createFightbarGraphics() {
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
 		this.fightAtlas = new BitmapTextureAtlas(textureManager, 626, 115);
-		this.fightRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.fightAtlas, activity, "fightbar.png", 0, 0);		
+		this.fightRegion = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(this.fightAtlas, activity, "fightbar.png", 0,
+						0);
 	}
 
-	
 	private void createTreeGraphics() {
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
 

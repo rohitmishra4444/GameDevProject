@@ -1,25 +1,21 @@
 package gamedev.game;
 
 import gamedev.game.GameActivity.GameMode;
+import gamedev.objects.AnimatedObject.GameState;
 import gamedev.objects.Berry;
 import gamedev.objects.BerryBush;
-import gamedev.scenes.BaseScene;
 import gamedev.objects.Dinosaur;
-import gamedev.objects.AnimatedObject.GameState;
 import gamedev.scenes.FightScene;
-
-import android.widget.Toast;
-
+import gamedev.scenes.GameMapScene;
 
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
-import org.andengine.entity.IEntity;
-import org.andengine.entity.IEntityMatcher;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.util.color.Color;
 import org.andengine.util.progress.IProgressListener;
 
-import com.badlogic.gdx.physics.box2d.Body;
+import android.widget.Toast;
+
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
@@ -31,52 +27,73 @@ public class BodiesContactListener implements ContactListener,
 
 	protected ResourcesManager resourcesManager = ResourcesManager
 			.getInstance();
-	protected BaseScene currentMapScene;
+	protected GameMapScene currentMapScene;
 	private Rectangle collectingBar;
 	private BerryBush berryBush;
-
-	// protected Avatar player = resourcesManager.avatar;
+	// Duration of collecting a berry:
+	private static final float COLLECTING_BAR_WIDTH = 50;
 
 	@Override
 	public void beginContact(Contact contact) {
+		currentMapScene = SceneManager.getInstance().getCurrentGameMapScene();
+
 		final Fixture x1 = contact.getFixtureA();
 		final Fixture x2 = contact.getFixtureB();
-		if (x1.getBody() == null || x2.getBody() == null || x1.getBody().getUserData() == null || x2.getBody().getUserData() == null)
+
+		if (x1.getBody() == null || x2.getBody() == null
+				|| x1.getBody().getUserData() == null
+				|| x2.getBody().getUserData() == null)
 			return;
-		
-		System.out.println("Contact between: " + x1.getBody().getUserData() + " and " + x2.getBody().getUserData());
+
+		System.out.println("Contact between: " + x1.getBody().getUserData()
+				+ " and " + x2.getBody().getUserData());
 
 		if (x1.getBody().getUserData() instanceof BerryBush) {
 			berryBush = (BerryBush) x1.getBody().getUserData();
-			addCollectingBarToBody(x1.getBody());
+			if (!berryBush.isEmpty()) {
+				addCollectingBarToBerryBush(berryBush);
+			} else {
+				resourcesManager.activity.toastOnUIThread(
+						"No berries ripened.", Toast.LENGTH_SHORT);
+			}
 		} else if (x2.getBody().getUserData() instanceof BerryBush) {
 			berryBush = (BerryBush) x2.getBody().getUserData();
-			addCollectingBarToBody(x2.getBody());
+			if (!berryBush.isEmpty()) {
+				addCollectingBarToBerryBush(berryBush);
+			} else {
+				resourcesManager.activity.toastOnUIThread(
+						"No berries ripened.", Toast.LENGTH_SHORT);
+			}
 		}
-		
-		if (x1.getBody().getUserData().equals("Avatar") && x2.getBody().getUserData() instanceof Dinosaur) {
+
+		if (x1.getBody().getUserData().equals("Avatar")
+				&& x2.getBody().getUserData() instanceof Dinosaur) {
 			Dinosaur d = (Dinosaur) x2.getBody().getUserData();
-			if (d.getState() == GameState.DEAD) return;
+			if (d.getState() == GameState.DEAD)
+				return;
 			showFightScene(d);
-		} else if (x2.getBody().getUserData().equals("Avatar") && x1.getBody().getUserData() instanceof Dinosaur) {
+		} else if (x2.getBody().getUserData().equals("Avatar")
+				&& x1.getBody().getUserData() instanceof Dinosaur) {
 			Dinosaur d = (Dinosaur) x1.getBody().getUserData();
-			if (d.getState() == GameState.DEAD) return;
-			showFightScene(d);			
+			if (d.getState() == GameState.DEAD)
+				return;
+			showFightScene(d);
 		}
-		
+
 	}
-	
+
 	private void showFightScene(Dinosaur d) {
 		GameActivity.mode = GameMode.FIGHTING;
 		FightScene fight = new FightScene(d);
-		this.resourcesManager.level.setChildScene(fight);
+		currentMapScene.setChildScene(fight);
 	}
-	
+
 	@Override
 	public void endContact(Contact contact) {
 		if (collectingBar != null) {
 			currentMapScene.detachChild(collectingBar);
 			collectingBar = null;
+			berryBush = null;
 		}
 	}
 
@@ -90,7 +107,6 @@ public class BodiesContactListener implements ContactListener,
 		// TODO Auto-generated method stub
 
 	}
-
 
 	@Override
 	public void onProgressChanged(int pProgress) {
@@ -107,13 +123,12 @@ public class BodiesContactListener implements ContactListener,
 		}
 	}
 
-	private void addCollectingBarToBody(Body body) {
-		collectingBar = new Rectangle(body.getPosition().x / 32 - 32,
-				body.getPosition().y / 32, 100, 10, resourcesManager.vbom);
+	private void addCollectingBarToBerryBush(BerryBush berryBush) {
+		collectingBar = new Rectangle(berryBush.getX(), berryBush.getY() - 5,
+				COLLECTING_BAR_WIDTH, 10, resourcesManager.vbom);
 		collectingBar.setColor(Color.GREEN);
-		// collectingBar.setAlpha(0.6f);
-		// collectingBar.setScale(0.2f);
-		collectingBar.setVisible(true);
+		collectingBar.setAlpha(0.5f);
+
 		collectingBar.registerUpdateHandler(new TimerHandler(0.05f, true,
 				new ITimerCallback() {
 					// Starts a timer for updating out progress
@@ -129,21 +144,7 @@ public class BodiesContactListener implements ContactListener,
 							onProgressChanged((int) timerSeconds);
 					}
 				}));
-
-		currentMapScene = SceneManager.getInstance().getCurrentGameMapScene();
-		IEntity berryBushEntity = currentMapScene
-				.getChildByMatcher(new IEntityMatcher() {
-					@Override
-					public boolean matches(IEntity pEntity) {
-						if (pEntity.getUserData() != null
-								&& pEntity.getUserData().equals(berryBush)) {
-							return true;
-						} else {
-							return false;
-						}
-					}
-				});
-		berryBushEntity.attachChild(collectingBar);
+		currentMapScene.attachChild(collectingBar);
 	}
 
 	private void addBerryToAvatarInventory() {
@@ -151,7 +152,8 @@ public class BodiesContactListener implements ContactListener,
 			Berry berry = berryBush.getBerry();
 			if (berry != null) {
 				resourcesManager.avatar.addBerryToInventory(berry);
-				resourcesManager.activity.toastOnUIThread("Collected berries", Toast.LENGTH_SHORT);
+				resourcesManager.activity.toastOnUIThread("Berry collected.",
+						Toast.LENGTH_SHORT);
 			}
 		}
 	}
