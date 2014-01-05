@@ -3,6 +3,7 @@ package gamedev.game;
 import gamedev.scenes.BaseScene;
 import gamedev.scenes.GameEndScene;
 import gamedev.scenes.GameMapScene;
+import gamedev.scenes.GameShopScene;
 import gamedev.scenes.IntroScene;
 import gamedev.scenes.LoadingScene;
 import gamedev.scenes.MainMenuScene;
@@ -21,6 +22,7 @@ public class SceneManager {
 	private BaseScene splashScene;
 	private BaseScene menuScene;
 	private BaseScene gameMapScene;
+	private BaseScene gameShopScene;
 	private BaseScene gameEndScene;
 	private BaseScene loadingScene;
 	private BaseScene introScene;
@@ -39,7 +41,7 @@ public class SceneManager {
 	private Engine engine = resourcesManager.engine;
 
 	public enum SceneType {
-		SCENE_SPLASH, SCENE_MENU, SCENE_GAME_MAP, SCENE_GAME_END, SCENE_LOADING, SCENE_INTRO
+		SCENE_SPLASH, SCENE_MENU, SCENE_GAME_MAP, SCENE_GAME_SHOP, SCENE_GAME_END, SCENE_LOADING, SCENE_INTRO
 	}
 
 	// ---------------------------------------------
@@ -68,6 +70,9 @@ public class SceneManager {
 			break;
 		case SCENE_GAME_MAP:
 			setScene(gameMapScene);
+			break;
+		case SCENE_GAME_SHOP:
+			setScene(gameShopScene);
 			break;
 		case SCENE_GAME_END:
 			setScene(gameEndScene);
@@ -191,6 +196,7 @@ public class SceneManager {
 		}
 
 		gameMapScene = new GameMapScene();
+		createGameShopScene(mEngine);
 
 		loadGameMapScene(engine);
 	}
@@ -223,8 +229,44 @@ public class SceneManager {
 	}
 
 	// ---------------------------------------------
+	// GameShop Scene
+	// ---------------------------------------------
+
+	public void createGameShopScene(final Engine mEngine) {
+		gameShopScene = new GameShopScene();
+	}
+
+	public void loadGameShopScene(final Engine mEngine) {
+		if (!currentSceneType.equals(SceneType.SCENE_LOADING)) {
+			disposeCurrentScene(true);
+		}
+		resourcesManager.loadGameShopResources();
+
+		mEngine.registerUpdateHandler(new TimerHandler(0.1f,
+				new ITimerCallback() {
+					public void onTimePassed(final TimerHandler pTimerHandler) {
+						if (gameShopScene != null) {
+							mEngine.unregisterUpdateHandler(pTimerHandler);
+							setScene(gameShopScene);
+							disposeLoadingScene();
+						} else {
+							gameShopScene = new GameShopScene();
+						}
+					}
+				}));
+	}
+
+	public void disposeGameShopScene() {
+		if (!gameShopScene.isDisposed()) {
+			gameShopScene.disposeScene();
+		}
+		resourcesManager.unloadGameShopResources();
+	}
+
+	// ---------------------------------------------
 	// GameEnd Scene
 	// ---------------------------------------------
+
 	public void loadGameEndScene(final Engine mEngine) {
 		disposeCurrentScene(false);
 		resourcesManager.loadGameEndResources();
@@ -266,6 +308,8 @@ public class SceneManager {
 			disposeMenuScene();
 		} else if (currentSceneType.equals(SceneType.SCENE_INTRO)) {
 			disposeIntroScene();
+		} else if (currentSceneType.equals(SceneType.SCENE_GAME_SHOP)) {
+			disposeGameShopScene();
 		}
 	}
 
@@ -294,6 +338,10 @@ public class SceneManager {
 
 	public GameMapScene getCurrentGameMapScene() {
 		return (GameMapScene) gameMapScene;
+	}
+
+	public GameShopScene getCurrentGameShopScene() {
+		return (GameShopScene) gameShopScene;
 	}
 
 	public boolean isGameMapSceneCreated() {

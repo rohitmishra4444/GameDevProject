@@ -85,6 +85,11 @@ public class Avatar extends AnimatedObject {
 				+ FRAMES_PER_ANIMATION - 1, loopAnimation);
 	}
 
+	public void attack(int damage) {
+		super.attack(damage);
+		this.resourcesManager.hud.setLife(this.life);
+	}
+
 	/**
 	 * Set the velocity direction. Speed is calculated based on state
 	 * 
@@ -116,9 +121,6 @@ public class Avatar extends AnimatedObject {
 	 */
 
 	public void setLife(int life) {
-		if (life > 100) {
-			life = 100;
-		}
 		super.setLife(life);
 		this.resourcesManager.hud.setLife(this.life);
 		// TODO Game over when life == 0

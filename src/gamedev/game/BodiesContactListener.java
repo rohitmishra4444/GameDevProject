@@ -48,7 +48,8 @@ public class BodiesContactListener implements ContactListener,
 		System.out.println("Contact between: " + x1.getBody().getUserData()
 				+ " and " + x2.getBody().getUserData());
 
-		if (x1.getBody().getUserData() instanceof BerryBush) {
+		if (x1.getBody().getUserData() instanceof BerryBush
+				&& x2.getBody().getUserData().equals("Avatar")) {
 			berryBush = (BerryBush) x1.getBody().getUserData();
 			if (!berryBush.isEmpty()) {
 				addCollectingBarToBerryBush(berryBush);
@@ -56,7 +57,8 @@ public class BodiesContactListener implements ContactListener,
 				resourcesManager.activity.toastOnUIThread(
 						"No berries ripened.", Toast.LENGTH_SHORT);
 			}
-		} else if (x2.getBody().getUserData() instanceof BerryBush) {
+		} else if (x1.getBody().getUserData().equals("Avatar")
+				&& x2.getBody().getUserData() instanceof BerryBush) {
 			berryBush = (BerryBush) x2.getBody().getUserData();
 			if (!berryBush.isEmpty()) {
 				addCollectingBarToBerryBush(berryBush);
@@ -68,16 +70,26 @@ public class BodiesContactListener implements ContactListener,
 
 		if (x1.getBody().getUserData().equals("Avatar")
 				&& x2.getBody().getUserData() instanceof Dinosaur) {
-			Dinosaur d = (Dinosaur) x2.getBody().getUserData();
-			if (d.getState() == GameState.DEAD)
+			Dinosaur dino = (Dinosaur) x2.getBody().getUserData();
+			if (dino.getState() == GameState.DEAD)
 				return;
-			showFightScene(d);
-		} else if (x2.getBody().getUserData().equals("Avatar")
-				&& x1.getBody().getUserData() instanceof Dinosaur) {
-			Dinosaur d = (Dinosaur) x1.getBody().getUserData();
-			if (d.getState() == GameState.DEAD)
+			showFightScene(dino);
+		} else if (x1.getBody().getUserData() instanceof Dinosaur
+				&& x2.getBody().getUserData().equals("Avatar")) {
+			Dinosaur dino = (Dinosaur) x1.getBody().getUserData();
+			if (dino.getState() == GameState.DEAD)
 				return;
-			showFightScene(d);
+			showFightScene(dino);
+		}
+
+		if (x1.getBody().getUserData().equals("Avatar")
+				&& x2.getBody().getUserData().equals("ShopCave")) {
+			SceneManager.getInstance().loadGameShopScene(
+					resourcesManager.engine);
+		} else if (x1.getBody().getUserData().equals("ShopCave")
+				&& x2.getBody().getUserData().equals("Avatar")) {
+			SceneManager.getInstance().loadGameShopScene(
+					resourcesManager.engine);
 		}
 
 	}
@@ -90,6 +102,7 @@ public class BodiesContactListener implements ContactListener,
 
 	@Override
 	public void endContact(Contact contact) {
+		// Remove collecting berry bar if player runs away.
 		if (collectingBar != null) {
 			currentMapScene.detachChild(collectingBar);
 			collectingBar = null;

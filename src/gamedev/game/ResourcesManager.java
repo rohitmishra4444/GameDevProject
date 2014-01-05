@@ -41,16 +41,6 @@ public class ResourcesManager {
 	public SceneHUD hud;
 
 	private static boolean gameGraphicsCreated = false;
-	private static boolean gameEndPortalAtlasLoaded = false;
-	private static boolean playerAtlasLoaded = false;
-	private static boolean dinosaurGreenAtlasLoaded = false;
-	private static boolean treesAtlasLoaded = false;
-	private static boolean controlTextureLoaded = false;
-	private static boolean splashTextureAtlasLoaded = false;
-	private static boolean menuBackgroundTextureAtlasLoaded = false;
-	private static boolean menuButtonsTextureAtlasLoaded = false;
-	private static boolean menuFontLoaded = false;
-	private static boolean game_end_atlasLoaded = false;
 
 	// ---------------------------------------------
 	// TEXTURES & TEXTURE REGIONS
@@ -63,6 +53,8 @@ public class ResourcesManager {
 	public ITiledTextureRegion dinosaurGreenRegion;
 	public BitmapTextureAtlas treesAtlas;
 	public ITextureRegion[] treeRegions = new ITextureRegion[20];
+
+	// Textures for fight scene
 	public BitmapTextureAtlas spearAtlas;
 	public ITextureRegion spearRegion;
 	public BitmapTextureAtlas fightAtlas;
@@ -82,6 +74,10 @@ public class ResourcesManager {
 	public ITextureRegion splash_region;
 	private BitmapTextureAtlas splashTextureAtlas;
 
+	// Textures for game shop scene
+	public ITextureRegion shopRegion;
+	private BitmapTextureAtlas shopTextureAtlas;
+
 	// Textures for menu scene
 	public ITextureRegion menu_background_region;
 	public ITiledTextureRegion menu_buttons_region;
@@ -89,7 +85,7 @@ public class ResourcesManager {
 	private BitmapTextureAtlas menuButtonsTextureAtlas;
 	public Font font;
 
-	// Textures for level-complete window
+	// Textures for game end scene
 	public ITextureRegion game_end_region;
 	public BitmapTextureAtlas game_end_atlas;
 
@@ -112,23 +108,19 @@ public class ResourcesManager {
 			createSplashScreen();
 		}
 
-		if (splashTextureAtlasLoaded == false) {
-			splashTextureAtlas.load();
-			splashTextureAtlasLoaded = true;
-		}
+		splashTextureAtlas.load();
 	}
 
 	public void unloadSplashScreen() {
 		splashTextureAtlas.unload();
-		splashTextureAtlasLoaded = false;
 		// The splash screen is no more used after the game has started.
 		splash_region = null;
 	}
 
 	private void createSplashScreen() {
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
-		splashTextureAtlas = new BitmapTextureAtlas(
-				getInstance().textureManager, 480, 320, TextureOptions.BILINEAR);
+		splashTextureAtlas = new BitmapTextureAtlas(textureManager, 480, 320,
+				TextureOptions.BILINEAR);
 		splash_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
 				splashTextureAtlas, activity, "splash_andengine.png", 0, 0);
 	}
@@ -156,45 +148,34 @@ public class ResourcesManager {
 		this.menuBackgroundTextureAtlas = new BitmapTextureAtlas(
 				textureManager, 800, 600, TextureOptions.DEFAULT);
 		this.menu_background_region = BitmapTextureAtlasTextureRegionFactory
-				.createTiledFromAsset(this.menuBackgroundTextureAtlas,
-						getInstance().activity, "menubackground.png", 0, 0, 1,
-						1);
+				.createTiledFromAsset(menuBackgroundTextureAtlas, activity,
+						"menubackground.png", 0, 0, 1, 1);
 
 		// Menu buttons
 		this.menuButtonsTextureAtlas = new BitmapTextureAtlas(textureManager,
 				800, 600, TextureOptions.DEFAULT);
 		this.menu_buttons_region = BitmapTextureAtlasTextureRegionFactory
-				.createTiledFromAsset(this.menuButtonsTextureAtlas,
-						getInstance().activity, "menubuttons.png", 0, 0, 1, 3);
+				.createTiledFromAsset(menuButtonsTextureAtlas, activity,
+						"menubuttons.png", 0, 0, 1, 3);
 	}
 
 	private void loadMenuGraphics() {
 		if (menuButtonsTextureAtlas == null) {
 			createMenuGraphics();
 		}
-		if (menuButtonsTextureAtlasLoaded == false) {
-			menuButtonsTextureAtlas.load();
-			menuButtonsTextureAtlasLoaded = true;
-		}
-		if (menuBackgroundTextureAtlasLoaded == false) {
-			menuBackgroundTextureAtlas.load();
-			menuBackgroundTextureAtlasLoaded = true;
-		}
+		menuButtonsTextureAtlas.load();
+		menuBackgroundTextureAtlas.load();
 	}
 
 	private void unloadMenuGraphics() {
 		menuButtonsTextureAtlas.unload();
-		menuButtonsTextureAtlasLoaded = false;
-
 		menuBackgroundTextureAtlas.unload();
-		menuBackgroundTextureAtlasLoaded = false;
 	}
 
 	private void createMenuFonts() {
 		FontFactory.setAssetBasePath("font/");
-		final ITexture mainFontTexture = new BitmapTextureAtlas(
-				getInstance().textureManager, 256, 256,
-				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+		final ITexture mainFontTexture = new BitmapTextureAtlas(textureManager,
+				256, 256, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 
 		font = FontFactory.createFromAsset(
 				((GameActivity) activity).getFontManager(), mainFontTexture,
@@ -205,15 +186,11 @@ public class ResourcesManager {
 		if (font == null) {
 			createMenuFonts();
 		}
-		if (menuFontLoaded == false) {
-			font.load();
-			menuFontLoaded = true;
-		}
+		font.load();
 	}
 
 	private void unloadMenuFonts() {
 		font.unload();
-		menuFontLoaded = false;
 	}
 
 	// ---------------------------------------------
@@ -242,6 +219,7 @@ public class ResourcesManager {
 		// loadGameFonts();
 		// loadGameAudio();
 		loadHUDResources();
+		loadGameShopResources();
 
 		// TODO: Refactor. This should not be created here, rather in
 		// GameMapScene.
@@ -259,6 +237,7 @@ public class ResourcesManager {
 		// unloadGameFonts();
 		// unloadGameAudio();
 		unloadHUDResources();
+		unloadGameShopResources();
 	}
 
 	private void loadGameGraphics() {
@@ -266,25 +245,10 @@ public class ResourcesManager {
 				|| treesAtlas == null || gameGraphicsCreated == false) {
 			createGameGraphics();
 		}
-
-		if (gameEndPortalAtlasLoaded == false) {
-			gameEndPortalAtlas.load();
-			gameEndPortalAtlasLoaded = true;
-		}
-
-		if (playerAtlasLoaded == false) {
-			playerAtlas.load();
-			playerAtlasLoaded = true;
-		}
-		if (dinosaurGreenAtlasLoaded == false) {
-			dinosaurGreenAtlas.load();
-			dinosaurGreenAtlasLoaded = true;
-		}
-		// if (treesAtlasLoaded == false) {
+		gameEndPortalAtlas.load();
+		playerAtlas.load();
+		dinosaurGreenAtlas.load();
 		// treesAtlas.load();
-		// treesAtlasLoaded = true;
-		// }
-
 		spearAtlas.load();
 		fightAtlas.load();
 
@@ -292,16 +256,11 @@ public class ResourcesManager {
 
 	private void unloadGameGraphics() {
 		gameEndPortalAtlas.unload();
-		gameEndPortalAtlasLoaded = false;
-
 		playerAtlas.unload();
-		playerAtlasLoaded = false;
-
 		dinosaurGreenAtlas.unload();
-		dinosaurGreenAtlasLoaded = false;
-
 		// treesAtlas.unload();
-		// treesAtlasLoaded = false;
+		spearAtlas.unload();
+		fightAtlas.unload();
 
 	}
 
@@ -349,6 +308,33 @@ public class ResourcesManager {
 						"green_dino_0.25_asc.png", 0, 0, 26, 32);
 	}
 
+	private void createTreeGraphics() {
+		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
+
+		this.treesAtlas = new BitmapTextureAtlas(textureManager, 512, 640);
+
+		BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.treesAtlas,
+				activity, "trees.png", 0, 0);
+		int x = 0;
+		int y = 0;
+		for (int i = 1; i <= 20; i++) {
+			// this.treeRegions[i-1] =
+			// BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.treesAtlas,
+			// activity, "trees.png", x, y);
+			this.treeRegions[i - 1] = TextureRegionFactory.extractFromTexture(
+					this.treesAtlas, x, y, 128, 128);
+			x = x + 128;
+			if (i % 4 == 0) {
+				x = 0;
+				y = y + 128;
+			}
+		}
+	}
+
+	// ---------------------------------------------
+	// Fight resources
+	// ---------------------------------------------
+
 	private void createSpearGraphics() {
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
 
@@ -373,27 +359,37 @@ public class ResourcesManager {
 						0);
 	}
 
-	private void createTreeGraphics() {
-		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
+	// ---------------------------------------------
+	// Game shop resources
+	// ---------------------------------------------
 
-		this.treesAtlas = new BitmapTextureAtlas(textureManager, 512, 640);
+	public void loadGameShopResources() {
+		loadGameShopGraphics();
+	}
 
-		BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.treesAtlas,
-				activity, "trees.png", 0, 0);
-		int x = 0;
-		int y = 0;
-		for (int i = 1; i <= 20; i++) {
-			// this.treeRegions[i-1] =
-			// BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.treesAtlas,
-			// activity, "trees.png", x, y);
-			this.treeRegions[i - 1] = TextureRegionFactory.extractFromTexture(
-					this.treesAtlas, x, y, 128, 128);
-			x = x + 128;
-			if (i % 4 == 0) {
-				x = 0;
-				y = y + 128;
-			}
+	public void unloadGameShopResources() {
+		unloadGameShopGraphics();
+	}
+
+	private void createGameShopGraphics() {
+		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/shop/");
+
+		this.shopTextureAtlas = new BitmapTextureAtlas(textureManager, 650,
+				400, TextureOptions.DEFAULT);
+		this.shopRegion = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(shopTextureAtlas, activity,
+						"shop_placeholder.png", 0, 0);
+	}
+
+	private void loadGameShopGraphics() {
+		if (shopTextureAtlas == null) {
+			createGameShopGraphics();
 		}
+		shopTextureAtlas.load();
+	}
+
+	private void unloadGameShopGraphics() {
+		shopTextureAtlas.unload();
 	}
 
 	// ---------------------------------------------
@@ -436,17 +432,13 @@ public class ResourcesManager {
 		if (controlTexture == null) {
 			createHUDGraphics();
 		}
-		if (controlTextureLoaded == false) {
-			controlTexture.load();
-			controlTextureLoaded = true;
-		}
+		controlTexture.load();
 		hudBerryAtlas.load();
 	}
 
 	private void unloadHUDGraphics() {
-		hudBerryAtlas.unload();
 		controlTexture.unload();
-		controlTextureLoaded = false;
+		hudBerryAtlas.unload();
 	}
 
 	// ---------------------------------------------
@@ -474,15 +466,11 @@ public class ResourcesManager {
 		if (game_end_atlas == null) {
 			createGameEndGraphics();
 		}
-		if (game_end_atlasLoaded == false) {
-			game_end_atlas.load();
-			game_end_atlasLoaded = true;
-		}
+		game_end_atlas.load();
 	}
 
 	private void unloadGameEndTextures() {
 		game_end_atlas.unload();
-		game_end_atlasLoaded = false;
 	}
 
 	/**

@@ -1,6 +1,5 @@
 package gamedev.game;
 
-import gamedev.objects.AnimatedObject.GameState;
 import gamedev.objects.BerryBush;
 import gamedev.objects.Dinosaur;
 import gamedev.objects.Tree;
@@ -59,24 +58,26 @@ public class TmxLevelLoader {
 		// TODO REMOVE TEST FOR MOVE-STRATEGIES
 		// Create a dinosaur with a different move strategy. the dino simply
 		// walks to point 5,5 (meters = *32 for pixels)
-//		Dinosaur d = new Dinosaur(600, 600, Dinosaur.COLOR_GREEN);
-//		this.scene.attachChild(d);
-//		d.setMoveStrategy(new SimpleMoveStrategy(d, new Vector2(100, 100), GameState.WALKING));
+		// Dinosaur d = new Dinosaur(600, 600, Dinosaur.COLOR_GREEN);
+		// this.scene.attachChild(d);
+		// d.setMoveStrategy(new SimpleMoveStrategy(d, new Vector2(100, 100),
+		// GameState.WALKING));
 
 		Dinosaur d2 = new Dinosaur(800, 800, Dinosaur.COLOR_GREEN);
 		this.scene.attachChild(d2);
 		d2.setMoveStrategy(new RandomMoveStrategy(d2, 3, 5, 3));
-		
+
 		Dinosaur d3 = new Dinosaur(400, 400, Dinosaur.COLOR_GREEN);
 		this.scene.attachChild(d3);
 		ArrayList<Vector2> wayPoints = new ArrayList<Vector2>();
-		wayPoints.add(new Vector2(400,100));
-		wayPoints.add(new Vector2(600,100));
-		wayPoints.add(new Vector2(600,200));
-		wayPoints.add(new Vector2(400,200));		
-//		d3.setMoveStrategy(new WaypointMoveStrategy(d3, wayPoints, true));		
-//		d3.setMoveStrategy(new WaypointMoveStrategy(d3, wayPoints, false));
-		d3.setMoveStrategy(new FollowPlayerStrategy(d3, d3.getRadius(), new WaypointMoveStrategy(d3, wayPoints, true)));
+		wayPoints.add(new Vector2(400, 100));
+		wayPoints.add(new Vector2(600, 100));
+		wayPoints.add(new Vector2(600, 200));
+		wayPoints.add(new Vector2(400, 200));
+		// d3.setMoveStrategy(new WaypointMoveStrategy(d3, wayPoints, true));
+		// d3.setMoveStrategy(new WaypointMoveStrategy(d3, wayPoints, false));
+		d3.setMoveStrategy(new FollowPlayerStrategy(d3, d3.getRadius(),
+				new WaypointMoveStrategy(d3, wayPoints, true)));
 		// TODO: Create portal object from tmx map.
 		// TODO: Create cave object from tmx map.
 	}
@@ -128,7 +129,6 @@ public class TmxLevelLoader {
 			body.setUserData(berryBush);
 			rect.setVisible(false);
 			this.scene.attachChild(rect);
-			System.out.println("BerryBush created and added to scene!");
 		}
 	}
 
@@ -145,7 +145,6 @@ public class TmxLevelLoader {
 			body.setUserData("ShopCave");
 			rect.setVisible(false);
 			this.scene.attachChild(rect);
-			System.out.println("ShopCave created and added to scene!");
 		}
 	}
 
