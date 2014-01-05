@@ -1,8 +1,15 @@
 package gamedev.game;
 
+import gamedev.game.GameActivity.GameMode;
 import gamedev.objects.Berry;
 import gamedev.objects.BerryBush;
 import gamedev.scenes.BaseScene;
+import gamedev.objects.Dinosaur;
+import gamedev.objects.AnimatedObject.GameState;
+import gamedev.scenes.FightScene;
+
+import android.widget.Toast;
+
 
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
@@ -34,10 +41,10 @@ public class BodiesContactListener implements ContactListener,
 	public void beginContact(Contact contact) {
 		final Fixture x1 = contact.getFixtureA();
 		final Fixture x2 = contact.getFixtureB();
-		if (x1.getBody() == null || x2.getBody() == null)
+		if (x1.getBody() == null || x2.getBody() == null || x1.getBody().getUserData() == null || x2.getBody().getUserData() == null)
 			return;
-		System.out.println("Contact between: " + x1.getBody().getUserData()
-				+ " and " + x2.getBody().getUserData());
+		
+		System.out.println("Contact between: " + x1.getBody().getUserData() + " and " + x2.getBody().getUserData());
 
 		if (x1.getBody().getUserData() instanceof BerryBush) {
 			berryBush = (BerryBush) x1.getBody().getUserData();
@@ -46,19 +53,25 @@ public class BodiesContactListener implements ContactListener,
 			berryBush = (BerryBush) x2.getBody().getUserData();
 			addCollectingBarToBody(x2.getBody());
 		}
-
-		// if ((x1.getBody().getUserData().equals("Player") &&
-		// x2.getBody().getUserData().equals("StaticObject"))
-		// || (x2.getBody().getUserData().equals("Player") &&
-		// x1.getBody().getUserData().equals("StaticObject"))) {
-		// System.out.println("Contact between player and StaticObject");
-		// Vector2 a = player.body.getLinearVelocity();
-		// a.x = -a.x/2;
-		// a.y = -a.y/2;
-		// player.body.setLinearVelocity(a);
-		// }
+		
+		if (x1.getBody().getUserData().equals("Avatar") && x2.getBody().getUserData() instanceof Dinosaur) {
+			Dinosaur d = (Dinosaur) x2.getBody().getUserData();
+			if (d.getState() == GameState.DEAD) return;
+			showFightScene(d);
+		} else if (x2.getBody().getUserData().equals("Avatar") && x1.getBody().getUserData() instanceof Dinosaur) {
+			Dinosaur d = (Dinosaur) x1.getBody().getUserData();
+			if (d.getState() == GameState.DEAD) return;
+			showFightScene(d);			
+		}
+		
 	}
-
+	
+	private void showFightScene(Dinosaur d) {
+		GameActivity.mode = GameMode.FIGHTING;
+		FightScene fight = new FightScene(d);
+		this.resourcesManager.level.setChildScene(fight);
+	}
+	
 	@Override
 	public void endContact(Contact contact) {
 		if (collectingBar != null) {
@@ -77,6 +90,7 @@ public class BodiesContactListener implements ContactListener,
 		// TODO Auto-generated method stub
 
 	}
+
 
 	@Override
 	public void onProgressChanged(int pProgress) {
@@ -137,6 +151,7 @@ public class BodiesContactListener implements ContactListener,
 			Berry berry = berryBush.getBerry();
 			if (berry != null) {
 				resourcesManager.avatar.addBerryToInventory(berry);
+				resourcesManager.activity.toastOnUIThread("Collected berries", Toast.LENGTH_SHORT);
 			}
 		}
 	}
