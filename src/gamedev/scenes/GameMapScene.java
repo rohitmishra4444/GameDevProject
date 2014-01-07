@@ -153,6 +153,10 @@ public class GameMapScene extends BaseScene {
 		this.quests = quests;
 	}
 
+	public Quest getQuest(int i) {
+		return this.quests.get(i);
+	}
+
 	
 	
 }

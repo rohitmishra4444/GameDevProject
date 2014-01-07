@@ -4,18 +4,25 @@ public abstract class Quest {
 	
 	protected String title;
 	protected String description;	
-	protected boolean isCompleted = false;
+	public static boolean isCompleted = false;
+	protected boolean isActive = false;
+	protected String status;
 	
 	// TODO: Give rewards!
 	
 	
-	public abstract void executeAction();
+	public abstract void onFinish();
+		
+	public abstract String getStatus();
 	
-	public abstract boolean checkCondition();
+	public abstract boolean isCompleted();
 
-	public boolean isCompleted() {
-		return this.isCompleted;
+	public boolean isActive() {
+		return isActive;
 	}
 
+	public void setActive(boolean isActive) {
+		this.isActive = isActive;
+	}
 	
 }
