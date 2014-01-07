@@ -210,9 +210,10 @@ public class SceneManager {
 			disposeCurrentScene(true);
 		}
 
-		resourcesManager.loadGameResources();
 		if (gameMapScene == null) {
 			createGameMapScene(engine, true);
+		} else {
+			resourcesManager.loadGameResources();
 		}
 
 		mEngine.registerUpdateHandler(new TimerHandler(0.1f,
