@@ -1,9 +1,12 @@
 package gamedev.scenes;
 
+import java.util.ArrayList;
+
 import gamedev.game.SceneManager;
 import gamedev.game.SceneManager.SceneType;
 import gamedev.game.TmxLevelLoader;
 import gamedev.objects.Avatar;
+import gamedev.quests.*;
 
 import org.andengine.entity.IEntity;
 import org.andengine.extension.tmx.TMXLayer;
@@ -35,7 +38,9 @@ public class GameMapScene extends BaseScene {
 
 	// private static final int MIN_DINOS_TO_KILL = 1;
 	// private int dinosKilled = 0;
-
+	
+	protected ArrayList<Quest> quests = new ArrayList<Quest>();
+	
 	public GameMapScene() {
 		// Call BaseScene without calling createScene because here we need some
 		// stuff initialized before
@@ -135,16 +140,19 @@ public class GameMapScene extends BaseScene {
 		this.detachSelf();
 		this.dispose();
 	}
+	
+	public void addQuest(Quest quest) {
+		this.quests.add(quest);
+	}
+	
+	public ArrayList<Quest> getQuests() {
+		return quests;
+	}
 
-	// public void killedDino() {
-	// this.dinosKilled++;
-	// }
+	public void setQuests(ArrayList<Quest> quests) {
+		this.quests = quests;
+	}
 
-	// private boolean areLevelRulesCompleted() {
-	// if (dinosKilled >= MIN_DINOS_TO_KILL) {
-	// return true;
-	// }
-	// return false;
-	// }
-
+	
+	
 }
