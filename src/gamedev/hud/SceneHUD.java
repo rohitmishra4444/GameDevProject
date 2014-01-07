@@ -2,7 +2,7 @@ package gamedev.hud;
 
 import gamedev.game.GameActivity;
 import gamedev.game.ResourcesManager;
-import gamedev.objects.AnimatedObject.GameState;
+import gamedev.scenes.QuestScene;
 
 import org.andengine.engine.camera.hud.HUD;
 import org.andengine.engine.camera.hud.controls.AnalogOnScreenControl;
@@ -16,6 +16,7 @@ import org.andengine.input.touch.TouchEvent;
 import org.andengine.util.color.Color;
 
 import android.opengl.GLES20;
+import android.widget.Toast;
 
 public class SceneHUD extends HUD {
 
@@ -34,7 +35,7 @@ public class SceneHUD extends HUD {
 	private static int energyAdditionFromBerry = 30;
 
 	protected boolean isTouchedPrimary = false;
-	protected boolean isTouchedSecondary = false;
+	protected boolean isSprintButtonTouched = false;
 
 	float cameraWidth = this.resourcesManager.camera.getWidth();
 	float cameraHeight = this.resourcesManager.camera.getHeight();
@@ -62,6 +63,107 @@ public class SceneHUD extends HUD {
 		this.attachChild(life);
 		this.attachChild(energy);
 
+		this.setTouchAreaBindingOnActionDownEnabled(true);
+
+		createDPadControls();
+		createSprintButton();
+		createQuestButton();
+		createBerriesAndButton();
+	}
+
+	protected void createDPadControls() {
+		AnalogOnScreenControlListener controlListener = new AnalogOnScreenControlListener();
+		this.pad = new AnalogOnScreenControl(20, GameActivity.HEIGHT
+				- resourcesManager.controlBaseTextureRegion.getHeight() - 20,
+				resourcesManager.camera,
+				resourcesManager.controlBaseTextureRegion,
+				resourcesManager.controlKnobTextureRegion, 0.1f, 200,
+				resourcesManager.vbom, controlListener);
+
+		this.pad.getControlBase().setBlendFunction(GLES20.GL_SRC_ALPHA,
+				GLES20.GL_ONE_MINUS_SRC_ALPHA);
+		this.pad.getControlBase().setAlpha(0.5f);
+		this.pad.getControlBase().setScaleCenter(0, 128);
+		this.pad.getControlBase().setScale(1.25f);
+		this.pad.getControlKnob().setScale(1.25f);
+		this.pad.refreshControlKnobPosition();
+		this.setChildScene(this.pad);
+	}
+
+	private void createSprintButton() {
+		ButtonSprite sprintButton = new ButtonSprite(cameraWidth - 120,
+				cameraHeight - 100, resourcesManager.controlKnobTextureRegion,
+				resourcesManager.vbom) {
+			@Override
+			public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y) {
+				this.registerEntityModifier(new SequenceEntityModifier(
+						new ScaleModifier(0.25f, 1.25f, 1f), new ScaleModifier(
+								0.25f, 1f, 1.25f)));
+
+				if (touchEvent.isActionDown()) {
+					isSprintButtonTouched = true;
+				} else if (touchEvent.isActionUp()) {
+					isSprintButtonTouched = false;
+				}
+				return true;
+			}
+		};
+
+		sprintButton.setAlpha(0.5f);
+		sprintButton.setScale(1.25f);
+		sprintButton.setColor(Color.WHITE);
+		this.registerTouchArea(sprintButton);
+		this.attachChild(sprintButton);
+	}
+
+	private void createQuestButton() {
+		// TODO: Better icon for quest button
+		ButtonSprite questButton = new ButtonSprite(cameraWidth - 120,
+				cameraHeight - 250, resourcesManager.controlKnobTextureRegion,
+				resourcesManager.vbom) {
+			@Override
+			public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y) {
+				this.registerEntityModifier(new SequenceEntityModifier(
+						new ScaleModifier(0.25f, 1.25f, 1f), new ScaleModifier(
+								0.25f, 1f, 1.25f)));
+
+				if (touchEvent.isActionUp()) {
+					if (resourcesManager.engine.isRunning()) {
+						QuestScene questScene = new QuestScene();
+						questScene.openQuestScene();
+						// TODO: Remove.
+						resourcesManager.activity
+								.toastOnUIThread(
+										"Sorry, quests are not implemented yet but you can see the camera scene.",
+										Toast.LENGTH_LONG);
+						resourcesManager.activity
+								.toastOnUIThread(
+										"Touch on the screen to close the camera scene.",
+										Toast.LENGTH_LONG);
+					}
+
+					// Stop the currently animation if it is not already
+					// attacking.
+					// if (resourcesManager.avatar.getState() !=
+					// GameState.ATTACK) {
+					// resourcesManager.avatar.stopAnimation();
+					// }
+					// resourcesManager.avatar.setState(GameState.ATTACK, -1);
+				}
+
+				return true;
+			};
+		};
+
+		questButton.setAlpha(0.5f);
+		questButton.setScale(1.25f);
+		questButton.setColor(Color.BLACK);
+
+		this.registerTouchArea(questButton);
+		this.attachChild(questButton);
+	}
+
+	private void createBerriesAndButton() {
 		this.berries = new ButtonSprite(cameraWidth - 115, 120,
 				resourcesManager.hudBerryRegion, resourcesManager.vbom) {
 			public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y) {
@@ -106,88 +208,6 @@ public class SceneHUD extends HUD {
 		this.berryCounter.setScale(1.5f);
 		this.attachChild(berryCounter);
 
-		createControls();
-		createButtons();
-	}
-
-	protected void createControls() {
-		AnalogOnScreenControlListener controlListener = new AnalogOnScreenControlListener();
-		this.pad = new AnalogOnScreenControl(20, GameActivity.HEIGHT
-				- resourcesManager.controlBaseTextureRegion.getHeight() - 20,
-				resourcesManager.camera,
-				resourcesManager.controlBaseTextureRegion,
-				resourcesManager.controlKnobTextureRegion, 0.1f, 200,
-				resourcesManager.vbom, controlListener);
-
-		this.pad.getControlBase().setBlendFunction(GLES20.GL_SRC_ALPHA,
-				GLES20.GL_ONE_MINUS_SRC_ALPHA);
-		this.pad.getControlBase().setAlpha(0.5f);
-		this.pad.getControlBase().setScaleCenter(0, 128);
-		this.pad.getControlBase().setScale(1.25f);
-		this.pad.getControlKnob().setScale(1.25f);
-		this.pad.refreshControlKnobPosition();
-		this.setChildScene(this.pad);
-
-	}
-
-	private void createButtons() {
-
-		ButtonSprite attackButton = new ButtonSprite(cameraWidth - 120,
-				cameraHeight - 100, resourcesManager.controlKnobTextureRegion,
-				resourcesManager.vbom) {
-			public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y) {
-
-				this.registerEntityModifier(new SequenceEntityModifier(
-						new ScaleModifier(0.25f, 1.25f, 1f), new ScaleModifier(
-								0.25f, 1f, 1.25f)));
-
-				if (touchEvent.isActionUp()) {
-					// Stop the currently animation if it is not already
-					// attacking.
-					if (resourcesManager.avatar.getState() != GameState.ATTACK) {
-						resourcesManager.avatar.stopAnimation();
-					}
-					resourcesManager.avatar.setState(GameState.ATTACK, -1);
-				}
-
-				return true;
-			};
-		};
-
-		ButtonSprite sprintButton = new ButtonSprite(cameraWidth - 120,
-				cameraHeight - 200, resourcesManager.controlKnobTextureRegion,
-				resourcesManager.vbom) {
-			@Override
-			public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y) {
-
-				this.registerEntityModifier(new SequenceEntityModifier(
-						new ScaleModifier(0.25f, 1.25f, 1f), new ScaleModifier(
-								0.25f, 1f, 1.25f)));
-
-				if (touchEvent.isActionDown()) {
-					isTouchedSecondary = true;
-					// System.out.println("Touched=true");
-				} else if (touchEvent.isActionUp()) {
-					isTouchedSecondary = false;
-					// System.out.println("Touched=false");
-				}
-				return true;
-			}
-		};
-
-		attackButton.setAlpha(0.5f);
-		attackButton.setScale(1.25f);
-		attackButton.setColor(Color.BLACK);
-		sprintButton.setAlpha(0.5f);
-		sprintButton.setScale(1.25f);
-		sprintButton.setColor(Color.WHITE);
-
-		this.setTouchAreaBindingOnActionDownEnabled(true);
-		this.registerTouchArea(attackButton);
-		this.registerTouchArea(sprintButton);
-
-		this.attachChild(attackButton);
-		this.attachChild(sprintButton);
 	}
 
 	/**
@@ -211,7 +231,7 @@ public class SceneHUD extends HUD {
 	}
 
 	public boolean isTouchedSecondaryButton() {
-		return this.isTouchedSecondary;
+		return this.isSprintButtonTouched;
 	}
 
 }

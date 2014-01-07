@@ -21,9 +21,9 @@ public class GameShopScene extends BaseScene {
 		this.setBackground(new Background(Color.WHITE));
 		this.setBackgroundEnabled(true);
 
-		// TODO: The sprite is not correctly centered yet.
+		// TODO: The sprite is not correctly centered yet (only the first time).
 		float centerX = camera.getCenterX()
-				- resourcesManager.shopRegion.getWidth() / 2 + 380;
+				- resourcesManager.shopRegion.getWidth() / 2;
 		float centerY = camera.getCenterY()
 				- resourcesManager.shopRegion.getHeight() / 2;
 
@@ -67,7 +67,6 @@ public class GameShopScene extends BaseScene {
 	public void disposeScene() {
 		this.detachSelf();
 		this.dispose();
-		background.detachSelf();
 		background.dispose();
 	}
 
