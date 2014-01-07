@@ -18,6 +18,17 @@ public class QuestTrigger extends Rectangle {
 	public void onManagedUpdate(float pSecondsElapsed) {
 		if (this.collidesWith(ResourcesManager.getInstance().avatar)) {
 			Quest quest = SceneManager.getInstance().getCurrentGameMapScene().getQuest(this.questId-1);
+			if (!quest.isCompleted()) {
+				if (!quest.isActive) {
+					quest.setActive(true);
+				}
+				// Toast quest.getStatus();
+			} else {
+				quest.onFinish();
+				quest.isCompleted = true;
+				this.dispose();
+				this.detachSelf();
+			}
 		}
 	}
 	
