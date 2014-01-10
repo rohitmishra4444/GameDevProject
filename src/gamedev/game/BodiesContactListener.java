@@ -7,6 +7,7 @@ import gamedev.objects.BerryBush;
 import gamedev.objects.Dinosaur;
 import gamedev.scenes.FightScene;
 import gamedev.scenes.GameMapScene;
+import gamedev.scenes.ShopScene;
 
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
@@ -82,16 +83,31 @@ public class BodiesContactListener implements ContactListener,
 			showFightScene(dino);
 		}
 
-		// TODO: Remove
+		// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+		// TODO: Remove this if else section, if we use a button for the shop.
 		if (x1.getBody().getUserData().equals("Avatar")
 				&& x2.getBody().getUserData().equals("ShopCave")) {
-			SceneManager.getInstance().loadGameShopScene(
-					resourcesManager.engine);
+			ShopScene shopScene = new ShopScene();
+			shopScene.openShopScene();
+			resourcesManager.activity.toastOnUIThread(
+					"Sorry, the shop is not implemented yet.",
+					Toast.LENGTH_LONG);
+			resourcesManager.activity.toastOnUIThread(
+					"Touch on the screen to close the camera scene.",
+					Toast.LENGTH_LONG);
+
 		} else if (x1.getBody().getUserData().equals("ShopCave")
 				&& x2.getBody().getUserData().equals("Avatar")) {
-			SceneManager.getInstance().loadGameShopScene(
-					resourcesManager.engine);
+			ShopScene shopScene = new ShopScene();
+			shopScene.openShopScene();
+			resourcesManager.activity.toastOnUIThread(
+					"Sorry, the shop is not implemented yet.",
+					Toast.LENGTH_LONG);
+			resourcesManager.activity.toastOnUIThread(
+					"Touch on the screen to close the camera scene.",
+					Toast.LENGTH_LONG);
 		}
+		// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 	}
 
@@ -113,13 +129,10 @@ public class BodiesContactListener implements ContactListener,
 
 	@Override
 	public void preSolve(Contact contact, Manifold oldManifold) {
-		// TODO Auto-generated method stub
 	}
 
 	@Override
 	public void postSolve(Contact contact, ContactImpulse impulse) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override

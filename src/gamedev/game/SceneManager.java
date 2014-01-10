@@ -3,7 +3,6 @@ package gamedev.game;
 import gamedev.scenes.BaseScene;
 import gamedev.scenes.GameEndScene;
 import gamedev.scenes.GameMapScene;
-import gamedev.scenes.GameShopScene;
 import gamedev.scenes.IntroScene;
 import gamedev.scenes.LoadingScene;
 import gamedev.scenes.MainMenuScene;
@@ -227,35 +226,6 @@ public class SceneManager {
 	}
 
 	// ---------------------------------------------
-	// GameShop Scene
-	// ---------------------------------------------
-
-	public void loadGameShopScene(final Engine mEngine) {
-		disposeCurrentScene(true);
-
-		resourcesManager.loadGameShopResources();
-		if (gameShopScene == null) {
-			gameShopScene = new GameShopScene();
-		}
-
-		mEngine.registerUpdateHandler(new TimerHandler(0.1f,
-				new ITimerCallback() {
-					public void onTimePassed(final TimerHandler pTimerHandler) {
-						mEngine.unregisterUpdateHandler(pTimerHandler);
-						setScene(gameShopScene);
-						disposeLoadingScene();
-					}
-				}));
-	}
-
-	public void disposeGameShopScene() {
-		if (!gameShopScene.isDisposed()) {
-			gameShopScene.disposeScene();
-		}
-		resourcesManager.unloadGameShopResources();
-	}
-
-	// ---------------------------------------------
 	// GameEnd Scene
 	// ---------------------------------------------
 
@@ -296,8 +266,6 @@ public class SceneManager {
 			disposeMenuScene();
 		} else if (currentSceneType.equals(SceneType.SCENE_INTRO)) {
 			disposeIntroScene();
-		} else if (currentSceneType.equals(SceneType.SCENE_GAME_SHOP)) {
-			disposeGameShopScene();
 		}
 
 		if (setLoadingSceneNeeded) {
@@ -336,10 +304,6 @@ public class SceneManager {
 
 	public GameMapScene getCurrentGameMapScene() {
 		return (GameMapScene) gameMapScene;
-	}
-
-	public GameShopScene getCurrentGameShopScene() {
-		return (GameShopScene) gameShopScene;
 	}
 
 	public boolean isGameMapSceneCreated() {

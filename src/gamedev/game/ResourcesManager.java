@@ -229,6 +229,7 @@ public class ResourcesManager {
 		loadMenuFonts();
 		// loadGameAudio();
 		loadHUDResources();
+		loadGameShopResources();
 
 		// TODO: Refactor. This should not be created here, rather in
 		// GameMapScene.
@@ -245,6 +246,7 @@ public class ResourcesManager {
 		// TODO:
 		// unloadGameAudio();
 		unloadHUDResources();
+		unloadGameShopResources();
 	}
 
 	private void loadGameGraphics() {

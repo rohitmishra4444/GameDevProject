@@ -13,17 +13,16 @@ import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.util.GLState;
 
-public class QuestScene extends CameraScene {
+public class ShopScene extends CameraScene {
 
 	private ResourcesManager resourcesManager = ResourcesManager.getInstance();
-
 	private Sprite background;
 
-	public QuestScene() {
+	public ShopScene() {
 		super(ResourcesManager.getInstance().camera);
 		this.setBackgroundEnabled(false);
 
-		background = new Sprite(0, 0, resourcesManager.questFrameRegion,
+		background = new Sprite(0, 0, resourcesManager.shopRegion,
 				resourcesManager.vbom) {
 			@Override
 			protected void preDraw(GLState pGLState, Camera pCamera) {
@@ -35,28 +34,27 @@ public class QuestScene extends CameraScene {
 		centerShapeInCamera(background);
 		attachChild(background);
 
-		// TODO: Instantiate the list of active and completed quests. Remove the
-		// onSceneTouchListener and add touch areas.
+		// TODO: Instantiate the shop. Remove the onSceneTouchListener and add
+		// touch areas.
 		this.setOnSceneTouchListener(new IOnSceneTouchListener() {
 			@Override
 			public boolean onSceneTouchEvent(Scene pScene,
 					TouchEvent pSceneTouchEvent) {
 				if (pSceneTouchEvent.isActionDown()) {
-					closeQuestScene();
+					closeShopScene();
 				}
 				return true;
 			}
 		});
-
 	}
 
-	public void openQuestScene() {
+	public void openShopScene() {
 		resourcesManager.unloadHUDResources();
 		SceneManager.getInstance().getCurrentGameMapScene().setChildScene(this);
 		GameActivity.mode = GameMode.POPUP;
 	}
 
-	public void closeQuestScene() {
+	public void closeShopScene() {
 		SceneManager.getInstance().getCurrentGameMapScene().clearChildScene();
 		resourcesManager.loadHUDResources();
 		GameActivity.mode = GameMode.EXPLORING;

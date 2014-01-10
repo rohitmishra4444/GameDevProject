@@ -1,10 +1,9 @@
 package gamedev.hud;
 
 import gamedev.game.GameActivity;
-import gamedev.game.GameActivity.GameMode;
 import gamedev.game.ResourcesManager;
-import gamedev.game.SceneManager;
 import gamedev.scenes.QuestScene;
+import gamedev.scenes.ShopScene;
 
 import org.andengine.engine.camera.hud.HUD;
 import org.andengine.engine.camera.hud.controls.AnalogOnScreenControl;
@@ -128,15 +127,13 @@ public class SceneHUD extends HUD {
 						new ScaleModifier(0.25f, 1.25f, 1f), new ScaleModifier(
 								0.25f, 1f, 1.25f)));
 
-				if (touchEvent.isActionUp()) {
-					if (resourcesManager.avatar.removeBerryFromInventory() == true) {
-						int currentLife = resourcesManager.avatar.getLife();
-						resourcesManager.avatar.setLife(currentLife
-								+ lifeAdditionFromBerry);
-						int currentEnergy = resourcesManager.avatar.getEnergy();
-						resourcesManager.avatar.setEnergy(currentEnergy
-								+ energyAdditionFromBerry);
-					}
+				if (resourcesManager.avatar.removeBerryFromInventory() == true) {
+					int currentLife = resourcesManager.avatar.getLife();
+					resourcesManager.avatar.setLife(currentLife
+							+ lifeAdditionFromBerry);
+					int currentEnergy = resourcesManager.avatar.getEnergy();
+					resourcesManager.avatar.setEnergy(currentEnergy
+							+ energyAdditionFromBerry);
 				}
 
 				return true;
@@ -176,17 +173,17 @@ public class SceneHUD extends HUD {
 						new ScaleModifier(0.25f, 1.25f, 1f), new ScaleModifier(
 								0.25f, 1f, 1.25f)));
 
-				if (touchEvent.isActionUp()) {
-					// TODO: Make the shop scene also a camera scene like the
-					// quest scene.
-					GameActivity.mode = GameMode.POPUP;
-					SceneManager.getInstance().loadGameShopScene(
-							resourcesManager.engine);
-					// TODO: Remove.
-					resourcesManager.activity.toastOnUIThread(
-							"Sorry, the shop is not implemented yet.",
-							Toast.LENGTH_LONG);
-				}
+				// TODO: Make the shop scene also a camera scene like the
+				// quest scene.
+				ShopScene shopScene = new ShopScene();
+				shopScene.openShopScene();
+				// TODO: Remove.
+				resourcesManager.activity.toastOnUIThread(
+						"Sorry, the shop is not implemented yet.",
+						Toast.LENGTH_LONG);
+				resourcesManager.activity.toastOnUIThread(
+						"Touch on the screen to close the camera scene.",
+						Toast.LENGTH_LONG);
 
 				return true;
 			};
@@ -208,20 +205,17 @@ public class SceneHUD extends HUD {
 						new ScaleModifier(0.25f, 1.25f, 1f), new ScaleModifier(
 								0.25f, 1f, 1.25f)));
 
-				if (touchEvent.isActionUp()) {
-					if (resourcesManager.engine.isRunning()) {
-						QuestScene questScene = new QuestScene();
-						questScene.openQuestScene();
-						// TODO: Remove.
-						resourcesManager.activity
-								.toastOnUIThread(
-										"Sorry, quests are not implemented yet but you can see the camera scene.",
-										Toast.LENGTH_LONG);
-						resourcesManager.activity
-								.toastOnUIThread(
-										"Touch on the screen to close the camera scene.",
-										Toast.LENGTH_LONG);
-					}
+				if (resourcesManager.engine.isRunning()) {
+					QuestScene questScene = new QuestScene();
+					questScene.openQuestScene();
+					// TODO: Remove.
+					resourcesManager.activity
+							.toastOnUIThread(
+									"Sorry, quests are not implemented yet but you can see the camera scene.",
+									Toast.LENGTH_LONG);
+					resourcesManager.activity.toastOnUIThread(
+							"Touch on the screen to close the camera scene.",
+							Toast.LENGTH_LONG);
 
 					// Stop the currently animation if it is not already
 					// attacking.
@@ -252,12 +246,10 @@ public class SceneHUD extends HUD {
 						new ScaleModifier(0.25f, 1.25f, 1f), new ScaleModifier(
 								0.25f, 1f, 1.25f)));
 
-				if (touchEvent.isActionUp()) {
-					// TODO: Remove.
-					resourcesManager.activity.toastOnUIThread(
-							"Sorry, the help is not implemented yet.",
-							Toast.LENGTH_LONG);
-				}
+				// TODO: Remove.
+				resourcesManager.activity.toastOnUIThread(
+						"Sorry, the help is not implemented yet.",
+						Toast.LENGTH_LONG);
 
 				return true;
 			};
