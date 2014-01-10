@@ -63,16 +63,27 @@ public class ResourcesManager {
 	public BitmapTextureAtlas gameEndPortalAtlas;
 	public ITextureRegion gameEndPortalRegion;
 
-	// Textures for controls
+	// Textures for HUD and controls
 	public BitmapTextureAtlas controlTextureAtlas;
 	public TextureRegion controlBaseTextureRegion;
 	public TextureRegion controlKnobTextureRegion;
 	private BitmapTextureAtlas hudBerryAtlas;
 	public TextureRegion hudBerryRegion;
 
+	private BitmapTextureAtlas hudHelpIconAtlas;
+	public TextureRegion hudHelpIconRegion;
+	private BitmapTextureAtlas hudQuestListIconAtlas;
+	public TextureRegion hudQuestListIconRegion;
+	private BitmapTextureAtlas hudShopIconAtlas;
+	public TextureRegion hudShopIconRegion;
+
 	// Textures for splash scene
 	public ITextureRegion splash_region;
 	private BitmapTextureAtlas splashTextureAtlas;
+
+	// Textures for current quest scene
+	public ITextureRegion questFrameRegion;
+	private BitmapTextureAtlas questFrameTextureAtlas;
 
 	// Textures for game shop scene
 	public ITextureRegion shopRegion;
@@ -245,6 +256,7 @@ public class ResourcesManager {
 		playerAtlas.load();
 		dinosaurGreenAtlas.load();
 		// treesAtlas.load();
+		questFrameTextureAtlas.load();
 		spearAtlas.load();
 		fightAtlas.load();
 
@@ -255,6 +267,7 @@ public class ResourcesManager {
 		playerAtlas.unload();
 		dinosaurGreenAtlas.unload();
 		// treesAtlas.unload();
+		questFrameTextureAtlas.unload();
 		spearAtlas.unload();
 		fightAtlas.unload();
 
@@ -265,6 +278,7 @@ public class ResourcesManager {
 		createPlayerGraphics();
 		createDinoGraphics();
 		// createTreeGraphics();
+		createQuestFrameGraphics();
 		createSpearGraphics();
 		createFightbarGraphics();
 		gameGraphicsCreated = true;
@@ -325,6 +339,17 @@ public class ResourcesManager {
 				y = y + 128;
 			}
 		}
+	}
+
+	private void createQuestFrameGraphics() {
+		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
+
+		this.questFrameTextureAtlas = new BitmapTextureAtlas(textureManager,
+				590, 480, TextureOptions.DEFAULT);
+
+		this.questFrameRegion = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(questFrameTextureAtlas, activity,
+						"quest_frame.png", 0, 0);
 	}
 
 	// ---------------------------------------------
@@ -408,35 +433,68 @@ public class ResourcesManager {
 	}
 
 	private void createHUDGraphics() {
-		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
+		BitmapTextureAtlasTextureRegionFactory
+				.setAssetBasePath("gfx/game/hud/");
 
 		this.controlTextureAtlas = new BitmapTextureAtlas(textureManager, 256,
 				128, TextureOptions.BILINEAR);
 		this.controlBaseTextureRegion = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(this.controlTextureAtlas, activity,
+				.createFromAsset(controlTextureAtlas, activity,
 						"onscreen_control_base.png", 0, 0);
 		this.controlKnobTextureRegion = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(this.controlTextureAtlas, activity,
+				.createFromAsset(controlTextureAtlas, activity,
 						"onscreen_control_knob.png", 128, 0);
 
 		this.hudBerryAtlas = new BitmapTextureAtlas(textureManager, 50, 39,
 				TextureOptions.BILINEAR);
 		this.hudBerryRegion = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(this.hudBerryAtlas, activity,
-						"berries_small.png", 0, 0);
+				.createFromAsset(hudBerryAtlas, activity, "berries_small.png",
+						0, 0);
+	}
+
+	private void createHUDButtonIconGraphics() {
+		BitmapTextureAtlasTextureRegionFactory
+				.setAssetBasePath("gfx/game/hud/icons/");
+
+		this.hudHelpIconAtlas = new BitmapTextureAtlas(textureManager, 50, 52,
+				TextureOptions.BILINEAR);
+		this.hudHelpIconRegion = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(hudHelpIconAtlas, activity,
+						"Game_Icons_0000_Help.png", 0, 0);
+
+		this.hudQuestListIconAtlas = new BitmapTextureAtlas(textureManager, 44,
+				44, TextureOptions.BILINEAR);
+		this.hudQuestListIconRegion = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(hudQuestListIconAtlas, activity,
+						"Game_Icons_0008_List.png", 0, 0);
+
+		this.hudShopIconAtlas = new BitmapTextureAtlas(textureManager, 44, 44,
+				TextureOptions.BILINEAR);
+		this.hudShopIconRegion = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(hudShopIconAtlas, activity,
+						"Game_Icons_0009_Shop.png", 0, 0);
 	}
 
 	private void loadHUDGraphics() {
-		if (controlTextureAtlas == null) {
+		if (controlTextureAtlas == null || hudBerryAtlas == null) {
 			createHUDGraphics();
+			createHUDButtonIconGraphics();
 		}
 		controlTextureAtlas.load();
 		hudBerryAtlas.load();
+
+		hudHelpIconAtlas.load();
+		hudQuestListIconAtlas.load();
+		hudShopIconAtlas.load();
 	}
 
 	private void unloadHUDGraphics() {
 		controlTextureAtlas.unload();
 		hudBerryAtlas.unload();
+
+		hudHelpIconAtlas.unload();
+		hudQuestListIconAtlas.unload();
+		hudShopIconAtlas.unload();
 	}
 
 	// ---------------------------------------------

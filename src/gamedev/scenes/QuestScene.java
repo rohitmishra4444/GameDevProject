@@ -1,5 +1,7 @@
 package gamedev.scenes;
 
+import gamedev.game.GameActivity;
+import gamedev.game.GameActivity.GameMode;
 import gamedev.game.ResourcesManager;
 import gamedev.game.SceneManager;
 
@@ -25,13 +27,7 @@ public class QuestScene extends CameraScene {
 
 		// Remove the rest of code in the constructor, is only for testing
 		// purposes.
-		resourcesManager.loadGameShopResources();
-		float centerX = resourcesManager.camera.getCenterX()
-				- resourcesManager.shopRegion.getWidth() / 2;
-		float centerY = resourcesManager.camera.getCenterY()
-				- resourcesManager.shopRegion.getHeight() / 2;
-
-		background = new Sprite(centerX, centerY, resourcesManager.shopRegion,
+		background = new Sprite(0, 0, resourcesManager.questFrameRegion,
 				resourcesManager.vbom) {
 			@Override
 			protected void preDraw(GLState pGLState, Camera pCamera) {
@@ -39,6 +35,8 @@ public class QuestScene extends CameraScene {
 				pGLState.enableDither();
 			}
 		};
+
+		background.setScaleX(1.3f);
 
 		centerShapeInCamera(background);
 
@@ -62,14 +60,13 @@ public class QuestScene extends CameraScene {
 	public void openQuestScene() {
 		resourcesManager.unloadHUDResources();
 		SceneManager.getInstance().getCurrentGameMapScene().setChildScene(this);
-		// If we stop the engine then also the touch inputs are working no more!
-		// resourcesManager.engine.stop();
+		GameActivity.mode = GameMode.POPUP;
 	}
 
 	public void closeQuestScene() {
 		SceneManager.getInstance().getCurrentGameMapScene().clearChildScene();
 		resourcesManager.loadHUDResources();
-		// resourcesManager.engine.start();
+		GameActivity.mode = GameMode.EXPLORING;
 		this.dispose();
 	}
 

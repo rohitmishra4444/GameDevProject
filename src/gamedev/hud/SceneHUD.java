@@ -1,7 +1,9 @@
 package gamedev.hud;
 
 import gamedev.game.GameActivity;
+import gamedev.game.GameActivity.GameMode;
 import gamedev.game.ResourcesManager;
+import gamedev.game.SceneManager;
 import gamedev.scenes.QuestScene;
 
 import org.andengine.engine.camera.hud.HUD;
@@ -51,14 +53,14 @@ public class SceneHUD extends HUD {
 			avatarEnergy = resourcesManager.avatar.getEnergy();
 		}
 
-		this.life = new Rectangle(cameraWidth - 150, 20, avatarLife, 20,
-				this.resourcesManager.vbom);
+		this.life = new Rectangle(cameraWidth - avatarLife - 70, 20,
+				avatarLife, 20, this.resourcesManager.vbom);
 		this.life.setColor(Color.RED);
-		this.life.setAlpha(0.6f);
-		this.energy = new Rectangle(cameraWidth - 150, 50, avatarEnergy, 20,
-				this.resourcesManager.vbom);
+		this.life.setAlpha(0.8f);
+		this.energy = new Rectangle(cameraWidth - avatarLife - 70, 50,
+				avatarEnergy, 20, this.resourcesManager.vbom);
 		this.energy.setColor(Color.BLUE);
-		this.energy.setAlpha(0.6f);
+		this.energy.setAlpha(0.8f);
 
 		this.attachChild(life);
 		this.attachChild(energy);
@@ -68,6 +70,8 @@ public class SceneHUD extends HUD {
 		createDPadControls();
 		createSprintButton();
 		createQuestButton();
+		createHelpButton();
+		createShopButton();
 		createBerriesAndButton();
 	}
 
@@ -116,53 +120,6 @@ public class SceneHUD extends HUD {
 		this.attachChild(sprintButton);
 	}
 
-	private void createQuestButton() {
-		// TODO: Better icon for quest button
-		ButtonSprite questButton = new ButtonSprite(cameraWidth - 120,
-				cameraHeight - 250, resourcesManager.controlKnobTextureRegion,
-				resourcesManager.vbom) {
-			@Override
-			public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y) {
-				this.registerEntityModifier(new SequenceEntityModifier(
-						new ScaleModifier(0.25f, 1.25f, 1f), new ScaleModifier(
-								0.25f, 1f, 1.25f)));
-
-				if (touchEvent.isActionUp()) {
-					if (resourcesManager.engine.isRunning()) {
-						QuestScene questScene = new QuestScene();
-						questScene.openQuestScene();
-						// TODO: Remove.
-						resourcesManager.activity
-								.toastOnUIThread(
-										"Sorry, quests are not implemented yet but you can see the camera scene.",
-										Toast.LENGTH_LONG);
-						resourcesManager.activity
-								.toastOnUIThread(
-										"Touch on the screen to close the camera scene.",
-										Toast.LENGTH_LONG);
-					}
-
-					// Stop the currently animation if it is not already
-					// attacking.
-					// if (resourcesManager.avatar.getState() !=
-					// GameState.ATTACK) {
-					// resourcesManager.avatar.stopAnimation();
-					// }
-					// resourcesManager.avatar.setState(GameState.ATTACK, -1);
-				}
-
-				return true;
-			};
-		};
-
-		questButton.setAlpha(0.5f);
-		questButton.setScale(1.25f);
-		questButton.setColor(Color.BLACK);
-
-		this.registerTouchArea(questButton);
-		this.attachChild(questButton);
-	}
-
 	private void createBerriesAndButton() {
 		this.berries = new ButtonSprite(cameraWidth - 115, 120,
 				resourcesManager.hudBerryRegion, resourcesManager.vbom) {
@@ -208,6 +165,109 @@ public class SceneHUD extends HUD {
 		this.berryCounter.setScale(1.5f);
 		this.attachChild(berryCounter);
 
+	}
+
+	private void createShopButton() {
+		ButtonSprite shopButton = new ButtonSprite(cameraWidth - 400, 20,
+				resourcesManager.hudShopIconRegion, resourcesManager.vbom) {
+			@Override
+			public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y) {
+				this.registerEntityModifier(new SequenceEntityModifier(
+						new ScaleModifier(0.25f, 1.25f, 1f), new ScaleModifier(
+								0.25f, 1f, 1.25f)));
+
+				if (touchEvent.isActionUp()) {
+					// TODO: Make the shop scene also a camera scene like the
+					// quest scene.
+					GameActivity.mode = GameMode.POPUP;
+					SceneManager.getInstance().loadGameShopScene(
+							resourcesManager.engine);
+					// TODO: Remove.
+					resourcesManager.activity.toastOnUIThread(
+							"Sorry, the shop is not implemented yet.",
+							Toast.LENGTH_LONG);
+				}
+
+				return true;
+			};
+		};
+
+		shopButton.setAlpha(0.8f);
+		shopButton.setScale(1.25f);
+
+		this.registerTouchArea(shopButton);
+		this.attachChild(shopButton);
+	}
+
+	private void createQuestButton() {
+		ButtonSprite questButton = new ButtonSprite(cameraWidth - 300, 20,
+				resourcesManager.hudQuestListIconRegion, resourcesManager.vbom) {
+			@Override
+			public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y) {
+				this.registerEntityModifier(new SequenceEntityModifier(
+						new ScaleModifier(0.25f, 1.25f, 1f), new ScaleModifier(
+								0.25f, 1f, 1.25f)));
+
+				if (touchEvent.isActionUp()) {
+					if (resourcesManager.engine.isRunning()) {
+						QuestScene questScene = new QuestScene();
+						questScene.openQuestScene();
+						// TODO: Remove.
+						resourcesManager.activity
+								.toastOnUIThread(
+										"Sorry, quests are not implemented yet but you can see the camera scene.",
+										Toast.LENGTH_LONG);
+						resourcesManager.activity
+								.toastOnUIThread(
+										"Touch on the screen to close the camera scene.",
+										Toast.LENGTH_LONG);
+					}
+
+					// Stop the currently animation if it is not already
+					// attacking.
+					// if (resourcesManager.avatar.getState() !=
+					// GameState.ATTACK) {
+					// resourcesManager.avatar.stopAnimation();
+					// }
+					// resourcesManager.avatar.setState(GameState.ATTACK, -1);
+				}
+
+				return true;
+			};
+		};
+
+		questButton.setAlpha(0.8f);
+		questButton.setScale(1.25f);
+
+		this.registerTouchArea(questButton);
+		this.attachChild(questButton);
+	}
+
+	private void createHelpButton() {
+		ButtonSprite helpButton = new ButtonSprite(70, 20,
+				resourcesManager.hudHelpIconRegion, resourcesManager.vbom) {
+			@Override
+			public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y) {
+				this.registerEntityModifier(new SequenceEntityModifier(
+						new ScaleModifier(0.25f, 1.25f, 1f), new ScaleModifier(
+								0.25f, 1f, 1.25f)));
+
+				if (touchEvent.isActionUp()) {
+					// TODO: Remove.
+					resourcesManager.activity.toastOnUIThread(
+							"Sorry, the help is not implemented yet.",
+							Toast.LENGTH_LONG);
+				}
+
+				return true;
+			};
+		};
+
+		helpButton.setAlpha(0.8f);
+		helpButton.setScale(1.25f);
+
+		this.registerTouchArea(helpButton);
+		this.attachChild(helpButton);
 	}
 
 	/**

@@ -82,6 +82,7 @@ public class BodiesContactListener implements ContactListener,
 			showFightScene(dino);
 		}
 
+		// TODO: Remove
 		if (x1.getBody().getUserData().equals("Avatar")
 				&& x2.getBody().getUserData().equals("ShopCave")) {
 			SceneManager.getInstance().loadGameShopScene(

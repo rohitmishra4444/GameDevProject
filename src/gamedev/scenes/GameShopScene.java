@@ -1,5 +1,7 @@
 package gamedev.scenes;
 
+import gamedev.game.GameActivity;
+import gamedev.game.GameActivity.GameMode;
 import gamedev.game.ResourcesManager;
 import gamedev.game.SceneManager;
 import gamedev.game.SceneManager.SceneType;
@@ -56,6 +58,7 @@ public class GameShopScene extends BaseScene {
 	@Override
 	public void onBackKeyPressed() {
 		SceneManager.getInstance().loadGameMapScene(engine);
+		GameActivity.mode = GameMode.EXPLORING;
 	}
 
 	@Override

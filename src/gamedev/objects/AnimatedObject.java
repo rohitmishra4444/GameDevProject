@@ -108,6 +108,11 @@ public abstract class AnimatedObject extends AnimatedSprite {
 			this.body.setLinearVelocity(0, 0);
 			return false;
 		}
+		if (GameActivity.mode == GameMode.POPUP) {
+			this.body.setLinearVelocity(0, 0);
+			// TODO: We should also stop the animation here.
+			return false;
+		}
 		return true;
 	}
 
