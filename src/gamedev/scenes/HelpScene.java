@@ -13,12 +13,12 @@ import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.util.GLState;
 
-public class ShopScene extends CameraScene {
+public class HelpScene extends CameraScene {
 
 	private ResourcesManager resourcesManager = ResourcesManager.getInstance();
 	private Sprite background;
 
-	public ShopScene() {
+	public HelpScene() {
 		super(ResourcesManager.getInstance().camera);
 		this.setBackgroundEnabled(false);
 
@@ -40,24 +40,23 @@ public class ShopScene extends CameraScene {
 			public boolean onSceneTouchEvent(Scene pScene,
 					TouchEvent pSceneTouchEvent) {
 				if (pSceneTouchEvent.isActionDown()) {
-					closeShopScene();
+					closeHelpScene();
 				}
 				return true;
 			}
 		});
 	}
 
-	public void openShopScene() {
+	public void openHelpScene() {
 		resourcesManager.unloadHUDResources();
 		SceneManager.getInstance().getCurrentGameMapScene().setChildScene(this);
 		GameActivity.mode = GameMode.POPUP;
 	}
 
-	public void closeShopScene() {
+	public void closeHelpScene() {
 		SceneManager.getInstance().getCurrentGameMapScene().clearChildScene();
 		resourcesManager.loadHUDResources();
 		GameActivity.mode = GameMode.EXPLORING;
 		this.dispose();
 	}
-
 }

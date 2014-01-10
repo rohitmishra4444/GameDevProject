@@ -2,6 +2,7 @@ package gamedev.hud;
 
 import gamedev.game.GameActivity;
 import gamedev.game.ResourcesManager;
+import gamedev.scenes.HelpScene;
 import gamedev.scenes.QuestScene;
 import gamedev.scenes.ShopScene;
 
@@ -173,8 +174,6 @@ public class SceneHUD extends HUD {
 						new ScaleModifier(0.25f, 1.25f, 1f), new ScaleModifier(
 								0.25f, 1f, 1.25f)));
 
-				// TODO: Make the shop scene also a camera scene like the
-				// quest scene.
 				ShopScene shopScene = new ShopScene();
 				shopScene.openShopScene();
 				// TODO: Remove.
@@ -205,26 +204,24 @@ public class SceneHUD extends HUD {
 						new ScaleModifier(0.25f, 1.25f, 1f), new ScaleModifier(
 								0.25f, 1f, 1.25f)));
 
-				if (resourcesManager.engine.isRunning()) {
-					QuestScene questScene = new QuestScene();
-					questScene.openQuestScene();
-					// TODO: Remove.
-					resourcesManager.activity
-							.toastOnUIThread(
-									"Sorry, quests are not implemented yet but you can see the camera scene.",
-									Toast.LENGTH_LONG);
-					resourcesManager.activity.toastOnUIThread(
-							"Touch on the screen to close the camera scene.",
-							Toast.LENGTH_LONG);
+				QuestScene questScene = new QuestScene();
+				questScene.openQuestScene();
+				// TODO: Remove.
+				resourcesManager.activity
+						.toastOnUIThread(
+								"Sorry, quests are not implemented yet but you can see the camera scene.",
+								Toast.LENGTH_LONG);
+				resourcesManager.activity.toastOnUIThread(
+						"Touch on the screen to close the camera scene.",
+						Toast.LENGTH_LONG);
 
-					// Stop the currently animation if it is not already
-					// attacking.
-					// if (resourcesManager.avatar.getState() !=
-					// GameState.ATTACK) {
-					// resourcesManager.avatar.stopAnimation();
-					// }
-					// resourcesManager.avatar.setState(GameState.ATTACK, -1);
-				}
+				// Stop the currently animation if it is not already
+				// attacking.
+				// if (resourcesManager.avatar.getState() !=
+				// GameState.ATTACK) {
+				// resourcesManager.avatar.stopAnimation();
+				// }
+				// resourcesManager.avatar.setState(GameState.ATTACK, -1);
 
 				return true;
 			};
@@ -245,6 +242,9 @@ public class SceneHUD extends HUD {
 				this.registerEntityModifier(new SequenceEntityModifier(
 						new ScaleModifier(0.25f, 1.25f, 1f), new ScaleModifier(
 								0.25f, 1f, 1.25f)));
+
+				HelpScene helpScene = new HelpScene();
+				helpScene.openHelpScene();
 
 				// TODO: Remove.
 				resourcesManager.activity.toastOnUIThread(
