@@ -250,8 +250,7 @@ public class ResourcesManager {
 	}
 
 	private void loadGameGraphics() {
-		if (playerAtlas == null || dinosaurGreenAtlas == null
-				|| treesAtlas == null || gameGraphicsCreated == false) {
+		if (playerAtlas == null || gameGraphicsCreated == false) {
 			createGameGraphics();
 		}
 		gameEndPortalAtlas.load();
@@ -286,16 +285,15 @@ public class ResourcesManager {
 		gameGraphicsCreated = true;
 	}
 
-	// TODO: Create here the graphics for the portal.
 	private void createGameEndPortalGraphics() {
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
 
-		this.gameEndPortalAtlas = new BitmapTextureAtlas(textureManager, 200,
-				126, TextureOptions.DEFAULT);
+		this.gameEndPortalAtlas = new BitmapTextureAtlas(textureManager, 280,
+				296, TextureOptions.DEFAULT);
 
 		this.gameEndPortalRegion = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(gameEndPortalAtlas, activity, "caveExit.png",
-						0, 0);
+				.createFromAsset(gameEndPortalAtlas, activity, "portal.png", 0,
+						0);
 	}
 
 	private void createPlayerGraphics() {

@@ -9,6 +9,7 @@ import gamedev.quests.Quest;
 import java.util.ArrayList;
 
 import org.andengine.entity.IEntity;
+import org.andengine.entity.sprite.Sprite;
 import org.andengine.extension.tmx.TMXLayer;
 import org.andengine.extension.tmx.TMXLoader;
 import org.andengine.extension.tmx.TMXLoader.ITMXTilePropertiesListener;
@@ -30,14 +31,7 @@ public class GameMapScene extends BaseScene {
 	protected TMXTiledMap mTMXTiledMap;
 	protected String tmxFileName;
 
-	// Player. Each level has to create the Player and its position in the world
-	protected Avatar player;
-
-	// private Sprite gameEndPortal;
-	// private Sprite cave;
-
-	// private static final int MIN_DINOS_TO_KILL = 1;
-	// private int dinosKilled = 0;
+	private Sprite gameEndPortal;
 
 	protected ArrayList<Quest> quests = new ArrayList<Quest>();
 
@@ -45,7 +39,6 @@ public class GameMapScene extends BaseScene {
 		// Call BaseScene without calling createScene because here we need some
 		// stuff initialized before
 		super(false);
-		this.player = this.resourcesManager.avatar;
 		this.tmxFileName = "level.tmx";
 		this.createScene();
 	}
@@ -54,35 +47,27 @@ public class GameMapScene extends BaseScene {
 	public void createScene() {
 		this.createMap();
 		this.connectPhysics();
-		assert (player != null);
+
+		if (resourcesManager.avatar == null) {
+			System.out.println("Avatar is null!");
+			resourcesManager.avatar = new Avatar();
+		}
+
 		// Check if the player is already has a parent (avoid
 		// assertEntityHasNoParent IllegalStateException)
 		// This is needed for the back button during gameplay (for restarting a
 		// new game).
-		if (player.hasParent()) {
-			IEntity parentEntity = player.getParent();
-			parentEntity.detachChild(player);
+		if (resourcesManager.avatar.hasParent()) {
+			IEntity parentEntity = resourcesManager.avatar.getParent();
+			parentEntity.detachChild(resourcesManager.avatar);
 		}
 		// 32 is the PIXEL_TO_METER_RATIO_DEFAULT from AndEngine
-		player.getBody().setTransform(200 / 32, 200 / 32, 0);
-		this.attachChild(player);
+		resourcesManager.avatar.getBody().setTransform(200 / 32, 200 / 32, 0);
+		this.attachChild(resourcesManager.avatar);
 
-		// TODO: Define player and portal positions as constant.
-		// TODO: Game end portal should be created in TmxLevelLoader class.
-		// gameEndPortal = new Sprite(1200, 300,
-		// resourcesManager.gameEndPortalRegion, vbom) {
-		// @Override
-		// protected void onManagedUpdate(float pSecondsElapsed) {
-		// super.onManagedUpdate(pSecondsElapsed);
-		// if (player.collidesWith(this) && areLevelRulesCompleted()) {
-		// SceneManager.getInstance().loadGameEndScene(engine);
-		// }
-		// }
-		// };
-		// gameEndPortal.setAlpha(0.9f);
-		// gameEndPortal.registerEntityModifier(new LoopEntityModifier(
-		// new ScaleModifier(2, 0.95f, 1.05f)));
-		// this.attachChild(gameEndPortal);
+		// TODO: Define player position as constant or in tmx map.
+
+		createGameEndPortal();
 	}
 
 	protected void connectPhysics() {
@@ -122,6 +107,27 @@ public class GameMapScene extends BaseScene {
 		// new class
 		TmxLevelLoader loader = new TmxLevelLoader(this.mTMXTiledMap, this);
 		loader.createWorldAndObjects();
+	}
+
+	private void createGameEndPortal() {
+		// TODO: Game end portal should be created in TmxLevelLoader class. This
+		// will be done by dwettstein.
+		// This is only for testing the GameEndScene.
+		gameEndPortal = new Sprite(1500, 300,
+				resourcesManager.gameEndPortalRegion, vbom) {
+			@Override
+			protected void onManagedUpdate(float pSecondsElapsed) {
+				super.onManagedUpdate(pSecondsElapsed);
+				if (resourcesManager.avatar.collidesWith(this)) {
+					SceneManager.getInstance().loadGameEndScene(engine);
+				}
+			}
+		};
+		gameEndPortal.setAlpha(0.8f);
+		gameEndPortal.setScale(0.5f);
+		// gameEndPortal.registerEntityModifier(new LoopEntityModifier(
+		// new ScaleModifier(2, 0.95f, 1.05f)));
+		this.attachChild(gameEndPortal);
 	}
 
 	@Override

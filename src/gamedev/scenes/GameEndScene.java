@@ -4,6 +4,7 @@ import gamedev.game.SceneManager;
 import gamedev.game.SceneManager.SceneType;
 
 import org.andengine.engine.camera.Camera;
+import org.andengine.entity.modifier.FadeInModifier;
 import org.andengine.entity.scene.IOnAreaTouchListener;
 import org.andengine.entity.scene.ITouchArea;
 import org.andengine.entity.sprite.Sprite;
@@ -87,8 +88,11 @@ public class GameEndScene extends BaseScene {
 						&& pTouchArea.equals(gameEndText)
 						&& gameEndText.isVisible()) {
 					System.out.println("GameEndText touched.");
+
 					gameEndText.setVisible(false);
 					gameEndSprite.setVisible(true);
+					gameEndSprite
+							.registerEntityModifier(new FadeInModifier(5f));
 
 					lastTouchTime = touchTime;
 				}
@@ -97,6 +101,7 @@ public class GameEndScene extends BaseScene {
 						&& pTouchArea.equals(gameEndSprite)
 						&& gameEndSprite.isVisible()) {
 					System.out.println("GameEndSprite touched.");
+
 					gameEndSprite.setVisible(false);
 					gameDevelopersText.setVisible(true);
 
@@ -107,10 +112,12 @@ public class GameEndScene extends BaseScene {
 						&& pTouchArea.equals(gameDevelopersText)
 						&& gameDevelopersText.isVisible()) {
 					System.out.println("GameDevelopersText touched.");
+
 					gameDevelopersText.setVisible(false);
 					SceneManager.getInstance().loadMenuScene(engine);
-					disposeScene();
-					SceneManager.getInstance().disposeGameMapScene();
+					SceneManager.getInstance().deleteCurrentGameMapScene();
+					resourcesManager.avatar = null;
+
 					lastTouchTime = touchTime;
 				}
 
@@ -131,10 +138,16 @@ public class GameEndScene extends BaseScene {
 
 	@Override
 	public void disposeScene() {
-		this.gameEndText.detachSelf();
-		this.gameEndText.dispose();
-		this.gameEndSprite.detachSelf();
-		this.gameEndSprite.dispose();
+		if (!gameEndText.isDisposed()) {
+			gameEndText.detachSelf();
+			gameEndText.dispose();
+		}
+
+		if (!gameEndSprite.isDisposed()) {
+			gameEndSprite.detachSelf();
+			gameEndSprite.dispose();
+		}
+
 		this.detachSelf();
 		this.dispose();
 	}

@@ -96,8 +96,10 @@ public class SceneManager {
 	}
 
 	private void disposeSplashScene() {
+		if (!splashScene.isDisposed()) {
+			splashScene.disposeScene();
+		}
 		resourcesManager.unloadSplashScreen();
-		splashScene.disposeScene();
 		splashScene = null;
 	}
 
@@ -151,6 +153,7 @@ public class SceneManager {
 			introScene.disposeScene();
 		}
 		resourcesManager.unloadIntroResources();
+		introScene = null;
 	}
 
 	// TODO: Probably its better for memory, when we create the intro new and
@@ -159,9 +162,7 @@ public class SceneManager {
 		disposeCurrentScene(true);
 
 		resourcesManager.loadIntroResources();
-		if (introScene == null) {
-			introScene = new IntroScene();
-		}
+		introScene = new IntroScene();
 
 		mEngine.registerUpdateHandler(new TimerHandler(0.1f,
 				new ITimerCallback() {
@@ -198,9 +199,9 @@ public class SceneManager {
 	}
 
 	public void disposeGameMapScene() {
-		if (!gameMapScene.isDisposed()) {
-			gameMapScene.disposeScene();
-		}
+		// if (!gameMapScene.isDisposed()) {
+		gameMapScene.disposeScene();
+		// }
 		resourcesManager.unloadGameResources();
 	}
 
@@ -232,9 +233,7 @@ public class SceneManager {
 	public void loadGameEndScene(final Engine mEngine) {
 		disposeCurrentScene(false);
 		resourcesManager.loadGameEndResources();
-		if (gameEndScene == null) {
-			gameEndScene = new GameEndScene();
-		}
+		gameEndScene = new GameEndScene();
 
 		mEngine.registerUpdateHandler(new TimerHandler(0.1f,
 				new ITimerCallback() {
@@ -250,6 +249,7 @@ public class SceneManager {
 			gameEndScene.disposeScene();
 		}
 		resourcesManager.unloadGameEndResources();
+		gameEndScene = null;
 	}
 
 	/**
@@ -304,6 +304,10 @@ public class SceneManager {
 
 	public GameMapScene getCurrentGameMapScene() {
 		return (GameMapScene) gameMapScene;
+	}
+
+	public void deleteCurrentGameMapScene() {
+		gameMapScene = null;
 	}
 
 	public boolean isGameMapSceneCreated() {
