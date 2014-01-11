@@ -48,7 +48,6 @@ public class GameActivity extends BaseGameActivity {
 		// engineOptions.getAudioOptions().setNeedsMusic(true).setNeedsSound(true);
 		// engineOptions.setWakeLockOptions(WakeLockOptions.SCREEN_ON);
 		engineOptions.getTouchOptions().setNeedsMultiTouch(true);
-		System.out.println("EngineOptions created");
 		return engineOptions;
 	}
 

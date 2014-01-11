@@ -374,7 +374,7 @@ public class ResourcesManager {
 
 	private void createFightSceneGraphics() {
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
-		this.fightDinoAtlas = new BitmapTextureAtlas(textureManager, 400, 355);
+		this.fightDinoAtlas = new BitmapTextureAtlas(textureManager, 500, 451);
 		this.fightDinoRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.fightDinoAtlas, activity, "dino_fight.png", 0, 0);
 	}
 

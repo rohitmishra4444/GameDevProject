@@ -22,6 +22,7 @@ import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.util.Vector2Pool;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.util.color.Color;
+import org.andengine.util.math.MathUtils;
 
 import android.content.Context;
 import android.hardware.Sensor;
@@ -44,6 +45,8 @@ public class FightScene extends CameraScene implements SensorEventListener {
 	protected Ellipse e;
 	protected ArrayList<Ellipse> targets;
 	private static FightScene instance;
+	protected float roundTime = 0;
+	protected float roundTimeMax = 5;
 	
 	private FightScene() {
 		super(ResourcesManager.getInstance().camera);
@@ -51,11 +54,6 @@ public class FightScene extends CameraScene implements SensorEventListener {
 		this.fightDino = new Sprite(0, 0, this.resourcesManager.fightDinoRegion, this.resourcesManager.vbom);
 		centerShapeInCamera(this.fightDino);
 		this.attachChild(this.fightDino);
-		
-		e = new Ellipse(this.fightDino.getX(), this.fightDino.getY(), 8, 8, this.resourcesManager.vbom);
-		e.setColor(Color.RED);
-		e.setDrawMode(DrawMode.TRIANGLE_FAN);
-		this.attachChild(e);		
 		this.setBackgroundEnabled(false);
 		this.setOnSceneTouchListener(new IOnSceneTouchListener() {
 
@@ -63,8 +61,15 @@ public class FightScene extends CameraScene implements SensorEventListener {
 			public boolean onSceneTouchEvent(Scene pScene,
 					TouchEvent pSceneTouchEvent) {
 				if (pSceneTouchEvent.isActionDown()) {
-					object.attack(50);
-					resourcesManager.avatar.attack(10);
+					for (Ellipse target : targets) {
+						if (collidesWithTarget(target)) {
+							targets.remove(target);
+							target.detachSelf();
+							target.dispose();
+							object.attack(33);
+							break;
+						}
+					}
 					if (object.getState() == GameState.DEAD) {
 						resourcesManager.avatar.setState(GameState.IDLE, -1);
 						GameActivity.mode = GameMode.EXPLORING;
@@ -77,7 +82,11 @@ public class FightScene extends CameraScene implements SensorEventListener {
 		});
 		
 		sensorManager = (SensorManager)resourcesManager.activity.getSystemService(Context.SENSOR_SERVICE);
-        System.out.println("In Constructor FightScene");
+	}
+	
+	protected boolean collidesWithTarget(Ellipse target) {
+		float distance = MathUtils.distance(e.getX(), e.getY(), target.getX(), target.getY());
+		return (distance <= 20);
 	}
 	
 	public static FightScene getInstance() {
@@ -85,15 +94,26 @@ public class FightScene extends CameraScene implements SensorEventListener {
 			instance = new FightScene();
 		}
 		instance.enableSensor();
+		ResourcesManager.getInstance().unloadHUDResources();
 		return instance;
 	}
-
+	
+	public void onManagedUpdate(float seconds) {
+		this.roundTime += seconds;
+		if (roundTime > this.roundTimeMax) {
+			this.roundTime = 0;
+			this.resourcesManager.avatar.attack(10);
+		}
+	}
+	
 	protected void onClose() {
 		this.disableSensor();
 		for (Ellipse e : this.targets) {
 			this.detachChild(e);
 		}
+		this.detachChild(this.e);
 		this.targets = null;
+		this.resourcesManager.loadHUDResources();
 	}
 	
 	
@@ -115,10 +135,10 @@ public class FightScene extends CameraScene implements SensorEventListener {
 	public void onSensorChanged(SensorEvent event) {
         float posX = e.getX() + event.values[1] * 2;
         float posY = e.getY() + event.values[0] * 2;
-        posX = Math.min(posX, this.resourcesManager.camera.getXMax());
-        posX = Math.max(posX, this.resourcesManager.camera.getXMin());
-        posY = Math.min(posY, this.resourcesManager.camera.getYMax());
-        posY = Math.max(posY, this.resourcesManager.camera.getYMin());        
+        posX = Math.min(posX, this.fightDino.getX()+500);
+        posX = Math.max(posX, this.fightDino.getX());
+        posY = Math.min(posY, this.fightDino.getY()+500);
+        posY = Math.max(posY, this.fightDino.getY());        
         e.setPosition(posX, posY);
 	}
 
@@ -132,13 +152,17 @@ public class FightScene extends CameraScene implements SensorEventListener {
 		float maxY = minY + 355;
 		Random r = new Random();
 		for (int i=0; i<5; i++) {
-			Ellipse e = new Ellipse(minX + r.nextFloat() * (maxX-minX) -10, minY + r.nextFloat() * (maxY-minY) -10, 20, 20, resourcesManager.vbom);
+			Ellipse e = new Ellipse(minX + r.nextFloat() * (maxX-minX) -20, minY + r.nextFloat() * (maxY-minY) -20, 20, 20, resourcesManager.vbom);
 			e.setColor(Color.BLACK);
 			e.setDrawMode(DrawMode.TRIANGLE_FAN);
-			e.setAlpha(0.5f);
+			e.setAlpha(0.8f);
 			this.targets.add(e);
 			this.attachChild(e);
 		}
+		e = new Ellipse(this.fightDino.getX(), this.fightDino.getY(), 8, 8, this.resourcesManager.vbom);
+		e.setColor(Color.RED);
+		e.setDrawMode(DrawMode.TRIANGLE_FAN);
+		this.attachChild(e);		
 	}
 
 }
