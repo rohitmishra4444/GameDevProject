@@ -57,8 +57,8 @@ public class ResourcesManager {
 	// Textures for fight scene
 	public BitmapTextureAtlas spearAtlas;
 	public ITextureRegion spearRegion;
-	public BitmapTextureAtlas fightAtlas;
-	public ITextureRegion fightRegion;
+	public BitmapTextureAtlas fightDinoAtlas;
+	public ITextureRegion fightDinoRegion;
 
 	public BitmapTextureAtlas gameEndPortalAtlas;
 	public ITextureRegion gameEndPortalRegion;
@@ -258,8 +258,8 @@ public class ResourcesManager {
 		dinosaurGreenAtlas.load();
 		// treesAtlas.load();
 		questFrameTextureAtlas.load();
-		spearAtlas.load();
-		fightAtlas.load();
+//		spearAtlas.load();
+		fightDinoAtlas.load();
 
 	}
 
@@ -270,7 +270,7 @@ public class ResourcesManager {
 		// treesAtlas.unload();
 		questFrameTextureAtlas.unload();
 		spearAtlas.unload();
-		fightAtlas.unload();
+		fightDinoAtlas.unload();
 
 	}
 
@@ -280,8 +280,8 @@ public class ResourcesManager {
 		createDinoGraphics();
 		// createTreeGraphics();
 		createQuestFrameGraphics();
-		createSpearGraphics();
-		createFightbarGraphics();
+//		createSpearGraphics();
+		createFightSceneGraphics();
 		gameGraphicsCreated = true;
 	}
 
@@ -372,12 +372,10 @@ public class ResourcesManager {
 		// }
 	}
 
-	private void createFightbarGraphics() {
+	private void createFightSceneGraphics() {
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
-		this.fightAtlas = new BitmapTextureAtlas(textureManager, 626, 115);
-		this.fightRegion = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(this.fightAtlas, activity, "fightbar.png", 0,
-						0);
+		this.fightDinoAtlas = new BitmapTextureAtlas(textureManager, 400, 355);
+		this.fightDinoRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.fightDinoAtlas, activity, "dino_fight.png", 0, 0);
 	}
 
 	// ---------------------------------------------

@@ -113,7 +113,8 @@ public class BodiesContactListener implements ContactListener,
 
 	private void showFightScene(Dinosaur d) {
 		GameActivity.mode = GameMode.FIGHTING;
-		FightScene fight = new FightScene(d);
+		FightScene fight = FightScene.getInstance();
+		fight.setObject(d);
 		currentMapScene.setChildScene(fight);
 	}
 
