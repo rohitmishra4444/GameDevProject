@@ -1,8 +1,10 @@
-package gamedev.game;
+package gamedev.ai;
 
 import org.andengine.util.math.MathUtils;
 
 import com.badlogic.gdx.math.Vector2;
+
+import gamedev.game.ResourcesManager;
 import gamedev.objects.AnimatedObject;
 
 public abstract class MoveStrategy {

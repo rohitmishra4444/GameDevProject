@@ -14,13 +14,12 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
 public class Avatar extends AnimatedObject {
 
-	public final static long[] ANIMATION_DURATION = { 50, 50, 50, 50, 50, 50,
-			50, 50 };
+	public final static long[] ANIMATION_DURATION = { 50, 50, 50, 50, 50, 50, 50, 50 };
 	public final static int FRAMES_PER_ANIMATION = ANIMATION_DURATION.length;
 	public final static int TILES_PER_LINE = 16;
 
 	protected int energy = 100;
-	protected ArrayList<Berry> berryInventory = new ArrayList<Berry>();
+	protected Inventory inventory = new Inventory();
 
 	public Avatar(float pX, float pY) {
 		super(pX, pY, ResourcesManager.getInstance().playerRegion);
@@ -137,7 +136,11 @@ public class Avatar extends AnimatedObject {
 		this.energy = Math.max(energy, 0);
 		this.resourcesManager.hud.setEnergy(this.energy);
 	}
-
+	
+	public Inventory getInventory() {
+		return this.inventory;
+	}
+	
 	@Override
 	protected void createPhysic() {
 		this.body = PhysicsFactory.createBoxBody(resourcesManager.physicsWorld,
@@ -160,28 +163,5 @@ public class Avatar extends AnimatedObject {
 	@Override
 	public void setInitialState() {
 		this.setState(GameState.IDLE, Direction.SOUTH);
-	}
-
-	public void addBerryToInventory(Berry berry) {
-		this.berryInventory.add(berry);
-		resourcesManager.hud.berryCounter.onUpdate(0);
-	}
-
-	/**
-	 * Removes a berry from the berry inventory if not empty.
-	 * 
-	 * @return true, if berry successfully removed false, if inventory is empty
-	 */
-	public boolean removeBerryFromInventory() {
-		if (!this.berryInventory.isEmpty()) {
-			this.berryInventory.remove(0);
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	public int getBerrySize() {
-		return this.berryInventory.size();
 	}
 }

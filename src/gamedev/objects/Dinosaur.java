@@ -5,8 +5,8 @@ import org.andengine.entity.shape.IShape;
 import org.andengine.extension.debugdraw.primitives.Ellipse;
 import org.andengine.util.color.Color;
 
-import gamedev.game.FollowPlayerStrategy;
-import gamedev.game.RandomMoveStrategy;
+import gamedev.ai.FollowPlayerStrategy;
+import gamedev.ai.RandomMoveStrategy;
 import gamedev.game.ResourcesManager;
 
 public class Dinosaur extends AnimatedObject {

@@ -128,13 +128,11 @@ public class SceneHUD extends HUD {
 						new ScaleModifier(0.25f, 1.25f, 1f), new ScaleModifier(
 								0.25f, 1f, 1.25f)));
 
-				if (resourcesManager.avatar.removeBerryFromInventory() == true) {
+				if (resourcesManager.avatar.getInventory().removeBerry()) {
 					int currentLife = resourcesManager.avatar.getLife();
-					resourcesManager.avatar.setLife(currentLife
-							+ lifeAdditionFromBerry);
+					resourcesManager.avatar.setLife(currentLife + lifeAdditionFromBerry);
 					int currentEnergy = resourcesManager.avatar.getEnergy();
-					resourcesManager.avatar.setEnergy(currentEnergy
-							+ energyAdditionFromBerry);
+					resourcesManager.avatar.setEnergy(currentEnergy + energyAdditionFromBerry);
 				}
 
 				return true;
@@ -150,8 +148,7 @@ public class SceneHUD extends HUD {
 		this.berryCounter.registerUpdateHandler(new IUpdateHandler() {
 			@Override
 			public void onUpdate(float pSecondsElapsed) {
-				berryCounter.setText(String.valueOf(resourcesManager.avatar
-						.getBerrySize()));
+				berryCounter.setText(String.valueOf(resourcesManager.avatar.getInventory().getNumberNumberOfBerries()));
 			}
 
 			@Override
@@ -214,14 +211,6 @@ public class SceneHUD extends HUD {
 				resourcesManager.activity.toastOnUIThread(
 						"Touch on the screen to close the camera scene.",
 						Toast.LENGTH_LONG);
-
-				// Stop the currently animation if it is not already
-				// attacking.
-				// if (resourcesManager.avatar.getState() !=
-				// GameState.ATTACK) {
-				// resourcesManager.avatar.stopAnimation();
-				// }
-				// resourcesManager.avatar.setState(GameState.ATTACK, -1);
 
 				return true;
 			};

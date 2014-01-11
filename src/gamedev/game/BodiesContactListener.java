@@ -179,7 +179,7 @@ public class BodiesContactListener implements ContactListener,
 		if (berryBush != null) {
 			Berry berry = berryBush.getBerry();
 			if (berry != null) {
-				resourcesManager.avatar.addBerryToInventory(berry);
+				resourcesManager.avatar.getInventory().addBerry(berry);
 				resourcesManager.activity.toastOnUIThread("Berry collected.",
 						Toast.LENGTH_SHORT);
 			}

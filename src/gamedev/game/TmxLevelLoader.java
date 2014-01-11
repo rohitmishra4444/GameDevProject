@@ -1,5 +1,8 @@
 package gamedev.game;
 
+import gamedev.ai.FollowPlayerStrategy;
+import gamedev.ai.RandomMoveStrategy;
+import gamedev.ai.WaypointMoveStrategy;
 import gamedev.objects.BerryBush;
 import gamedev.objects.Dinosaur;
 import gamedev.objects.Tree;

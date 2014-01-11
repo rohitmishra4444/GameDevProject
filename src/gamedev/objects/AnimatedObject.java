@@ -1,9 +1,9 @@
 package gamedev.objects;
 
+import gamedev.ai.MoveStrategy;
 import gamedev.game.Direction;
 import gamedev.game.GameActivity;
 import gamedev.game.GameActivity.GameMode;
-import gamedev.game.MoveStrategy;
 import gamedev.game.ResourcesManager;
 
 import org.andengine.engine.handler.physics.PhysicsHandler;

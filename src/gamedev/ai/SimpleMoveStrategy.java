@@ -1,4 +1,4 @@
-package gamedev.game;
+package gamedev.ai;
 
 import gamedev.objects.AnimatedObject;
 import gamedev.objects.AnimatedObject.GameState;

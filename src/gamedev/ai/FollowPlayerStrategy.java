@@ -1,7 +1,8 @@
-package gamedev.game;
+package gamedev.ai;
 
 import org.andengine.util.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+
 import gamedev.objects.AnimatedObject;
 import gamedev.objects.AnimatedObject.GameState;
 
