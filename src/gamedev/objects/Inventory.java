@@ -12,12 +12,18 @@ import java.util.ArrayList;
 public class Inventory {
 	
 	/** Static objects from world */
-	protected ArrayList<StaticObject> objects = new ArrayList<StaticObject>();
+	protected ArrayList<CollectableObject> objects = new ArrayList<CollectableObject>();
 	
 	/** Berries collected */
 	protected ArrayList<Berry> berries = new ArrayList<Berry>();
 	
+	public void addObject(CollectableObject object) {
+		this.objects.add(object);
+	}
 	
+	public boolean contains(CollectableObject object) {
+		return this.objects.contains(object);
+	}
 	
 	public void addBerry(Berry berry) {
 		this.berries.add(berry);

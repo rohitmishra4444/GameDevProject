@@ -2,6 +2,8 @@ package gamedev.quests;
 
 import gamedev.game.ResourcesManager;
 import gamedev.game.SceneManager;
+import gamedev.objects.Inventory;
+import gamedev.objects.Wood;
 
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.Scene;
@@ -20,6 +22,9 @@ public class QuestBuildBridge extends Quest {
 	
 	protected Body body;
 	protected Rectangle rectangle;
+	protected Wood wood1;
+	protected Wood wood2;
+	protected Wood wood3;
 	
 	public QuestBuildBridge(Scene map) {
 		super(map);
@@ -29,9 +34,12 @@ public class QuestBuildBridge extends Quest {
 		final FixtureDef boxFixtureDef = PhysicsFactory.createFixtureDef(0,0, 0);
 		this.body = PhysicsFactory.createBoxBody(ResourcesManager.getInstance().physicsWorld, this.rectangle, BodyType.StaticBody, boxFixtureDef);
 		this.map.attachChild(this.rectangle);
-		
-		// TODO Add static objects to collect...
-		
+		this.wood1 = new Wood(200,200);
+		this.wood2 = new Wood(400,600);
+		this.wood3 = new Wood(500, 500);
+		map.attachChild(wood1);
+		map.attachChild(wood2);
+		map.attachChild(wood3);
 	}
 
 	@Override
@@ -48,8 +56,8 @@ public class QuestBuildBridge extends Quest {
 
 	@Override
 	public boolean isCompleted() {
-		// TODO Auto-generated method stub
-		return false;
+		Inventory inventory = ResourcesManager.getInstance().avatar.getInventory();
+		return (inventory.contains(wood1) && inventory.contains(wood2) && inventory.contains(wood3));
 	}
 
 	

@@ -29,8 +29,9 @@ public class QuestTrigger extends Rectangle {
 				// Toast quest.getStatus();
 			} else {
 				quest.onFinish();
-				this.dispose();
-				this.detachSelf();
+				// TODO: Removing same object in on ManagedUpdate does not work, we need to find a way to safely remove objects...
+//				this.dispose();
+//				this.detachSelf();
 			}
 		}
 	}

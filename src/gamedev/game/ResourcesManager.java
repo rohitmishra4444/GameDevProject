@@ -5,6 +5,7 @@ import gamedev.objects.Avatar;
 
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.BoundCamera;
+import org.andengine.entity.IEntity;
 import org.andengine.extension.physics.box2d.FixedStepPhysicsWorld;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.opengl.font.Font;
@@ -99,7 +100,12 @@ public class ResourcesManager {
 	// Textures for game end scene
 	public ITextureRegion game_end_region;
 	public BitmapTextureAtlas game_end_atlas;
+	
+	// Static objects
+	public BitmapTextureAtlas woodAtlas;
+	public ITextureRegion woodRegion;
 
+	
 	// ---------------------------------------------
 	// Physic
 	// ---------------------------------------------
@@ -109,7 +115,18 @@ public class ResourcesManager {
 	// ---------------------------------------------
 	// CLASS LOGIC
 	// ---------------------------------------------
+	
+	public void removeSpriteFromScene(final IEntity sprite) {
+		activity.runOnUiThread(new Runnable(){
 
+			@Override
+			public void run() {
+				SceneManager.getInstance().getCurrentGameMapScene().detachChild(sprite);
+			}
+			
+		});
+	}
+	
 	// ---------------------------------------------
 	// Splash resources
 	// ---------------------------------------------
@@ -260,7 +277,7 @@ public class ResourcesManager {
 		questFrameTextureAtlas.load();
 //		spearAtlas.load();
 		fightDinoAtlas.load();
-
+		woodAtlas.load();
 	}
 
 	private void unloadGameGraphics() {
@@ -271,7 +288,7 @@ public class ResourcesManager {
 		questFrameTextureAtlas.unload();
 		spearAtlas.unload();
 		fightDinoAtlas.unload();
-
+		woodAtlas.unload();
 	}
 
 	private void createGameGraphics() {
@@ -282,7 +299,17 @@ public class ResourcesManager {
 		createQuestFrameGraphics();
 //		createSpearGraphics();
 		createFightSceneGraphics();
+		createStaticObjectGraphics();
 		gameGraphicsCreated = true;
+	}
+
+	private void createStaticObjectGraphics() {
+		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
+
+		this.woodAtlas = new BitmapTextureAtlas(textureManager, 32, 33, TextureOptions.DEFAULT);
+
+		this.woodRegion = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(woodAtlas, activity, "wood.png", 0, 0);
 	}
 
 	private void createGameEndPortalGraphics() {
