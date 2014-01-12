@@ -45053,8 +45053,23 @@
   <object x="1363" y="636" width="3" height="970"/>
  </objectgroup>
  <objectgroup name="GreenDinosaurs" width="100" height="50">
-  <object x="913" y="54" width="10" height="11"/>
-  <object x="1055" y="518" width="11" height="11"/>
+  <object x="904" y="156" width="10" height="11">
+   <properties>
+    <property name="MoveStrategy" value="WaypointMoveStrategy"/>
+    <property name="point" value="20,7"/>
+    <property name="point2" value="31,11"/>
+    <property name="point3" value="27,4"/>
+   </properties>
+  </object>
+  <object x="973" y="969" width="14" height="12"/>
+  <object x="530" y="518" width="15" height="15">
+   <properties>
+    <property name="MoveStrategy" value="RandomMoveStrategy"/>
+    <property name="maxDistance" value="400"/>
+    <property name="minDistance" value="100"/>
+    <property name="waitBetweenTime" value="5"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup name="ShopCave" width="100" height="50">
   <object x="778" y="26" width="39" height="56"/>
@@ -45063,5 +45078,8 @@
   <object x="879" y="272"/>
   <object x="687" y="370"/>
   <object x="336" y="303"/>
+ </objectgroup>
+ <objectgroup name="QuestTrigger" width="100" height="50">
+  <object name="1" x="1131" y="480" width="81" height="93"/>
  </objectgroup>
 </map>

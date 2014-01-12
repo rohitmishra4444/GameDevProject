@@ -5,6 +5,8 @@ import gamedev.game.SceneManager;
 
 import org.andengine.entity.primitive.Rectangle;
 
+import android.widget.Toast;
+
 public class QuestTrigger extends Rectangle {
 	
 	protected int questId;
@@ -13,6 +15,7 @@ public class QuestTrigger extends Rectangle {
 	public QuestTrigger(int questId, float pX, float pY, float pWidth, float pHeight) {
 		super(pX, pY, pWidth, pHeight, ResourcesManager.getInstance().vbom);
 		this.questId = questId;
+		this.setVisible(false);
 	}
 
 	public void onManagedUpdate(float pSecondsElapsed) {
@@ -21,11 +24,11 @@ public class QuestTrigger extends Rectangle {
 			if (!quest.isCompleted()) {
 				if (!quest.isActive) {
 					quest.setActive(true);
+					ResourcesManager.getInstance().activity.toastOnUIThread(quest.getDescription(), Toast.LENGTH_SHORT);
 				}
 				// Toast quest.getStatus();
 			} else {
 				quest.onFinish();
-				quest.isCompleted = true;
 				this.dispose();
 				this.detachSelf();
 			}

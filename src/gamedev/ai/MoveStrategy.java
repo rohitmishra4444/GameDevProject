@@ -1,5 +1,6 @@
 package gamedev.ai;
 
+import org.andengine.extension.tmx.TMXObject;
 import org.andengine.util.math.MathUtils;
 
 import com.badlogic.gdx.math.Vector2;
@@ -37,7 +38,11 @@ public abstract class MoveStrategy {
 	public void setCoordinates(int coordinates) {
 		this.coordinates = coordinates;
 	}
-
+	
+	
+	public static MoveStrategy createObjectFromTmxProperties(TMXObject object) {		
+		return null;		
+	}
 
 	/**
 	 * Update the strategy

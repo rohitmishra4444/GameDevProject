@@ -5,6 +5,7 @@ import gamedev.game.SceneManager.SceneType;
 import gamedev.game.TmxLevelLoader;
 import gamedev.objects.Avatar;
 import gamedev.quests.Quest;
+import gamedev.quests.QuestBuildBridge;
 
 import java.util.ArrayList;
 
@@ -41,6 +42,7 @@ public class GameMapScene extends BaseScene {
 		super(false);
 		this.tmxFileName = "level.tmx";
 		this.createScene();
+		this.createQuests();
 	}
 
 	@Override
@@ -109,6 +111,10 @@ public class GameMapScene extends BaseScene {
 		loader.createWorldAndObjects();
 	}
 
+	protected void createQuests() {
+		this.quests.add(new QuestBuildBridge(this));
+	}
+	
 	private void createGameEndPortal() {
 		// TODO: Game end portal should be created in TmxLevelLoader class. This
 		// will be done by dwettstein.

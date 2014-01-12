@@ -2,6 +2,9 @@ package gamedev.ai;
 
 import java.util.ArrayList;
 
+import org.andengine.extension.tmx.TMXObject;
+import org.andengine.extension.tmx.TMXObjectProperty;
+
 import gamedev.objects.AnimatedObject;
 import gamedev.objects.AnimatedObject.GameState;
 

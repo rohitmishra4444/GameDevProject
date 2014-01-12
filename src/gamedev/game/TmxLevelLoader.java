@@ -1,11 +1,13 @@
 package gamedev.game;
 
 import gamedev.ai.FollowPlayerStrategy;
+import gamedev.ai.MoveStrategy;
 import gamedev.ai.RandomMoveStrategy;
 import gamedev.ai.WaypointMoveStrategy;
 import gamedev.objects.BerryBush;
 import gamedev.objects.Dinosaur;
 import gamedev.objects.Tree;
+import gamedev.quests.QuestTrigger;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -16,6 +18,7 @@ import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.tmx.TMXLayer;
 import org.andengine.extension.tmx.TMXObject;
 import org.andengine.extension.tmx.TMXObjectGroup;
+import org.andengine.extension.tmx.TMXObjectProperty;
 import org.andengine.extension.tmx.TMXTiledMap;
 
 import com.badlogic.gdx.math.Vector2;
@@ -24,7 +27,11 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 
 public class TmxLevelLoader {
-
+	
+	private final static String MOVE_STRATEGY_RANDOM = "RandomMoveStrategy";
+	private final static String MOVE_STRATEGY_SIMPLE = "SimpleMoveStrategy";
+	private final static String MOVE_STRATEGY_WAYPOINT = "WaypointMoveStrategy";
+	
 	protected TMXTiledMap map;
 	protected Scene scene;
 	protected ResourcesManager resourcesManager;
@@ -54,35 +61,23 @@ public class TmxLevelLoader {
 				this.createBerryBushes(group.getTMXObjects());
 			} else if (group.getName().equals("ShopCave")) {
 				this.createShopCave(group.getTMXObjects());
+			} else if (group.getName().equals("QuestTrigger")) {
+				this.createQuestTriggers(group.getTMXObjects());
 			}
 
 		}
 
-		// TODO REMOVE TEST FOR MOVE-STRATEGIES
-		// Create a dinosaur with a different move strategy. the dino simply
-		// walks to point 5,5 (meters = *32 for pixels)
-		// Dinosaur d = new Dinosaur(600, 600, Dinosaur.COLOR_GREEN);
-		// this.scene.attachChild(d);
-		// d.setMoveStrategy(new SimpleMoveStrategy(d, new Vector2(100, 100),
-		// GameState.WALKING));
-
-		Dinosaur d2 = new Dinosaur(800, 800, Dinosaur.COLOR_GREEN);
-		this.scene.attachChild(d2);
-		d2.setMoveStrategy(new RandomMoveStrategy(d2, 3, 5, 3));
-
-		Dinosaur d3 = new Dinosaur(400, 400, Dinosaur.COLOR_GREEN);
-		this.scene.attachChild(d3);
-		ArrayList<Vector2> wayPoints = new ArrayList<Vector2>();
-		wayPoints.add(new Vector2(400, 100));
-		wayPoints.add(new Vector2(600, 100));
-		wayPoints.add(new Vector2(600, 200));
-		wayPoints.add(new Vector2(400, 200));
-		// d3.setMoveStrategy(new WaypointMoveStrategy(d3, wayPoints, true));
-		// d3.setMoveStrategy(new WaypointMoveStrategy(d3, wayPoints, false));
-		d3.setMoveStrategy(new FollowPlayerStrategy(d3, d3.getRadius(),
-				new WaypointMoveStrategy(d3, wayPoints, true)));
 		// TODO: Create portal object from tmx map.
 		// TODO: Create cave object from tmx map.
+	}
+
+	protected void createQuestTriggers(ArrayList<TMXObject> tmxObjects) {
+		for (final TMXObject object : tmxObjects) {
+			int id = Integer.parseInt(object.getName());
+//			System.out.println("Quest-ID: " + object.getName());
+			QuestTrigger q = new QuestTrigger(id, object.getX(), object.getY(), object.getWidth(), object.getHeight());
+			this.scene.attachChild(q);
+		}
 	}
 
 	protected void createBoundaries(ArrayList<TMXObject> objects) {
@@ -111,11 +106,71 @@ public class TmxLevelLoader {
 
 	protected void createDinosaurs(ArrayList<TMXObject> objects) {
 		for (final TMXObject object : objects) {
-			this.scene.attachChild(new Dinosaur(object.getX(), object.getY(),
-					Dinosaur.COLOR_GREEN));
+			Dinosaur d = new Dinosaur(object.getX(), object.getY(), Dinosaur.COLOR_GREEN);
+			MoveStrategy alternateStrategy = this.getMoveStrategy(object, d);
+			// TODO Radius defined in class or also in tmx map?
+			if (alternateStrategy != null) {
+				d.setMoveStrategy(new FollowPlayerStrategy(d, d.getRadius(), alternateStrategy));				
+			}
+			this.scene.attachChild(d);
 		}
 	}
+	
+	/**
+	 * Return a new MoveStrategy object from tmx object properties
+	 * @param object
+	 * @param d
+	 * @return
+	 */
+	protected MoveStrategy getMoveStrategy(TMXObject object, Dinosaur d) {
+		
+		for (int i=0; i<object.getTMXObjectProperties().size(); i++) {
+			if (object.getTMXObjectProperties().get(i).getName().equals("MoveStrategy")) {
 
+				if (object.getTMXObjectProperties().get(i).getValue().equals(MOVE_STRATEGY_WAYPOINT)) {
+					ArrayList<Vector2> wayPoints = new ArrayList<Vector2>();
+					boolean loop = true;
+					for (int j=(i+1); j<object.getTMXObjectProperties().size(); j++) {
+						String name = object.getTMXObjectProperties().get(j).getName();
+						String value = object.getTMXObjectProperties().get(j).getValue();
+						// Points are separated with a comma and they are in the tmx coordinates (tiles)
+						if (name.substring(0, 5).equals("point")) {
+							String[] coord = value.split(",");
+							wayPoints.add(new Vector2(Float.parseFloat(coord[0])*32, Float.parseFloat(coord[1])*32));
+						} else if (name.equals("loop")) {
+							loop = Boolean.getBoolean(value);
+						}
+					}
+					return new WaypointMoveStrategy(d, wayPoints, loop);
+
+				} else if (object.getTMXObjectProperties().get(i).getValue().equals(MOVE_STRATEGY_SIMPLE)) {
+				
+					// TODO Simple
+					
+				} else if (object.getTMXObjectProperties().get(i).getValue().equals(MOVE_STRATEGY_RANDOM)) {
+					float minDistance = 0;
+					float maxDistance = 0;
+					float waitBetweenTime = 0;
+					for (int j=(i+1); j<object.getTMXObjectProperties().size(); j++) {
+						String name = object.getTMXObjectProperties().get(j).getName();
+						String value = object.getTMXObjectProperties().get(j).getValue();
+						if (name.equals("minDistance")) {
+							minDistance = Float.parseFloat(value);
+						} else if (name.equals("maxDistance")) {
+							maxDistance = Float.parseFloat(value);
+						} else if (name.equals("waitBetweenTime")) {
+							waitBetweenTime = Float.parseFloat(value);
+						}
+					}
+					return new RandomMoveStrategy(d, minDistance, maxDistance, waitBetweenTime);
+				}
+			}
+		}
+		
+		return null;
+	}
+
+	
 	protected void createBerryBushes(ArrayList<TMXObject> objects) {
 		for (final TMXObject object : objects) {
 			BerryBush berryBush = new BerryBush(object.getX(), object.getY());
