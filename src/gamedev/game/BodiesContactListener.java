@@ -6,6 +6,7 @@ import gamedev.objects.Berry;
 import gamedev.objects.BerryBush;
 import gamedev.objects.Dinosaur;
 import gamedev.scenes.FightScene;
+import gamedev.scenes.FightSceneOld;
 import gamedev.scenes.GameMapScene;
 import gamedev.scenes.ShopScene;
 

@@ -142,6 +142,9 @@ public class Dinosaur extends AnimatedObject {
 		this.radius = radius;
 	}
 	
+	public int getDinoColor() {
+		return this.color;
+	}
 	
 	// /**
 	// * Get a random state. Only state at index 0 - 4 are valid :)
