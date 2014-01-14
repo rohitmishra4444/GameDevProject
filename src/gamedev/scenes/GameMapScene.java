@@ -37,7 +37,7 @@ public class GameMapScene extends BaseScene {
 
 	protected ArrayList<Quest> quests = new ArrayList<Quest>();
 	protected ArrayList<CollectableObject> collectableObjects = new ArrayList<CollectableObject>();
-	
+
 	public GameMapScene() {
 		// Call BaseScene without calling createScene because here we need some
 		// stuff initialized before
@@ -116,7 +116,7 @@ public class GameMapScene extends BaseScene {
 	public void createQuests() {
 		this.quests.add(new QuestBuildBridge(this));
 	}
-	
+
 	private void createGameEndPortal() {
 		// TODO: Game end portal should be created in TmxLevelLoader class. This
 		// will be done by dwettstein.
@@ -137,16 +137,19 @@ public class GameMapScene extends BaseScene {
 		// new ScaleModifier(2, 0.95f, 1.05f)));
 		this.attachChild(gameEndPortal);
 	}
-	
+
+	@Override
 	public void onManagedUpdate(float seconds) {
 		super.onManagedUpdate(seconds);
+		// TODO: Here I get an IndexOutOfBoundsException in the super methods.
+
 		for (CollectableObject o : this.collectableObjects) {
 			if (o.isRemoveable()) {
 				this.detachChild(o);
 			}
 		}
 	}
-	
+
 	@Override
 	public void onBackKeyPressed() {
 		SceneManager.getInstance().loadMenuScene(engine);
@@ -167,11 +170,11 @@ public class GameMapScene extends BaseScene {
 	public void addQuest(Quest quest) {
 		this.quests.add(quest);
 	}
-	
+
 	public void addCollectableObject(CollectableObject object) {
 		this.collectableObjects.add(object);
 	}
-	
+
 	public ArrayList<Quest> getQuests() {
 		return quests;
 	}

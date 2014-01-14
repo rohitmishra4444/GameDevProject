@@ -100,12 +100,11 @@ public class ResourcesManager {
 	// Textures for game end scene
 	public ITextureRegion game_end_region;
 	public BitmapTextureAtlas game_end_atlas;
-	
+
 	// Static objects
 	public BitmapTextureAtlas woodAtlas;
 	public ITextureRegion woodRegion;
 
-	
 	// ---------------------------------------------
 	// Physic
 	// ---------------------------------------------
@@ -115,25 +114,25 @@ public class ResourcesManager {
 	// ---------------------------------------------
 	// CLASS LOGIC
 	// ---------------------------------------------
-	
+
 	public void removeSpriteFromScene(final IEntity sprite) {
-		activity.runOnUiThread(new Runnable(){
+		activity.runOnUiThread(new Runnable() {
 
 			@Override
 			public void run() {
-//				SceneManager.getInstance().getCurrentGameMapScene().detachChild(sprite);
+				// SceneManager.getInstance().getCurrentGameMapScene().detachChild(sprite);
 				sprite.setIgnoreUpdate(true);
 				sprite.clearUpdateHandlers();
 				try {
-					sprite.detachSelf();					
+					sprite.detachSelf();
 				} catch (Exception e) {
 					//
 				}
 			}
-			
+
 		});
 	}
-	
+
 	// ---------------------------------------------
 	// Splash resources
 	// ---------------------------------------------
@@ -282,7 +281,7 @@ public class ResourcesManager {
 		dinosaurGreenAtlas.load();
 		// treesAtlas.load();
 		questFrameTextureAtlas.load();
-//		spearAtlas.load();
+		// spearAtlas.load();
 		fightDinoAtlas.load();
 		woodAtlas.load();
 	}
@@ -293,7 +292,7 @@ public class ResourcesManager {
 		dinosaurGreenAtlas.unload();
 		// treesAtlas.unload();
 		questFrameTextureAtlas.unload();
-		spearAtlas.unload();
+		// spearAtlas.unload();
 		fightDinoAtlas.unload();
 		woodAtlas.unload();
 	}
@@ -304,7 +303,7 @@ public class ResourcesManager {
 		createDinoGraphics();
 		// createTreeGraphics();
 		createQuestFrameGraphics();
-//		createSpearGraphics();
+		// createSpearGraphics();
 		createFightSceneGraphics();
 		createStaticObjectGraphics();
 		gameGraphicsCreated = true;
@@ -313,7 +312,8 @@ public class ResourcesManager {
 	private void createStaticObjectGraphics() {
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
 
-		this.woodAtlas = new BitmapTextureAtlas(textureManager, 32, 33, TextureOptions.DEFAULT);
+		this.woodAtlas = new BitmapTextureAtlas(textureManager, 32, 33,
+				TextureOptions.DEFAULT);
 
 		this.woodRegion = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(woodAtlas, activity, "wood.png", 0, 0);
@@ -409,7 +409,9 @@ public class ResourcesManager {
 	private void createFightSceneGraphics() {
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
 		this.fightDinoAtlas = new BitmapTextureAtlas(textureManager, 500, 451);
-		this.fightDinoRegion = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.fightDinoAtlas, activity, "dino_fight.png", 0, 0);
+		this.fightDinoRegion = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(this.fightDinoAtlas, activity,
+						"dino_fight.png", 0, 0);
 	}
 
 	// ---------------------------------------------
