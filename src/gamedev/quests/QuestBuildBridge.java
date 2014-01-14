@@ -4,13 +4,14 @@ import gamedev.game.ResourcesManager;
 import gamedev.game.SceneManager;
 import gamedev.objects.Inventory;
 import gamedev.objects.Wood;
+import gamedev.scenes.GameMapScene;
 
 import org.andengine.entity.primitive.Rectangle;
-import org.andengine.entity.scene.Scene;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 
 public class QuestBuildBridge extends Quest {
@@ -26,7 +27,7 @@ public class QuestBuildBridge extends Quest {
 	protected Wood wood2;
 	protected Wood wood3;
 
-	public QuestBuildBridge(Scene map) {
+	public QuestBuildBridge(GameMapScene map) {
 		super(map);
 		this.title = "Cross the River";
 		this.description = "I need to find something so I can go to the other side of the river!";
@@ -50,11 +51,22 @@ public class QuestBuildBridge extends Quest {
 
 	@Override
 	public void onFinish() {
-		this.rectangle.detachSelf();
-		this.rectangle.dispose();
-		SceneManager.getInstance().getCurrentGameMapScene().detachChild(wood1);
-		SceneManager.getInstance().getCurrentGameMapScene().detachChild(wood2);
-		SceneManager.getInstance().getCurrentGameMapScene().detachChild(wood3);
+		Runnable removeRectangle = new Runnable() {
+			@Override
+			public void run() {
+				for (Fixture fixture : body.getFixtureList()) {
+					body.destroyFixture(fixture);
+				}
+				ResourcesManager.getInstance().physicsWorld.destroyBody(body);
+
+				// SceneManager.getInstance().getCurrentGameMapScene()
+				// .detachChild(rectangle);
+				rectangle.detachSelf();
+				rectangle.dispose();
+			}
+		};
+		SceneManager.getInstance().getCurrentGameMapScene().runnableHandler
+				.postRunnable(removeRectangle);
 	}
 
 	@Override

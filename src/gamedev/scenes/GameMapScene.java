@@ -10,6 +10,7 @@ import gamedev.quests.QuestBuildBridge;
 
 import java.util.ArrayList;
 
+import org.andengine.engine.handler.runnable.RunnableHandler;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.extension.tmx.TMXLayer;
@@ -38,6 +39,8 @@ public class GameMapScene extends BaseScene {
 	protected ArrayList<Quest> quests = new ArrayList<Quest>();
 	protected ArrayList<CollectableObject> collectableObjects = new ArrayList<CollectableObject>();
 
+	public RunnableHandler runnableHandler = new RunnableHandler();
+
 	public GameMapScene() {
 		// Call BaseScene without calling createScene because here we need some
 		// stuff initialized before
@@ -45,6 +48,7 @@ public class GameMapScene extends BaseScene {
 		this.tmxFileName = "level.tmx";
 		this.createScene();
 		this.createQuests();
+		this.registerUpdateHandler(runnableHandler);
 	}
 
 	@Override
@@ -141,13 +145,15 @@ public class GameMapScene extends BaseScene {
 	@Override
 	public void onManagedUpdate(float seconds) {
 		super.onManagedUpdate(seconds);
-		// TODO: Here I get an IndexOutOfBoundsException in the super methods.
+		// TODO: Here I get an IndexOutOfBoundsException in the super methods
+		// (see javadoc in detachChild).
+		// Update: Fixed by using a RunnableHandler.
 
-		for (CollectableObject o : this.collectableObjects) {
-			if (o.isRemoveable()) {
-				this.detachChild(o);
-			}
-		}
+		// for (CollectableObject o : this.collectableObjects) {
+		// if (o.isRemoveable()) {
+		// this.detachChild(o);
+		// }
+		// }
 	}
 
 	@Override

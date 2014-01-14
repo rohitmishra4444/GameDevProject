@@ -10,14 +10,14 @@ import android.widget.Toast;
 public class QuestTrigger extends Rectangle {
 
 	protected int questId;
-	protected Quest quest;
+	private Quest quest;
 	private boolean contact;
 
 	public QuestTrigger(int questId, float pX, float pY, float pWidth,
 			float pHeight) {
 		super(pX, pY, pWidth, pHeight, ResourcesManager.getInstance().vbom);
 		this.questId = questId;
-		this.setVisible(false);
+		// this.setVisible(false);
 		this.contact = false;
 	}
 
@@ -33,7 +33,7 @@ public class QuestTrigger extends Rectangle {
 			// contact (see println in console).
 			System.out.println("Avatar collided with trigger.");
 
-			Quest quest = SceneManager.getInstance().getCurrentGameMapScene()
+			quest = SceneManager.getInstance().getCurrentGameMapScene()
 					.getQuest(this.questId - 1);
 			if (!quest.isCompleted()) {
 				if (!quest.isActive) {
@@ -50,10 +50,28 @@ public class QuestTrigger extends Rectangle {
 			} else {
 				this.setIgnoreUpdate(true);
 				quest.onFinish();
+
 				// TODO: Removing same object in on ManagedUpdate does not work,
 				// we need to find a way to safely remove objects...
 				// this.clearUpdateHandlers();
 				// ResourcesManager.getInstance().removeSpriteFromScene(this);
+
+				// DW: We don't need to remove the trigger, we can simply
+				// setIgnoreUpdate to true. The objects can be detached in the
+				// quest itself, where they were also attached.
+
+				final QuestTrigger self = this;
+
+				Runnable removeTrigger = new Runnable() {
+					@Override
+					public void run() {
+						SceneManager.getInstance().getCurrentGameMapScene()
+								.detachChild(self);
+					}
+				};
+				SceneManager.getInstance().getCurrentGameMapScene().runnableHandler
+						.postRunnable(removeTrigger);
+
 			}
 		} else if (!this.collidesWith(ResourcesManager.getInstance().avatar)) {
 			this.contact = false;

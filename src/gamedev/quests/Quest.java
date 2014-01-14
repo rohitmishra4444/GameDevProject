@@ -1,25 +1,26 @@
 package gamedev.quests;
 
-import org.andengine.entity.scene.Scene;
+import gamedev.scenes.GameMapScene;
 
 public abstract class Quest {
-	
+
 	protected String title;
-	protected String description;	
+	protected String description;
 	public static boolean isCompleted = false;
 	protected boolean isActive = false;
 	protected String status;
-	protected Scene map;
+	protected GameMapScene map;
+
 	// TODO: Give rewards!
-	
-	public Quest(Scene map) {
+
+	public Quest(GameMapScene map) {
 		this.map = map;
 	}
-	
+
 	public abstract void onFinish();
-		
+
 	public abstract String getStatus();
-	
+
 	public abstract boolean isCompleted();
 
 	public boolean isActive() {
@@ -37,6 +38,5 @@ public abstract class Quest {
 	public String getDescription() {
 		return this.description;
 	}
-	
-	
+
 }

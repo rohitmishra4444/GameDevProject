@@ -16,7 +16,7 @@ abstract public class CollectableObject extends Sprite {
 		super(pX, pY, pTextureRegion, ResourcesManager.getInstance().vbom);
 	}
 
-	protected void init() {
+	private void init() {
 		SceneManager.getInstance().getCurrentGameMapScene()
 				.addCollectableObject(this);
 	}
@@ -32,12 +32,29 @@ abstract public class CollectableObject extends Sprite {
 			// objects from the map...
 			// ResourcesManager.getInstance().removeSpriteFromScene(this);
 
-			// Added a solution to the removing problem. Here we only set the
+			// A possible solution to the removing problem: Here we only set the
 			// object invisible and ignore further update. Then in the
 			// onFinish() method of the quest we detach the object.
-			this.setVisible(false);
+			// this.setVisible(false);
+
 			this.setIgnoreUpdate(true);
 			this.removeable = true;
+
+			// Better solution: Use RunnableHandler like described in javadoc of
+			// detachChild method.
+			// This way we don't need the removeable boolean and the
+			// collectableObject list.
+			final CollectableObject self = this;
+
+			Runnable removeObject = new Runnable() {
+				@Override
+				public void run() {
+					SceneManager.getInstance().getCurrentGameMapScene()
+							.detachChild(self);
+				}
+			};
+			SceneManager.getInstance().getCurrentGameMapScene().runnableHandler
+					.postRunnable(removeObject);
 
 			// Give feedback:
 			ResourcesManager.getInstance().activity.toastOnUIThread(
