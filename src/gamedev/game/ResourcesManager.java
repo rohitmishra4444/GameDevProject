@@ -121,7 +121,14 @@ public class ResourcesManager {
 
 			@Override
 			public void run() {
-				SceneManager.getInstance().getCurrentGameMapScene().detachChild(sprite);
+//				SceneManager.getInstance().getCurrentGameMapScene().detachChild(sprite);
+				sprite.setIgnoreUpdate(true);
+				sprite.clearUpdateHandlers();
+				try {
+					sprite.detachSelf();					
+				} catch (Exception e) {
+					//
+				}
 			}
 			
 		});

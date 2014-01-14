@@ -44,14 +44,18 @@ public class QuestBuildBridge extends Quest {
 
 	@Override
 	public void onFinish() {
-		// TODO Auto-generated method stub
-		
+		this.rectangle.detachSelf();
+		this.rectangle.dispose();
 	}
 
 	@Override
 	public String getStatus() {
-		// TODO Auto-generated method stub
-		return null;
+		Inventory inventory = ResourcesManager.getInstance().avatar.getInventory();
+		int count = 0;
+		if (inventory.contains(wood1)) count ++;
+		if (inventory.contains(wood2)) count ++;
+		if (inventory.contains(wood3)) count ++;
+		return "I found " + Integer.toString(count) + "/3 wood... I need more!";
 	}
 
 	@Override

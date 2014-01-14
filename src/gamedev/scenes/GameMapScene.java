@@ -4,6 +4,7 @@ import gamedev.game.SceneManager;
 import gamedev.game.SceneManager.SceneType;
 import gamedev.game.TmxLevelLoader;
 import gamedev.objects.Avatar;
+import gamedev.objects.CollectableObject;
 import gamedev.quests.Quest;
 import gamedev.quests.QuestBuildBridge;
 
@@ -35,7 +36,8 @@ public class GameMapScene extends BaseScene {
 	private Sprite gameEndPortal;
 
 	protected ArrayList<Quest> quests = new ArrayList<Quest>();
-
+	protected ArrayList<CollectableObject> collectableObjects = new ArrayList<CollectableObject>();
+	
 	public GameMapScene() {
 		// Call BaseScene without calling createScene because here we need some
 		// stuff initialized before
@@ -111,7 +113,7 @@ public class GameMapScene extends BaseScene {
 		loader.createWorldAndObjects();
 	}
 
-	protected void createQuests() {
+	public void createQuests() {
 		this.quests.add(new QuestBuildBridge(this));
 	}
 	
@@ -135,7 +137,16 @@ public class GameMapScene extends BaseScene {
 		// new ScaleModifier(2, 0.95f, 1.05f)));
 		this.attachChild(gameEndPortal);
 	}
-
+	
+	public void onManagedUpdate(float seconds) {
+		super.onManagedUpdate(seconds);
+		for (CollectableObject o : this.collectableObjects) {
+			if (o.isRemoveable()) {
+				this.detachChild(o);
+			}
+		}
+	}
+	
 	@Override
 	public void onBackKeyPressed() {
 		SceneManager.getInstance().loadMenuScene(engine);
@@ -156,7 +167,11 @@ public class GameMapScene extends BaseScene {
 	public void addQuest(Quest quest) {
 		this.quests.add(quest);
 	}
-
+	
+	public void addCollectableObject(CollectableObject object) {
+		this.collectableObjects.add(object);
+	}
+	
 	public ArrayList<Quest> getQuests() {
 		return quests;
 	}

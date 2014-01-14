@@ -78,6 +78,8 @@ public class Dinosaur extends AnimatedObject {
 			this.body.setLinearVelocity(0, 0);
 			loopAnimation = false;
 			this.detachChildren();
+			this.setIgnoreUpdate(true);
+			this.clearUpdateHandlers();
 			break;
 		case RUNNING:
 		case CHASE_PLAYER:

@@ -20,7 +20,7 @@ public class SceneManager {
 
 	private BaseScene splashScene;
 	private BaseScene menuScene;
-	private BaseScene gameMapScene;
+	private GameMapScene gameMapScene;
 	private BaseScene gameShopScene;
 	private BaseScene gameEndScene;
 	private BaseScene loadingScene;
@@ -194,7 +194,7 @@ public class SceneManager {
 		}
 
 		gameMapScene = new GameMapScene();
-
+		gameMapScene.createQuests();
 		loadGameMapScene(engine);
 	}
 

@@ -18,7 +18,9 @@ public class Inventory {
 	protected ArrayList<Berry> berries = new ArrayList<Berry>();
 	
 	public void addObject(CollectableObject object) {
-		this.objects.add(object);
+		if (!this.objects.contains(object)) {
+			this.objects.add(object);			
+		}
 	}
 	
 	public boolean contains(CollectableObject object) {

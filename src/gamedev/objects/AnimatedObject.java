@@ -95,22 +95,15 @@ public abstract class AnimatedObject extends AnimatedSprite {
 	@Override
 	public void onManagedUpdate(float pSecondsElapsed) {
 		super.onManagedUpdate(pSecondsElapsed);
-		// if (this.state == GameState.DEAD) {
-		// return;
-		// }
 		this.onCustomUpdate(pSecondsElapsed);
 	}
 
 	public boolean onCustomUpdate(float pSecondsElapsed) {
 		if (this.state == GameState.DEAD)
 			return false;
-		if (GameActivity.mode == GameMode.FIGHTING) {
+		if (GameActivity.mode == GameMode.FIGHTING || GameActivity.mode == GameMode.POPUP) {
 			this.body.setLinearVelocity(0, 0);
-			return false;
-		}
-		if (GameActivity.mode == GameMode.POPUP) {
-			this.body.setLinearVelocity(0, 0);
-			// TODO: We should also stop the animation here.
+			this.setState(GameState.IDLE, -1);
 			return false;
 		}
 		return true;
