@@ -5,7 +5,6 @@ import gamedev.objects.Avatar;
 
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.BoundCamera;
-import org.andengine.entity.IEntity;
 import org.andengine.extension.physics.box2d.FixedStepPhysicsWorld;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.opengl.font.Font;
@@ -115,23 +114,24 @@ public class ResourcesManager {
 	// CLASS LOGIC
 	// ---------------------------------------------
 
-	public void removeSpriteFromScene(final IEntity sprite) {
-		activity.runOnUiThread(new Runnable() {
-
-			@Override
-			public void run() {
-				// SceneManager.getInstance().getCurrentGameMapScene().detachChild(sprite);
-				sprite.setIgnoreUpdate(true);
-				sprite.clearUpdateHandlers();
-				try {
-					sprite.detachSelf();
-				} catch (Exception e) {
-					//
-				}
-			}
-
-		});
-	}
+	// public void removeSpriteFromScene(final IEntity sprite) {
+	// activity.runOnUiThread(new Runnable() {
+	//
+	// @Override
+	// public void run() {
+	// //
+	// SceneManager.getInstance().getCurrentGameMapScene().detachChild(sprite);
+	// sprite.setIgnoreUpdate(true);
+	// sprite.clearUpdateHandlers();
+	// try {
+	// sprite.detachSelf();
+	// } catch (Exception e) {
+	// //
+	// }
+	// }
+	//
+	// });
+	// }
 
 	// ---------------------------------------------
 	// Splash resources

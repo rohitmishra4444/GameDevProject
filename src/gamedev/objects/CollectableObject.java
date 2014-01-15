@@ -10,16 +10,16 @@ import android.widget.Toast;
 
 abstract public class CollectableObject extends Sprite {
 
-	protected boolean removeable = false;
+	// protected boolean removeable = false;
 
 	public CollectableObject(float pX, float pY, ITextureRegion pTextureRegion) {
 		super(pX, pY, pTextureRegion, ResourcesManager.getInstance().vbom);
 	}
 
-	private void init() {
-		SceneManager.getInstance().getCurrentGameMapScene()
-				.addCollectableObject(this);
-	}
+	// private void init() {
+	// SceneManager.getInstance().getCurrentGameMapScene()
+	// .addCollectableObject(this);
+	// }
 
 	@Override
 	public void onManagedUpdate(float seconds) {
@@ -38,7 +38,7 @@ abstract public class CollectableObject extends Sprite {
 			// this.setVisible(false);
 
 			this.setIgnoreUpdate(true);
-			this.removeable = true;
+			// this.removeable = true;
 
 			// Better solution: Use RunnableHandler like described in javadoc of
 			// detachChild method.
@@ -53,7 +53,7 @@ abstract public class CollectableObject extends Sprite {
 							.detachChild(self);
 				}
 			};
-			SceneManager.getInstance().getCurrentGameMapScene().runnableHandler
+			ResourcesManager.getInstance().physicsWorld
 					.postRunnable(removeObject);
 
 			// Give feedback:
@@ -62,12 +62,12 @@ abstract public class CollectableObject extends Sprite {
 		}
 	}
 
-	public boolean isRemoveable() {
-		return removeable;
-	}
-
-	public void setRemoveable(boolean removeable) {
-		this.removeable = removeable;
-	}
+	// public boolean isRemoveable() {
+	// return removeable;
+	// }
+	//
+	// public void setRemoveable(boolean removeable) {
+	// this.removeable = removeable;
+	// }
 
 }

@@ -48,8 +48,8 @@ public class QuestTrigger extends Rectangle {
 					}
 				}
 			} else {
-				this.setIgnoreUpdate(true);
 				quest.onFinish();
+				this.setIgnoreUpdate(true);
 
 				// TODO: Removing same object in on ManagedUpdate does not work,
 				// we need to find a way to safely remove objects...
@@ -69,7 +69,7 @@ public class QuestTrigger extends Rectangle {
 								.detachChild(self);
 					}
 				};
-				SceneManager.getInstance().getCurrentGameMapScene().runnableHandler
+				ResourcesManager.getInstance().physicsWorld
 						.postRunnable(removeTrigger);
 
 			}

@@ -4,13 +4,11 @@ import gamedev.game.SceneManager;
 import gamedev.game.SceneManager.SceneType;
 import gamedev.game.TmxLevelLoader;
 import gamedev.objects.Avatar;
-import gamedev.objects.CollectableObject;
 import gamedev.quests.Quest;
 import gamedev.quests.QuestBuildBridge;
 
 import java.util.ArrayList;
 
-import org.andengine.engine.handler.runnable.RunnableHandler;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.extension.tmx.TMXLayer;
@@ -37,9 +35,9 @@ public class GameMapScene extends BaseScene {
 	private Sprite gameEndPortal;
 
 	protected ArrayList<Quest> quests = new ArrayList<Quest>();
-	protected ArrayList<CollectableObject> collectableObjects = new ArrayList<CollectableObject>();
 
-	public RunnableHandler runnableHandler = new RunnableHandler();
+	// protected ArrayList<CollectableObject> collectableObjects = new
+	// ArrayList<CollectableObject>();
 
 	public GameMapScene() {
 		// Call BaseScene without calling createScene because here we need some
@@ -48,7 +46,6 @@ public class GameMapScene extends BaseScene {
 		this.tmxFileName = "level.tmx";
 		this.createScene();
 		this.createQuests();
-		this.registerUpdateHandler(runnableHandler);
 	}
 
 	@Override
@@ -177,9 +174,9 @@ public class GameMapScene extends BaseScene {
 		this.quests.add(quest);
 	}
 
-	public void addCollectableObject(CollectableObject object) {
-		this.collectableObjects.add(object);
-	}
+	// public void addCollectableObject(CollectableObject object) {
+	// this.collectableObjects.add(object);
+	// }
 
 	public ArrayList<Quest> getQuests() {
 		return quests;
