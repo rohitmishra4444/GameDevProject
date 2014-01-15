@@ -7,11 +7,11 @@ import gamedev.objects.Wood;
 import gamedev.scenes.GameMapScene;
 
 import org.andengine.entity.primitive.Rectangle;
+import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 
 public class QuestBuildBridge extends Quest {
@@ -31,14 +31,17 @@ public class QuestBuildBridge extends Quest {
 		super(map);
 		this.title = "Cross the River";
 		this.description = "I need to find something so I can go to the other side of the river!";
+
+		ResourcesManager res = ResourcesManager.getInstance();
 		this.rectangle = new Rectangle(RECTANGLE_X, RECTANGLE_Y,
-				RECTANGLE_WIDTH, RECTANGLE_HEIGHT,
-				ResourcesManager.getInstance().vbom);
+				RECTANGLE_WIDTH, RECTANGLE_HEIGHT, res.vbom);
 		final FixtureDef boxFixtureDef = PhysicsFactory.createFixtureDef(0, 0,
 				0);
-		this.body = PhysicsFactory.createBoxBody(
-				ResourcesManager.getInstance().physicsWorld, this.rectangle,
-				BodyType.StaticBody, boxFixtureDef);
+		this.body = PhysicsFactory.createBoxBody(res.physicsWorld,
+				this.rectangle, BodyType.StaticBody, boxFixtureDef);
+		res.physicsWorld.registerPhysicsConnector(new PhysicsConnector(
+				rectangle, body, false, false));
+
 		this.map.attachChild(this.rectangle);
 
 		this.wood1 = new Wood(200, 200);
@@ -51,16 +54,20 @@ public class QuestBuildBridge extends Quest {
 
 	@Override
 	public void onFinish() {
+
 		Runnable removeRectangle = new Runnable() {
 			@Override
 			public void run() {
-				for (Fixture fixture : body.getFixtureList()) {
-					body.destroyFixture(fixture);
-				}
-				ResourcesManager.getInstance().physicsWorld.destroyBody(body);
+				ResourcesManager res = ResourcesManager.getInstance();
+				// PhysicsConnector is null
+				final PhysicsConnector rectanglePhysicsConnector = res.physicsWorld
+						.getPhysicsConnectorManager()
+						.findPhysicsConnectorByShape(rectangle);
+				res.physicsWorld
+						.unregisterPhysicsConnector(rectanglePhysicsConnector);
+				body.setActive(false);
+				res.physicsWorld.destroyBody(body);
 
-				// SceneManager.getInstance().getCurrentGameMapScene()
-				// .detachChild(rectangle);
 				rectangle.detachSelf();
 				rectangle.dispose();
 			}
