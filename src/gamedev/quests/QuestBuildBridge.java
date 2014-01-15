@@ -1,11 +1,13 @@
 package gamedev.quests;
 
 import gamedev.game.ResourcesManager;
+import gamedev.game.SceneManager;
 import gamedev.objects.Inventory;
 import gamedev.objects.Wood;
 import gamedev.scenes.GameMapScene;
 
 import org.andengine.entity.primitive.Rectangle;
+import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 
 import com.badlogic.gdx.physics.box2d.Body;
@@ -37,9 +39,9 @@ public class QuestBuildBridge extends Quest {
 				0);
 		this.body = PhysicsFactory.createBoxBody(res.physicsWorld,
 				this.rectangle, BodyType.StaticBody, boxFixtureDef);
-		// res.physicsWorld.registerPhysicsConnector(new PhysicsConnector(
-		// rectangle, body, false, false));
-
+		 res.physicsWorld.registerPhysicsConnector(new PhysicsConnector(
+		 rectangle, body, false, false));
+		System.out.println("GameMapScene: " + SceneManager.getInstance().getCurrentGameMapScene());
 		map.attachChild(rectangle);
 
 		this.wood1 = new Wood(200, 200);
@@ -53,18 +55,21 @@ public class QuestBuildBridge extends Quest {
 	@Override
 	public void onFinish() {
 		// super.removeShapeWithBody(rectangle);
-		final ResourcesManager res = ResourcesManager.getInstance();
-		Runnable removeRectangle = new Runnable() {
-			@Override
-			public void run() {
-				body.setActive(false);
-				res.physicsWorld.destroyBody(body);
-
-				rectangle.detachSelf();
-				rectangle.dispose();
-			}
-		};
-		res.physicsWorld.postRunnable(removeRectangle);
+//		final ResourcesManager res = ResourcesManager.getInstance();
+//		Runnable removeRectangle = new Runnable() {
+//			@Override
+//			public void run() {
+//				System.out.println("RUN EXECUTED");
+//				body.setActive(false);
+//				System.out.println("Body: " + body.isActive());
+//				res.physicsWorld.destroyBody(body);
+//				rectangle.detachSelf();
+//				rectangle.dispose();
+//			}
+//		};
+////		res.physicsWorld.postRunnable(removeRectangle);
+//		ResourcesManager.getInstance().engine.runOnUpdateThread(removeRectangle);
+		ResourcesManager.getInstance().removeSpriteAndBody(rectangle);
 	}
 
 	@Override

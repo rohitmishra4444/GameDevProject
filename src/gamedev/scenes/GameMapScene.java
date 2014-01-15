@@ -45,7 +45,6 @@ public class GameMapScene extends BaseScene {
 		super(false);
 		this.tmxFileName = "level.tmx";
 		this.createScene();
-		this.createQuests();
 	}
 
 	@Override

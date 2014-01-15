@@ -31,7 +31,7 @@ public class QuestTrigger extends Rectangle {
 			// collides, so we need a boolean to handle this. Like this it is
 			// guaranteed that the following code is called only once per
 			// contact (see println in console).
-			System.out.println("Avatar collided with trigger.");
+//			System.out.println("Avatar collided with trigger.");
 
 			quest = SceneManager.getInstance().getCurrentGameMapScene()
 					.getQuest(this.questId - 1);
@@ -50,7 +50,7 @@ public class QuestTrigger extends Rectangle {
 			} else {
 				quest.onFinish();
 				this.setIgnoreUpdate(true);
-
+				ResourcesManager.getInstance().removeSpriteAndBody(this);
 				// TODO: Removing same object in on ManagedUpdate does not work,
 				// we need to find a way to safely remove objects...
 				// this.clearUpdateHandlers();
@@ -60,17 +60,17 @@ public class QuestTrigger extends Rectangle {
 				// setIgnoreUpdate to true. The objects can be detached in the
 				// quest itself, where they were also attached.
 
-				final QuestTrigger self = this;
-
-				Runnable removeTrigger = new Runnable() {
-					@Override
-					public void run() {
-						SceneManager.getInstance().getCurrentGameMapScene()
-								.detachChild(self);
-					}
-				};
-				ResourcesManager.getInstance().physicsWorld
-						.postRunnable(removeTrigger);
+//				final QuestTrigger self = this;
+//
+//				Runnable removeTrigger = new Runnable() {
+//					@Override
+//					public void run() {
+//						SceneManager.getInstance().getCurrentGameMapScene()
+//								.detachChild(self);
+//					}
+//				};
+//				ResourcesManager.getInstance().physicsWorld
+//						.postRunnable(removeTrigger);
 
 			}
 		} else if (!this.collidesWith(ResourcesManager.getInstance().avatar)) {

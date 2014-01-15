@@ -194,7 +194,6 @@ public class SceneManager {
 		}
 
 		gameMapScene = new GameMapScene();
-		gameMapScene.createQuests();
 		loadGameMapScene(engine);
 	}
 
@@ -214,16 +213,17 @@ public class SceneManager {
 			createGameMapScene(engine, true);
 		} else {
 			resourcesManager.loadGameResources();
+			gameMapScene.createQuests();
 		}
+		setScene(gameMapScene);
 
-		mEngine.registerUpdateHandler(new TimerHandler(0.1f,
-				new ITimerCallback() {
-					public void onTimePassed(final TimerHandler pTimerHandler) {
-						mEngine.unregisterUpdateHandler(pTimerHandler);
-						setScene(gameMapScene);
-						disposeLoadingScene();
-					}
-				}));
+//		mEngine.registerUpdateHandler(new TimerHandler(0.1f,
+//				new ITimerCallback() {
+//					public void onTimePassed(final TimerHandler pTimerHandler) {
+//						mEngine.unregisterUpdateHandler(pTimerHandler);
+//						disposeLoadingScene();
+//					}
+//				}));
 	}
 
 	// ---------------------------------------------
@@ -303,7 +303,7 @@ public class SceneManager {
 	}
 
 	public GameMapScene getCurrentGameMapScene() {
-		return (GameMapScene) gameMapScene;
+		return gameMapScene;
 	}
 
 	public void deleteCurrentGameMapScene() {

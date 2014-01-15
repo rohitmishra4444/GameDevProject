@@ -5,7 +5,10 @@ import gamedev.objects.Avatar;
 
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.BoundCamera;
+import org.andengine.entity.IEntity;
+import org.andengine.entity.shape.IShape;
 import org.andengine.extension.physics.box2d.FixedStepPhysicsWorld;
+import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.opengl.font.Font;
 import org.andengine.opengl.font.FontFactory;
@@ -114,24 +117,21 @@ public class ResourcesManager {
 	// CLASS LOGIC
 	// ---------------------------------------------
 
-	// public void removeSpriteFromScene(final IEntity sprite) {
-	// activity.runOnUiThread(new Runnable() {
-	//
-	// @Override
-	// public void run() {
-	// //
-	// SceneManager.getInstance().getCurrentGameMapScene().detachChild(sprite);
-	// sprite.setIgnoreUpdate(true);
-	// sprite.clearUpdateHandlers();
-	// try {
-	// sprite.detachSelf();
-	// } catch (Exception e) {
-	// //
-	// }
-	// }
-	//
-	// });
-	// }
+	 public void removeSpriteAndBody(final IShape shape) {
+		 final PhysicsConnector physicsConnector = physicsWorld.getPhysicsConnectorManager().findPhysicsConnectorByShape(shape);
+		 engine.runOnUpdateThread(new Runnable() {	
+			 @Override
+			 public void run() {
+				 if (physicsConnector != null) {
+					 physicsWorld.unregisterPhysicsConnector(physicsConnector);
+			         physicsConnector.getBody().setActive(false);
+			         physicsWorld.destroyBody(physicsConnector.getBody());
+			      }
+	             shape.setIgnoreUpdate(true);
+				 shape.detachSelf();
+			 }
+		 });
+	 }
 
 	// ---------------------------------------------
 	// Splash resources
