@@ -30,7 +30,7 @@ public class GameEndScene extends BaseScene {
 		String gameEndString = "Congratulations! "
 				+ "\n"
 				+ "The portal was working properly and you returned to your era."
-				+ "\n\n" + "Tap here...";
+				+ "\n\n\n" + "Tap...";
 
 		gameEndText = new Text(0, 0, resourcesManager.font, gameEndString,
 				gameEndString.length(), vbom);

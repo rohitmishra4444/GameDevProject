@@ -3,9 +3,10 @@ package gamedev.game;
 import gamedev.hud.SceneHUD;
 import gamedev.objects.Avatar;
 
+import java.util.ArrayList;
+
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.BoundCamera;
-import org.andengine.entity.IEntity;
 import org.andengine.entity.shape.IShape;
 import org.andengine.extension.physics.box2d.FixedStepPhysicsWorld;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
@@ -101,14 +102,8 @@ public class ResourcesManager {
 	public Font font;
 
 	// Textures for game intro scene
-	public BitmapTextureAtlas game_intro_atlas;
-	public ITextureRegion game_intro_region_01;
-	public ITextureRegion game_intro_region_02;
-	public ITextureRegion game_intro_region_03;
-	public ITextureRegion game_intro_region_04;
-	public ITextureRegion game_intro_region_05;
-	public ITextureRegion game_intro_region_06;
-	public ITextureRegion game_intro_region_07;
+	public ArrayList<BitmapTextureAtlas> game_intro_atlas;
+	public ArrayList<ITextureRegion> game_intro_region;
 
 	// Textures for game end scene
 	public ITextureRegion game_end_region;
@@ -128,21 +123,23 @@ public class ResourcesManager {
 	// CLASS LOGIC
 	// ---------------------------------------------
 
-	 public void removeSpriteAndBody(final IShape shape) {
-		 final PhysicsConnector physicsConnector = physicsWorld.getPhysicsConnectorManager().findPhysicsConnectorByShape(shape);
-		 engine.runOnUpdateThread(new Runnable() {	
-			 @Override
-			 public void run() {
-				 if (physicsConnector != null) {
-					 physicsWorld.unregisterPhysicsConnector(physicsConnector);
-			         physicsConnector.getBody().setActive(false);
-			         physicsWorld.destroyBody(physicsConnector.getBody());
-			      }
-	             shape.setIgnoreUpdate(true);
-				 shape.detachSelf();
-			 }
-		 });
-	 }
+	public void removeSpriteAndBody(final IShape shape) {
+		final PhysicsConnector physicsConnector = physicsWorld
+				.getPhysicsConnectorManager()
+				.findPhysicsConnectorByShape(shape);
+		engine.runOnUpdateThread(new Runnable() {
+			@Override
+			public void run() {
+				if (physicsConnector != null) {
+					physicsWorld.unregisterPhysicsConnector(physicsConnector);
+					physicsConnector.getBody().setActive(false);
+					physicsWorld.destroyBody(physicsConnector.getBody());
+				}
+				shape.setIgnoreUpdate(true);
+				shape.detachSelf();
+			}
+		});
+	}
 
 	// ---------------------------------------------
 	// Splash resources
@@ -253,41 +250,36 @@ public class ResourcesManager {
 		BitmapTextureAtlasTextureRegionFactory
 				.setAssetBasePath("gfx/game/game_intro/");
 
-		game_intro_atlas = new BitmapTextureAtlas(textureManager, 800, 480,
-				BitmapTextureFormat.RGBA_4444);
+		game_intro_atlas = new ArrayList<BitmapTextureAtlas>();
+		game_intro_region = new ArrayList<ITextureRegion>();
 
-		game_intro_region_01 = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(game_intro_atlas, activity, "picture_01.jpg",
-						0, 0);
-		game_intro_region_02 = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(game_intro_atlas, activity, "picture_02.jpg",
-						0, 0);
-		game_intro_region_03 = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(game_intro_atlas, activity, "picture_03.jpg",
-						0, 0);
-		game_intro_region_04 = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(game_intro_atlas, activity, "picture_04.jpg",
-						0, 0);
-		game_intro_region_05 = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(game_intro_atlas, activity, "picture_05.jpg",
-						0, 0);
-		game_intro_region_06 = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(game_intro_atlas, activity, "picture_06.jpg",
-						0, 0);
-		game_intro_region_07 = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(game_intro_atlas, activity, "picture_07.jpg",
-						0, 0);
+		for (int i = 0; i < 7; i++) {
+			BitmapTextureAtlas atlas = new BitmapTextureAtlas(textureManager,
+					800, 480, BitmapTextureFormat.RGBA_4444);
+			game_intro_atlas.add(i, atlas);
+
+			String fileName = "picture_0" + (i + 1) + ".jpg";
+
+			ITextureRegion region = BitmapTextureAtlasTextureRegionFactory
+					.createFromAsset(atlas, activity, fileName, 0, 0);
+			game_intro_region.add(i, region);
+		}
 	}
 
 	private void loadGameIntroGraphics() {
 		if (game_intro_atlas == null) {
 			createGameIntroGraphics();
 		}
-		game_intro_atlas.load();
+
+		for (BitmapTextureAtlas atlas : game_intro_atlas) {
+			atlas.load();
+		}
 	}
 
 	private void unloadGameIntroGraphics() {
-		game_intro_atlas.unload();
+		for (BitmapTextureAtlas atlas : game_intro_atlas) {
+			atlas.unload();
+		}
 	}
 
 	// ---------------------------------------------
