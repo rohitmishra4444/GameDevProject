@@ -21,14 +21,12 @@ public class GameIntroScene extends BaseScene {
 	@Override
 	public void createScene() {
 		float centerX = camera.getCenterX()
-				- resourcesManager.game_intro_region_01.getWidth() / 2;
+				- resourcesManager.game_intro_region.get(0).getWidth() / 2;
 		float centerY = camera.getCenterY()
-				- resourcesManager.game_intro_region_01.getHeight() / 2;
+				- resourcesManager.game_intro_region.get(0).getHeight() / 2;
 
-		String gameIntroString = "Congratulations! "
-				+ "\n"
-				+ "The portal was working properly and you returned to your era."
-				+ "\n\n" + "Tap here...";
+		String gameIntroString = "Once a day," + "\n"
+				+ "in the modern world of today..." + "\n\n\n" + "Tap...";
 
 		gameIntroText = new Text(0, 0, resourcesManager.font, gameIntroString,
 				gameIntroString.length(), vbom);
@@ -40,9 +38,9 @@ public class GameIntroScene extends BaseScene {
 		attachChild(gameIntroText);
 
 		gameIntroSprite = new Sprite(centerX, centerY,
-				resourcesManager.game_intro_region_01.getWidth(),
-				resourcesManager.game_intro_region_01.getHeight(),
-				resourcesManager.game_intro_region_01, vbom) {
+				resourcesManager.game_intro_region.get(0).getWidth(),
+				resourcesManager.game_intro_region.get(0).getHeight(),
+				resourcesManager.game_intro_region.get(0), vbom) {
 			@Override
 			protected void preDraw(GLState pGLState, Camera pCamera) {
 				super.preDraw(pGLState, pCamera);
