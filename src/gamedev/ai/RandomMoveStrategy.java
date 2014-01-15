@@ -69,10 +69,12 @@ public class RandomMoveStrategy extends MoveStrategy {
 	protected Vector2 getRandomPoint() {
 		Random r = new Random();
 		Vector2 bodyPos = this.object.getBody().getPosition();
-		float x = bodyPos.x + this.minDistance + (r.nextFloat() * (this.maxDistance - this.minDistance));
-		float y = bodyPos.y + this.minDistance + (r.nextFloat() * (this.maxDistance - this.minDistance));
+		float x = this.minDistance + (r.nextFloat() * (this.maxDistance - this.minDistance));
+		float y = this.minDistance + (r.nextFloat() * (this.maxDistance - this.minDistance));
 		if (r.nextInt(2) == 0) x = -x;
 		if (r.nextInt(2) == 0) y = -y;
+		x = bodyPos.x + x;
+		y = bodyPos.y + y;
 		if (this.isBounded) {
 			x = Math.min(x, maxX);
 			x = Math.max(x, minX);
