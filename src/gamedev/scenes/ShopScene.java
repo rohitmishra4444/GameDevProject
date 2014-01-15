@@ -57,7 +57,9 @@ public class ShopScene extends CameraScene {
 		SceneManager.getInstance().getCurrentGameMapScene().clearChildScene();
 		resourcesManager.loadHUDResources();
 		GameActivity.mode = GameMode.EXPLORING;
-		this.dispose();
+		if (!this.isDisposed()) {
+			this.dispose();
+		}
 	}
 
 }

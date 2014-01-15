@@ -166,7 +166,9 @@ public class GameMapScene extends BaseScene {
 	public void disposeScene() {
 		this.camera.setHUD(null);
 		this.detachSelf();
-		this.dispose();
+		if (!this.isDisposed()) {
+			this.dispose();
+		}
 	}
 
 	public void addQuest(Quest quest) {

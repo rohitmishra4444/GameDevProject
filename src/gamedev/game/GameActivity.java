@@ -78,7 +78,6 @@ public class GameActivity extends BaseGameActivity {
 				new ITimerCallback() {
 					public void onTimePassed(final TimerHandler pTimerHandler) {
 						mEngine.unregisterUpdateHandler(pTimerHandler);
-						// load menu resources, create menu scene
 						// set menu scene using scene manager
 						SceneManager.getInstance().createMenuScene();
 					}

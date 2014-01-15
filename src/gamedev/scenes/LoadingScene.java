@@ -39,6 +39,8 @@ public class LoadingScene extends BaseScene {
 		loadingText.detachSelf();
 		loadingText.dispose();
 		this.detachSelf();
-		this.dispose();
+		if (!this.isDisposed()) {
+			this.dispose();
+		}
 	}
 }

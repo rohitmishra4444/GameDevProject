@@ -15,7 +15,6 @@ import org.andengine.util.HorizontalAlign;
 
 public class GameEndScene extends BaseScene {
 
-	// Level-complete window
 	private Sprite gameEndSprite;
 
 	private Text gameEndText;
@@ -149,6 +148,8 @@ public class GameEndScene extends BaseScene {
 		}
 
 		this.detachSelf();
-		this.dispose();
+		if (!this.isDisposed()) {
+			this.dispose();
+		}
 	}
 }
