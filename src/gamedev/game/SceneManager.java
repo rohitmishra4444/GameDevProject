@@ -2,8 +2,8 @@ package gamedev.game;
 
 import gamedev.scenes.BaseScene;
 import gamedev.scenes.GameEndScene;
+import gamedev.scenes.GameIntroScene;
 import gamedev.scenes.GameMapScene;
-import gamedev.scenes.IntroScene;
 import gamedev.scenes.LoadingScene;
 import gamedev.scenes.MainMenuScene;
 import gamedev.scenes.SplashScene;
@@ -86,8 +86,9 @@ public class SceneManager {
 	// ---------------------------------------------
 
 	// ---------------------------------------------
-	// Splash Scene
+	// SplashScene
 	// ---------------------------------------------
+
 	public void createSplashScene(OnCreateSceneCallback pOnCreateSceneCallback) {
 		resourcesManager.loadSplashScreen();
 		splashScene = new SplashScene();
@@ -104,8 +105,9 @@ public class SceneManager {
 	}
 
 	// ---------------------------------------------
-	// Menu Scene
+	// MainMenuScene
 	// ---------------------------------------------
+
 	public void createMenuScene() {
 		resourcesManager.loadMenuResources();
 		menuScene = new MainMenuScene();
@@ -139,30 +141,22 @@ public class SceneManager {
 	}
 
 	// ---------------------------------------------
-	// Intro Scene
+	// GameIntroScene
 	// ---------------------------------------------
-	public void createIntroScene(OnCreateSceneCallback pOnCreateSceneCallback) {
-		resourcesManager.loadIntroResources();
-		introScene = new IntroScene();
-		currentScene = introScene;
-		pOnCreateSceneCallback.onCreateSceneFinished(introScene);
-	}
 
-	public void disposeIntroScene() {
+	public void disposeGameIntroScene() {
 		if (!introScene.isDisposed()) {
 			introScene.disposeScene();
 		}
-		resourcesManager.unloadIntroResources();
+		resourcesManager.unloadGameIntroResources();
 		introScene = null;
 	}
 
-	// TODO: Probably its better for memory, when we create the intro new and
-	// delete it after disposing.
-	public void loadIntroScene(final Engine mEngine) {
+	public void loadGameIntroScene(final Engine mEngine) {
 		disposeCurrentScene(true);
 
-		resourcesManager.loadIntroResources();
-		introScene = new IntroScene();
+		resourcesManager.loadGameIntroResources();
+		introScene = new GameIntroScene();
 
 		mEngine.registerUpdateHandler(new TimerHandler(0.1f,
 				new ITimerCallback() {
@@ -175,7 +169,7 @@ public class SceneManager {
 	}
 
 	// ---------------------------------------------
-	// Game Scene
+	// GameMapScene
 	// ---------------------------------------------
 
 	public void createGameMapScene(final Engine mEngine, boolean restart) {
@@ -227,7 +221,7 @@ public class SceneManager {
 	}
 
 	// ---------------------------------------------
-	// GameEnd Scene
+	// GameEndScene
 	// ---------------------------------------------
 
 	public void loadGameEndScene(final Engine mEngine) {
@@ -252,6 +246,10 @@ public class SceneManager {
 		gameEndScene = null;
 	}
 
+	// ---------------------------------------------
+	// LoadingScene
+	// ---------------------------------------------
+
 	/**
 	 * 
 	 * @param setLoadingSceneNeeded
@@ -265,7 +263,7 @@ public class SceneManager {
 		} else if (currentSceneType.equals(SceneType.SCENE_MENU)) {
 			disposeMenuScene();
 		} else if (currentSceneType.equals(SceneType.SCENE_INTRO)) {
-			disposeIntroScene();
+			disposeGameIntroScene();
 		}
 
 		if (setLoadingSceneNeeded) {

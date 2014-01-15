@@ -81,7 +81,9 @@ public class MainMenuScene extends BaseScene implements
 		menuChildScene.detachSelf();
 		menuChildScene.dispose();
 		this.detachSelf();
-		this.dispose();
+		if (!this.isDisposed()) {
+			this.dispose();
+		}
 	}
 
 	@Override
@@ -91,13 +93,20 @@ public class MainMenuScene extends BaseScene implements
 		switch (pMenuItem.getID()) {
 		case MENU_PLAY:
 			boolean restart = false;
-			// Uncomment the following lines if you want to restart the game by
-			// clicking
-			// on "New game" in the menu.
-			// if (SceneManager.getInstance().isGameMapSceneCreated()) {
-			// restart = true;
-			// }
-			SceneManager.getInstance().createGameMapScene(engine, restart);
+			if (SceneManager.getInstance().isGameMapSceneCreated() == false) {
+				// Show intro scene
+				SceneManager.getInstance().loadGameIntroScene(engine);
+			} else {
+				// Uncomment the following lines if you want to restart the game
+				// by
+				// clicking
+				// on "New game" in the menu.
+				// if (SceneManager.getInstance().isGameMapSceneCreated()) {
+				// restart = true;
+				// }
+				SceneManager.getInstance().createGameMapScene(engine, restart);
+			}
+
 			return true;
 		case MENU_EXIT:
 			System.exit(0);

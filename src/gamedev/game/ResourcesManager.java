@@ -14,6 +14,7 @@ import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
+import org.andengine.opengl.texture.bitmap.BitmapTextureFormat;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.texture.region.TextureRegion;
@@ -96,6 +97,16 @@ public class ResourcesManager {
 	private BitmapTextureAtlas menuButtonsTextureAtlas;
 	public Font font;
 
+	// Textures for game intro scene
+	public BitmapTextureAtlas game_intro_atlas;
+	public ITextureRegion game_intro_region_01;
+	public ITextureRegion game_intro_region_02;
+	public ITextureRegion game_intro_region_03;
+	public ITextureRegion game_intro_region_04;
+	public ITextureRegion game_intro_region_05;
+	public ITextureRegion game_intro_region_06;
+	public ITextureRegion game_intro_region_07;
+
 	// Textures for game end scene
 	public ITextureRegion game_end_region;
 	public BitmapTextureAtlas game_end_atlas;
@@ -154,7 +165,7 @@ public class ResourcesManager {
 	private void createSplashScreen() {
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
 		splashTextureAtlas = new BitmapTextureAtlas(textureManager, 480, 320,
-				TextureOptions.BILINEAR);
+				BitmapTextureFormat.RGBA_4444);
 		splash_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
 				splashTextureAtlas, activity, "splash_andengine.png", 0, 0);
 	}
@@ -179,7 +190,7 @@ public class ResourcesManager {
 
 		// Menu background
 		this.menuBackgroundTextureAtlas = new BitmapTextureAtlas(
-				textureManager, 800, 600, TextureOptions.DEFAULT);
+				textureManager, 800, 600, BitmapTextureFormat.RGBA_4444);
 		this.menu_background_region = BitmapTextureAtlasTextureRegionFactory
 				.createTiledFromAsset(menuBackgroundTextureAtlas, activity,
 						"menubackground.png", 0, 0, 1, 1);
@@ -230,16 +241,53 @@ public class ResourcesManager {
 	// Intro resources
 	// ---------------------------------------------
 
-	public void loadIntroResources() {
-		// TODO
+	public void loadGameIntroResources() {
+		loadGameIntroGraphics();
 	}
 
-	public void unloadIntroResources() {
-		// TODO
+	public void unloadGameIntroResources() {
+		unloadGameIntroGraphics();
 	}
 
-	private void createIntroResources() {
-		// TODO
+	private void createGameIntroGraphics() {
+		BitmapTextureAtlasTextureRegionFactory
+				.setAssetBasePath("gfx/game/game_intro/");
+
+		game_intro_atlas = new BitmapTextureAtlas(textureManager, 800, 480,
+				BitmapTextureFormat.RGBA_4444);
+
+		game_intro_region_01 = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(game_intro_atlas, activity, "picture_01.jpg",
+						0, 0);
+		game_intro_region_02 = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(game_intro_atlas, activity, "picture_02.jpg",
+						0, 0);
+		game_intro_region_03 = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(game_intro_atlas, activity, "picture_03.jpg",
+						0, 0);
+		game_intro_region_04 = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(game_intro_atlas, activity, "picture_04.jpg",
+						0, 0);
+		game_intro_region_05 = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(game_intro_atlas, activity, "picture_05.jpg",
+						0, 0);
+		game_intro_region_06 = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(game_intro_atlas, activity, "picture_06.jpg",
+						0, 0);
+		game_intro_region_07 = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(game_intro_atlas, activity, "picture_07.jpg",
+						0, 0);
+	}
+
+	private void loadGameIntroGraphics() {
+		if (game_intro_atlas == null) {
+			createGameIntroGraphics();
+		}
+		game_intro_atlas.load();
+	}
+
+	private void unloadGameIntroGraphics() {
+		game_intro_atlas.unload();
 	}
 
 	// ---------------------------------------------
@@ -536,11 +584,11 @@ public class ResourcesManager {
 	// ---------------------------------------------
 
 	public void loadGameEndResources() {
-		loadGameEndTextures();
+		loadGameEndGraphics();
 	}
 
 	public void unloadGameEndResources() {
-		unloadGameEndTextures();
+		unloadGameEndGraphics();
 	}
 
 	private void createGameEndGraphics() {
@@ -552,14 +600,14 @@ public class ResourcesManager {
 				.createFromAsset(game_end_atlas, activity, "game_end.png", 0, 0);
 	}
 
-	private void loadGameEndTextures() {
+	private void loadGameEndGraphics() {
 		if (game_end_atlas == null) {
 			createGameEndGraphics();
 		}
 		game_end_atlas.load();
 	}
 
-	private void unloadGameEndTextures() {
+	private void unloadGameEndGraphics() {
 		game_end_atlas.unload();
 	}
 
