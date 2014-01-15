@@ -71,6 +71,7 @@ public class GameMapScene extends BaseScene {
 
 		// TODO: Define player position as constant or in tmx map.
 
+		createQuests();
 		createGameEndPortal();
 	}
 

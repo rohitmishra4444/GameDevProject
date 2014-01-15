@@ -192,9 +192,9 @@ public class SceneManager {
 	}
 
 	public void disposeGameMapScene() {
-		// if (!gameMapScene.isDisposed()) {
-		gameMapScene.disposeScene();
-		// }
+		if (!gameMapScene.isDisposed()) {
+			gameMapScene.disposeScene();
+		}
 		resourcesManager.unloadGameResources();
 	}
 
@@ -207,17 +207,16 @@ public class SceneManager {
 			createGameMapScene(engine, true);
 		} else {
 			resourcesManager.loadGameResources();
-			gameMapScene.createQuests();
 		}
-		setScene(gameMapScene);
 
-//		mEngine.registerUpdateHandler(new TimerHandler(0.1f,
-//				new ITimerCallback() {
-//					public void onTimePassed(final TimerHandler pTimerHandler) {
-//						mEngine.unregisterUpdateHandler(pTimerHandler);
-//						disposeLoadingScene();
-//					}
-//				}));
+		mEngine.registerUpdateHandler(new TimerHandler(0.1f,
+				new ITimerCallback() {
+					public void onTimePassed(final TimerHandler pTimerHandler) {
+						mEngine.unregisterUpdateHandler(pTimerHandler);
+						setScene(gameMapScene);
+						disposeLoadingScene();
+					}
+				}));
 	}
 
 	// ---------------------------------------------
