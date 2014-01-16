@@ -10,6 +10,8 @@ import org.andengine.entity.primitive.Rectangle;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 
+import android.widget.Toast;
+
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -41,7 +43,6 @@ public class QuestBuildBridge extends Quest {
 				this.rectangle, BodyType.StaticBody, boxFixtureDef);
 		 res.physicsWorld.registerPhysicsConnector(new PhysicsConnector(
 		 rectangle, body, false, false));
-		System.out.println("GameMapScene: " + SceneManager.getInstance().getCurrentGameMapScene());
 		map.attachChild(rectangle);
 
 		this.wood1 = new Wood(200, 200);
@@ -51,24 +52,14 @@ public class QuestBuildBridge extends Quest {
 		map.attachChild(wood2);
 		map.attachChild(wood3);
 	}
-
+	
+	public void setActive(boolean active) {
+		super.setActive(active);
+		ResourcesManager.getInstance().activity.toastOnUIThread(this.description, Toast.LENGTH_SHORT);
+	}
+	
 	@Override
 	public void onFinish() {
-		// super.removeShapeWithBody(rectangle);
-//		final ResourcesManager res = ResourcesManager.getInstance();
-//		Runnable removeRectangle = new Runnable() {
-//			@Override
-//			public void run() {
-//				System.out.println("RUN EXECUTED");
-//				body.setActive(false);
-//				System.out.println("Body: " + body.isActive());
-//				res.physicsWorld.destroyBody(body);
-//				rectangle.detachSelf();
-//				rectangle.dispose();
-//			}
-//		};
-////		res.physicsWorld.postRunnable(removeRectangle);
-//		ResourcesManager.getInstance().engine.runOnUpdateThread(removeRectangle);
 		ResourcesManager.getInstance().removeSpriteAndBody(rectangle);
 	}
 

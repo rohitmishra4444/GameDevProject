@@ -7,5 +7,9 @@ public class Wood extends CollectableObject {
 	public Wood(float pX, float pY) {
 		super(pX, pY, ResourcesManager.getInstance().woodRegion);
 	}
-
+	
+	public String toString() {
+		return "Wood";
+	}
+	
 }

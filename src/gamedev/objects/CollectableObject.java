@@ -9,7 +9,7 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import android.widget.Toast;
 
 abstract public class CollectableObject extends Sprite {
-
+		
 	public CollectableObject(float pX, float pY, ITextureRegion pTextureRegion) {
 		super(pX, pY, pTextureRegion, ResourcesManager.getInstance().vbom);
 	}
@@ -24,9 +24,14 @@ abstract public class CollectableObject extends Sprite {
 			ResourcesManager.getInstance().removeSpriteAndBody(this);
 
 			// Give feedback:
+			String item = (this.toString().equals("")) ? "item" : this.toString();
 			ResourcesManager.getInstance().activity.toastOnUIThread(
-					"Item collected.", Toast.LENGTH_SHORT);
+					"Collected " + item, Toast.LENGTH_SHORT);
 		}
 	}
-
+	
+	public String toString() {
+		return "";
+	}
+	
 }

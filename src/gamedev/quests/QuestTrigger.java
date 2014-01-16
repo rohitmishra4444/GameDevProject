@@ -27,19 +27,14 @@ public class QuestTrigger extends Rectangle {
 				&& this.contact == false) {
 			this.contact = true;
 
-			// This method is called and executed multiple times when the avatar
-			// collides, so we need a boolean to handle this. Like this it is
-			// guaranteed that the following code is called only once per
-			// contact (see println in console).
-//			System.out.println("Avatar collided with trigger.");
-
 			quest = SceneManager.getInstance().getCurrentGameMapScene()
 					.getQuest(this.questId - 1);
 			if (!quest.isCompleted()) {
 				if (!quest.isActive) {
 					quest.setActive(true);
-					ResourcesManager.getInstance().activity.toastOnUIThread(
-							quest.getDescription(), Toast.LENGTH_SHORT);
+					//Moving this to the quests setActive() method so we are more flexible what to print...
+//					ResourcesManager.getInstance().activity.toastOnUIThread(
+//							quest.getDescription(), Toast.LENGTH_SHORT);
 				} else {
 					if (quest.getStatus() != null) {
 						ResourcesManager.getInstance().activity

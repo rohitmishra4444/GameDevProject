@@ -5,6 +5,7 @@ import gamedev.objects.AnimatedObject.GameState;
 import gamedev.objects.Berry;
 import gamedev.objects.BerryBush;
 import gamedev.objects.Dinosaur;
+import gamedev.objects.Pig;
 import gamedev.scenes.FightScene;
 import gamedev.scenes.FightSceneOld;
 import gamedev.scenes.GameMapScene;
@@ -37,6 +38,10 @@ public class BodiesContactListener implements ContactListener,
 
 	@Override
 	public void beginContact(Contact contact) {
+		
+		// No need to handle contacts if not exploring the world...
+		if (GameActivity.mode != GameMode.EXPLORING) return;
+		
 		currentMapScene = SceneManager.getInstance().getCurrentGameMapScene();
 
 		final Fixture x1 = contact.getFixtureA();
@@ -47,8 +52,8 @@ public class BodiesContactListener implements ContactListener,
 				|| x2.getBody().getUserData() == null)
 			return;
 
-		System.out.println("Contact between: " + x1.getBody().getUserData()
-				+ " and " + x2.getBody().getUserData());
+//		System.out.println("Contact between: " + x1.getBody().getUserData()
+//				+ " and " + x2.getBody().getUserData());
 
 		if (x1.getBody().getUserData() instanceof BerryBush
 				&& x2.getBody().getUserData().equals("Avatar")) {
@@ -59,6 +64,7 @@ public class BodiesContactListener implements ContactListener,
 				resourcesManager.activity.toastOnUIThread(
 						"No berries ripened.", Toast.LENGTH_SHORT);
 			}
+			return;
 		} else if (x1.getBody().getUserData().equals("Avatar")
 				&& x2.getBody().getUserData() instanceof BerryBush) {
 			berryBush = (BerryBush) x2.getBody().getUserData();
@@ -68,22 +74,45 @@ public class BodiesContactListener implements ContactListener,
 				resourcesManager.activity.toastOnUIThread(
 						"No berries ripened.", Toast.LENGTH_SHORT);
 			}
+			return;
 		}
-
+		
+		// Dinosaurs
 		if (x1.getBody().getUserData().equals("Avatar")
 				&& x2.getBody().getUserData() instanceof Dinosaur) {
 			Dinosaur dino = (Dinosaur) x2.getBody().getUserData();
 			if (dino.getState() == GameState.DEAD)
 				return;
 			showFightScene(dino);
+			return;
 		} else if (x1.getBody().getUserData() instanceof Dinosaur
 				&& x2.getBody().getUserData().equals("Avatar")) {
 			Dinosaur dino = (Dinosaur) x1.getBody().getUserData();
 			if (dino.getState() == GameState.DEAD)
 				return;
 			showFightScene(dino);
+			return;
 		}
 
+		// Pig for second Quest
+		if (currentMapScene.getQuest(1).isActive()) {
+			Pig pig = null;
+			if (x1.getBody().getUserData().equals("Avatar")
+					&& x2.getBody().getUserData() instanceof Pig) {
+				pig = (Pig) x2.getBody().getUserData();
+			} else if (x1.getBody().getUserData() instanceof Pig
+					&& x2.getBody().getUserData().equals("Avatar")) {
+				pig = (Pig) x1.getBody().getUserData();
+			}
+			if (pig != null) {
+				// Catched the Pig!
+				ResourcesManager.getInstance().removeSpriteAndBody(pig);
+				ResourcesManager.getInstance().activity.toastOnUIThread("Yes! Catched the pig... I need to bring it back.", Toast.LENGTH_SHORT);
+				currentMapScene.getQuest(1).setCompleted(true);
+			}
+		}
+		
+		
 		// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 		// TODO: Remove this if else section, if we use a button for the shop.
 		if (x1.getBody().getUserData().equals("Avatar")
