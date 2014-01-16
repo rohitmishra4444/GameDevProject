@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" width="100" height="50" tilewidth="32" tileheight="32">
  <tileset firstgid="1" name="landscape_mountains_(2D_Circle_Graphic_32x32)" tilewidth="32" tileheight="32">
-  <image source="../gfx/landscape_mountains_(2D_Circle_Graphic_32x32).png" width="1024" height="512"/>
+  <image source="gfx/landscape_mountains_(2D_Circle_Graphic_32x32).png" width="1024" height="512"/>
  </tileset>
  <layer name="Ground" width="100" height="50">
   <data>
@@ -35063,10 +35063,6 @@
   <object x="120" y="210" width="28" height="25"/>
  </objectgroup>
  <objectgroup name="QuestTrigger" width="100" height="50">
-  <object x="996" y="641" width="47" height="54">
-   <properties>
-    <property name="id" value="0"/>
-   </properties>
-  </object>
+  <object name="1" x="995" y="643" width="47" height="54"/>
  </objectgroup>
 </map>
