@@ -388,12 +388,19 @@ public class ResourcesManager {
 	private void createAnimalGraphics() {
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
 
-		this.dinosaurGreenAtlas = new BitmapTextureAtlas(textureManager, 832,
-				1024, TextureOptions.DEFAULT);
+//		this.dinosaurGreenAtlas = new BitmapTextureAtlas(textureManager, 832,
+//				1024, TextureOptions.DEFAULT);
+//
+//		this.dinosaurGreenRegion = BitmapTextureAtlasTextureRegionFactory
+//				.createTiledFromAsset(this.dinosaurGreenAtlas, activity,
+//						"green_dino_0.25_asc.png", 0, 0, 26, 32);
+
+		this.dinosaurGreenAtlas = new BitmapTextureAtlas(textureManager, 1664,
+				2048, TextureOptions.DEFAULT);
 
 		this.dinosaurGreenRegion = BitmapTextureAtlasTextureRegionFactory
 				.createTiledFromAsset(this.dinosaurGreenAtlas, activity,
-						"green_dino_0.25_asc.png", 0, 0, 26, 32);
+						"green_dino_0.5_asc.png", 0, 0, 26, 32);
 
 		this.pigAtlas = new BitmapTextureAtlas(textureManager, 300,
 				300, TextureOptions.DEFAULT);

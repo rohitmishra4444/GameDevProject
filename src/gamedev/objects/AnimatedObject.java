@@ -118,6 +118,7 @@ public abstract class AnimatedObject extends AnimatedSprite {
 	public void attack(int damage) {
 		this.life -= damage;
 		if (this.life <= 0) {
+			this.life = 0;
 			this.setState(GameState.DEAD, -1);
 		} else {
 			this.setState(GameState.BEEN_HIT, -1);

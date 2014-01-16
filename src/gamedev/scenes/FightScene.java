@@ -54,7 +54,7 @@ public class FightScene extends CameraScene {
 					float pY = pSceneTouchEvent.getY();
 					for (Target target : targets) {
 						if (target.isHit(pX, pY)) {
-							if (target.getDamageObject() > 0) object.attack(target.getDamageObject());
+							if (target.getDamageOpponent() > 0) object.attack(target.getDamageOpponent());
 							if (target.getDamageAvatar() > 0) resourcesManager.avatar.attack(target.getDamageAvatar());
 							target.setRemovable(true);
 						}
@@ -96,9 +96,9 @@ public class FightScene extends CameraScene {
 		for (Target t : this.targets) {
 			if ((this.fightDuration - t.getTimeAlive()) > t.getTimeCreated()) {
 				// Missed!
-				resourcesManager.avatar.attack(t.getDamageMiss());
+				if (t.getDamageMiss() > 0) resourcesManager.avatar.attack(t.getDamageMiss());
 				t.setRemovable(true);
-				System.out.println("You dismissed target [actual time: "+ fightDuration + ", created: " + t.getTimeCreated() + ", timeAlive: " + t.getTimeAlive()+"]");
+//				System.out.println("You dismissed target [actual time: "+ fightDuration + ", created: " + t.getTimeCreated() + ", timeAlive: " + t.getTimeAlive()+"]");
 			}
 			if (t.isRemovable()) targetsToRemove.add(t);
 		}
@@ -138,12 +138,12 @@ public class FightScene extends CameraScene {
 			if (r.nextFloat() < pGoodTarget) {
 				// Good target
 				if (d.getDinoColor() == Dinosaur.COLOR_GREEN) {
-					t = new Target(position.x, position.y, TARGET_RADIUS, Color.GREEN, this.fightDuration, 2.5f);
-					t.setDamageObject(10);
+					t = new Target(position.x, position.y, TARGET_RADIUS, Color.BLACK, this.fightDuration, 2.5f);
+					t.setDamageOpponent(10);
 					t.setDamageMiss(10);
 				} else {
-					t = new Target(position.x, position.y, TARGET_RADIUS, Color.GREEN, this.fightDuration, 1.5f);
-					t.setDamageObject(5);
+					t = new Target(position.x, position.y, TARGET_RADIUS, Color.BLACK, this.fightDuration, 1.5f);
+					t.setDamageOpponent(5);
 					t.setDamageMiss(15);
 				}
 			} else {
@@ -173,8 +173,8 @@ public class FightScene extends CameraScene {
 			for (Target t : this.targets) {
 				if (MathUtils.distance(t.getX(), t.getY(), x, y) < t.getRadius()*2) {
 					intersects = true;
-					x = this.fightDino.getX() + r.nextFloat() * FIGHTBAR_WIDTH;
-					y = this.fightDino.getY() + r.nextFloat() * FIGHTBAR_HEIGHT;
+					x = this.fightDino.getX() + 50 + r.nextFloat() * FIGHTBAR_WIDTH;
+					y = this.fightDino.getY() + 50 + r.nextFloat() * FIGHTBAR_HEIGHT;
 				} else {
 					intersects = false;
 				}

@@ -124,18 +124,22 @@ public class SceneHUD extends HUD {
 		this.berries = new ButtonSprite(cameraWidth - 115, 120,
 				resourcesManager.hudBerryRegion, resourcesManager.vbom) {
 			public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y) {
-				this.registerEntityModifier(new SequenceEntityModifier(
-						new ScaleModifier(0.25f, 1.25f, 1f), new ScaleModifier(
-								0.25f, 1f, 1.25f)));
+				
+				if (touchEvent.isActionUp()) {
+					this.registerEntityModifier(new SequenceEntityModifier(
+							new ScaleModifier(0.25f, 1.25f, 1f), new ScaleModifier(
+									0.25f, 1f, 1.25f)));
 
-				if (resourcesManager.avatar.getInventory().removeBerry()) {
-					int currentLife = resourcesManager.avatar.getLife();
-					resourcesManager.avatar.setLife(currentLife + lifeAdditionFromBerry);
-					int currentEnergy = resourcesManager.avatar.getEnergy();
-					resourcesManager.avatar.setEnergy(currentEnergy + energyAdditionFromBerry);
+					if (resourcesManager.avatar.getInventory().removeBerry()) {
+						int currentLife = resourcesManager.avatar.getLife();
+						resourcesManager.avatar.setLife(currentLife + lifeAdditionFromBerry);
+						int currentEnergy = resourcesManager.avatar.getEnergy();
+						resourcesManager.avatar.setEnergy(currentEnergy + energyAdditionFromBerry);
+					}
+
+					return true;					
 				}
-
-				return true;
+				return false;
 			}
 		};
 		this.attachChild(berries);

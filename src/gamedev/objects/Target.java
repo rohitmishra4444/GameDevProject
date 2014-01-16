@@ -22,7 +22,7 @@ public class Target extends Ellipse {
 	/**
 	 * Amount of damage given to the avatar when the player misses this target
 	 */
-	protected int damageMiss = 10;
+	protected int damageMiss = 0;
 	
 	/**
 	 * Time in seconds this target is showed
@@ -72,11 +72,11 @@ public class Target extends Ellipse {
 	}
 
 
-	public int getDamageObject() {
+	public int getDamageOpponent() {
 		return damageOpponent;
 	}
 
-	public void setDamageObject(int damageObject) {
+	public void setDamageOpponent(int damageObject) {
 		this.damageOpponent = damageObject;
 	}
 
