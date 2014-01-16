@@ -41,7 +41,7 @@ public class Dinosaur extends AnimatedObject {
 			this.factorRunning = 2f;
 			this.radius = 10f;
 		}
-		this.moveStrategy = new FollowPlayerStrategy(this, this.radius, new RandomMoveStrategy(this, 4, 10, 5));
+		this.moveStrategy = new FollowPlayerStrategy(this, this.radius);
 		this.getBody().setUserData(this);
 		Ellipse e = new Ellipse(x/32, y/32, this.radius*32, this.radius*32, this.resourcesManager.vbom);
 		e.setColor(Color.RED);
@@ -116,11 +116,6 @@ public class Dinosaur extends AnimatedObject {
 				+ FRAMES_PER_ANIMATION - 1, loopAnimation);
 	}
 
-//	@Override
-//	public void onManagedUpdate(float pSecondsElapsed) {
-//		super.onManagedUpdate(pSecondsElapsed);
-//		this.moveStrategy.update(pSecondsElapsed);
-//	}
 	
 	@Override
 	public boolean onCustomUpdate(float pSecondsElapsed) {

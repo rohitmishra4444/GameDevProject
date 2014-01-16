@@ -33,28 +33,28 @@ public class RandomMoveStrategy extends MoveStrategy {
 	
 	public RandomMoveStrategy(AnimatedObject object, float minDistance, float maxDistance) {
 		super(object);
-		this.minDistance = minDistance;
-		this.maxDistance = maxDistance;
+		this.minDistance = minDistance/32;
+		this.maxDistance = maxDistance/32;
 		this.init();
 	}
 
 	public RandomMoveStrategy(AnimatedObject object, float minDistance, float maxDistance, float waitBetweenTime) {
 		super(object);
-		this.minDistance = minDistance;
-		this.maxDistance = maxDistance;
+		this.minDistance = minDistance/32;
+		this.maxDistance = maxDistance/32;
 		this.waitBetweenTime = waitBetweenTime;
 		this.init();
 	}
 
 	public RandomMoveStrategy(AnimatedObject object, float minDistance, float maxDistance, float waitBetweenTime, float minX, float maxX, float minY, float maxY) {
 		super(object);
-		this.minDistance = minDistance;
-		this.maxDistance = maxDistance;
-		this.waitBetweenTime = waitBetweenTime;
-		this.minX = minX;
-		this.maxX = maxX;
-		this.minY = minY;
-		this.maxY = maxY;
+		this.minDistance = minDistance/32;
+		this.maxDistance = maxDistance/32;
+		this.waitBetweenTime = waitBetweenTime/32;
+		this.minX = minX/32;
+		this.maxX = maxX/32;
+		this.minY = minY/32;
+		this.maxY = maxY/32;
 		this.isBounded = true;
 		this.init();
 	}
@@ -64,6 +64,7 @@ public class RandomMoveStrategy extends MoveStrategy {
 		Vector2 bodyPos = this.object.getBody().getPosition();
 		this.object.moveTo(rPoint, GameState.WALKING);
 		this.duration = calculateDuration(bodyPos, rPoint, this.object.getBody().getLinearVelocity());
+		System.out.println("Move from " + bodyPos + " to point " + rPoint + ", needed time is " + this.duration);
 	}
 	
 	protected Vector2 getRandomPoint() {
@@ -81,7 +82,7 @@ public class RandomMoveStrategy extends MoveStrategy {
 			y = Math.min(y, maxY);
 			y = Math.max(y, minY);			
 		}
-		return new Vector2(bodyPos.x + x, bodyPos.y + y);
+		return new Vector2(x, y);
 	}
 	
 	
@@ -91,6 +92,7 @@ public class RandomMoveStrategy extends MoveStrategy {
 		if (this.reachedGoal) {
 			// We are waiting till the seconds are passed...
 			if (this.time > this.waitBetweenTime) {
+				this.time = 0;
 				this.reachedGoal = false;
 				this.init();
 			}

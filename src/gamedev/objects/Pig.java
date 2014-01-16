@@ -6,11 +6,11 @@ public class Pig extends AnimatedObject {
 	
 	private final static int TILES_PER_LINE = 8;
 	private final static int FRAMES_PER_ANIMATION = 8;
-	private final static long[] ANIMATION_DURATION = { 120, 120, 120, 120, 120, 120, 120, 120 };
+	private final static long[] ANIMATION_DURATION = { 60, 60, 60, 60, 60, 60, 60, 60 };
 	
 	public Pig(float x, float y) {
 		super(x, y, ResourcesManager.getInstance().pigRegion);
-		this.velocity = 0.5f;
+		this.velocity = 4f;
 		this.factorRunning = 1.5f;
 	}
 
@@ -43,6 +43,7 @@ public class Pig extends AnimatedObject {
 
 	}
 	
+	@Override
 	public boolean onCustomUpdate(float pSecondsElapsed) {
 		if (!super.onCustomUpdate(pSecondsElapsed)) {
 			return false;
@@ -50,7 +51,6 @@ public class Pig extends AnimatedObject {
 			this.moveStrategy.update(pSecondsElapsed);
 			return true;
 		}
-
 	}
 
 }
