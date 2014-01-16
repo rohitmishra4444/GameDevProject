@@ -50,6 +50,9 @@ public abstract class AnimatedObject extends AnimatedSprite {
 
 	/** Duration of the current animation/state */
 	protected float animationTime;
+	
+	/** The time alive... just a counter */
+	protected float timeAlive = 0;
 
 	public AnimatedObject(float x, float y, ITiledTextureRegion textureRegion) {
 		super(x, y, textureRegion, ResourcesManager.getInstance().vbom);
@@ -95,6 +98,7 @@ public abstract class AnimatedObject extends AnimatedSprite {
 	@Override
 	public void onManagedUpdate(float pSecondsElapsed) {
 		super.onManagedUpdate(pSecondsElapsed);
+		this.timeAlive += pSecondsElapsed;
 		this.onCustomUpdate(pSecondsElapsed);
 	}
 
@@ -211,6 +215,14 @@ public abstract class AnimatedObject extends AnimatedSprite {
 
 	public void setMoveStrategy(MoveStrategy moveStrategy) {
 		this.moveStrategy = moveStrategy;
+	}
+
+	public float getTimeAlive() {
+		return timeAlive;
+	}
+
+	public void setTimeAlive(float timeAlive) {
+		this.timeAlive = timeAlive;
 	}
 
 }

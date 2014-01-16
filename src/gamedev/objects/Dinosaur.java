@@ -1,19 +1,17 @@
 package gamedev.objects;
 
 import org.andengine.entity.primitive.DrawMode;
-import org.andengine.entity.shape.IShape;
 import org.andengine.extension.debugdraw.primitives.Ellipse;
 import org.andengine.util.color.Color;
 
 import gamedev.ai.FollowPlayerStrategy;
-import gamedev.ai.RandomMoveStrategy;
 import gamedev.game.ResourcesManager;
 
 public class Dinosaur extends AnimatedObject {
 
 	public final static int COLOR_GREEN = 0;
 	public final static int COLOR_RED = 1;
-
+	
 	// TODO Durations can be different per animation. E.G. we will remove
 	// RUNNING and just play the same animation as WALKING but faster...
 	// Handle this inside the setState method!
@@ -21,7 +19,11 @@ public class Dinosaur extends AnimatedObject {
 			120, 120, 120, 120, 120, 120, 120, 120 };
 	public final static int FRAMES_PER_ANIMATION = 13;
 	public final static int TILES_PER_LINE = 26;
-
+	
+	/** Time in seconds to remove the update-handler after the dino is killed... */
+	private final static int REMOVE_UPDATEHANDLER_SECONDS = 4;
+	protected float timeDeath = 0;
+	
 	/** Green or Red */
 	protected int color;
 
@@ -78,8 +80,7 @@ public class Dinosaur extends AnimatedObject {
 			this.body.setLinearVelocity(0, 0);
 			loopAnimation = false;
 			this.detachChildren();
-//			this.setIgnoreUpdate(true);
-//			this.clearUpdateHandlers();
+			this.timeDeath = this.timeAlive;
 			break;
 		case RUNNING:
 		case CHASE_PLAYER:
@@ -120,6 +121,11 @@ public class Dinosaur extends AnimatedObject {
 	@Override
 	public boolean onCustomUpdate(float pSecondsElapsed) {
 		if (!super.onCustomUpdate(pSecondsElapsed)) {
+			if (this.state == GameState.DEAD && (this.timeAlive - this.timeDeath) > REMOVE_UPDATEHANDLER_SECONDS) {
+//				System.out.println("Cleared Update Handlers for Dinosaur");
+				this.setIgnoreUpdate(true);
+				this.clearUpdateHandlers();
+			}
 			return false;
 		} else {
 			this.moveStrategy.update(pSecondsElapsed);
@@ -143,15 +149,4 @@ public class Dinosaur extends AnimatedObject {
 		return this.color;
 	}
 	
-	// /**
-	// * Get a random state. Only state at index 0 - 4 are valid :)
-	// *
-	// * @return
-	// */
-	// private DinosaurState getRandomState() {
-	// Random r = new Random();
-	// DinosaurState randomState = DinosaurState.values()[r.nextInt(5)];
-	// return randomState;
-	// }
-
 }
