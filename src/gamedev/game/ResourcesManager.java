@@ -60,6 +60,7 @@ public class ResourcesManager {
 	public ITextureRegion[] treeRegions = new ITextureRegion[20];
 	public BitmapTextureAtlas pigAtlas;
 	public ITiledTextureRegion pigRegion;
+	
 
 	// Textures for fight scene
 	public BitmapTextureAtlas spearAtlas;
@@ -114,6 +115,9 @@ public class ResourcesManager {
 	// Static objects
 	public BitmapTextureAtlas woodAtlas;
 	public ITextureRegion woodRegion;
+	public BitmapTextureAtlas oldCavemanAtlas;
+	public ITextureRegion oldCavemanRegion;
+
 
 	// ---------------------------------------------
 	// Physic
@@ -327,6 +331,7 @@ public class ResourcesManager {
 		fightDinoAtlas.load();
 		woodAtlas.load();
 		pigAtlas.load();
+		oldCavemanAtlas.load();
 	}
 
 	private void unloadGameGraphics() {
@@ -339,11 +344,12 @@ public class ResourcesManager {
 		fightDinoAtlas.unload();
 		woodAtlas.unload();
 		pigAtlas.unload();
+		oldCavemanAtlas.unload();
 	}
 
 	private void createGameGraphics() {
 		createGameEndPortalGraphics();
-		createPlayerGraphics();
+		createAvatarGraphics();
 		createAnimalGraphics();
 		// createTreeGraphics();
 		createQuestFrameGraphics();
@@ -361,6 +367,13 @@ public class ResourcesManager {
 
 		this.woodRegion = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(woodAtlas, activity, "wood.png", 0, 0);
+		
+		this.oldCavemanAtlas = new BitmapTextureAtlas(textureManager, 36, 35,
+				TextureOptions.DEFAULT);
+
+		this.oldCavemanRegion = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(oldCavemanAtlas, activity, "old_caveman_0.6.png", 0, 0);
+
 	}
 
 	private void createGameEndPortalGraphics() {
@@ -374,7 +387,7 @@ public class ResourcesManager {
 						0);
 	}
 
-	private void createPlayerGraphics() {
+	private void createAvatarGraphics() {
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
 
 		this.playerAtlas = new BitmapTextureAtlas(textureManager, 608, 760,

@@ -10,7 +10,7 @@ public class Pig extends AnimatedObject {
 	
 	public Pig(float x, float y) {
 		super(x, y, ResourcesManager.getInstance().pigRegion);
-		this.velocity = 4f;
+		this.velocity = 5f;
 		this.factorRunning = 1.5f;
 		this.getBody().setUserData(this);
 	}
