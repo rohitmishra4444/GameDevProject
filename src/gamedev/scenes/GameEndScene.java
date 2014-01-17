@@ -31,7 +31,6 @@ public class GameEndScene extends BaseScene {
 				+ "\n"
 				+ "The portal was working properly and you returned to your era."
 				+ "\n\n\n" + "Tap...";
-
 		gameEndText = new Text(0, 0, resourcesManager.font, gameEndString,
 				gameEndString.length(), vbom);
 		gameEndText.setPosition(camera.getCenterX() - gameEndText.getWidth()
@@ -50,26 +49,22 @@ public class GameEndScene extends BaseScene {
 				pGLState.enableDither();
 			}
 		};
-		this.registerTouchArea(gameEndSprite);
-		gameEndSprite.setVisible(false);
-		attachChild(gameEndSprite);
 
 		String gameDevelopersString = "This game was designed and developed by"
 				+ "\n" + "Stefan Wanzenried" + "\n" + "David Wettstein"
 				+ "\n\n\n" + "Tap...";
-
 		gameDevelopersText = new Text(0, 0, resourcesManager.font,
 				gameDevelopersString, gameDevelopersString.length(), vbom);
 		gameDevelopersText.setPosition(
 				camera.getCenterX() - gameDevelopersText.getWidth() / 2,
 				camera.getCenterY() - gameDevelopersText.getHeight() / 2);
 		gameDevelopersText.setHorizontalAlign(HorizontalAlign.CENTER);
-		this.registerTouchArea(gameDevelopersText);
-		gameDevelopersText.setVisible(false);
-		attachChild(gameDevelopersText);
 
+		registerAreaTouchListener();
+	}
+
+	private void registerAreaTouchListener() {
 		this.setOnAreaTouchListener(new IOnAreaTouchListener() {
-
 			long lastTouchTime = 0;
 			// Wait time in ms. Needed for the touch input, otherwise it is
 			// proceeding to fast.
@@ -84,35 +79,37 @@ public class GameEndScene extends BaseScene {
 						.getEventTime();
 
 				if (touchTime > lastTouchTime + WAIT_TIME
-						&& pTouchArea.equals(gameEndText)
-						&& gameEndText.isVisible()) {
-					System.out.println("GameEndText touched.");
+						&& pTouchArea.equals(gameEndText)) {
+					gameEndText.detachSelf();
+					unregisterTouchArea(gameEndText);
 
-					gameEndText.setVisible(false);
-					gameEndSprite.setVisible(true);
+					attachChild(gameEndSprite);
 					gameEndSprite
-							.registerEntityModifier(new FadeInModifier(5f));
+							.registerEntityModifier(new FadeInModifier(1f));
+					registerTouchArea(gameEndSprite);
 
 					lastTouchTime = touchTime;
 				}
 
 				if (touchTime > lastTouchTime + WAIT_TIME
-						&& pTouchArea.equals(gameEndSprite)
-						&& gameEndSprite.isVisible()) {
-					System.out.println("GameEndSprite touched.");
+						&& pTouchArea.equals(gameEndSprite)) {
+					gameEndSprite.detachSelf();
+					unregisterTouchArea(gameEndSprite);
 
-					gameEndSprite.setVisible(false);
-					gameDevelopersText.setVisible(true);
+					attachChild(gameDevelopersText);
+					gameDevelopersText
+							.registerEntityModifier(new FadeInModifier(1f));
+					registerTouchArea(gameDevelopersText);
 
 					lastTouchTime = touchTime;
 				}
 
 				if (touchTime > lastTouchTime + WAIT_TIME
-						&& pTouchArea.equals(gameDevelopersText)
-						&& gameDevelopersText.isVisible()) {
-					System.out.println("GameDevelopersText touched.");
+						&& pTouchArea.equals(gameDevelopersText)) {
 
-					gameDevelopersText.setVisible(false);
+					gameDevelopersText.detachSelf();
+					unregisterTouchArea(gameDevelopersText);
+
 					SceneManager.getInstance().loadMenuScene(engine);
 					SceneManager.getInstance().deleteCurrentGameMapScene();
 					resourcesManager.avatar = null;

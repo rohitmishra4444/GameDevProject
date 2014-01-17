@@ -3,6 +3,8 @@ package gamedev.scenes;
 import gamedev.game.SceneManager;
 import gamedev.game.SceneManager.SceneType;
 
+import java.util.ArrayList;
+
 import org.andengine.engine.camera.Camera;
 import org.andengine.entity.modifier.FadeInModifier;
 import org.andengine.entity.scene.IOnAreaTouchListener;
@@ -10,13 +12,15 @@ import org.andengine.entity.scene.ITouchArea;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
+import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.util.GLState;
 import org.andengine.util.HorizontalAlign;
 
 public class GameIntroScene extends BaseScene {
 
-	private Sprite gameIntroSprite;
 	private Text gameIntroText;
+	private ArrayList<Sprite> gameIntroSprites;
+	private int nextSprite = 0;
 
 	@Override
 	public void createScene() {
@@ -27,7 +31,6 @@ public class GameIntroScene extends BaseScene {
 
 		String gameIntroString = "Once a day," + "\n"
 				+ "in the modern world of today..." + "\n\n\n" + "Tap...";
-
 		gameIntroText = new Text(0, 0, resourcesManager.font, gameIntroString,
 				gameIntroString.length(), vbom);
 		gameIntroText.setPosition(
@@ -37,20 +40,20 @@ public class GameIntroScene extends BaseScene {
 		this.registerTouchArea(gameIntroText);
 		attachChild(gameIntroText);
 
-		gameIntroSprite = new Sprite(centerX, centerY,
-				resourcesManager.game_intro_region.get(0).getWidth(),
-				resourcesManager.game_intro_region.get(0).getHeight(),
-				resourcesManager.game_intro_region.get(0), vbom) {
-			@Override
-			protected void preDraw(GLState pGLState, Camera pCamera) {
-				super.preDraw(pGLState, pCamera);
-				pGLState.enableDither();
-			}
-		};
-		this.registerTouchArea(gameIntroSprite);
-		gameIntroSprite.setVisible(false);
-		attachChild(gameIntroSprite);
+		gameIntroSprites = new ArrayList<Sprite>();
+		for (ITextureRegion region : resourcesManager.game_intro_region) {
+			Sprite sprite = new Sprite(centerX, centerY, region.getWidth(),
+					region.getHeight(), region, vbom) {
+				@Override
+				protected void preDraw(GLState pGLState, Camera pCamera) {
+					super.preDraw(pGLState, pCamera);
+					pGLState.enableDither();
+				}
+			};
+			gameIntroSprites.add(sprite);
+		}
 
+		// This call has to be at the end.
 		registerAreaTouchListener();
 	}
 
@@ -70,28 +73,46 @@ public class GameIntroScene extends BaseScene {
 						.getEventTime();
 
 				if (touchTime > lastTouchTime + WAIT_TIME
-						&& pTouchArea.equals(gameIntroText)
-						&& gameIntroText.isVisible()) {
-					System.out.println("GameIntroText touched.");
+						&& pTouchArea.equals(gameIntroText)) {
+					gameIntroText.detachSelf();
+					unregisterTouchArea(gameIntroText);
 
-					gameIntroText.setVisible(false);
-					gameIntroSprite.setVisible(true);
-					gameIntroSprite.registerEntityModifier(new FadeInModifier(
-							5f));
-
+					Sprite newSprite = gameIntroSprites.get(0);
+					attachChild(newSprite);
+					newSprite.registerEntityModifier(new FadeInModifier(1f));
+					registerTouchArea(newSprite);
 					lastTouchTime = touchTime;
+					nextSprite++;
 				}
 
+				// Show the GameMapScene if last sprite was touched, else show
+				// the next sprite.
 				if (touchTime > lastTouchTime + WAIT_TIME
-						&& pTouchArea.equals(gameIntroSprite)
-						&& gameIntroSprite.isVisible()) {
-					System.out.println("GameIntroSprite touched.");
+						&& pTouchArea.equals(gameIntroSprites
+								.get(gameIntroSprites.size() - 1))) {
+					Sprite oldSprite = gameIntroSprites.get(gameIntroSprites
+							.size() - 1);
+					oldSprite.detachSelf();
+					unregisterTouchArea(oldSprite);
 
-					gameIntroSprite.setVisible(false);
 					SceneManager.getInstance()
 							.createGameMapScene(engine, false);
 
 					lastTouchTime = touchTime;
+				} else if (touchTime > lastTouchTime + WAIT_TIME
+						&& pTouchArea.equals(gameIntroSprites
+								.get(nextSprite - 1))) {
+					Sprite oldSprite = gameIntroSprites.get(nextSprite - 1);
+					oldSprite.detachSelf();
+					unregisterTouchArea(oldSprite);
+
+					Sprite newSprite = gameIntroSprites.get(nextSprite);
+					attachChild(newSprite);
+					newSprite.registerEntityModifier(new FadeInModifier(1f));
+					registerTouchArea(newSprite);
+
+					lastTouchTime = touchTime;
+					nextSprite++;
 				}
 
 				return false;
