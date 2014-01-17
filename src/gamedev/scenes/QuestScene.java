@@ -70,7 +70,7 @@ public class QuestScene extends CameraScene {
 		for (Quest quest : map.getQuests()) {
 			if (quest.isActive()) {
 				activeQuests.add(quest);
-			} else if (quest.isCompleted()) {
+			} else if (quest.isFinished()) {
 				finishedQuests.add(quest);
 			}
 		}
