@@ -45,7 +45,7 @@ public class GameMapScene extends BaseScene {
 		// Call BaseScene without calling createScene because here we need some
 		// stuff initialized before
 		super(false);
-		this.tmxFileName = "level.tmx";
+		this.tmxFileName = "final_map.tmx";
 		this.createScene();
 	}
 
@@ -67,12 +67,8 @@ public class GameMapScene extends BaseScene {
 			IEntity parentEntity = resourcesManager.avatar.getParent();
 			parentEntity.detachChild(resourcesManager.avatar);
 		}
-		// 32 is the PIXEL_TO_METER_RATIO_DEFAULT from AndEngine
 		resourcesManager.avatar.getBody().setTransform(200 / 32, 200 / 32, 0);
 		this.attachChild(resourcesManager.avatar);
-
-		// TODO: Define player position as constant or in tmx map.
-
 		createQuests();
 		createGameEndPortal();
 	}
@@ -86,7 +82,7 @@ public class GameMapScene extends BaseScene {
 		try {
 			final TMXLoader tmxLoader = new TMXLoader(
 					this.activity.getAssets(), this.engine.getTextureManager(),
-					TextureOptions.BILINEAR_PREMULTIPLYALPHA, this.vbom,
+					TextureOptions.DEFAULT, this.vbom,
 					new ITMXTilePropertiesListener() {
 						@Override
 						public void onTMXTileWithPropertiesCreated(

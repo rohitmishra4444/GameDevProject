@@ -378,8 +378,8 @@ public class ResourcesManager {
 	private void createGameEndPortalGraphics() {
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
 
-		this.gameEndPortalAtlas = new BitmapTextureAtlas(textureManager, 280,
-				296, TextureOptions.DEFAULT);
+		this.gameEndPortalAtlas = new BitmapTextureAtlas(textureManager, 90,
+				49, TextureOptions.DEFAULT);
 
 		this.gameEndPortalRegion = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(gameEndPortalAtlas, activity, "portal.png", 0,

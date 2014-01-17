@@ -107,6 +107,7 @@ public class FightScene extends CameraScene {
 		for (Target t : targetsToRemove) {
 			this.targets.remove(t);
 			this.detachChild(t);
+			t.dispose();
 		}
 		
 		// Third step: Check if a new target should be created
@@ -188,6 +189,7 @@ public class FightScene extends CameraScene {
 	protected void onClose() {
 		for (Target t : this.targets) {
 			this.detachChild(t);
+			t.dispose();
 		}
 		this.targets.clear();
 		this.object = null;

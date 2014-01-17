@@ -61,9 +61,9 @@ public class TmxLevelLoader {
 			} else if (group.getName().equals("QuestTrigger")) {
 				this.createQuestTriggers(group.getTMXObjects());
 			}
-			// else if (group.getName().equals("ShopCave")) {
-			// this.createShopCave(group.getTMXObjects());
-			// }
+//			 else if (group.getName().equals("ShopCave")) {
+//			 this.createShopCave(group.getTMXObjects());
+//			 }
 
 		}
 

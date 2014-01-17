@@ -25023,7 +25023,6 @@
    <tile gid="0"/>
   </data>
  </layer>
- <objectgroup name="BerryBushes" width="100" height="50"/>
  <layer name="Wald" width="100" height="50">
   <data>
    <tile gid="0"/>
@@ -35032,6 +35031,7 @@
    <tile gid="0"/>
   </data>
  </layer>
+ <objectgroup name="BerryBushes" width="100" height="50"/>
  <objectgroup name="Walls" width="100" height="50">
   <object x="1101" y="3" width="6" height="429"/>
   <object x="692" y="2" width="377" height="8"/>
