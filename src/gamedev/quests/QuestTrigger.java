@@ -41,6 +41,7 @@ public class QuestTrigger extends Rectangle {
 				}
 			} else {
 				quest.onFinish();
+				quest.setFinished(true);
 				this.setIgnoreUpdate(true);
 				ResourcesManager.getInstance().removeSpriteAndBody(this);
 			}

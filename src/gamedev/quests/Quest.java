@@ -50,5 +50,6 @@ public abstract class Quest {
 
 	public void setFinished(boolean finished) {
 		this.isFinished = finished;
+		this.isActive = false;
 	}
 }
