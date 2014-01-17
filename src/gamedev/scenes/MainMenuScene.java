@@ -95,7 +95,7 @@ public class MainMenuScene extends BaseScene implements
 			boolean restart = false;
 			if (SceneManager.getInstance().isGameMapSceneCreated() == false) {
 				// Show intro scene
-//				SceneManager.getInstance().loadGameIntroScene(engine);
+				// SceneManager.getInstance().loadGameIntroScene(engine);
 				SceneManager.getInstance().createGameMapScene(engine, restart);
 
 			} else {

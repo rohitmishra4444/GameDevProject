@@ -1,5 +1,6 @@
 package gamedev.scenes;
 
+import gamedev.game.ResourcesManager;
 import gamedev.game.SceneManager;
 import gamedev.game.SceneManager.SceneType;
 import gamedev.game.TmxLevelLoader;
@@ -23,6 +24,8 @@ import org.andengine.extension.tmx.util.exception.TMXLoadException;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.util.debug.Debug;
 
+import android.widget.Toast;
+
 /**
  * Base class for all levels
  * 
@@ -34,6 +37,7 @@ public class GameMapScene extends BaseScene {
 	protected String tmxFileName;
 
 	private Sprite gameEndPortal;
+	private boolean gameEndPortalContact = false;
 
 	protected ArrayList<Quest> quests = new ArrayList<Quest>();
 
@@ -129,8 +133,27 @@ public class GameMapScene extends BaseScene {
 			@Override
 			protected void onManagedUpdate(float pSecondsElapsed) {
 				super.onManagedUpdate(pSecondsElapsed);
-				if (resourcesManager.avatar.collidesWith(this)) {
-					SceneManager.getInstance().loadGameEndScene(engine);
+				if (resourcesManager.avatar.collidesWith(this)
+						&& gameEndPortalContact == false) {
+					gameEndPortalContact = true;
+
+					int numberOfCompletedQuests = 0;
+					for (Quest quest : quests) {
+						if (quest.isCompleted()) {
+							numberOfCompletedQuests++;
+						}
+					}
+					if (numberOfCompletedQuests == quests.size()) {
+						SceneManager.getInstance().loadGameEndScene(engine);
+					} else {
+						ResourcesManager.getInstance().activity
+								.toastOnUIThread(
+										"Hmm... the portal is not working. Did I complete all quests?",
+										Toast.LENGTH_SHORT);
+					}
+				} else if (!this
+						.collidesWith(ResourcesManager.getInstance().avatar)) {
+					gameEndPortalContact = false;
 				}
 			}
 		};

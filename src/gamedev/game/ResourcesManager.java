@@ -22,7 +22,6 @@ import org.andengine.opengl.texture.bitmap.BitmapTextureFormat;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.texture.region.TextureRegion;
-import org.andengine.opengl.texture.region.TextureRegionFactory;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.ui.activity.BaseActivity;
 
@@ -60,7 +59,6 @@ public class ResourcesManager {
 	public ITextureRegion[] treeRegions = new ITextureRegion[20];
 	public BitmapTextureAtlas pigAtlas;
 	public ITiledTextureRegion pigRegion;
-	
 
 	// Textures for fight scene
 	public BitmapTextureAtlas spearAtlas;
@@ -92,6 +90,10 @@ public class ResourcesManager {
 	// Textures for current quest scene
 	public ITextureRegion questFrameRegion;
 	private BitmapTextureAtlas questFrameTextureAtlas;
+	public ITextureRegion questActiveRegion;
+	private BitmapTextureAtlas questActiveTextureAtlas;
+	public ITextureRegion questCompletedRegion;
+	private BitmapTextureAtlas questCompletedTextureAtlas;
 
 	// Textures for game shop scene
 	public ITextureRegion shopRegion;
@@ -117,7 +119,6 @@ public class ResourcesManager {
 	public ITextureRegion woodRegion;
 	public BitmapTextureAtlas oldCavemanAtlas;
 	public ITextureRegion oldCavemanRegion;
-
 
 	// ---------------------------------------------
 	// Physic
@@ -167,8 +168,7 @@ public class ResourcesManager {
 
 	private void createSplashScreen() {
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
-		splashTextureAtlas = new BitmapTextureAtlas(textureManager, 480, 320,
-				BitmapTextureFormat.RGBA_4444);
+		splashTextureAtlas = new BitmapTextureAtlas(textureManager, 480, 320);
 		splash_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
 				splashTextureAtlas, activity, "splash_andengine.png", 0, 0);
 	}
@@ -327,6 +327,8 @@ public class ResourcesManager {
 		dinosaurGreenAtlas.load();
 		// treesAtlas.load();
 		questFrameTextureAtlas.load();
+		questActiveTextureAtlas.load();
+		questCompletedTextureAtlas.load();
 		// spearAtlas.load();
 		fightDinoAtlas.load();
 		woodAtlas.load();
@@ -340,6 +342,8 @@ public class ResourcesManager {
 		dinosaurGreenAtlas.unload();
 		// treesAtlas.unload();
 		questFrameTextureAtlas.unload();
+		questActiveTextureAtlas.unload();
+		questCompletedTextureAtlas.unload();
 		// spearAtlas.unload();
 		fightDinoAtlas.unload();
 		woodAtlas.unload();
@@ -352,7 +356,7 @@ public class ResourcesManager {
 		createAvatarGraphics();
 		createAnimalGraphics();
 		// createTreeGraphics();
-		createQuestFrameGraphics();
+		createQuestSceneGraphics();
 		// createSpearGraphics();
 		createFightSceneGraphics();
 		createStaticObjectGraphics();
@@ -367,12 +371,13 @@ public class ResourcesManager {
 
 		this.woodRegion = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(woodAtlas, activity, "wood.png", 0, 0);
-		
+
 		this.oldCavemanAtlas = new BitmapTextureAtlas(textureManager, 36, 35,
 				TextureOptions.DEFAULT);
 
 		this.oldCavemanRegion = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(oldCavemanAtlas, activity, "old_caveman_0.6.png", 0, 0);
+				.createFromAsset(oldCavemanAtlas, activity,
+						"old_caveman_0.6.png", 0, 0);
 
 	}
 
@@ -401,53 +406,55 @@ public class ResourcesManager {
 	private void createAnimalGraphics() {
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
 
-//		this.dinosaurGreenAtlas = new BitmapTextureAtlas(textureManager, 832,
-//				1024, TextureOptions.DEFAULT);
-//
-//		this.dinosaurGreenRegion = BitmapTextureAtlasTextureRegionFactory
-//				.createTiledFromAsset(this.dinosaurGreenAtlas, activity,
-//						"green_dino_0.25_asc.png", 0, 0, 26, 32);
-
-		this.dinosaurGreenAtlas = new BitmapTextureAtlas(textureManager, 1664,
-				2048, TextureOptions.DEFAULT);
+		this.dinosaurGreenAtlas = new BitmapTextureAtlas(textureManager, 832,
+				1024, TextureOptions.DEFAULT);
 
 		this.dinosaurGreenRegion = BitmapTextureAtlasTextureRegionFactory
 				.createTiledFromAsset(this.dinosaurGreenAtlas, activity,
-						"green_dino_0.5_asc.png", 0, 0, 26, 32);
+						"green_dino_0.25_asc.png", 0, 0, 26, 32);
 
-		this.pigAtlas = new BitmapTextureAtlas(textureManager, 300,
-				300, TextureOptions.DEFAULT);
+		// this.dinosaurGreenAtlas = new BitmapTextureAtlas(textureManager,
+		// 1664,
+		// 2048, TextureOptions.DEFAULT);
+		//
+		// this.dinosaurGreenRegion = BitmapTextureAtlasTextureRegionFactory
+		// .createTiledFromAsset(this.dinosaurGreenAtlas, activity,
+		// "green_dino_0.5_asc.png", 0, 0, 26, 32);
+
+		this.pigAtlas = new BitmapTextureAtlas(textureManager, 300, 300,
+				TextureOptions.DEFAULT);
 
 		this.pigRegion = BitmapTextureAtlasTextureRegionFactory
-				.createTiledFromAsset(this.pigAtlas, activity,
-						"pig.png", 0, 0, 8, 8);
+				.createTiledFromAsset(this.pigAtlas, activity, "pig.png", 0, 0,
+						8, 8);
 
 	}
 
-//	private void createTreeGraphics() {
-//		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
-//
-//		this.treesAtlas = new BitmapTextureAtlas(textureManager, 512, 640);
-//
-//		BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.treesAtlas,
-//				activity, "trees.png", 0, 0);
-//		int x = 0;
-//		int y = 0;
-//		for (int i = 1; i <= 20; i++) {
-//			// this.treeRegions[i-1] =
-//			// BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.treesAtlas,
-//			// activity, "trees.png", x, y);
-//			this.treeRegions[i - 1] = TextureRegionFactory.extractFromTexture(
-//					this.treesAtlas, x, y, 128, 128);
-//			x = x + 128;
-//			if (i % 4 == 0) {
-//				x = 0;
-//				y = y + 128;
-//			}
-//		}
-//	}
+	// private void createTreeGraphics() {
+	// BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
+	//
+	// this.treesAtlas = new BitmapTextureAtlas(textureManager, 512, 640);
+	//
+	// BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.treesAtlas,
+	// activity, "trees.png", 0, 0);
+	// int x = 0;
+	// int y = 0;
+	// for (int i = 1; i <= 20; i++) {
+	// // this.treeRegions[i-1] =
+	// //
+	// BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.treesAtlas,
+	// // activity, "trees.png", x, y);
+	// this.treeRegions[i - 1] = TextureRegionFactory.extractFromTexture(
+	// this.treesAtlas, x, y, 128, 128);
+	// x = x + 128;
+	// if (i % 4 == 0) {
+	// x = 0;
+	// y = y + 128;
+	// }
+	// }
+	// }
 
-	private void createQuestFrameGraphics() {
+	private void createQuestSceneGraphics() {
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
 
 		this.questFrameTextureAtlas = new BitmapTextureAtlas(textureManager,
@@ -456,6 +463,21 @@ public class ResourcesManager {
 		this.questFrameRegion = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(questFrameTextureAtlas, activity,
 						"quest_frame.png", 0, 0);
+
+		BitmapTextureAtlasTextureRegionFactory
+				.setAssetBasePath("gfx/game/hud/icons/");
+
+		this.questActiveTextureAtlas = new BitmapTextureAtlas(textureManager,
+				51, 49, TextureOptions.DEFAULT);
+		this.questActiveRegion = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(questActiveTextureAtlas, activity,
+						"Game_Icons_0001_Info.png", 0, 0);
+
+		this.questCompletedTextureAtlas = new BitmapTextureAtlas(
+				textureManager, 49, 49, TextureOptions.DEFAULT);
+		this.questCompletedRegion = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(questCompletedTextureAtlas, activity,
+						"Game_Icons_0005_Ok.png", 0, 0);
 	}
 
 	// ---------------------------------------------

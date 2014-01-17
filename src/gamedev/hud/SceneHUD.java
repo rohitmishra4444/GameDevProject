@@ -124,20 +124,22 @@ public class SceneHUD extends HUD {
 		this.berries = new ButtonSprite(cameraWidth - 115, 120,
 				resourcesManager.hudBerryRegion, resourcesManager.vbom) {
 			public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y) {
-				
+
 				if (touchEvent.isActionUp()) {
 					this.registerEntityModifier(new SequenceEntityModifier(
-							new ScaleModifier(0.25f, 1.25f, 1f), new ScaleModifier(
-									0.25f, 1f, 1.25f)));
+							new ScaleModifier(0.25f, 1.25f, 1f),
+							new ScaleModifier(0.25f, 1f, 1.25f)));
 
 					if (resourcesManager.avatar.getInventory().removeBerry()) {
 						int currentLife = resourcesManager.avatar.getLife();
-						resourcesManager.avatar.setLife(currentLife + lifeAdditionFromBerry);
+						resourcesManager.avatar.setLife(currentLife
+								+ lifeAdditionFromBerry);
 						int currentEnergy = resourcesManager.avatar.getEnergy();
-						resourcesManager.avatar.setEnergy(currentEnergy + energyAdditionFromBerry);
+						resourcesManager.avatar.setEnergy(currentEnergy
+								+ energyAdditionFromBerry);
 					}
 
-					return true;					
+					return true;
 				}
 				return false;
 			}
@@ -152,7 +154,8 @@ public class SceneHUD extends HUD {
 		this.berryCounter.registerUpdateHandler(new IUpdateHandler() {
 			@Override
 			public void onUpdate(float pSecondsElapsed) {
-				berryCounter.setText(String.valueOf(resourcesManager.avatar.getInventory().getNumberNumberOfBerries()));
+				berryCounter.setText(String.valueOf(resourcesManager.avatar
+						.getInventory().getNumberNumberOfBerries()));
 			}
 
 			@Override
@@ -207,15 +210,6 @@ public class SceneHUD extends HUD {
 
 				QuestScene questScene = new QuestScene();
 				questScene.openQuestScene();
-				// TODO: Remove.
-				resourcesManager.activity
-						.toastOnUIThread(
-								"Sorry, quests are not implemented yet but you can see the camera scene.",
-								Toast.LENGTH_LONG);
-				resourcesManager.activity.toastOnUIThread(
-						"Touch on the screen to close the camera scene.",
-						Toast.LENGTH_LONG);
-
 				return true;
 			};
 		};
@@ -238,12 +232,10 @@ public class SceneHUD extends HUD {
 
 				HelpScene helpScene = new HelpScene();
 				helpScene.openHelpScene();
-
-				// TODO: Remove.
+				// TODO: Remove toast.
 				resourcesManager.activity.toastOnUIThread(
 						"Sorry, the help is not implemented yet.",
 						Toast.LENGTH_LONG);
-
 				return true;
 			};
 		};

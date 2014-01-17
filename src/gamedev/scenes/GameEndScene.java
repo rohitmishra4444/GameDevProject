@@ -56,7 +56,7 @@ public class GameEndScene extends BaseScene {
 
 		String gameDevelopersString = "This game was designed and developed by"
 				+ "\n" + "Stefan Wanzenried" + "\n" + "David Wettstein"
-				+ "\n\n" + "Tap here...";
+				+ "\n\n\n" + "Tap...";
 
 		gameDevelopersText = new Text(0, 0, resourcesManager.font,
 				gameDevelopersString, gameDevelopersString.length(), vbom);
