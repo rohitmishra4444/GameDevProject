@@ -226,7 +226,7 @@ public class ResourcesManager {
 
 		font = FontFactory.createFromAsset(
 				((GameActivity) activity).getFontManager(), mainFontTexture,
-				activity.getAssets(), "font.ttf", 30f, true, Color.WHITE);
+				activity.getAssets(), "font.ttf", 35f, true, Color.WHITE);
 	}
 
 	private void loadMenuFonts() {
@@ -326,9 +326,6 @@ public class ResourcesManager {
 		playerAtlas.load();
 		dinosaurGreenAtlas.load();
 		// treesAtlas.load();
-		questFrameTextureAtlas.load();
-		questActiveTextureAtlas.load();
-		questFinishedTextureAtlas.load();
 		// spearAtlas.load();
 		fightDinoAtlas.load();
 		woodAtlas.load();
@@ -341,9 +338,6 @@ public class ResourcesManager {
 		playerAtlas.unload();
 		dinosaurGreenAtlas.unload();
 		// treesAtlas.unload();
-		questFrameTextureAtlas.unload();
-		questActiveTextureAtlas.unload();
-		questFinishedTextureAtlas.unload();
 		// spearAtlas.unload();
 		fightDinoAtlas.unload();
 		woodAtlas.unload();
@@ -454,6 +448,18 @@ public class ResourcesManager {
 	// }
 	// }
 
+	public void loadQuestSceneGraphics() {
+		questFrameTextureAtlas.load();
+		questActiveTextureAtlas.load();
+		questFinishedTextureAtlas.load();
+	}
+
+	public void unloadQuestSceneGraphics() {
+		questFrameTextureAtlas.unload();
+		questActiveTextureAtlas.unload();
+		questFinishedTextureAtlas.unload();
+	}
+
 	private void createQuestSceneGraphics() {
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
 
@@ -473,8 +479,8 @@ public class ResourcesManager {
 				.createFromAsset(questActiveTextureAtlas, activity,
 						"Game_Icons_0001_Info.png", 0, 0);
 
-		this.questFinishedTextureAtlas = new BitmapTextureAtlas(
-				textureManager, 49, 49, TextureOptions.DEFAULT);
+		this.questFinishedTextureAtlas = new BitmapTextureAtlas(textureManager,
+				49, 49, TextureOptions.DEFAULT);
 		this.questFinishedRegion = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(questFinishedTextureAtlas, activity,
 						"Game_Icons_0005_Ok.png", 0, 0);

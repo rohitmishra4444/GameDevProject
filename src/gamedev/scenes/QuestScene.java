@@ -117,6 +117,7 @@ public class QuestScene extends CameraScene {
 	}
 
 	public void openQuestScene() {
+		resourcesManager.loadQuestSceneGraphics();
 		resourcesManager.unloadHUDResources();
 		SceneManager.getInstance().getCurrentGameMapScene().setChildScene(this);
 		GameActivity.mode = GameMode.POPUP;
@@ -126,6 +127,7 @@ public class QuestScene extends CameraScene {
 	public void closeQuestScene() {
 		SceneManager.getInstance().getCurrentGameMapScene().clearChildScene();
 		resourcesManager.loadHUDResources();
+		resourcesManager.unloadQuestSceneGraphics();
 		GameActivity.mode = GameMode.EXPLORING;
 
 		for (int i = 0; i < this.getChildCount(); i++) {
