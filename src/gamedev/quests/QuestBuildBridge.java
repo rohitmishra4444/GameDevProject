@@ -1,7 +1,6 @@
 package gamedev.quests;
 
 import gamedev.game.ResourcesManager;
-import gamedev.game.SceneManager;
 import gamedev.objects.Inventory;
 import gamedev.objects.Wood;
 import gamedev.scenes.GameMapScene;
@@ -41,8 +40,8 @@ public class QuestBuildBridge extends Quest {
 				0);
 		this.body = PhysicsFactory.createBoxBody(res.physicsWorld,
 				this.rectangle, BodyType.StaticBody, boxFixtureDef);
-		 res.physicsWorld.registerPhysicsConnector(new PhysicsConnector(
-		 rectangle, body, false, false));
+		res.physicsWorld.registerPhysicsConnector(new PhysicsConnector(
+				rectangle, body, false, false));
 		map.attachChild(rectangle);
 
 		this.wood1 = new Wood(200, 200);
@@ -52,15 +51,17 @@ public class QuestBuildBridge extends Quest {
 		map.attachChild(wood2);
 		map.attachChild(wood3);
 	}
-	
+
 	public void setActive(boolean active) {
 		super.setActive(active);
-		ResourcesManager.getInstance().activity.toastOnUIThread(this.description, Toast.LENGTH_SHORT);
+		ResourcesManager.getInstance().activity.toastOnUIThread(
+				this.description, Toast.LENGTH_SHORT);
 	}
-	
+
 	@Override
 	public void onFinish() {
 		ResourcesManager.getInstance().removeSpriteAndBody(rectangle);
+		this.setFinished(true);
 	}
 
 	@Override

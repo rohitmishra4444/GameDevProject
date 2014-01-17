@@ -10,7 +10,8 @@ public abstract class Quest {
 	protected String status;
 	protected GameMapScene map;
 	protected boolean isCompleted = false;
-	
+	protected boolean isFinished = false;
+
 	// TODO: Give rewards!
 
 	public Quest(GameMapScene map) {
@@ -23,9 +24,8 @@ public abstract class Quest {
 
 	public abstract boolean isCompleted();
 
-
 	public boolean isActive() {
-		return isActive;
+		return this.isActive;
 	}
 
 	public void setActive(boolean isActive) {
@@ -39,9 +39,16 @@ public abstract class Quest {
 	public String getDescription() {
 		return this.description;
 	}
-	
+
 	public void setCompleted(boolean completed) {
 		this.isCompleted = completed;
 	}
 
+	public boolean isFinished() {
+		return this.isFinished;
+	}
+
+	public void setFinished(boolean finished) {
+		this.isFinished = finished;
+	}
 }

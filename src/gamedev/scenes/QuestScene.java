@@ -66,18 +66,18 @@ public class QuestScene extends CameraScene {
 	private void addCurrentQuestsToScene() {
 		GameMapScene map = SceneManager.getInstance().getCurrentGameMapScene();
 		ArrayList<Quest> activeQuests = new ArrayList<Quest>();
-		ArrayList<Quest> completedQuests = new ArrayList<Quest>();
+		ArrayList<Quest> finishedQuests = new ArrayList<Quest>();
 		for (Quest quest : map.getQuests()) {
 			if (quest.isActive()) {
 				activeQuests.add(quest);
 			} else if (quest.isCompleted()) {
-				completedQuests.add(quest);
+				finishedQuests.add(quest);
 			}
 		}
 
-		if (activeQuests.isEmpty() && completedQuests.isEmpty()) {
+		if (activeQuests.isEmpty() && finishedQuests.isEmpty()) {
 			ResourcesManager.getInstance().activity.toastOnUIThread(
-					"You have no active or completed quests yet.",
+					"You have no active or finished quests yet.",
 					Toast.LENGTH_SHORT);
 		}
 
@@ -98,12 +98,12 @@ public class QuestScene extends CameraScene {
 			attachChild(text);
 		}
 
-		for (int i = 0; i < completedQuests.size(); i++) {
-			Quest quest = completedQuests.get(i);
+		for (int i = 0; i < finishedQuests.size(); i++) {
+			Quest quest = finishedQuests.get(i);
 
 			Sprite sprite = new Sprite(X_POSITION, Y_POSITION_MIN
 					+ (i + activeQuests.size()) * GAP_BETWEEN_QUESTS - 7,
-					resourcesManager.questCompletedRegion.deepCopy(),
+					resourcesManager.questFinishedRegion.deepCopy(),
 					resourcesManager.vbom);
 			sprite.setScale(0.8f);
 			attachChild(sprite);

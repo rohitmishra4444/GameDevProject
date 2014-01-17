@@ -92,8 +92,8 @@ public class ResourcesManager {
 	private BitmapTextureAtlas questFrameTextureAtlas;
 	public ITextureRegion questActiveRegion;
 	private BitmapTextureAtlas questActiveTextureAtlas;
-	public ITextureRegion questCompletedRegion;
-	private BitmapTextureAtlas questCompletedTextureAtlas;
+	public ITextureRegion questFinishedRegion;
+	private BitmapTextureAtlas questFinishedTextureAtlas;
 
 	// Textures for game shop scene
 	public ITextureRegion shopRegion;
@@ -328,7 +328,7 @@ public class ResourcesManager {
 		// treesAtlas.load();
 		questFrameTextureAtlas.load();
 		questActiveTextureAtlas.load();
-		questCompletedTextureAtlas.load();
+		questFinishedTextureAtlas.load();
 		// spearAtlas.load();
 		fightDinoAtlas.load();
 		woodAtlas.load();
@@ -343,7 +343,7 @@ public class ResourcesManager {
 		// treesAtlas.unload();
 		questFrameTextureAtlas.unload();
 		questActiveTextureAtlas.unload();
-		questCompletedTextureAtlas.unload();
+		questFinishedTextureAtlas.unload();
 		// spearAtlas.unload();
 		fightDinoAtlas.unload();
 		woodAtlas.unload();
@@ -473,10 +473,10 @@ public class ResourcesManager {
 				.createFromAsset(questActiveTextureAtlas, activity,
 						"Game_Icons_0001_Info.png", 0, 0);
 
-		this.questCompletedTextureAtlas = new BitmapTextureAtlas(
+		this.questFinishedTextureAtlas = new BitmapTextureAtlas(
 				textureManager, 49, 49, TextureOptions.DEFAULT);
-		this.questCompletedRegion = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(questCompletedTextureAtlas, activity,
+		this.questFinishedRegion = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(questFinishedTextureAtlas, activity,
 						"Game_Icons_0005_Ok.png", 0, 0);
 	}
 

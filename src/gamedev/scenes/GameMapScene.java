@@ -41,9 +41,6 @@ public class GameMapScene extends BaseScene {
 
 	protected ArrayList<Quest> quests = new ArrayList<Quest>();
 
-	// protected ArrayList<CollectableObject> collectableObjects = new
-	// ArrayList<CollectableObject>();
-
 	public GameMapScene() {
 		// Call BaseScene without calling createScene because here we need some
 		// stuff initialized before
@@ -137,13 +134,13 @@ public class GameMapScene extends BaseScene {
 						&& gameEndPortalContact == false) {
 					gameEndPortalContact = true;
 
-					int numberOfCompletedQuests = 0;
+					int numberOfFinishedQuests = 0;
 					for (Quest quest : quests) {
-						if (quest.isCompleted()) {
-							numberOfCompletedQuests++;
+						if (quest.isFinished()) {
+							numberOfFinishedQuests++;
 						}
 					}
-					if (numberOfCompletedQuests == quests.size()) {
+					if (numberOfFinishedQuests == quests.size()) {
 						SceneManager.getInstance().loadGameEndScene(engine);
 					} else {
 						ResourcesManager.getInstance().activity
@@ -159,23 +156,7 @@ public class GameMapScene extends BaseScene {
 		};
 		gameEndPortal.setAlpha(0.8f);
 		gameEndPortal.setScale(0.5f);
-		// gameEndPortal.registerEntityModifier(new LoopEntityModifier(
-		// new ScaleModifier(2, 0.95f, 1.05f)));
 		this.attachChild(gameEndPortal);
-	}
-
-	@Override
-	public void onManagedUpdate(float seconds) {
-		super.onManagedUpdate(seconds);
-		// TODO: Here I get an IndexOutOfBoundsException in the super methods
-		// (see javadoc in detachChild).
-		// Update: Fixed by using a RunnableHandler.
-
-		// for (CollectableObject o : this.collectableObjects) {
-		// if (o.isRemoveable()) {
-		// this.detachChild(o);
-		// }
-		// }
 	}
 
 	@Override
@@ -200,10 +181,6 @@ public class GameMapScene extends BaseScene {
 	public void addQuest(Quest quest) {
 		this.quests.add(quest);
 	}
-
-	// public void addCollectableObject(CollectableObject object) {
-	// this.collectableObjects.add(object);
-	// }
 
 	public ArrayList<Quest> getQuests() {
 		return quests;

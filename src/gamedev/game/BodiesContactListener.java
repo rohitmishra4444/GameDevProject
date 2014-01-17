@@ -7,9 +7,7 @@ import gamedev.objects.BerryBush;
 import gamedev.objects.Dinosaur;
 import gamedev.objects.Pig;
 import gamedev.scenes.FightScene;
-import gamedev.scenes.FightSceneOld;
 import gamedev.scenes.GameMapScene;
-import gamedev.scenes.ShopScene;
 
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
@@ -38,10 +36,11 @@ public class BodiesContactListener implements ContactListener,
 
 	@Override
 	public void beginContact(Contact contact) {
-		
+
 		// No need to handle contacts if not exploring the world...
-		if (GameActivity.mode != GameMode.EXPLORING) return;
-		
+		if (GameActivity.mode != GameMode.EXPLORING)
+			return;
+
 		currentMapScene = SceneManager.getInstance().getCurrentGameMapScene();
 
 		final Fixture x1 = contact.getFixtureA();
@@ -52,9 +51,11 @@ public class BodiesContactListener implements ContactListener,
 				|| x2.getBody().getUserData() == null)
 			return;
 
-//		System.out.println("Contact between: " + x1.getBody().getUserData()
-//				+ " and " + x2.getBody().getUserData());
+		// System.out.println("Contact between: " + x1.getBody().getUserData()
+		// + " and " + x2.getBody().getUserData());
 
+		// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+		// Berries
 		if (x1.getBody().getUserData() instanceof BerryBush
 				&& x2.getBody().getUserData().equals("Avatar")) {
 			berryBush = (BerryBush) x1.getBody().getUserData();
@@ -76,7 +77,8 @@ public class BodiesContactListener implements ContactListener,
 			}
 			return;
 		}
-		
+
+		// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 		// Dinosaurs
 		if (x1.getBody().getUserData().equals("Avatar")
 				&& x2.getBody().getUserData() instanceof Dinosaur) {
@@ -94,6 +96,7 @@ public class BodiesContactListener implements ContactListener,
 			return;
 		}
 
+		// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 		// Pig for second Quest
 		if (currentMapScene.getQuest(1).isActive()) {
 			Pig pig = null;
@@ -107,36 +110,37 @@ public class BodiesContactListener implements ContactListener,
 			if (pig != null) {
 				// Catched the Pig!
 				ResourcesManager.getInstance().removeSpriteAndBody(pig);
-				ResourcesManager.getInstance().activity.toastOnUIThread("Yes! Catched the pig... I need to bring it back.", Toast.LENGTH_SHORT);
+				ResourcesManager.getInstance().activity.toastOnUIThread(
+						"Yes! Catched the pig... I need to bring it back.",
+						Toast.LENGTH_SHORT);
 				currentMapScene.getQuest(1).setCompleted(true);
 			}
 		}
-		
-		
+
 		// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 		// TODO: Remove this if else section, if we use a button for the shop.
-		if (x1.getBody().getUserData().equals("Avatar")
-				&& x2.getBody().getUserData().equals("ShopCave")) {
-			ShopScene shopScene = new ShopScene();
-			shopScene.openShopScene();
-			resourcesManager.activity.toastOnUIThread(
-					"Sorry, the shop is not implemented yet.",
-					Toast.LENGTH_LONG);
-			resourcesManager.activity.toastOnUIThread(
-					"Touch on the screen to close the camera scene.",
-					Toast.LENGTH_LONG);
-
-		} else if (x1.getBody().getUserData().equals("ShopCave")
-				&& x2.getBody().getUserData().equals("Avatar")) {
-			ShopScene shopScene = new ShopScene();
-			shopScene.openShopScene();
-			resourcesManager.activity.toastOnUIThread(
-					"Sorry, the shop is not implemented yet.",
-					Toast.LENGTH_LONG);
-			resourcesManager.activity.toastOnUIThread(
-					"Touch on the screen to close the camera scene.",
-					Toast.LENGTH_LONG);
-		}
+		// if (x1.getBody().getUserData().equals("Avatar")
+		// && x2.getBody().getUserData().equals("ShopCave")) {
+		// ShopScene shopScene = new ShopScene();
+		// shopScene.openShopScene();
+		// resourcesManager.activity.toastOnUIThread(
+		// "Sorry, the shop is not implemented yet.",
+		// Toast.LENGTH_LONG);
+		// resourcesManager.activity.toastOnUIThread(
+		// "Touch on the screen to close the camera scene.",
+		// Toast.LENGTH_LONG);
+		//
+		// } else if (x1.getBody().getUserData().equals("ShopCave")
+		// && x2.getBody().getUserData().equals("Avatar")) {
+		// ShopScene shopScene = new ShopScene();
+		// shopScene.openShopScene();
+		// resourcesManager.activity.toastOnUIThread(
+		// "Sorry, the shop is not implemented yet.",
+		// Toast.LENGTH_LONG);
+		// resourcesManager.activity.toastOnUIThread(
+		// "Touch on the screen to close the camera scene.",
+		// Toast.LENGTH_LONG);
+		// }
 		// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 	}
