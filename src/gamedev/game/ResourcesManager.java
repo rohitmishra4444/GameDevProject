@@ -55,6 +55,8 @@ public class ResourcesManager {
 	public ITiledTextureRegion playerRegion;
 	public BitmapTextureAtlas dinosaurGreenAtlas;
 	public ITiledTextureRegion dinosaurGreenRegion;
+	public BitmapTextureAtlas dinosaurRedAtlas;
+	public ITiledTextureRegion dinosaurRedRegion;
 	public BitmapTextureAtlas treesAtlas;
 	public ITextureRegion[] treeRegions = new ITextureRegion[20];
 	public BitmapTextureAtlas pigAtlas;
@@ -327,6 +329,7 @@ public class ResourcesManager {
 		gameEndPortalAtlas.load();
 		playerAtlas.load();
 		dinosaurGreenAtlas.load();
+		dinosaurRedAtlas.load();
 		// treesAtlas.load();
 		// spearAtlas.load();
 		fightDinoAtlas.load();
@@ -340,6 +343,7 @@ public class ResourcesManager {
 		gameEndPortalAtlas.unload();
 		playerAtlas.unload();
 		dinosaurGreenAtlas.unload();
+		dinosaurRedAtlas.unload();
 		// treesAtlas.unload();
 		// spearAtlas.unload();
 		fightDinoAtlas.unload();
@@ -375,7 +379,7 @@ public class ResourcesManager {
 
 		this.bridgeRegion = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(bridgeAtlas, activity, "bridge.png", 0, 0);
-		
+
 		this.oldCavemanAtlas = new BitmapTextureAtlas(textureManager, 36, 35,
 				TextureOptions.DEFAULT);
 
@@ -410,27 +414,26 @@ public class ResourcesManager {
 	private void createAnimalGraphics() {
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
 
-		this.dinosaurGreenAtlas = new BitmapTextureAtlas(textureManager, 832,
-				1024, TextureOptions.DEFAULT);
+		this.dinosaurGreenAtlas = new BitmapTextureAtlas(textureManager, 864,
+				864, TextureOptions.DEFAULT);
 
 		this.dinosaurGreenRegion = BitmapTextureAtlasTextureRegionFactory
 				.createTiledFromAsset(this.dinosaurGreenAtlas, activity,
-						"green_dino_0.25_asc.png", 0, 0, 26, 32);
+						"dino_green_0.5.png", 0, 0, 16, 16);
 
-		// this.dinosaurGreenAtlas = new BitmapTextureAtlas(textureManager,
-		// 1664,
-		// 2048, TextureOptions.DEFAULT);
-		//
-		// this.dinosaurGreenRegion = BitmapTextureAtlasTextureRegionFactory
-		// .createTiledFromAsset(this.dinosaurGreenAtlas, activity,
-		// "green_dino_0.5_asc.png", 0, 0, 26, 32);
+		this.dinosaurRedAtlas = new BitmapTextureAtlas(textureManager, 864,
+				864, TextureOptions.DEFAULT);
 
-		this.pigAtlas = new BitmapTextureAtlas(textureManager, 300, 300,
+		this.dinosaurRedRegion = BitmapTextureAtlasTextureRegionFactory
+				.createTiledFromAsset(this.dinosaurGreenAtlas, activity,
+						"dino_red_0.5.png", 0, 0, 16, 16);
+
+		this.pigAtlas = new BitmapTextureAtlas(textureManager, 486, 432,
 				TextureOptions.DEFAULT);
 
 		this.pigRegion = BitmapTextureAtlasTextureRegionFactory
 				.createTiledFromAsset(this.pigAtlas, activity, "pig.png", 0, 0,
-						8, 8);
+						9, 8);
 
 	}
 
