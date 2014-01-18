@@ -41,7 +41,7 @@ public class Dinosaur extends AnimatedObject {
 		} else if (color == COLOR_RED) {
 			this.velocity = 3f;
 			this.factorRunning = 2f;
-			this.radius = 10f;
+			this.radius = 5f;
 		}
 		this.moveStrategy = new FollowPlayerStrategy(this, this.radius);
 		this.getBody().setUserData(this);

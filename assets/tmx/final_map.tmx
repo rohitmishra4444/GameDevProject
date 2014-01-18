@@ -35053,6 +35053,10 @@
   <object x="946" y="561" width="11" height="11"/>
   <object x="353" y="1110" width="11" height="10"/>
  </objectgroup>
+ <objectgroup name="RedDinosaurs" width="100" height="50">
+  <object x="653" y="767" width="10" height="11"/>
+  <object x="307" y="600" width="12" height="11"/>
+ </objectgroup>
  <objectgroup name="ShopCave" width="100" height="50">
   <object x="778" y="26" width="39" height="56"/>
  </objectgroup>

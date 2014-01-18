@@ -22,9 +22,11 @@ public class QuestBuildBridge extends Quest {
 	private final static float RECTANGLE_Y = 14 * 32;
 	private final static float RECTANGLE_HEIGHT = 100;
 	private final static float RECTANGLE_WIDTH = 20;
-
+	private final static int N_WOOD = 5;
+	
 	protected Body body;
 	protected Rectangle rectangle;
+	protected Wood[] woods = new Wood[N_WOOD];
 	protected Wood wood1;
 	protected Wood wood2;
 	protected Wood wood3;
@@ -45,13 +47,16 @@ public class QuestBuildBridge extends Quest {
 		res.physicsWorld.registerPhysicsConnector(new PhysicsConnector(
 				rectangle, body, false, false));
 		map.attachChild(rectangle);
-
-		this.wood1 = new Wood(200, 200);
-		this.wood2 = new Wood(400, 600);
-		this.wood3 = new Wood(500, 500);
-		map.attachChild(wood1);
-		map.attachChild(wood2);
-		map.attachChild(wood3);
+		
+		this.woods[0] = new Wood(250, 250);
+		this.woods[1] = new Wood(250, 600);
+		this.woods[2] = new Wood(300, 700);
+		this.woods[3] = new Wood(500, 900);
+		this.woods[4] = new Wood(100, 1000);
+		
+		for (int i=0; i<N_WOOD; i++) {
+			this.map.attachChild(this.woods[i]);
+		}
 		
 		this.bridge = new Sprite(600, 600, ResourcesManager.getInstance().bridgeRegion, ResourcesManager.getInstance().vbom);
 				
@@ -71,24 +76,21 @@ public class QuestBuildBridge extends Quest {
 
 	@Override
 	public String getStatus() {
-		Inventory inventory = ResourcesManager.getInstance().avatar
-				.getInventory();
+		Inventory inventory = ResourcesManager.getInstance().avatar.getInventory();
 		int count = 0;
-		if (inventory.contains(wood1))
-			count++;
-		if (inventory.contains(wood2))
-			count++;
-		if (inventory.contains(wood3))
-			count++;
-		return "I found " + Integer.toString(count) + "/3 wood... I need more!";
+		for (int i=0; i<N_WOOD; i++) {
+			if (inventory.contains(this.woods[i])) count++;
+		}
+		return "I found " + Integer.toString(count) + "/" + N_WOOD +" wood... I need more!";
 	}
 
 	@Override
 	public boolean isCompleted() {
-		Inventory inventory = ResourcesManager.getInstance().avatar
-				.getInventory();
-		return (inventory.contains(wood1) && inventory.contains(wood2) && inventory
-				.contains(wood3));
+		Inventory inventory = ResourcesManager.getInstance().avatar.getInventory();
+		for (int i=0; i<N_WOOD; i++) {
+			if (!inventory.contains(this.woods[i])) return false;
+		}
+		return true;
 	}
 
 	public Rectangle getRectangle() {
