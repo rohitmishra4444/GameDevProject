@@ -32,9 +32,10 @@ public class FightScene extends CameraScene {
 	protected AnimatedObject object;
 	protected ResourcesManager resourcesManager;
 	protected ArrayList<Target> targets = new ArrayList<Target>();
+	protected ArrayList<Target> targetsToRemove = new ArrayList<Target>();
 	protected float fightDuration = 0; // Total duration of fight
 	protected float lastTargetCreated = 0; // Last target created (passed seconds)
-	protected float frequencyOfTargts = 0.25f; // How often are new targets created in seconds
+	protected float frequencyOfTargts = 0.2f; // How often are new targets created in seconds
 	private static FightScene instance;
 		
 	private FightScene() {
@@ -98,7 +99,6 @@ public class FightScene extends CameraScene {
 		this.lastTargetCreated += seconds;
 	
 		// First step: Check for dismissed targets!
-		ArrayList<Target> targetsToRemove = new ArrayList<Target>();
 		for (Target t : this.targets) {
 			if ((this.fightDuration - t.getTimeAlive()) > t.getTimeCreated()) {
 				// Missed!
@@ -115,13 +115,18 @@ public class FightScene extends CameraScene {
 			this.detachChild(t);
 			t.dispose();
 		}
+		this.targetsToRemove.clear();
 		
-		// Third step: Check if a new target should be created
+		// Third step: Check how much new target should be created.
+		// Note that this depends on the time how often this method can be called - therefore we maybe must create multiple targets on slower devices
 		if (this.lastTargetCreated > this.frequencyOfTargts) {
-			Target t = this.generateTarget();
-			this.targets.add(t);
-			this.attachChild(t);
+			int nTargets = (int) (this.lastTargetCreated / this.frequencyOfTargts); 
 			this.lastTargetCreated = 0;
+			for (int i= 0; i<nTargets; i++) {
+				Target t = this.generateTarget();
+				this.targets.add(t);
+				this.attachChild(t);				
+			}
 		}			
 	}
 	
@@ -145,7 +150,7 @@ public class FightScene extends CameraScene {
 			if (r.nextFloat() < pGoodTarget) {
 				// Good target
 				if (d.getDinoColor() == Dinosaur.COLOR_GREEN) {
-					t = new Target(position.x, position.y, TARGET_RADIUS, Color.BLACK, this.fightDuration, 1.5f);
+					t = new Target(position.x, position.y, TARGET_RADIUS, Color.BLACK, this.fightDuration, 0.75f);
 					t.setDamageOpponent(10);
 					t.setDamageMiss(10);
 				} else {
@@ -156,10 +161,10 @@ public class FightScene extends CameraScene {
 			} else {
 				// Bad target
 				if (d.getDinoColor() == Dinosaur.COLOR_GREEN) {
-					t = new Target(position.x, position.y, TARGET_RADIUS, Color.RED, this.fightDuration, 1.5f);
+					t = new Target(position.x, position.y, TARGET_RADIUS, Color.RED, this.fightDuration, 0.5f);
 					t.setDamageAvatar(10);
 				} else {
-					t = new Target(position.x, position.y, TARGET_RADIUS, Color.RED, this.fightDuration, 1.5f);
+					t = new Target(position.x, position.y, TARGET_RADIUS, Color.RED, this.fightDuration, 0.5f);
 					t.setDamageAvatar(15);
 				}
 			}
