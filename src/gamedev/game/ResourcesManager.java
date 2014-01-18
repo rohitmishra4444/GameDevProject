@@ -55,10 +55,10 @@ public class ResourcesManager {
 	public ITiledTextureRegion playerRegion;
 	public BitmapTextureAtlas[] dinosaurAtlas = new BitmapTextureAtlas[2];
 	public ITiledTextureRegion[] dinosaurRegion = new ITiledTextureRegion[2];
-//	public BitmapTextureAtlas dinosaurRedAtlas;
-//	public ITiledTextureRegion dinosaurRedRegion;
+	// public BitmapTextureAtlas dinosaurRedAtlas;
+	// public ITiledTextureRegion dinosaurRedRegion;
 	public BitmapTextureAtlas treesAtlas;
-//	public ITextureRegion[] treeRegions = new ITextureRegion[20];
+	// public ITextureRegion[] treeRegions = new ITextureRegion[20];
 	public BitmapTextureAtlas pigAtlas;
 	public ITiledTextureRegion pigRegion;
 	public BitmapTextureAtlas spiderAtlas;
@@ -200,7 +200,7 @@ public class ResourcesManager {
 
 		// Menu background
 		this.menuBackgroundTextureAtlas = new BitmapTextureAtlas(
-				textureManager, 800, 600, BitmapTextureFormat.RGBA_4444);
+				textureManager, 800, 600, BitmapTextureFormat.RGBA_8888);
 		this.menu_background_region = BitmapTextureAtlasTextureRegionFactory
 				.createTiledFromAsset(menuBackgroundTextureAtlas, activity,
 						"menubackground.png", 0, 0, 1, 1);
@@ -333,7 +333,7 @@ public class ResourcesManager {
 		playerAtlas.load();
 		dinosaurAtlas[0].load();
 		dinosaurAtlas[1].load();
-//		dinosaurRedAtlas.load();
+		// dinosaurRedAtlas.load();
 		// treesAtlas.load();
 		// spearAtlas.load();
 		fightDinoAtlas.load();
@@ -349,8 +349,8 @@ public class ResourcesManager {
 		playerAtlas.unload();
 		dinosaurAtlas[0].unload();
 		dinosaurAtlas[1].unload();
-//		dinosaurAtlas.unload();
-//		dinosaurRedAtlas.unload();
+		// dinosaurAtlas.unload();
+		// dinosaurRedAtlas.unload();
 		// treesAtlas.unload();
 		// spearAtlas.unload();
 		fightDinoAtlas.unload();
@@ -447,8 +447,8 @@ public class ResourcesManager {
 				TextureOptions.DEFAULT);
 
 		this.spiderRegion = BitmapTextureAtlasTextureRegionFactory
-				.createTiledFromAsset(this.spiderAtlas, activity, "spider.png",
-						0, 0, 8, 8);
+				.createTiledFromAsset(this.spiderAtlas, activity,
+						"spider_0.3.png", 0, 0, 8, 8);
 
 	}
 

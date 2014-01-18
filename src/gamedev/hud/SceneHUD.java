@@ -184,9 +184,6 @@ public class SceneHUD extends HUD {
 				resourcesManager.activity.toastOnUIThread(
 						"Sorry, the shop is not implemented yet.",
 						Toast.LENGTH_LONG);
-				resourcesManager.activity.toastOnUIThread(
-						"Touch on the screen to close the camera scene.",
-						Toast.LENGTH_LONG);
 
 				return true;
 			};

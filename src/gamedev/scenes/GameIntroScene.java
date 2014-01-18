@@ -68,53 +68,56 @@ public class GameIntroScene extends BaseScene {
 			public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
 					ITouchArea pTouchArea, float pTouchAreaLocalX,
 					float pTouchAreaLocalY) {
+				if (pSceneTouchEvent.isActionDown()) {
+					long touchTime = pSceneTouchEvent.getMotionEvent()
+							.getEventTime();
 
-				long touchTime = pSceneTouchEvent.getMotionEvent()
-						.getEventTime();
+					if (touchTime > lastTouchTime + WAIT_TIME
+							&& pTouchArea.equals(gameIntroText)) {
+						gameIntroText.detachSelf();
+						unregisterTouchArea(gameIntroText);
 
-				if (touchTime > lastTouchTime + WAIT_TIME
-						&& pTouchArea.equals(gameIntroText)) {
-					gameIntroText.detachSelf();
-					unregisterTouchArea(gameIntroText);
+						Sprite newSprite = gameIntroSprites.get(0);
+						attachChild(newSprite);
+						newSprite
+								.registerEntityModifier(new FadeInModifier(1f));
+						registerTouchArea(newSprite);
+						lastTouchTime = touchTime;
+						nextSprite++;
+					}
 
-					Sprite newSprite = gameIntroSprites.get(0);
-					attachChild(newSprite);
-					newSprite.registerEntityModifier(new FadeInModifier(1f));
-					registerTouchArea(newSprite);
-					lastTouchTime = touchTime;
-					nextSprite++;
+					// Show the GameMapScene if last sprite was touched, else
+					// show
+					// the next sprite.
+					if (touchTime > lastTouchTime + WAIT_TIME
+							&& pTouchArea.equals(gameIntroSprites
+									.get(gameIntroSprites.size() - 1))) {
+						Sprite oldSprite = gameIntroSprites
+								.get(gameIntroSprites.size() - 1);
+						oldSprite.detachSelf();
+						unregisterTouchArea(oldSprite);
+
+						SceneManager.getInstance().createGameMapScene(engine,
+								false);
+
+						lastTouchTime = touchTime;
+					} else if (touchTime > lastTouchTime + WAIT_TIME
+							&& pTouchArea.equals(gameIntroSprites
+									.get(nextSprite - 1))) {
+						Sprite oldSprite = gameIntroSprites.get(nextSprite - 1);
+						oldSprite.detachSelf();
+						unregisterTouchArea(oldSprite);
+
+						Sprite newSprite = gameIntroSprites.get(nextSprite);
+						attachChild(newSprite);
+						newSprite
+								.registerEntityModifier(new FadeInModifier(1f));
+						registerTouchArea(newSprite);
+
+						lastTouchTime = touchTime;
+						nextSprite++;
+					}
 				}
-
-				// Show the GameMapScene if last sprite was touched, else show
-				// the next sprite.
-				if (touchTime > lastTouchTime + WAIT_TIME
-						&& pTouchArea.equals(gameIntroSprites
-								.get(gameIntroSprites.size() - 1))) {
-					Sprite oldSprite = gameIntroSprites.get(gameIntroSprites
-							.size() - 1);
-					oldSprite.detachSelf();
-					unregisterTouchArea(oldSprite);
-
-					SceneManager.getInstance()
-							.createGameMapScene(engine, false);
-
-					lastTouchTime = touchTime;
-				} else if (touchTime > lastTouchTime + WAIT_TIME
-						&& pTouchArea.equals(gameIntroSprites
-								.get(nextSprite - 1))) {
-					Sprite oldSprite = gameIntroSprites.get(nextSprite - 1);
-					oldSprite.detachSelf();
-					unregisterTouchArea(oldSprite);
-
-					Sprite newSprite = gameIntroSprites.get(nextSprite);
-					attachChild(newSprite);
-					newSprite.registerEntityModifier(new FadeInModifier(1f));
-					registerTouchArea(newSprite);
-
-					lastTouchTime = touchTime;
-					nextSprite++;
-				}
-
 				return false;
 			}
 		});

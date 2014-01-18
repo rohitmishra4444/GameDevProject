@@ -74,49 +74,49 @@ public class GameEndScene extends BaseScene {
 			public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
 					ITouchArea pTouchArea, float pTouchAreaLocalX,
 					float pTouchAreaLocalY) {
+				if (pSceneTouchEvent.isActionDown()) {
+					long touchTime = pSceneTouchEvent.getMotionEvent()
+							.getEventTime();
 
-				long touchTime = pSceneTouchEvent.getMotionEvent()
-						.getEventTime();
+					if (touchTime > lastTouchTime + WAIT_TIME
+							&& pTouchArea.equals(gameEndText)) {
+						gameEndText.detachSelf();
+						unregisterTouchArea(gameEndText);
 
-				if (touchTime > lastTouchTime + WAIT_TIME
-						&& pTouchArea.equals(gameEndText)) {
-					gameEndText.detachSelf();
-					unregisterTouchArea(gameEndText);
+						attachChild(gameEndSprite);
+						gameEndSprite
+								.registerEntityModifier(new FadeInModifier(1f));
+						registerTouchArea(gameEndSprite);
 
-					attachChild(gameEndSprite);
-					gameEndSprite
-							.registerEntityModifier(new FadeInModifier(1f));
-					registerTouchArea(gameEndSprite);
+						lastTouchTime = touchTime;
+					}
 
-					lastTouchTime = touchTime;
+					if (touchTime > lastTouchTime + WAIT_TIME
+							&& pTouchArea.equals(gameEndSprite)) {
+						gameEndSprite.detachSelf();
+						unregisterTouchArea(gameEndSprite);
+
+						attachChild(gameDevelopersText);
+						gameDevelopersText
+								.registerEntityModifier(new FadeInModifier(1f));
+						registerTouchArea(gameDevelopersText);
+
+						lastTouchTime = touchTime;
+					}
+
+					if (touchTime > lastTouchTime + WAIT_TIME
+							&& pTouchArea.equals(gameDevelopersText)) {
+
+						gameDevelopersText.detachSelf();
+						unregisterTouchArea(gameDevelopersText);
+
+						SceneManager.getInstance().loadMenuScene(engine);
+						SceneManager.getInstance().deleteCurrentGameMapScene();
+						resourcesManager.avatar = null;
+
+						lastTouchTime = touchTime;
+					}
 				}
-
-				if (touchTime > lastTouchTime + WAIT_TIME
-						&& pTouchArea.equals(gameEndSprite)) {
-					gameEndSprite.detachSelf();
-					unregisterTouchArea(gameEndSprite);
-
-					attachChild(gameDevelopersText);
-					gameDevelopersText
-							.registerEntityModifier(new FadeInModifier(1f));
-					registerTouchArea(gameDevelopersText);
-
-					lastTouchTime = touchTime;
-				}
-
-				if (touchTime > lastTouchTime + WAIT_TIME
-						&& pTouchArea.equals(gameDevelopersText)) {
-
-					gameDevelopersText.detachSelf();
-					unregisterTouchArea(gameDevelopersText);
-
-					SceneManager.getInstance().loadMenuScene(engine);
-					SceneManager.getInstance().deleteCurrentGameMapScene();
-					resourcesManager.avatar = null;
-
-					lastTouchTime = touchTime;
-				}
-
 				return false;
 			}
 		});
