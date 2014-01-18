@@ -1,6 +1,7 @@
 package gamedev.quests;
 
 import gamedev.game.ResourcesManager;
+import gamedev.objects.Avatar;
 import gamedev.objects.Inventory;
 import gamedev.objects.Wood;
 import gamedev.scenes.GameMapScene;
@@ -72,6 +73,9 @@ public class QuestBuildBridge extends Quest {
 	public void onFinish() {
 		ResourcesManager.getInstance().removeSpriteAndBody(rectangle);
 		this.map.attachChild(this.bridge);
+		Avatar avatar = ResourcesManager.getInstance().avatar;
+		avatar.detachSelf();
+		this.map.attachChild(avatar);
 	}
 
 	@Override
@@ -86,10 +90,10 @@ public class QuestBuildBridge extends Quest {
 
 	@Override
 	public boolean isCompleted() {
-		Inventory inventory = ResourcesManager.getInstance().avatar.getInventory();
-		for (int i=0; i<N_WOOD; i++) {
-			if (!inventory.contains(this.woods[i])) return false;
-		}
+//		Inventory inventory = ResourcesManager.getInstance().avatar.getInventory();
+//		for (int i=0; i<N_WOOD; i++) {
+//			if (!inventory.contains(this.woods[i])) return false;
+//		}
 		return true;
 	}
 

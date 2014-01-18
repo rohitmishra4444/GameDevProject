@@ -443,7 +443,7 @@ public class ResourcesManager {
 				.createTiledFromAsset(this.pigAtlas, activity, "pig.png", 0, 0,
 						9, 8);
 
-		this.spiderAtlas = new BitmapTextureAtlas(textureManager, 688, 688,
+		this.spiderAtlas = new BitmapTextureAtlas(textureManager, 226, 226,
 				TextureOptions.DEFAULT);
 
 		this.spiderRegion = BitmapTextureAtlasTextureRegionFactory

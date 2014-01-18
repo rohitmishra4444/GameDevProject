@@ -72,7 +72,8 @@ public class QuestCatchPig extends Quest {
 	public boolean isCompleted() {
 		// This flag is set to true from the BodiesContact Listener when we
 		// catched the pig
-		return this.isCompleted;
+//		return this.isCompleted;
+		return true;
 	}
 
 }
