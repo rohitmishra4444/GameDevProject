@@ -119,6 +119,8 @@ public class ResourcesManager {
 	public ITextureRegion woodRegion;
 	public BitmapTextureAtlas oldCavemanAtlas;
 	public ITextureRegion oldCavemanRegion;
+	public BitmapTextureAtlas bridgeAtlas;
+	public ITextureRegion bridgeRegion;
 
 	// ---------------------------------------------
 	// Physic
@@ -329,6 +331,7 @@ public class ResourcesManager {
 		// spearAtlas.load();
 		fightDinoAtlas.load();
 		woodAtlas.load();
+		bridgeAtlas.load();
 		pigAtlas.load();
 		oldCavemanAtlas.load();
 	}
@@ -341,6 +344,7 @@ public class ResourcesManager {
 		// spearAtlas.unload();
 		fightDinoAtlas.unload();
 		woodAtlas.unload();
+		bridgeAtlas.unload();
 		pigAtlas.unload();
 		oldCavemanAtlas.unload();
 	}
@@ -360,12 +364,18 @@ public class ResourcesManager {
 	private void createStaticObjectGraphics() {
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
 
-		this.woodAtlas = new BitmapTextureAtlas(textureManager, 32, 33,
+		this.woodAtlas = new BitmapTextureAtlas(textureManager, 7, 30,
 				TextureOptions.DEFAULT);
 
 		this.woodRegion = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(woodAtlas, activity, "wood.png", 0, 0);
 
+		this.bridgeAtlas = new BitmapTextureAtlas(textureManager, 256, 97,
+				TextureOptions.DEFAULT);
+
+		this.bridgeRegion = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(bridgeAtlas, activity, "bridge.png", 0, 0);
+		
 		this.oldCavemanAtlas = new BitmapTextureAtlas(textureManager, 36, 35,
 				TextureOptions.DEFAULT);
 

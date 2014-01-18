@@ -6,6 +6,7 @@ import gamedev.objects.Wood;
 import gamedev.scenes.GameMapScene;
 
 import org.andengine.entity.primitive.Rectangle;
+import org.andengine.entity.sprite.Sprite;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 
@@ -27,7 +28,8 @@ public class QuestBuildBridge extends Quest {
 	protected Wood wood1;
 	protected Wood wood2;
 	protected Wood wood3;
-
+	protected Sprite bridge;
+	
 	public QuestBuildBridge(GameMapScene map) {
 		super(map);
 		this.title = "Cross the River";
@@ -50,6 +52,9 @@ public class QuestBuildBridge extends Quest {
 		map.attachChild(wood1);
 		map.attachChild(wood2);
 		map.attachChild(wood3);
+		
+		this.bridge = new Sprite(600, 600, ResourcesManager.getInstance().bridgeRegion, ResourcesManager.getInstance().vbom);
+				
 	}
 
 	public void setActive(boolean active) {
@@ -61,7 +66,7 @@ public class QuestBuildBridge extends Quest {
 	@Override
 	public void onFinish() {
 		ResourcesManager.getInstance().removeSpriteAndBody(rectangle);
-		this.setFinished(true);
+		this.map.attachChild(this.bridge);
 	}
 
 	@Override
@@ -89,5 +94,6 @@ public class QuestBuildBridge extends Quest {
 	public Rectangle getRectangle() {
 		return this.rectangle;
 	}
+	
 
 }
