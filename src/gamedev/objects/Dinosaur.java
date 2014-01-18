@@ -33,7 +33,7 @@ public class Dinosaur extends AnimatedObject {
 	public Dinosaur(float x, float y, int color) {
 		// TODO Make dinosaurRegion an array holding green on pos 0, red on pos
 		// 1
-		super(x, y, ResourcesManager.getInstance().dinosaurGreenRegion);
+		super(x, y, ResourcesManager.getInstance().dinosaurRegion[color]);
 		if (color == COLOR_GREEN) {
 			this.velocity = 2f;
 			this.factorRunning = 2f;
@@ -41,7 +41,7 @@ public class Dinosaur extends AnimatedObject {
 		} else if (color == COLOR_RED) {
 			this.velocity = 3f;
 			this.factorRunning = 2f;
-			this.radius = 10f;
+			this.radius = 5f;
 		}
 		this.moveStrategy = new FollowPlayerStrategy(this, this.radius);
 		this.getBody().setUserData(this);

@@ -34,7 +34,7 @@ public class FightScene extends CameraScene {
 	protected ArrayList<Target> targets = new ArrayList<Target>();
 	protected float fightDuration = 0; // Total duration of fight
 	protected float lastTargetCreated = 0; // Last target created (passed seconds)
-	protected float frequencyOfTargts = 0.5f; // How often are new targets created in seconds
+	protected float frequencyOfTargts = 0.4f; // How often are new targets created in seconds
 	private static FightScene instance;
 		
 	private FightScene() {
@@ -84,6 +84,12 @@ public class FightScene extends CameraScene {
 	
 	public void setObject(AnimatedObject object) {
 		this.object = object;
+		if (this.object instanceof Dinosaur) {
+			Dinosaur d = (Dinosaur) this.object;
+			if (d.getDinoColor() == Dinosaur.COLOR_RED) {
+				this.frequencyOfTargts = 0.2f;
+			}
+		}
 	}
 	
 	public void onManagedUpdate(float seconds) {
@@ -135,26 +141,26 @@ public class FightScene extends CameraScene {
 		// I know it's horrible this way, but who cares... we're in a hurry
 		if (this.object instanceof Dinosaur) {
 			Dinosaur d = (Dinosaur) this.object;
-			pGoodTarget = (d.getDinoColor() == Dinosaur.COLOR_GREEN) ? 0.6f : 0.5f;
+			pGoodTarget = (d.getDinoColor() == Dinosaur.COLOR_GREEN) ? 0.7f : 0.5f;
 			if (r.nextFloat() < pGoodTarget) {
 				// Good target
 				if (d.getDinoColor() == Dinosaur.COLOR_GREEN) {
-					t = new Target(position.x, position.y, TARGET_RADIUS, Color.BLACK, this.fightDuration, 2.5f);
+					t = new Target(position.x, position.y, TARGET_RADIUS, Color.BLACK, this.fightDuration, 1.5f);
 					t.setDamageOpponent(10);
 					t.setDamageMiss(10);
 				} else {
-					t = new Target(position.x, position.y, TARGET_RADIUS, Color.BLACK, this.fightDuration, 1.5f);
+					t = new Target(position.x, position.y, TARGET_RADIUS, Color.BLACK, this.fightDuration, 0.75f);
 					t.setDamageOpponent(5);
 					t.setDamageMiss(15);
 				}
 			} else {
 				// Bad target
 				if (d.getDinoColor() == Dinosaur.COLOR_GREEN) {
-					t = new Target(position.x, position.y, TARGET_RADIUS, Color.RED, this.fightDuration, 2);
-					t.setDamageAvatar(15);
+					t = new Target(position.x, position.y, TARGET_RADIUS, Color.RED, this.fightDuration, 1.5f);
+					t.setDamageAvatar(10);
 				} else {
-					t = new Target(position.x, position.y, TARGET_RADIUS, Color.RED, this.fightDuration, 2);
-					t.setDamageAvatar(20);
+					t = new Target(position.x, position.y, TARGET_RADIUS, Color.RED, this.fightDuration, 1.5f);
+					t.setDamageAvatar(15);
 				}
 			}
 		}
