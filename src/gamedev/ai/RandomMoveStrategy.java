@@ -2,6 +2,8 @@ package gamedev.ai;
 
 import java.util.Random;
 
+import org.andengine.extension.physics.box2d.util.Vector2Pool;
+
 import com.badlogic.gdx.math.Vector2;
 
 import gamedev.objects.AnimatedObject;
@@ -64,7 +66,7 @@ public class RandomMoveStrategy extends MoveStrategy {
 		Vector2 bodyPos = this.object.getBody().getPosition();
 		this.object.moveTo(rPoint, GameState.WALKING);
 		this.duration = calculateDuration(bodyPos, rPoint, this.object.getBody().getLinearVelocity());
-		System.out.println("Move from " + bodyPos + " to point " + rPoint + ", needed time is " + this.duration);
+//		System.out.println("Move from " + bodyPos + " to point " + rPoint + ", needed time is " + this.duration);
 	}
 	
 	protected Vector2 getRandomPoint() {
@@ -81,7 +83,7 @@ public class RandomMoveStrategy extends MoveStrategy {
 			x = Math.max(x, minX);
 			y = Math.min(y, maxY);
 			y = Math.max(y, minY);			
-		}
+		} 
 		return new Vector2(x, y);
 	}
 	

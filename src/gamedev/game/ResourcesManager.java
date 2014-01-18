@@ -149,6 +149,7 @@ public class ResourcesManager {
 					physicsWorld.destroyBody(physicsConnector.getBody());
 				}
 				shape.setIgnoreUpdate(true);
+				shape.clearUpdateHandlers();
 				shape.detachSelf();
 			}
 		});

@@ -42,7 +42,7 @@ public class WaypointMoveStrategy extends MoveStrategy {
 				if (this.loop) {
 					this.currentIndex = 0;
 					this.currentMovement = new SimpleMoveStrategy(this.object, this.wayPoints.get(0), GameState.WALKING);
-					System.out.println("Reached the last point, now go back to the starting point: " + this.wayPoints.get(0));
+//					System.out.println("Reached the last point, now go back to the starting point: " + this.wayPoints.get(0));
 					return true;
 				} else {
 					this.object.setState(GameState.LOOKING, -1);

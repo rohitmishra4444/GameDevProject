@@ -34,7 +34,7 @@ public class FightScene extends CameraScene {
 	protected ArrayList<Target> targets = new ArrayList<Target>();
 	protected float fightDuration = 0; // Total duration of fight
 	protected float lastTargetCreated = 0; // Last target created (passed seconds)
-	protected float frequencyOfTargts = 0.4f; // How often are new targets created in seconds
+	protected float frequencyOfTargts = 0.25f; // How often are new targets created in seconds
 	private static FightScene instance;
 		
 	private FightScene() {
@@ -87,7 +87,7 @@ public class FightScene extends CameraScene {
 		if (this.object instanceof Dinosaur) {
 			Dinosaur d = (Dinosaur) this.object;
 			if (d.getDinoColor() == Dinosaur.COLOR_RED) {
-				this.frequencyOfTargts = 0.2f;
+				this.frequencyOfTargts = 0.1f;
 			}
 		}
 	}

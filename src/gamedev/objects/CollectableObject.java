@@ -1,8 +1,6 @@
 package gamedev.objects;
 
 import gamedev.game.ResourcesManager;
-import gamedev.game.SceneManager;
-
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.region.ITextureRegion;
 
@@ -26,7 +24,7 @@ abstract public class CollectableObject extends Sprite {
 			// Give feedback:
 			String item = (this.toString().equals("")) ? "item" : this.toString();
 			ResourcesManager.getInstance().activity.toastOnUIThread(
-					"Collected " + item, Toast.LENGTH_SHORT);
+					"Collected " + item, Toast.LENGTH_SHORT);	
 		}
 	}
 	

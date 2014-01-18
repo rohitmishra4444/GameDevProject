@@ -1,5 +1,7 @@
 package gamedev.ai;
 
+import org.andengine.extension.physics.box2d.util.Vector2Pool;
+
 import gamedev.objects.AnimatedObject;
 import gamedev.objects.AnimatedObject.GameState;
 import com.badlogic.gdx.math.Vector2;
@@ -22,13 +24,14 @@ public class SimpleMoveStrategy extends MoveStrategy {
 		Vector2 bodyPos = this.object.getBody().getPosition();
 		Vector2 moveTmp = null;
 		if (this.coordinates == COORDINATES_PIXEL) {
-			moveTmp = new Vector2(moveTo.x/32, moveTo.y/32);
+			moveTmp = Vector2Pool.obtain(moveTo.x/32, moveTo.y/32);
 		} else {
 			moveTmp = moveTo;
 		}
 		this.object.moveTo(moveTmp, state);
 		// Calculate the duration needed for movement
 		this.duration = calculateDuration(bodyPos, moveTmp, this.object.getBody().getLinearVelocity());
+		Vector2Pool.recycle(moveTmp);
 //		System.out.println("Move from " + bodyPos + " to point " + moveTo + ", needed time is " + this.duration);
 	}
 	

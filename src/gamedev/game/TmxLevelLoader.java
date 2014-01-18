@@ -4,8 +4,10 @@ import gamedev.ai.FollowPlayerStrategy;
 import gamedev.ai.MoveStrategy;
 import gamedev.ai.RandomMoveStrategy;
 import gamedev.ai.WaypointMoveStrategy;
+import gamedev.objects.AnimatedObject;
 import gamedev.objects.BerryBush;
 import gamedev.objects.Dinosaur;
+import gamedev.objects.Spider;
 import gamedev.quests.QuestTrigger;
 
 import java.util.ArrayList;
@@ -57,6 +59,8 @@ public class TmxLevelLoader {
 				this.createDinosaurs(group.getTMXObjects(), 0);
 			} else if (group.getName().equals("RedDinosaurs")) {
 				this.createDinosaurs(group.getTMXObjects(), 1);
+			} else if (group.getName().equals("Spiders")) {
+				this.createSpiders(group.getTMXObjects());
 			} else if (group.getName().equals("BerryBushes")) {
 				this.createBerryBushes(group.getTMXObjects());
 			} else if (group.getName().equals("QuestTrigger")) {
@@ -69,6 +73,17 @@ public class TmxLevelLoader {
 		}
 
 		// TODO: Create portal object from tmx map.
+	}
+
+	private void createSpiders(ArrayList<TMXObject> objects) {
+		for (final TMXObject object : objects) {
+			Spider s = new Spider(object.getX(), object.getY());
+			MoveStrategy strategy = this.getMoveStrategy(object, s);
+			if (strategy != null) {
+				s.setMoveStrategy(strategy);
+			}
+			this.scene.attachChild(s);		
+		}
 	}
 
 	protected void createQuestTriggers(ArrayList<TMXObject> tmxObjects) {
@@ -124,7 +139,7 @@ public class TmxLevelLoader {
 	 * @param d
 	 * @return
 	 */
-	protected MoveStrategy getMoveStrategy(TMXObject object, Dinosaur d) {
+	protected MoveStrategy getMoveStrategy(TMXObject object, AnimatedObject d) {
 
 		for (int i = 0; i < object.getTMXObjectProperties().size(); i++) {
 			if (object.getTMXObjectProperties().get(i).getName()
