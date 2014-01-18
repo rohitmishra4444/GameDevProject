@@ -5,8 +5,7 @@ import gamedev.game.ResourcesManager;
 public class Pig extends AnimatedObject {
 
 	private final static int TILES_PER_LINE = 9;
-	private final static long[] ANIMATION_DURATION = { 60, 60, 60, 60, 60, 60,
-			60, 60, 60 };
+	private final static long[] ANIMATION_DURATION = { 60, 60, 60, 60, 60, 60, 60, 60, 60 };
 	private final static int FRAMES_PER_ANIMATION = ANIMATION_DURATION.length;
 
 	public Pig(float x, float y) {

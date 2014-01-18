@@ -436,11 +436,11 @@ public class ResourcesManager {
 				.createTiledFromAsset(this.dinosaurAtlas[1], activity,
 						"dino_red_0.5.png", 0, 0, 16, 16);
 
-		this.pigAtlas = new BitmapTextureAtlas(textureManager, 486, 432,
+		this.pigAtlas = new BitmapTextureAtlas(textureManager, 243, 216,
 				TextureOptions.DEFAULT);
 
 		this.pigRegion = BitmapTextureAtlasTextureRegionFactory
-				.createTiledFromAsset(this.pigAtlas, activity, "pig.png", 0, 0,
+				.createTiledFromAsset(this.pigAtlas, activity, "pig_0.5.png", 0, 0,
 						9, 8);
 
 		this.spiderAtlas = new BitmapTextureAtlas(textureManager, 226, 226,

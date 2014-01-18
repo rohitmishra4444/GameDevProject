@@ -19,10 +19,10 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 
 public class QuestBuildBridge extends Quest {
 
-	private final static float RECTANGLE_X = 37 * 32;
-	private final static float RECTANGLE_Y = 14 * 32;
+	private final static float RECTANGLE_X = 34 * 32;
+	private final static float RECTANGLE_Y = 21 * 32;
 	private final static float RECTANGLE_HEIGHT = 100;
-	private final static float RECTANGLE_WIDTH = 20;
+	private final static float RECTANGLE_WIDTH = 10;
 	private final static int N_WOOD = 5;
 	
 	protected Body body;
@@ -49,17 +49,17 @@ public class QuestBuildBridge extends Quest {
 				rectangle, body, false, false));
 		map.attachChild(rectangle);
 		
-		this.woods[0] = new Wood(250, 250);
-		this.woods[1] = new Wood(250, 600);
-		this.woods[2] = new Wood(300, 700);
-		this.woods[3] = new Wood(500, 900);
-		this.woods[4] = new Wood(100, 1000);
+		this.woods[0] = new Wood(15*32, 44*32);
+		this.woods[1] = new Wood(7*32, 43*32);
+		this.woods[2] = new Wood(3*32, 9*32);
+		this.woods[3] = new Wood(24*32, 34*32);
+		this.woods[4] = new Wood(31*32, 4*32);
 		
 		for (int i=0; i<N_WOOD; i++) {
 			this.map.attachChild(this.woods[i]);
 		}
 		
-		this.bridge = new Sprite(600, 600, ResourcesManager.getInstance().bridgeRegion, ResourcesManager.getInstance().vbom);
+		this.bridge = new Sprite(33*32, 21*32, ResourcesManager.getInstance().bridgeRegion, ResourcesManager.getInstance().vbom);
 				
 	}
 

@@ -5,9 +5,8 @@ import gamedev.game.ResourcesManager;
 
 public class Spider extends AnimatedObject {
 
-	private final static int TILES_PER_LINE = 9;
-	private final static long[] ANIMATION_DURATION = { 60, 60, 60, 60, 60, 60,
-			60, 60, 60 };
+	private final static int TILES_PER_LINE = 8;
+	private final static long[] ANIMATION_DURATION = { 60, 60, 60, 60, 60, 60,60, 60 };
 	private final static int FRAMES_PER_ANIMATION = ANIMATION_DURATION.length;
 
 	public Spider(float x, float y) {

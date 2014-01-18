@@ -146,7 +146,7 @@ public class FightScene extends CameraScene {
 		// I know it's horrible this way, but who cares... we're in a hurry
 		if (this.object instanceof Dinosaur) {
 			Dinosaur d = (Dinosaur) this.object;
-			pGoodTarget = (d.getDinoColor() == Dinosaur.COLOR_GREEN) ? 0.7f : 0.5f;
+			pGoodTarget = (d.getDinoColor() == Dinosaur.COLOR_GREEN) ? 0.7f : 0.9f;
 			if (r.nextFloat() < pGoodTarget) {
 				// Good target
 				if (d.getDinoColor() == Dinosaur.COLOR_GREEN) {

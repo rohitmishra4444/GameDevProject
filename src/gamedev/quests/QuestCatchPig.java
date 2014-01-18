@@ -8,14 +8,29 @@ import gamedev.scenes.GameMapScene;
 
 import java.util.ArrayList;
 
+import org.andengine.entity.primitive.Rectangle;
+import org.andengine.extension.physics.box2d.PhysicsConnector;
+import org.andengine.extension.physics.box2d.PhysicsFactory;
+
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+
 import android.widget.Toast;
 
 public class QuestCatchPig extends Quest {
-
+	
+	private final static float RECTANGLE_X = 68 * 32;
+	private final static float RECTANGLE_Y = 5 * 32;
+	private final static float RECTANGLE_HEIGHT = 175;
+	private final static float RECTANGLE_WIDTH = 10;
+	
 	protected Pig pig;
 	protected ArrayList<String> conversation = new ArrayList<String>();
 	protected OldCaveman caveman;
-
+	protected Body body;
+	protected Rectangle rectangle;
+	
 	public QuestCatchPig(GameMapScene map) {
 		super(map);
 		this.title = "Cross the forest";
@@ -33,13 +48,23 @@ public class QuestCatchPig extends Quest {
 
 		// Create the pig :-D
 		this.pig = new Pig(500, 500);
-		RandomMoveStrategy rm = new RandomMoveStrategy(pig, 200, 800, 1, 100,
-				1000, 100, 1000);
+		RandomMoveStrategy rm = new RandomMoveStrategy(pig, 50, 250, 0, 41*32, 63*32, 11*32, 43*32);
 		pig.setMoveStrategy(rm);
 		map.attachChild(pig);
-
-		this.caveman = new OldCaveman(951, 1133);
+		
+		// Caveman
+		this.caveman = new OldCaveman(48*32, 42*32);
 		map.attachChild(caveman);
+		
+		// Body and trees...
+		ResourcesManager res = ResourcesManager.getInstance();
+		this.rectangle = new Rectangle(RECTANGLE_X, RECTANGLE_Y, RECTANGLE_WIDTH, RECTANGLE_HEIGHT, res.vbom);
+		final FixtureDef boxFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0);
+		this.body = PhysicsFactory.createBoxBody(res.physicsWorld,
+				this.rectangle, BodyType.StaticBody, boxFixtureDef);
+		res.physicsWorld.registerPhysicsConnector(new PhysicsConnector(
+				rectangle, body, false, false));
+		map.attachChild(rectangle);
 	}
 
 	@Override
