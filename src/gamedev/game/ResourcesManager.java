@@ -61,6 +61,8 @@ public class ResourcesManager {
 	public ITextureRegion[] treeRegions = new ITextureRegion[20];
 	public BitmapTextureAtlas pigAtlas;
 	public ITiledTextureRegion pigRegion;
+	public BitmapTextureAtlas spiderAtlas;
+	public ITiledTextureRegion spiderRegion;
 
 	// Textures for fight scene
 	public BitmapTextureAtlas spearAtlas;
@@ -336,6 +338,7 @@ public class ResourcesManager {
 		woodAtlas.load();
 		bridgeAtlas.load();
 		pigAtlas.load();
+		spiderAtlas.load();
 		oldCavemanAtlas.load();
 	}
 
@@ -350,6 +353,7 @@ public class ResourcesManager {
 		woodAtlas.unload();
 		bridgeAtlas.unload();
 		pigAtlas.unload();
+		spiderAtlas.unload();
 		oldCavemanAtlas.unload();
 	}
 
@@ -425,7 +429,7 @@ public class ResourcesManager {
 				864, TextureOptions.DEFAULT);
 
 		this.dinosaurRedRegion = BitmapTextureAtlasTextureRegionFactory
-				.createTiledFromAsset(this.dinosaurGreenAtlas, activity,
+				.createTiledFromAsset(this.dinosaurRedAtlas, activity,
 						"dino_red_0.5.png", 0, 0, 16, 16);
 
 		this.pigAtlas = new BitmapTextureAtlas(textureManager, 486, 432,
@@ -434,6 +438,13 @@ public class ResourcesManager {
 		this.pigRegion = BitmapTextureAtlasTextureRegionFactory
 				.createTiledFromAsset(this.pigAtlas, activity, "pig.png", 0, 0,
 						9, 8);
+
+		this.spiderAtlas = new BitmapTextureAtlas(textureManager, 688, 688,
+				TextureOptions.DEFAULT);
+
+		this.spiderRegion = BitmapTextureAtlasTextureRegionFactory
+				.createTiledFromAsset(this.spiderAtlas, activity, "spider.png",
+						0, 0, 8, 8);
 
 	}
 
