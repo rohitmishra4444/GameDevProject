@@ -13,6 +13,7 @@ public class Pig extends AnimatedObject {
 		this.velocity = 5f;
 		this.factorRunning = 1.5f;
 		this.getBody().setUserData(this);
+		this.setCullingEnabled(true);
 	}
 
 	@Override

@@ -11,6 +11,7 @@ import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
 import org.andengine.entity.scene.Scene;
+import org.andengine.entity.util.FPSLogger;
 import org.andengine.ui.activity.BaseGameActivity;
 
 import android.view.KeyEvent;
@@ -58,22 +59,23 @@ public class GameActivity extends BaseGameActivity {
 		ResourcesManager.prepareManager(this.mEngine, this, this.camera,
 				this.getVertexBufferObjectManager(), this.getTextureManager());
 		this.resourcesManager = ResourcesManager.getInstance();
-		System.out.println("Rescources created");
+//		System.out.println("Rescources created");
 		pOnCreateResourcesCallback.onCreateResourcesFinished();
 	}
 
 	@Override
 	public void onCreateScene(OnCreateSceneCallback pOnCreateSceneCallback)
 			throws Exception {
-		System.out.println("Scene created");
+//		System.out.println("Scene created");
 		SceneManager.getInstance().createSplashScene(pOnCreateSceneCallback);
+		this.mEngine.registerUpdateHandler(new FPSLogger());
 	}
 
 	@Override
 	public void onPopulateScene(Scene pScene,
 			OnPopulateSceneCallback pOnPopulateSceneCallback) throws Exception {
 
-		System.out.println("Populate Scene");
+//		System.out.println("Populate Scene");
 		mEngine.registerUpdateHandler(new TimerHandler(2f,
 				new ITimerCallback() {
 					public void onTimePassed(final TimerHandler pTimerHandler) {

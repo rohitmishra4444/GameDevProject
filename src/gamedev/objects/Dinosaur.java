@@ -49,6 +49,7 @@ public class Dinosaur extends AnimatedObject {
 		e.setColor(Color.RED);
 		e.setDrawMode(DrawMode.TRIANGLE_FAN);
 		e.setAlpha(0.1f);
+//		this.setCullingEnabled(true);
 		this.attachChild(e);
 	}
 
