@@ -33,7 +33,7 @@ public class Dinosaur extends AnimatedObject {
 	public Dinosaur(float x, float y, int color) {
 		// TODO Make dinosaurRegion an array holding green on pos 0, red on pos
 		// 1
-		super(x, y, ResourcesManager.getInstance().dinosaurGreenRegion);
+		super(x, y, ResourcesManager.getInstance().dinosaurRegion[color]);
 		if (color == COLOR_GREEN) {
 			this.velocity = 2f;
 			this.factorRunning = 2f;

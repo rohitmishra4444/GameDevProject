@@ -6,7 +6,6 @@ import gamedev.ai.RandomMoveStrategy;
 import gamedev.ai.WaypointMoveStrategy;
 import gamedev.objects.BerryBush;
 import gamedev.objects.Dinosaur;
-import gamedev.objects.Tree;
 import gamedev.quests.QuestTrigger;
 
 import java.util.ArrayList;
@@ -52,10 +51,12 @@ public class TmxLevelLoader {
 		for (final TMXObjectGroup group : this.map.getTMXObjectGroups()) {
 			if (group.getName().equals("Walls")) {
 				this.createBoundaries(group.getTMXObjects());
-			} else if (group.getName().equals("Trees")) {
-				this.createTrees(group.getTMXObjects());
+//			} else if (group.getName().equals("Trees")) {
+//				this.createTrees(group.getTMXObjects());
 			} else if (group.getName().equals("GreenDinosaurs")) {
-				this.createDinosaurs(group.getTMXObjects());
+				this.createDinosaurs(group.getTMXObjects(), 0);
+			} else if (group.getName().equals("RedDinosaurs")) {
+				this.createDinosaurs(group.getTMXObjects(), 1);
 			} else if (group.getName().equals("BerryBushes")) {
 				this.createBerryBushes(group.getTMXObjects());
 			} else if (group.getName().equals("QuestTrigger")) {
@@ -96,23 +97,21 @@ public class TmxLevelLoader {
 		}
 	}
 
-	protected void createTrees(ArrayList<TMXObject> objects) {
-		Random r = new Random();
-		for (final TMXObject object : objects) {
-			this.scene.attachChild(new Tree(object.getX(), object.getY(), r
-					.nextInt(20)));
-		}
-	}
+//	protected void createTrees(ArrayList<TMXObject> objects) {
+//		Random r = new Random();
+//		for (final TMXObject object : objects) {
+//			this.scene.attachChild(new Tree(object.getX(), object.getY(), r
+//					.nextInt(20)));
+//		}
+//	}
 
-	protected void createDinosaurs(ArrayList<TMXObject> objects) {
+	protected void createDinosaurs(ArrayList<TMXObject> objects, int color) {
 		for (final TMXObject object : objects) {
-			Dinosaur d = new Dinosaur(object.getX(), object.getY(),
-					Dinosaur.COLOR_GREEN);
+			Dinosaur d = new Dinosaur(object.getX(), object.getY(), color);
 			MoveStrategy alternateStrategy = this.getMoveStrategy(object, d);
 			// TODO Radius defined in class or also in tmx map?
 			if (alternateStrategy != null) {
-				d.setMoveStrategy(new FollowPlayerStrategy(d, d.getRadius(),
-						alternateStrategy));
+				d.setMoveStrategy(new FollowPlayerStrategy(d, d.getRadius(), alternateStrategy));
 			}
 			this.scene.attachChild(d);
 		}
