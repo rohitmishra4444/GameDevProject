@@ -59,7 +59,7 @@ public class QuestBuildBridge extends Quest {
 			this.map.attachChild(this.woods[i]);
 		}
 		
-		this.bridge = new Sprite(33*32, 21*32, ResourcesManager.getInstance().bridgeRegion, ResourcesManager.getInstance().vbom);
+		this.bridge = new Sprite(31.5f*32, 19.6f*32, ResourcesManager.getInstance().bridgeRegion, ResourcesManager.getInstance().vbom);
 				
 	}
 

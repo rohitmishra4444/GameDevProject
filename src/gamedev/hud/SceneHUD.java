@@ -13,6 +13,7 @@ import org.andengine.entity.modifier.ScaleModifier;
 import org.andengine.entity.modifier.SequenceEntityModifier;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.sprite.ButtonSprite;
+import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.util.color.Color;
@@ -52,13 +53,17 @@ public class SceneHUD extends HUD {
 			avatarLife = resourcesManager.avatar.getLife();
 			avatarEnergy = resourcesManager.avatar.getEnergy();
 		}
-
-		this.life = new Rectangle(cameraWidth - avatarLife - 70, 20,
-				avatarLife, 20, this.resourcesManager.vbom);
+		
+		Sprite bgBars = new Sprite(cameraWidth - avatarLife - 90, 20, resourcesManager.bgBarsRegion, resourcesManager.vbom);
+		bgBars.setAlpha(0.9f);
+		this.attachChild(bgBars);
+		
+		this.life = new Rectangle(cameraWidth - avatarLife - 70, 30,
+				avatarLife, 10, this.resourcesManager.vbom);
 		this.life.setColor(Color.RED);
 		this.life.setAlpha(0.8f);
-		this.energy = new Rectangle(cameraWidth - avatarLife - 70, 50,
-				avatarEnergy, 20, this.resourcesManager.vbom);
+		this.energy = new Rectangle(cameraWidth - avatarLife - 70, 43,
+				avatarEnergy, 10, this.resourcesManager.vbom);
 		this.energy.setColor(Color.BLUE);
 		this.energy.setAlpha(0.8f);
 
@@ -70,8 +75,8 @@ public class SceneHUD extends HUD {
 		createDPadControls();
 		createSprintButton();
 		createQuestButton();
-		createHelpButton();
-		createShopButton();
+//		createHelpButton();
+//		createShopButton();
 		createBerriesAndButton();
 	}
 
@@ -164,7 +169,7 @@ public class SceneHUD extends HUD {
 			}
 
 		});
-		this.berryCounter.setScale(1.5f);
+//		this.berryCounter.setScale(1.5f);
 		this.attachChild(berryCounter);
 
 	}
@@ -190,7 +195,7 @@ public class SceneHUD extends HUD {
 		};
 
 		shopButton.setAlpha(0.8f);
-		shopButton.setScale(1.25f);
+//		shopButton.setScale(1.25f);
 
 		this.registerTouchArea(shopButton);
 		this.attachChild(shopButton);
@@ -211,8 +216,8 @@ public class SceneHUD extends HUD {
 			};
 		};
 
-		questButton.setAlpha(0.8f);
-		questButton.setScale(1.25f);
+		questButton.setAlpha(0.9f);
+//		questButton.setScale(1.25f);
 
 		this.registerTouchArea(questButton);
 		this.attachChild(questButton);
@@ -237,8 +242,8 @@ public class SceneHUD extends HUD {
 			};
 		};
 
-		helpButton.setAlpha(0.8f);
-		helpButton.setScale(1.25f);
+		helpButton.setAlpha(0.9f);
+//		helpButton.setScale(1.25f);
 
 		this.registerTouchArea(helpButton);
 		this.attachChild(helpButton);

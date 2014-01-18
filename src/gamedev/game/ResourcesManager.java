@@ -86,6 +86,10 @@ public class ResourcesManager {
 	public TextureRegion hudQuestListIconRegion;
 	private BitmapTextureAtlas hudShopIconAtlas;
 	public TextureRegion hudShopIconRegion;
+	
+	public BitmapTextureAtlas bgBarsAtlas;
+	public TextureRegion bgBarsRegion;
+
 
 	// Textures for splash scene
 	public ITextureRegion splash_region;
@@ -233,7 +237,12 @@ public class ResourcesManager {
 
 		font = FontFactory.createFromAsset(
 				((GameActivity) activity).getFontManager(), mainFontTexture,
-				activity.getAssets(), "font.ttf", 35f, true, Color.WHITE);
+				activity.getAssets(), "UniversElse-Regular.ttf", 22, true, Color.WHITE);
+
+//		font = FontFactory.createFromAsset(
+//				((GameActivity) activity).getFontManager(), mainFontTexture,
+//				activity.getAssets(), "font.ttf", 35f, true, Color.WHITE);
+
 	}
 
 	private void loadMenuFonts() {
@@ -489,14 +498,22 @@ public class ResourcesManager {
 	}
 
 	private void createQuestSceneGraphics() {
-		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
+//		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
+		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/hud/");
+
+//		this.questFrameTextureAtlas = new BitmapTextureAtlas(textureManager,
+//				590, 480, TextureOptions.DEFAULT);
+//
+//		this.questFrameRegion = BitmapTextureAtlasTextureRegionFactory
+//				.createFromAsset(questFrameTextureAtlas, activity,
+//						"quest_frame.png", 0, 0);
 
 		this.questFrameTextureAtlas = new BitmapTextureAtlas(textureManager,
-				590, 480, TextureOptions.DEFAULT);
+				577, 469, TextureOptions.DEFAULT);
 
 		this.questFrameRegion = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(questFrameTextureAtlas, activity,
-						"quest_frame.png", 0, 0);
+						"bg_popup.png", 0, 0);
 
 		BitmapTextureAtlasTextureRegionFactory
 				.setAssetBasePath("gfx/game/hud/icons/");
@@ -505,13 +522,13 @@ public class ResourcesManager {
 				51, 49, TextureOptions.DEFAULT);
 		this.questActiveRegion = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(questActiveTextureAtlas, activity,
-						"Game_Icons_0001_Info.png", 0, 0);
+						"not_finished.png", 0, 0);
 
 		this.questFinishedTextureAtlas = new BitmapTextureAtlas(textureManager,
 				49, 49, TextureOptions.DEFAULT);
 		this.questFinishedRegion = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(questFinishedTextureAtlas, activity,
-						"Game_Icons_0005_Ok.png", 0, 0);
+						"finished.png", 0, 0);
 	}
 
 	// ---------------------------------------------
@@ -612,6 +629,12 @@ public class ResourcesManager {
 		this.hudBerryRegion = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(hudBerryAtlas, activity, "berries_small.png",
 						0, 0);
+
+		this.bgBarsAtlas = new BitmapTextureAtlas(textureManager, 134, 44,
+				TextureOptions.BILINEAR);
+		this.bgBarsRegion = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(bgBarsAtlas, activity, "bg_bars2.png", 0, 0);
+
 	}
 
 	private void createHUDButtonIconGraphics() {
@@ -628,7 +651,7 @@ public class ResourcesManager {
 				44, TextureOptions.BILINEAR);
 		this.hudQuestListIconRegion = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(hudQuestListIconAtlas, activity,
-						"Game_Icons_0008_List.png", 0, 0);
+						"quests.png", 0, 0);
 
 		this.hudShopIconAtlas = new BitmapTextureAtlas(textureManager, 44, 44,
 				TextureOptions.BILINEAR);
@@ -648,6 +671,7 @@ public class ResourcesManager {
 		hudHelpIconAtlas.load();
 		hudQuestListIconAtlas.load();
 		hudShopIconAtlas.load();
+		bgBarsAtlas.load();
 	}
 
 	private void unloadHUDGraphics() {
@@ -657,6 +681,7 @@ public class ResourcesManager {
 		hudHelpIconAtlas.unload();
 		hudQuestListIconAtlas.unload();
 		hudShopIconAtlas.unload();
+		bgBarsAtlas.unload();
 	}
 
 	// ---------------------------------------------
