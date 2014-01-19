@@ -106,7 +106,7 @@ public class MainMenuScene extends BaseScene implements
 				// if (SceneManager.getInstance().isGameMapSceneCreated()) {
 				// restart = true;
 				// }
-				SceneManager.getInstance().createGameMapScene(engine, restart);
+				SceneManager.getInstance().loadGameMapScene(engine);
 			}
 
 			return true;

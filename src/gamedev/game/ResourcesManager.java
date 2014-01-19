@@ -140,7 +140,9 @@ public class ResourcesManager {
 	// Sound and music
 	// ---------------------------------------------
 
-	public Music backgroundMusic;
+	public Music backgroundMusicMenu;
+
+	public Music backgroundMusicGame;
 	public Sound hit;
 	public Sound hit_false;
 	public Sound collect;
@@ -206,13 +208,13 @@ public class ResourcesManager {
 
 	public void loadMenuResources() {
 		loadMenuGraphics();
-		// loadMenuAudio();
+		loadMenuAudio();
 		loadMenuFonts();
 	}
 
 	public void unloadMenuResources() {
 		unloadMenuGraphics();
-		// unloadMenuAudio();
+		unloadMenuAudio();
 	}
 
 	private void createMenuGraphics() {
@@ -244,6 +246,22 @@ public class ResourcesManager {
 	private void unloadMenuGraphics() {
 		menuButtonsTextureAtlas.unload();
 		menuBackgroundTextureAtlas.unload();
+	}
+
+	private void loadMenuAudio() {
+		MusicFactory.setAssetBasePath("mfx/");
+		try {
+			backgroundMusicMenu = MusicFactory.createMusicFromAsset(
+					engine.getMusicManager(), activity, "Haply.ogg");
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void unloadMenuAudio() {
+		// TODO: Needed?
 	}
 
 	private void createMenuFonts() {
@@ -551,7 +569,7 @@ public class ResourcesManager {
 		if (walk == null) {
 			createGameSounds();
 		}
-		if (backgroundMusic == null) {
+		if (backgroundMusicGame == null) {
 			createGameMusic();
 		}
 	}
@@ -563,8 +581,8 @@ public class ResourcesManager {
 	private void createGameMusic() {
 		MusicFactory.setAssetBasePath("mfx/");
 		try {
-			backgroundMusic = MusicFactory.createMusicFromAsset(
-					engine.getMusicManager(), activity, "Haply.ogg");
+			backgroundMusicGame = MusicFactory.createMusicFromAsset(
+					engine.getMusicManager(), activity, "Soliloquy.mp3");
 		} catch (IllegalStateException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

@@ -106,7 +106,7 @@ public class GameActivity extends BaseGameActivity {
 		super.onPause();
 		if (this.isGameLoaded()) {
 			resourcesManager.soundManager.setMasterVolume(0);
-			resourcesManager.backgroundMusic.pause();
+			resourcesManager.backgroundMusicMenu.pause();
 		}
 	}
 
@@ -116,7 +116,7 @@ public class GameActivity extends BaseGameActivity {
 		System.gc();
 		if (this.isGameLoaded()) {
 			resourcesManager.soundManager.setMasterVolume(1);
-			resourcesManager.backgroundMusic.play();
+			resourcesManager.backgroundMusicMenu.play();
 		}
 	}
 
