@@ -9,6 +9,7 @@ import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
+import org.andengine.engine.options.WakeLockOptions;
 import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.util.FPSLogger;
@@ -46,8 +47,8 @@ public class GameActivity extends BaseGameActivity {
 		EngineOptions engineOptions = new EngineOptions(true,
 				ScreenOrientation.LANDSCAPE_FIXED, new RatioResolutionPolicy(
 						WIDTH, HEIGHT), this.camera);
-		// engineOptions.getAudioOptions().setNeedsMusic(true).setNeedsSound(true);
-		// engineOptions.setWakeLockOptions(WakeLockOptions.SCREEN_ON);
+		engineOptions.getAudioOptions().setNeedsMusic(true).setNeedsSound(true);
+		engineOptions.setWakeLockOptions(WakeLockOptions.SCREEN_ON);
 		engineOptions.getTouchOptions().setNeedsMultiTouch(true);
 		return engineOptions;
 	}
@@ -57,16 +58,17 @@ public class GameActivity extends BaseGameActivity {
 			OnCreateResourcesCallback pOnCreateResourcesCallback)
 			throws IOException {
 		ResourcesManager.prepareManager(this.mEngine, this, this.camera,
-				this.getVertexBufferObjectManager(), this.getTextureManager());
+				this.getVertexBufferObjectManager(), this.getTextureManager(),
+				this.getSoundManager());
 		this.resourcesManager = ResourcesManager.getInstance();
-//		System.out.println("Rescources created");
+		// System.out.println("Rescources created");
 		pOnCreateResourcesCallback.onCreateResourcesFinished();
 	}
 
 	@Override
 	public void onCreateScene(OnCreateSceneCallback pOnCreateSceneCallback)
 			throws Exception {
-//		System.out.println("Scene created");
+		// System.out.println("Scene created");
 		SceneManager.getInstance().createSplashScene(pOnCreateSceneCallback);
 		this.mEngine.registerUpdateHandler(new FPSLogger());
 	}
@@ -75,7 +77,7 @@ public class GameActivity extends BaseGameActivity {
 	public void onPopulateScene(Scene pScene,
 			OnPopulateSceneCallback pOnPopulateSceneCallback) throws Exception {
 
-//		System.out.println("Populate Scene");
+		// System.out.println("Populate Scene");
 		mEngine.registerUpdateHandler(new TimerHandler(2f,
 				new ITimerCallback() {
 					public void onTimePassed(final TimerHandler pTimerHandler) {
@@ -103,7 +105,8 @@ public class GameActivity extends BaseGameActivity {
 	protected void onPause() {
 		super.onPause();
 		if (this.isGameLoaded()) {
-			// music.pause();
+			resourcesManager.soundManager.setMasterVolume(0);
+			resourcesManager.backgroundMusic.pause();
 		}
 	}
 
@@ -112,7 +115,8 @@ public class GameActivity extends BaseGameActivity {
 		super.onResume();
 		System.gc();
 		if (this.isGameLoaded()) {
-			// music.play();
+			resourcesManager.soundManager.setMasterVolume(1);
+			resourcesManager.backgroundMusic.play();
 		}
 	}
 

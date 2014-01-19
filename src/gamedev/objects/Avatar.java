@@ -3,8 +3,6 @@ package gamedev.objects;
 import gamedev.game.Direction;
 import gamedev.game.ResourcesManager;
 
-import java.util.ArrayList;
-
 import org.andengine.engine.handler.physics.PhysicsHandler;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
@@ -14,7 +12,8 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
 public class Avatar extends AnimatedObject {
 
-	public final static long[] ANIMATION_DURATION = { 50, 50, 50, 50, 50, 50, 50, 50 };
+	public final static long[] ANIMATION_DURATION = { 50, 50, 50, 50, 50, 50,
+			50, 50 };
 	public final static int FRAMES_PER_ANIMATION = ANIMATION_DURATION.length;
 	public final static int TILES_PER_LINE = 16;
 
@@ -52,6 +51,7 @@ public class Avatar extends AnimatedObject {
 		case IDLE:
 			this.body.setLinearVelocity(0, 0);
 			this.stopAnimation();
+			resourcesManager.walk.stop();
 			// TODO Give some amount of energy back after a certain level
 			return;
 		case ATTACK:
@@ -65,6 +65,10 @@ public class Avatar extends AnimatedObject {
 		case RUNNING:
 			rowIndex = 8;
 			loopAnimation = true;
+			resourcesManager.walk.stop();
+			resourcesManager.walk.setRate(1.5f);
+			resourcesManager.walk.setLooping(true);
+			resourcesManager.walk.play();
 			break;
 		case TIPPING_OVER:
 			rowIndex = 12;
@@ -73,6 +77,10 @@ public class Avatar extends AnimatedObject {
 		case WALKING:
 			rowIndex = 16;
 			loopAnimation = true;
+			resourcesManager.walk.stop();
+			resourcesManager.walk.setRate(1);
+			resourcesManager.walk.setLooping(true);
+			resourcesManager.walk.play();
 			break;
 		default:
 			return;
@@ -136,11 +144,11 @@ public class Avatar extends AnimatedObject {
 		this.energy = Math.max(energy, 0);
 		this.resourcesManager.hud.setEnergy(this.energy);
 	}
-	
+
 	public Inventory getInventory() {
 		return this.inventory;
 	}
-	
+
 	@Override
 	protected void createPhysic() {
 		this.body = PhysicsFactory.createBoxBody(resourcesManager.physicsWorld,

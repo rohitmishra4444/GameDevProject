@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import org.andengine.audio.music.Music;
+import org.andengine.audio.music.MusicFactory;
 import org.andengine.audio.sound.Sound;
 import org.andengine.audio.sound.SoundFactory;
 import org.andengine.audio.sound.SoundManager;
@@ -139,11 +140,11 @@ public class ResourcesManager {
 	// Sound and music
 	// ---------------------------------------------
 
-	private Music backgroundMusic;
-	private Sound hit;
-	private Sound hit_false;
-	private Sound collect;
-	private Sound walk;
+	public Music backgroundMusic;
+	public Sound hit;
+	public Sound hit_false;
+	public Sound collect;
+	public Sound walk;
 
 	// ---------------------------------------------
 	// Physic
@@ -547,7 +548,12 @@ public class ResourcesManager {
 	}
 
 	private void loadGameAudio() {
-
+		if (walk == null) {
+			createGameSounds();
+		}
+		if (backgroundMusic == null) {
+			createGameMusic();
+		}
 	}
 
 	private void unloadGameAudio() {
@@ -555,20 +561,29 @@ public class ResourcesManager {
 	}
 
 	private void createGameMusic() {
-
+		MusicFactory.setAssetBasePath("mfx/");
+		try {
+			backgroundMusic = MusicFactory.createMusicFromAsset(
+					engine.getMusicManager(), activity, "Haply.ogg");
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void createGameSounds() {
 		try {
-			hit = SoundFactory.createSoundFromAsset(soundManager, activity,
-					"mfx/hit.wav");
+			SoundFactory.setAssetBasePath("mfx/");
 
+			hit = SoundFactory.createSoundFromAsset(soundManager, activity,
+					"hit.wav");
 			hit_false = SoundFactory.createSoundFromAsset(soundManager,
-					activity, "mfx/hit_false.wav");
+					activity, "hit_false.wav");
 			collect = SoundFactory.createSoundFromAsset(soundManager, activity,
-					"mfx/collect.wav");
+					"collect.wav");
 			walk = SoundFactory.createSoundFromAsset(soundManager, activity,
-					"mfx/walk.wav");
+					"walk.wav");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -772,13 +787,13 @@ public class ResourcesManager {
 	 */
 	public static void prepareManager(Engine engine, BaseActivity activity,
 			BoundCamera camera, VertexBufferObjectManager vbom,
-			TextureManager textureManager) {
+			TextureManager textureManager, SoundManager soundManager) {
 		getInstance().engine = engine;
 		getInstance().activity = activity;
 		getInstance().camera = camera;
 		getInstance().vbom = vbom;
 		getInstance().textureManager = textureManager;
-		getInstance().soundManager = engine.getSoundManager();
+		getInstance().soundManager = soundManager;
 	}
 
 	// ---------------------------------------------
