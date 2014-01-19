@@ -1,8 +1,5 @@
 package gamedev.scenes;
 
-import java.util.ArrayList;
-import java.util.Random;
-
 import gamedev.game.GameActivity;
 import gamedev.game.GameActivity.GameMode;
 import gamedev.game.ResourcesManager;
@@ -11,6 +8,9 @@ import gamedev.objects.AnimatedObject;
 import gamedev.objects.AnimatedObject.GameState;
 import gamedev.objects.Dinosaur;
 import gamedev.objects.Target;
+
+import java.util.ArrayList;
+import java.util.Random;
 
 import org.andengine.entity.scene.CameraScene;
 import org.andengine.entity.scene.IOnSceneTouchListener;
@@ -34,14 +34,18 @@ public class FightScene extends CameraScene {
 	protected ArrayList<Target> targets = new ArrayList<Target>();
 	protected ArrayList<Target> targetsToRemove = new ArrayList<Target>();
 	protected float fightDuration = 0; // Total duration of fight
-	protected float lastTargetCreated = 0; // Last target created (passed seconds)
-	protected float frequencyOfTargts = 0.2f; // How often are new targets created in seconds
+	protected float lastTargetCreated = 0; // Last target created (passed
+											// seconds)
+	protected float frequencyOfTargts = 0.2f; // How often are new targets
+												// created in seconds
 	private static FightScene instance;
-		
+
 	private FightScene() {
 		super(ResourcesManager.getInstance().camera);
 		this.resourcesManager = ResourcesManager.getInstance();
-		this.fightDino = new Sprite(0, 0, this.resourcesManager.fightDinoRegion, this.resourcesManager.vbom);
+		this.fightDino = new Sprite(0, 0,
+				this.resourcesManager.fightDinoRegion,
+				this.resourcesManager.vbom);
 		centerShapeInCamera(this.fightDino);
 		this.attachChild(this.fightDino);
 		this.setBackgroundEnabled(false);
@@ -55,8 +59,15 @@ public class FightScene extends CameraScene {
 					float pY = pSceneTouchEvent.getY();
 					for (Target target : targets) {
 						if (target.isHit(pX, pY)) {
-							if (target.getDamageOpponent() > 0) object.attack(target.getDamageOpponent());
-							if (target.getDamageAvatar() > 0) resourcesManager.avatar.attack(target.getDamageAvatar());
+							if (target.getDamageOpponent() > 0) {
+								object.attack(target.getDamageOpponent());
+								resourcesManager.hit.play();
+							}
+							if (target.getDamageAvatar() > 0) {
+								resourcesManager.avatar.attack(target
+										.getDamageAvatar());
+								resourcesManager.hit_false.play();
+							}
 							target.setRemovable(true);
 						}
 					}
@@ -64,17 +75,17 @@ public class FightScene extends CameraScene {
 						resourcesManager.avatar.setState(GameState.IDLE, -1);
 						GameActivity.mode = GameMode.EXPLORING;
 						onClose();
-						SceneManager.getInstance().getCurrentGameMapScene().clearChildScene();
+						SceneManager.getInstance().getCurrentGameMapScene()
+								.clearChildScene();
 					}
 					return true;
 				}
 				return false;
 			}
 		});
-		
+
 	}
-	
-	
+
 	public static FightScene getInstance() {
 		if (instance == null) {
 			instance = new FightScene();
@@ -82,7 +93,7 @@ public class FightScene extends CameraScene {
 		ResourcesManager.getInstance().unloadHUDResources();
 		return instance;
 	}
-	
+
 	public void setObject(AnimatedObject object) {
 		this.object = object;
 		if (this.object instanceof Dinosaur) {
@@ -92,23 +103,28 @@ public class FightScene extends CameraScene {
 			}
 		}
 	}
-	
+
 	public void onManagedUpdate(float seconds) {
-		if (this.object == null) return;
+		if (this.object == null)
+			return;
 		this.fightDuration += seconds;
 		this.lastTargetCreated += seconds;
-	
+
 		// First step: Check for dismissed targets!
 		for (Target t : this.targets) {
 			if ((this.fightDuration - t.getTimeAlive()) > t.getTimeCreated()) {
 				// Missed!
-				if (t.getDamageMiss() > 0) resourcesManager.avatar.attack(t.getDamageMiss());
+				if (t.getDamageMiss() > 0)
+					resourcesManager.avatar.attack(t.getDamageMiss());
 				t.setRemovable(true);
-//				System.out.println("You dismissed target [actual time: "+ fightDuration + ", created: " + t.getTimeCreated() + ", timeAlive: " + t.getTimeAlive()+"]");
+				// System.out.println("You dismissed target [actual time: "+
+				// fightDuration + ", created: " + t.getTimeCreated() +
+				// ", timeAlive: " + t.getTimeAlive()+"]");
 			}
-			if (t.isRemovable()) targetsToRemove.add(t);
+			if (t.isRemovable())
+				targetsToRemove.add(t);
 		}
-		
+
 		// Second step: Remove targets!
 		for (Target t : targetsToRemove) {
 			this.targets.remove(t);
@@ -116,64 +132,72 @@ public class FightScene extends CameraScene {
 			t.dispose();
 		}
 		this.targetsToRemove.clear();
-		
+
 		// Third step: Check how much new target should be created.
-		// Note that this depends on the time how often this method can be called - therefore we maybe must create multiple targets on slower devices
+		// Note that this depends on the time how often this method can be
+		// called - therefore we maybe must create multiple targets on slower
+		// devices
 		if (this.lastTargetCreated > this.frequencyOfTargts) {
-			int nTargets = (int) (this.lastTargetCreated / this.frequencyOfTargts); 
+			int nTargets = (int) (this.lastTargetCreated / this.frequencyOfTargts);
 			this.lastTargetCreated = 0;
-			for (int i= 0; i<nTargets; i++) {
+			for (int i = 0; i < nTargets; i++) {
 				Target t = this.generateTarget();
 				this.targets.add(t);
-				this.attachChild(t);				
+				this.attachChild(t);
 			}
-		}			
+		}
 	}
-	
-	
+
 	/**
 	 * 
 	 * @return
 	 */
 	protected Target generateTarget() {
-		// Percentage to generate a "good" target that attacks the object when hit ;)
+		// Percentage to generate a "good" target that attacks the object when
+		// hit ;)
 		// 1-p is the percentage of a "bad" target, that should not be hit
 		float pGoodTarget = 0;
 		Random r = new Random();
 		Vector2 position = this.getRandomPosition();
 		Target t = null;
-		
+
 		// I know it's horrible this way, but who cares... we're in a hurry
 		if (this.object instanceof Dinosaur) {
 			Dinosaur d = (Dinosaur) this.object;
-			pGoodTarget = (d.getDinoColor() == Dinosaur.COLOR_GREEN) ? 0.7f : 0.9f;
+			pGoodTarget = (d.getDinoColor() == Dinosaur.COLOR_GREEN) ? 0.7f
+					: 0.9f;
 			if (r.nextFloat() < pGoodTarget) {
 				// Good target
 				if (d.getDinoColor() == Dinosaur.COLOR_GREEN) {
-					t = new Target(position.x, position.y, TARGET_RADIUS, Color.BLACK, this.fightDuration, 0.75f);
+					t = new Target(position.x, position.y, TARGET_RADIUS,
+							Color.BLACK, this.fightDuration, 0.75f);
 					t.setDamageOpponent(10);
 					t.setDamageMiss(10);
 				} else {
-					t = new Target(position.x, position.y, TARGET_RADIUS, Color.BLACK, this.fightDuration, 0.75f);
+					t = new Target(position.x, position.y, TARGET_RADIUS,
+							Color.BLACK, this.fightDuration, 0.75f);
 					t.setDamageOpponent(5);
 					t.setDamageMiss(15);
 				}
 			} else {
 				// Bad target
 				if (d.getDinoColor() == Dinosaur.COLOR_GREEN) {
-					t = new Target(position.x, position.y, TARGET_RADIUS, Color.RED, this.fightDuration, 0.5f);
+					t = new Target(position.x, position.y, TARGET_RADIUS,
+							Color.RED, this.fightDuration, 0.5f);
 					t.setDamageAvatar(10);
 				} else {
-					t = new Target(position.x, position.y, TARGET_RADIUS, Color.RED, this.fightDuration, 0.5f);
+					t = new Target(position.x, position.y, TARGET_RADIUS,
+							Color.RED, this.fightDuration, 0.5f);
 					t.setDamageAvatar(15);
 				}
 			}
 		}
 		return t;
 	}
-	
+
 	/**
 	 * Get a random position so that none of the targets are overlapping
+	 * 
 	 * @return
 	 */
 	protected Vector2 getRandomPosition() {
@@ -181,12 +205,15 @@ public class FightScene extends CameraScene {
 		float x = this.fightDino.getX() + 50 + r.nextFloat() * FIGHTBAR_WIDTH;
 		float y = this.fightDino.getY() + 50 + r.nextFloat() * FIGHTBAR_HEIGHT;
 		boolean intersects = false;
-		do  {
+		do {
 			for (Target t : this.targets) {
-				if (MathUtils.distance(t.getX(), t.getY(), x, y) < t.getRadius()*2) {
+				if (MathUtils.distance(t.getX(), t.getY(), x, y) < t
+						.getRadius() * 2) {
 					intersects = true;
-					x = this.fightDino.getX() + 50 + r.nextFloat() * FIGHTBAR_WIDTH;
-					y = this.fightDino.getY() + 50 + r.nextFloat() * FIGHTBAR_HEIGHT;
+					x = this.fightDino.getX() + 50 + r.nextFloat()
+							* FIGHTBAR_WIDTH;
+					y = this.fightDino.getY() + 50 + r.nextFloat()
+							* FIGHTBAR_HEIGHT;
 				} else {
 					intersects = false;
 				}
@@ -194,9 +221,7 @@ public class FightScene extends CameraScene {
 		} while (intersects);
 		return new Vector2(x, y);
 	}
-	
-	
-	
+
 	protected void onClose() {
 		for (Target t : this.targets) {
 			this.detachChild(t);
@@ -204,9 +229,9 @@ public class FightScene extends CameraScene {
 		}
 		this.targets.clear();
 		this.object = null;
-		this.fightDuration  = 0;
+		this.fightDuration = 0;
 		this.lastTargetCreated = 0;
 		this.resourcesManager.loadHUDResources();
 	}
-	
+
 }

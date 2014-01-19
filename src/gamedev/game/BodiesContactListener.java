@@ -109,39 +109,14 @@ public class BodiesContactListener implements ContactListener,
 			}
 			if (pig != null) {
 				// Catched the Pig!
-				ResourcesManager.getInstance().removeSpriteAndBody(pig);
-				ResourcesManager.getInstance().activity.toastOnUIThread(
+				resourcesManager.removeSpriteAndBody(pig);
+				resourcesManager.activity.toastOnUIThread(
 						"Yes! Catched the pig... I need to bring it back.",
 						Toast.LENGTH_SHORT);
+				resourcesManager.collect.play();
 				currentMapScene.getQuest(1).setCompleted(true);
 			}
 		}
-
-		// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-		// TODO: Remove this if else section, if we use a button for the shop.
-		// if (x1.getBody().getUserData().equals("Avatar")
-		// && x2.getBody().getUserData().equals("ShopCave")) {
-		// ShopScene shopScene = new ShopScene();
-		// shopScene.openShopScene();
-		// resourcesManager.activity.toastOnUIThread(
-		// "Sorry, the shop is not implemented yet.",
-		// Toast.LENGTH_LONG);
-		// resourcesManager.activity.toastOnUIThread(
-		// "Touch on the screen to close the camera scene.",
-		// Toast.LENGTH_LONG);
-		//
-		// } else if (x1.getBody().getUserData().equals("ShopCave")
-		// && x2.getBody().getUserData().equals("Avatar")) {
-		// ShopScene shopScene = new ShopScene();
-		// shopScene.openShopScene();
-		// resourcesManager.activity.toastOnUIThread(
-		// "Sorry, the shop is not implemented yet.",
-		// Toast.LENGTH_LONG);
-		// resourcesManager.activity.toastOnUIThread(
-		// "Touch on the screen to close the camera scene.",
-		// Toast.LENGTH_LONG);
-		// }
-		// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 	}
 
@@ -216,6 +191,7 @@ public class BodiesContactListener implements ContactListener,
 				resourcesManager.avatar.getInventory().addBerry(berry);
 				resourcesManager.activity.toastOnUIThread("Berry collected.",
 						Toast.LENGTH_SHORT);
+				resourcesManager.collect.play();
 			}
 		}
 	}
