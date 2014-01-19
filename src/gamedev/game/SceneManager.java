@@ -222,7 +222,7 @@ public class SceneManager {
 						setScene(gameMapScene);
 						resourcesManager.backgroundMusicGame.setVolume(0.2f);
 						resourcesManager.backgroundMusicGame.setLooping(true);
-						resourcesManager.backgroundMusicGame.play();
+						resourcesManager.backgroundMusicGame.resume();
 						disposeLoadingScene();
 					}
 				}));
@@ -266,7 +266,7 @@ public class SceneManager {
 	public void disposeCurrentScene(boolean setLoadingSceneNeeded) {
 		if (currentSceneType.equals(SceneType.SCENE_GAME_MAP)) {
 			disposeGameMapScene();
-			resourcesManager.backgroundMusicGame.stop();
+			resourcesManager.backgroundMusicGame.pause();
 		} else if (currentSceneType.equals(SceneType.SCENE_GAME_END)) {
 			disposeGameEndScene();
 		} else if (currentSceneType.equals(SceneType.SCENE_MENU)) {
