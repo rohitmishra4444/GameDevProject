@@ -86,6 +86,7 @@ public class QuestCatchPig extends Quest {
 						Toast.LENGTH_LONG);
 		// TODO Remove the trees and the body so the player can pass the forest
 		// :)
+		ResourcesManager.getInstance().removeSpriteAndBody(rectangle);
 	}
 
 	@Override
