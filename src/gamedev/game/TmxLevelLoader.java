@@ -98,16 +98,18 @@ public class TmxLevelLoader {
 
 	protected void createBoundaries(ArrayList<TMXObject> objects) {
 		for (final TMXObject object : objects) {
-			final Rectangle rect = new Rectangle(object.getX(), object.getY(),
-					object.getWidth(), object.getHeight(),
-					this.resourcesManager.vbom);
-			final FixtureDef boxFixtureDef = PhysicsFactory.createFixtureDef(0,
-					0, 0);
-			Body body = PhysicsFactory.createBoxBody(
-					this.resourcesManager.physicsWorld, rect,
-					BodyType.StaticBody, boxFixtureDef);
+			final Rectangle rect = new Rectangle(object.getX(), object.getY(), object.getWidth(), object.getHeight(), this.resourcesManager.vbom);
+			if (object.getTMXObjectProperties().size() > 0) {
+				for (int i = 0; i < object.getTMXObjectProperties().size(); i++) {
+					if (object.getTMXObjectProperties().get(i).getName().equals("rotate")) {
+						rect.setRotation((-1) * Float.parseFloat(object.getTMXObjectProperties().get(i).getValue()));
+					}
+				}
+			}
+			final FixtureDef boxFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0);
+			Body body = PhysicsFactory.createBoxBody(this.resourcesManager.physicsWorld, rect, BodyType.StaticBody, boxFixtureDef);
 			body.setUserData("Boundary");
-			rect.setVisible(false);
+//			rect.setVisible(false);
 			this.scene.attachChild(rect);
 		}
 	}

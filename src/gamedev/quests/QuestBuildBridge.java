@@ -19,8 +19,8 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 
 public class QuestBuildBridge extends Quest {
 
-	private final static float RECTANGLE_X = 34 * 32;
-	private final static float RECTANGLE_Y = 21 * 32;
+	private final static float RECTANGLE_X = 33 * 32;
+	private final static float RECTANGLE_Y = 19.5f * 32;
 	private final static float RECTANGLE_HEIGHT = 100;
 	private final static float RECTANGLE_WIDTH = 10;
 	private final static int N_WOOD = 5;

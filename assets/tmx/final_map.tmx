@@ -25025,17 +25025,17 @@
  </layer>
  <objectgroup name="BerryBushes" width="100" height="50"/>
  <objectgroup name="Walls" width="100" height="50">
-  <object x="1045" y="134" width="6" height="502"/>
-  <object x="70" y="126" width="979" height="6"/>
-  <object x="66" y="94" width="9" height="1389"/>
+  <object x="1050" y="116" width="6" height="502"/>
+  <object x="66" y="113" width="979" height="6"/>
+  <object x="57" y="120" width="9" height="1389"/>
   <object x="71" y="1480" width="532" height="9"/>
-  <object x="1040" y="702" width="9" height="103"/>
+  <object x="1047" y="726" width="9" height="103"/>
   <object x="991" y="773" width="8" height="123">
    <properties>
     <property name="rotate" value="-45"/>
    </properties>
   </object>
-  <object x="945" y="873" width="6" height="134"/>
+  <object x="952" y="877" width="6" height="134"/>
   <object x="885" y="994" width="60" height="14"/>
   <object x="879" y="995" width="9" height="102"/>
   <object x="827" y="1065" width="9" height="129">
@@ -25043,22 +25043,52 @@
     <property name="rotate" value="-45"/>
    </properties>
   </object>
-  <object x="782" y="1166" width="10" height="122"/>
+  <object x="791" y="1176" width="10" height="122"/>
   <object x="681" y="1241" width="8" height="282">
    <properties>
     <property name="rotate" value="-45"/>
    </properties>
   </object>
-  <object x="1048" y="631" width="156" height="6"/>
-  <object x="1046" y="699" width="157" height="7"/>
-  <object x="1200" y="710" width="6" height="101"/>
-  <object x="1200" y="570" width="7" height="57"/>
-  <object x="1325" y="280" width="7" height="179"/>
-  <object x="1250" y="144" width="525" height="8"/>
-  <object x="1770" y="154" width="7" height="139"/>
-  <object x="1298" y="138" width="6" height="162">
+  <object x="1047" y="612" width="156" height="6"/>
+  <object x="1045" y="718" width="157" height="7"/>
+  <object x="1195" y="721" width="6" height="82"/>
+  <object x="1193" y="559" width="7" height="57"/>
+  <object x="1317" y="280" width="7" height="179"/>
+  <object x="1217" y="127" width="561" height="6"/>
+  <object x="1770" y="138" width="7" height="139"/>
+  <object x="1264" y="115" width="6" height="182">
    <properties>
-    <property name="rotate" value="40"/>
+    <property name="rotate" value="30"/>
+   </properties>
+  </object>
+  <object x="1140" y="768" width="6" height="136">
+   <properties>
+    <property name="rotate" value="-45"/>
+   </properties>
+  </object>
+  <object x="1100" y="891" width="5" height="48"/>
+  <object x="1222" y="1109" width="4" height="80"/>
+  <object x="1142" y="1184" width="86" height="8"/>
+  <object x="1124" y="1186" width="6" height="132"/>
+  <object x="1242" y="1422" width="68" height="6"/>
+  <object x="1436" y="1547" width="191" height="7"/>
+  <object x="1654" y="1520" width="207" height="7"/>
+  <object x="1825" y="234" width="6" height="170">
+   <properties>
+    <property name="rotate" value="45"/>
+   </properties>
+  </object>
+  <object x="2034" y="446" width="5" height="93"/>
+  <object x="2132" y="801" width="5" height="234"/>
+  <object x="2161" y="1056" width="7" height="96"/>
+  <object x="2022" y="1099" width="7" height="478">
+   <properties>
+    <property name="rotate" value="-40"/>
+   </properties>
+  </object>
+  <object x="1181" y="1305" width="5" height="153">
+   <properties>
+    <property name="rotate" value="45"/>
    </properties>
   </object>
  </objectgroup>

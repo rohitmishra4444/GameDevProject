@@ -33,22 +33,22 @@ public class QuestCatchPig extends Quest {
 	
 	public QuestCatchPig(GameMapScene map) {
 		super(map);
-		this.title = "Cross the forest";
-		this.description = "Catch the pig and bring it to the cave man";
+		this.title = "Find a way through the canyon";
+		this.description = "Catch the pig and bring it back to the cave man";
 
 		this.conversation
-				.add("Hi, my name is Detlef. I need to go to the other side of the forest, can you help me?");
+				.add("Hi, my name is Detlef. I need to pass the canyon, can you help me?");
 		this.conversation.add("Hmm... My back hurts, I'm so old!");
-		this.conversation.add("And even worse, I lost my pig this morning");
+		this.conversation.add("And even worse, one of my pigs broke out this morning...");
 		this.conversation
 				.add("I'm scared that the dinosaurs will kill it... Can you catch it for me?");
 		this.conversation
-				.add("I will give you an axe so you can destroy the trees");
+				.add("I will give you an axe so you can destroy the trees and go trought the canyon.");
 		this.conversation.add("OK! Let's find this pig...");
 
 		// Create the pig :-D
 		this.pig = new Pig(500, 500);
-		RandomMoveStrategy rm = new RandomMoveStrategy(pig, 50, 250, 0, 41*32, 63*32, 11*32, 43*32);
+		RandomMoveStrategy rm = new RandomMoveStrategy(pig, 100, 300, 0, 42*32, 65*32, 11*32, 43*32);
 		pig.setMoveStrategy(rm);
 		map.attachChild(pig);
 		
