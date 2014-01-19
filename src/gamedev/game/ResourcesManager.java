@@ -3,8 +3,13 @@ package gamedev.game;
 import gamedev.hud.SceneHUD;
 import gamedev.objects.Avatar;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
+import org.andengine.audio.music.Music;
+import org.andengine.audio.sound.Sound;
+import org.andengine.audio.sound.SoundFactory;
+import org.andengine.audio.sound.SoundManager;
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.BoundCamera;
 import org.andengine.entity.shape.IShape;
@@ -41,6 +46,7 @@ public class ResourcesManager {
 	public BoundCamera camera;
 	public VertexBufferObjectManager vbom;
 	public TextureManager textureManager;
+	public SoundManager soundManager;
 	public Avatar avatar;
 	public SceneHUD hud;
 
@@ -86,10 +92,9 @@ public class ResourcesManager {
 	public TextureRegion hudQuestListIconRegion;
 	private BitmapTextureAtlas hudShopIconAtlas;
 	public TextureRegion hudShopIconRegion;
-	
+
 	public BitmapTextureAtlas bgBarsAtlas;
 	public TextureRegion bgBarsRegion;
-
 
 	// Textures for splash scene
 	public ITextureRegion splash_region;
@@ -129,6 +134,16 @@ public class ResourcesManager {
 	public ITextureRegion oldCavemanRegion;
 	public BitmapTextureAtlas bridgeAtlas;
 	public ITextureRegion bridgeRegion;
+
+	// ---------------------------------------------
+	// Sound and music
+	// ---------------------------------------------
+
+	private Music backgroundMusic;
+	private Sound hit;
+	private Sound hit_false;
+	private Sound collect;
+	private Sound walk;
 
 	// ---------------------------------------------
 	// Physic
@@ -237,11 +252,12 @@ public class ResourcesManager {
 
 		font = FontFactory.createFromAsset(
 				((GameActivity) activity).getFontManager(), mainFontTexture,
-				activity.getAssets(), "UniversElse-Regular.ttf", 22, true, Color.WHITE);
+				activity.getAssets(), "UniversElse-Regular.ttf", 22, true,
+				Color.WHITE);
 
-//		font = FontFactory.createFromAsset(
-//				((GameActivity) activity).getFontManager(), mainFontTexture,
-//				activity.getAssets(), "font.ttf", 35f, true, Color.WHITE);
+		// font = FontFactory.createFromAsset(
+		// ((GameActivity) activity).getFontManager(), mainFontTexture,
+		// activity.getAssets(), "font.ttf", 35f, true, Color.WHITE);
 
 	}
 
@@ -310,9 +326,8 @@ public class ResourcesManager {
 
 	public void loadGameResources() {
 		loadGameGraphics();
-		// TODO:
 		loadMenuFonts();
-		// loadGameAudio();
+		loadGameAudio();
 		loadHUDResources();
 		loadGameShopResources();
 
@@ -328,8 +343,7 @@ public class ResourcesManager {
 
 	public void unloadGameResources() {
 		unloadGameGraphics();
-		// TODO:
-		// unloadGameAudio();
+		unloadGameAudio();
 		unloadHUDResources();
 		unloadGameShopResources();
 	}
@@ -449,8 +463,8 @@ public class ResourcesManager {
 				TextureOptions.DEFAULT);
 
 		this.pigRegion = BitmapTextureAtlasTextureRegionFactory
-				.createTiledFromAsset(this.pigAtlas, activity, "pig_0.5.png", 0, 0,
-						9, 8);
+				.createTiledFromAsset(this.pigAtlas, activity, "pig_0.5.png",
+						0, 0, 9, 8);
 
 		this.spiderAtlas = new BitmapTextureAtlas(textureManager, 226, 226,
 				TextureOptions.DEFAULT);
@@ -498,15 +512,16 @@ public class ResourcesManager {
 	}
 
 	private void createQuestSceneGraphics() {
-//		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
-		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/hud/");
+		// BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
+		BitmapTextureAtlasTextureRegionFactory
+				.setAssetBasePath("gfx/game/hud/");
 
-//		this.questFrameTextureAtlas = new BitmapTextureAtlas(textureManager,
-//				590, 480, TextureOptions.DEFAULT);
-//
-//		this.questFrameRegion = BitmapTextureAtlasTextureRegionFactory
-//				.createFromAsset(questFrameTextureAtlas, activity,
-//						"quest_frame.png", 0, 0);
+		// this.questFrameTextureAtlas = new BitmapTextureAtlas(textureManager,
+		// 590, 480, TextureOptions.DEFAULT);
+		//
+		// this.questFrameRegion = BitmapTextureAtlasTextureRegionFactory
+		// .createFromAsset(questFrameTextureAtlas, activity,
+		// "quest_frame.png", 0, 0);
 
 		this.questFrameTextureAtlas = new BitmapTextureAtlas(textureManager,
 				577, 469, TextureOptions.DEFAULT);
@@ -529,6 +544,34 @@ public class ResourcesManager {
 		this.questFinishedRegion = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(questFinishedTextureAtlas, activity,
 						"finished.png", 0, 0);
+	}
+
+	private void loadGameAudio() {
+
+	}
+
+	private void unloadGameAudio() {
+
+	}
+
+	private void createGameMusic() {
+
+	}
+
+	private void createGameSounds() {
+		try {
+			hit = SoundFactory.createSoundFromAsset(soundManager, activity,
+					"mfx/hit.wav");
+
+			hit_false = SoundFactory.createSoundFromAsset(soundManager,
+					activity, "mfx/hit_false.wav");
+			collect = SoundFactory.createSoundFromAsset(soundManager, activity,
+					"mfx/collect.wav");
+			walk = SoundFactory.createSoundFromAsset(soundManager, activity,
+					"mfx/walk.wav");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	// ---------------------------------------------
@@ -650,8 +693,8 @@ public class ResourcesManager {
 		this.hudQuestListIconAtlas = new BitmapTextureAtlas(textureManager, 44,
 				44, TextureOptions.BILINEAR);
 		this.hudQuestListIconRegion = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(hudQuestListIconAtlas, activity,
-						"quests.png", 0, 0);
+				.createFromAsset(hudQuestListIconAtlas, activity, "quests.png",
+						0, 0);
 
 		this.hudShopIconAtlas = new BitmapTextureAtlas(textureManager, 44, 44,
 				TextureOptions.BILINEAR);
@@ -735,6 +778,7 @@ public class ResourcesManager {
 		getInstance().camera = camera;
 		getInstance().vbom = vbom;
 		getInstance().textureManager = textureManager;
+		getInstance().soundManager = engine.getSoundManager();
 	}
 
 	// ---------------------------------------------
