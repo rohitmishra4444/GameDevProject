@@ -33,6 +33,8 @@ public class RandomMoveStrategy extends MoveStrategy {
 	
 	protected boolean isBounded = false;
 	
+	protected Random random = new Random();
+	
 	public RandomMoveStrategy(AnimatedObject object, float minDistance, float maxDistance) {
 		super(object);
 		this.minDistance = minDistance/32;
@@ -70,12 +72,11 @@ public class RandomMoveStrategy extends MoveStrategy {
 	}
 	
 	protected Vector2 getRandomPoint() {
-		Random r = new Random();
 		Vector2 bodyPos = this.object.getBody().getPosition();
-		float x = this.minDistance + (r.nextFloat() * (this.maxDistance - this.minDistance));
-		float y = this.minDistance + (r.nextFloat() * (this.maxDistance - this.minDistance));
-		if (r.nextInt(2) == 0) x = -x;
-		if (r.nextInt(2) == 0) y = -y;
+		float x = this.minDistance + (random.nextFloat() * (this.maxDistance - this.minDistance));
+		float y = this.minDistance + (random.nextFloat() * (this.maxDistance - this.minDistance));
+		if (random.nextInt(2) == 0) x = -x;
+		if (random.nextInt(2) == 0) y = -y;
 		x = bodyPos.x + x;
 		y = bodyPos.y + y;
 		if (this.isBounded) {

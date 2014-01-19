@@ -39,7 +39,9 @@ public class FightScene extends CameraScene {
 	protected float frequencyOfTargts = 0.2f; // How often are new targets
 												// created in seconds
 	private static FightScene instance;
-
+	
+	protected Random r = new Random();
+	
 	private FightScene() {
 		super(ResourcesManager.getInstance().camera);
 		this.resourcesManager = ResourcesManager.getInstance();
@@ -201,7 +203,6 @@ public class FightScene extends CameraScene {
 	 * @return
 	 */
 	protected Vector2 getRandomPosition() {
-		Random r = new Random();
 		float x = this.fightDino.getX() + 50 + r.nextFloat() * FIGHTBAR_WIDTH;
 		float y = this.fightDino.getY() + 50 + r.nextFloat() * FIGHTBAR_HEIGHT;
 		boolean intersects = false;
