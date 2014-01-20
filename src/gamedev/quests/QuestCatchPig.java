@@ -4,6 +4,7 @@ import gamedev.ai.RandomMoveStrategy;
 import gamedev.ai.SimpleMoveStrategy;
 import gamedev.game.ResourcesManager;
 import gamedev.objects.AnimatedObject.GameState;
+import gamedev.objects.Axe;
 import gamedev.objects.OldCaveman;
 import gamedev.objects.Pig;
 import gamedev.scenes.GameMapScene;
@@ -22,6 +23,7 @@ public class QuestCatchPig extends Quest {
 	protected Pig pig2;
 	protected ArrayList<String> conversation = new ArrayList<String>();
 	protected OldCaveman caveman;
+	protected Axe axe;
 	
 	public QuestCatchPig(GameMapScene map) {
 		super(map);
@@ -47,6 +49,9 @@ public class QuestCatchPig extends Quest {
 		// Caveman
 		this.caveman = new OldCaveman(48*32, 37*32);
 		map.attachChild(caveman);
+		
+		this.axe = new Axe(59*32, 41*32);
+		map.attachChild(axe);
 	}
 
 	@Override
@@ -81,6 +86,10 @@ public class QuestCatchPig extends Quest {
 	public boolean isCompleted() {
 		return (pig.isCatched() && pig2.isCatched());
 //		return true;
+	}
+	
+	public Axe getAxe() {
+		return this.axe;
 	}
 
 }

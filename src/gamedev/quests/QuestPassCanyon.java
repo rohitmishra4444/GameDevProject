@@ -3,6 +3,7 @@ package gamedev.quests;
 import gamedev.game.ResourcesManager;
 import gamedev.objects.Avatar;
 import gamedev.objects.Inventory;
+import gamedev.objects.Tree;
 import gamedev.objects.Wood;
 import gamedev.scenes.GameMapScene;
 
@@ -26,6 +27,8 @@ public class QuestPassCanyon extends Quest {
 	
 	protected Body body;
 	protected Rectangle rectangle;
+	protected Tree tree;
+	protected Tree tree2;
 	
 	public QuestPassCanyon(GameMapScene map) {
 		super(map);
@@ -42,7 +45,11 @@ public class QuestPassCanyon extends Quest {
 		res.physicsWorld.registerPhysicsConnector(new PhysicsConnector(
 				rectangle, body, false, false));
 		map.attachChild(rectangle);
-	
+		
+		this.tree = new Tree(69*32, 4.5f*32);
+		this.tree2 = new Tree(69*32, 5.5f*32);
+		this.map.attachChild(tree);
+		this.map.attachChild(tree2);
 	}
 
 	public void setActive(boolean active) {
@@ -54,6 +61,8 @@ public class QuestPassCanyon extends Quest {
 	@Override
 	public void onFinish() {
 		ResourcesManager.getInstance().removeSpriteAndBody(rectangle);
+		ResourcesManager.getInstance().removeSpriteAndBody(tree);
+		ResourcesManager.getInstance().removeSpriteAndBody(tree2);		
 	}
 
 	@Override
@@ -64,8 +73,9 @@ public class QuestPassCanyon extends Quest {
 	@Override
 	public boolean isCompleted() {
 		Inventory inventory = ResourcesManager.getInstance().avatar.getInventory();
-//		return (inventory.contains("AXE"));
-		return false;
+		QuestCatchPig quest = (QuestCatchPig) this.map.getQuest(1);
+		return inventory.contains(quest.getAxe());
+		//		return true;
 	}
 
 	public Rectangle getRectangle() {

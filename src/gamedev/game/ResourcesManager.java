@@ -135,7 +135,12 @@ public class ResourcesManager {
 	public ITextureRegion oldCavemanRegion;
 	public BitmapTextureAtlas bridgeAtlas;
 	public ITextureRegion bridgeRegion;
+	public BitmapTextureAtlas treeAtlas;
+	public ITextureRegion treeRegion;
+	public BitmapTextureAtlas axeAtlas;
+	public ITextureRegion axeRegion;
 
+	
 	// ---------------------------------------------
 	// Sound and music
 	// ---------------------------------------------
@@ -391,6 +396,8 @@ public class ResourcesManager {
 		pigAtlas.load();
 		spiderAtlas.load();
 		oldCavemanAtlas.load();
+		axeAtlas.load();
+		treeAtlas.load();
 	}
 
 	private void unloadGameGraphics() {
@@ -408,6 +415,8 @@ public class ResourcesManager {
 		pigAtlas.unload();
 		spiderAtlas.unload();
 		oldCavemanAtlas.unload();
+		axeAtlas.unload();
+		treeAtlas.unload();
 	}
 
 	private void createGameGraphics() {
@@ -437,6 +446,19 @@ public class ResourcesManager {
 		this.bridgeRegion = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(bridgeAtlas, activity, "bridge.png", 0, 0);
 
+		this.axeAtlas = new BitmapTextureAtlas(textureManager, 24, 22,
+				TextureOptions.DEFAULT);
+
+		this.axeRegion = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(axeAtlas, activity, "axe.png", 0, 0);
+
+		this.treeAtlas = new BitmapTextureAtlas(textureManager, 65, 114,
+				TextureOptions.DEFAULT);
+
+		this.treeRegion = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(treeAtlas, activity, "tree.png", 0, 0);
+
+		
 		this.oldCavemanAtlas = new BitmapTextureAtlas(textureManager, 36, 35,
 				TextureOptions.DEFAULT);
 
