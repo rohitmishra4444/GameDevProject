@@ -7,8 +7,8 @@ import java.util.ArrayList;
 
 import org.andengine.engine.camera.Camera;
 import org.andengine.entity.modifier.FadeInModifier;
-import org.andengine.entity.scene.IOnAreaTouchListener;
-import org.andengine.entity.scene.ITouchArea;
+import org.andengine.entity.scene.IOnSceneTouchListener;
+import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
@@ -49,7 +49,6 @@ public class GameIntroScene extends BaseScene {
 			gameIntroTexts.add(text);
 		}
 		attachChild(gameIntroTexts.get(0));
-		registerTouchArea(gameIntroTexts.get(0));
 
 		float spriteCenterX = camera.getCenterX()
 				- resourcesManager.game_intro_region.get(0).getWidth() / 2;
@@ -70,78 +69,53 @@ public class GameIntroScene extends BaseScene {
 		}
 
 		// This call has to be at the end.
-		registerAreaTouchListener();
+		registerSceneTouchListener();
 	}
 
-	private void registerAreaTouchListener() {
-		this.setOnAreaTouchListener(new IOnAreaTouchListener() {
-			long lastTouchTime = 0;
-			// Wait time in ms. Needed for the touch input, otherwise it is
-			// proceeding to fast.
-			final long WAIT_TIME = 800;
-
+	private void registerSceneTouchListener() {
+		this.setOnSceneTouchListener(new IOnSceneTouchListener() {
 			@Override
-			public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
-					ITouchArea pTouchArea, float pTouchAreaLocalX,
-					float pTouchAreaLocalY) {
+			public boolean onSceneTouchEvent(Scene pScene,
+					TouchEvent pSceneTouchEvent) {
 				if (pSceneTouchEvent.isActionDown()) {
-					long touchTime = pSceneTouchEvent.getMotionEvent()
-							.getEventTime();
 
-					if (nextText == 0) {
-						return false;
-					}
-
-					if (touchTime > lastTouchTime + WAIT_TIME
-							&& pTouchArea.equals(gameIntroTexts
-									.get(nextText - 1))) {
+					if (gameIntroTexts.get(nextText - 1).hasParent()) {
 						Text oldText = gameIntroTexts.get(nextText - 1);
 						oldText.detachSelf();
-						unregisterTouchArea(oldText);
 
 						Sprite newSprite = gameIntroSprites.get(nextSprite);
 						attachChild(newSprite);
 						newSprite
 								.registerEntityModifier(new FadeInModifier(1f));
-						registerTouchArea(newSprite);
-
-						lastTouchTime = touchTime;
 						nextSprite++;
+						return true;
 					}
 
 					// Show the GameMapScene if last sprite was touched, else
 					// show
 					// the next text.
-					if (touchTime > lastTouchTime + WAIT_TIME
-							&& pTouchArea.equals(gameIntroSprites
-									.get(gameIntroSprites.size() - 1))) {
+					if (gameIntroSprites.get(gameIntroSprites.size() - 1)
+							.hasParent()) {
 						Sprite oldSprite = gameIntroSprites
 								.get(gameIntroSprites.size() - 1);
 						oldSprite.detachSelf();
-						unregisterTouchArea(oldSprite);
 
 						SceneManager.getInstance().createGameMapScene(engine,
 								false);
-
-						lastTouchTime = touchTime;
-					} else if (touchTime > lastTouchTime + WAIT_TIME
-							&& pTouchArea.equals(gameIntroSprites
-									.get(nextSprite - 1))) {
+						return true;
+					} else if (gameIntroSprites.get(nextSprite - 1).hasParent()) {
 						Sprite oldSprite = gameIntroSprites.get(nextSprite - 1);
 						oldSprite.detachSelf();
-						unregisterTouchArea(oldSprite);
 
 						Text newText = gameIntroTexts.get(nextText);
 						attachChild(newText);
-						registerTouchArea(newText);
-
-						lastTouchTime = touchTime;
 						nextText++;
+						return true;
 					}
-
 				}
 				return false;
 			}
+
 		});
 	}
 

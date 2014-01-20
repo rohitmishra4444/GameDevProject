@@ -5,8 +5,8 @@ import gamedev.game.SceneManager.SceneType;
 
 import org.andengine.engine.camera.Camera;
 import org.andengine.entity.modifier.FadeInModifier;
-import org.andengine.entity.scene.IOnAreaTouchListener;
-import org.andengine.entity.scene.ITouchArea;
+import org.andengine.entity.scene.IOnSceneTouchListener;
+import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
@@ -15,8 +15,18 @@ import org.andengine.util.HorizontalAlign;
 
 public class GameEndScene extends BaseScene {
 
-	private Sprite gameEndSprite;
+	private static final String gameEndString = "Congratulations! " + "\n"
+			+ "The portal was working properly and you returned to your era."
+			+ "\n\n\n" + "Tap...";
+	private static final String gameDevelopersString = "This game was designed and developed by"
+			+ "\n"
+			+ "Stefan Wanzenried"
+			+ "\n"
+			+ "David Wettstein"
+			+ "\n\n\n"
+			+ "Tap...";
 
+	private Sprite gameEndSprite;
 	private Text gameEndText;
 	private Text gameDevelopersText;
 
@@ -27,16 +37,11 @@ public class GameEndScene extends BaseScene {
 		float centerY = camera.getCenterY()
 				- resourcesManager.game_end_region.getHeight() / 2;
 
-		String gameEndString = "Congratulations! "
-				+ "\n"
-				+ "The portal was working properly and you returned to your era."
-				+ "\n\n\n" + "Tap...";
 		gameEndText = new Text(0, 0, resourcesManager.font, gameEndString,
 				gameEndString.length(), vbom);
 		gameEndText.setPosition(camera.getCenterX() - gameEndText.getWidth()
 				/ 2, camera.getCenterY() - gameEndText.getHeight() / 2);
 		gameEndText.setHorizontalAlign(HorizontalAlign.CENTER);
-		this.registerTouchArea(gameEndText);
 		attachChild(gameEndText);
 
 		gameEndSprite = new Sprite(centerX, centerY,
@@ -50,9 +55,6 @@ public class GameEndScene extends BaseScene {
 			}
 		};
 
-		String gameDevelopersString = "This game was designed and developed by"
-				+ "\n" + "Stefan Wanzenried" + "\n" + "David Wettstein"
-				+ "\n\n\n" + "Tap...";
 		gameDevelopersText = new Text(0, 0, resourcesManager.font,
 				gameDevelopersString, gameDevelopersString.length(), vbom);
 		gameDevelopersText.setPosition(
@@ -60,65 +62,47 @@ public class GameEndScene extends BaseScene {
 				camera.getCenterY() - gameDevelopersText.getHeight() / 2);
 		gameDevelopersText.setHorizontalAlign(HorizontalAlign.CENTER);
 
-		registerAreaTouchListener();
+		// This call has to be at the end.
+		registerSceneTouchListener();
 	}
 
-	private void registerAreaTouchListener() {
-		this.setOnAreaTouchListener(new IOnAreaTouchListener() {
-			long lastTouchTime = 0;
-			// Wait time in ms. Needed for the touch input, otherwise it is
-			// proceeding to fast.
-			final long WAIT_TIME = 800;
-
+	private void registerSceneTouchListener() {
+		this.setOnSceneTouchListener(new IOnSceneTouchListener() {
 			@Override
-			public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
-					ITouchArea pTouchArea, float pTouchAreaLocalX,
-					float pTouchAreaLocalY) {
+			public boolean onSceneTouchEvent(Scene pScene,
+					TouchEvent pSceneTouchEvent) {
 				if (pSceneTouchEvent.isActionDown()) {
-					long touchTime = pSceneTouchEvent.getMotionEvent()
-							.getEventTime();
 
-					if (touchTime > lastTouchTime + WAIT_TIME
-							&& pTouchArea.equals(gameEndText)) {
+					if (gameEndText.hasParent()) {
 						gameEndText.detachSelf();
-						unregisterTouchArea(gameEndText);
 
 						attachChild(gameEndSprite);
 						gameEndSprite
 								.registerEntityModifier(new FadeInModifier(1f));
-						registerTouchArea(gameEndSprite);
-
-						lastTouchTime = touchTime;
+						return true;
 					}
 
-					if (touchTime > lastTouchTime + WAIT_TIME
-							&& pTouchArea.equals(gameEndSprite)) {
+					if (gameEndSprite.hasParent()) {
 						gameEndSprite.detachSelf();
-						unregisterTouchArea(gameEndSprite);
 
 						attachChild(gameDevelopersText);
 						gameDevelopersText
 								.registerEntityModifier(new FadeInModifier(1f));
-						registerTouchArea(gameDevelopersText);
-
-						lastTouchTime = touchTime;
+						return true;
 					}
 
-					if (touchTime > lastTouchTime + WAIT_TIME
-							&& pTouchArea.equals(gameDevelopersText)) {
-
+					if (gameDevelopersText.hasParent()) {
 						gameDevelopersText.detachSelf();
-						unregisterTouchArea(gameDevelopersText);
 
 						SceneManager.getInstance().loadMenuScene(engine);
 						SceneManager.getInstance().deleteCurrentGameMapScene();
 						resourcesManager.avatar = null;
-
-						lastTouchTime = touchTime;
+						return true;
 					}
 				}
 				return false;
 			}
+
 		});
 	}
 
@@ -142,6 +126,11 @@ public class GameEndScene extends BaseScene {
 		if (!gameEndSprite.isDisposed()) {
 			gameEndSprite.detachSelf();
 			gameEndSprite.dispose();
+		}
+
+		if (!gameDevelopersText.isDisposed()) {
+			gameDevelopersText.detachSelf();
+			gameDevelopersText.dispose();
 		}
 
 		this.detachSelf();
