@@ -11,7 +11,7 @@ public abstract class Quest {
 	protected GameMapScene map;
 	protected boolean isCompleted = false;
 	protected boolean isFinished = false;
-	
+
 	// TODO: Give rewards!
 
 	public Quest(GameMapScene map) {

@@ -4,6 +4,7 @@ import gamedev.game.ResourcesManager;
 import gamedev.game.SceneManager;
 import gamedev.game.SceneManager.SceneType;
 import gamedev.game.TmxLevelLoader;
+import gamedev.objects.AnimatedObject.GameState;
 import gamedev.objects.Avatar;
 import gamedev.quests.Quest;
 import gamedev.quests.QuestBuildBridge;
@@ -138,6 +139,8 @@ public class GameMapScene extends BaseScene {
 					}
 					if (numberOfFinishedQuests == quests.size()) {
 						SceneManager.getInstance().loadGameEndScene(engine);
+						ResourcesManager.getInstance().avatar.setState(
+								GameState.IDLE, -1);
 					} else {
 						ResourcesManager.getInstance().activity
 								.toastOnUIThread(

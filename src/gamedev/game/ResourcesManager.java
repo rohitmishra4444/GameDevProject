@@ -149,6 +149,7 @@ public class ResourcesManager {
 	public Sound walk;
 	public Sound eat;
 	public Sound openChildScene;
+	public Sound questFinished;
 
 	// ---------------------------------------------
 	// Physic
@@ -254,7 +255,7 @@ public class ResourcesManager {
 		MusicFactory.setAssetBasePath("mfx/");
 		try {
 			backgroundMusicMenu = MusicFactory.createMusicFromAsset(
-					engine.getMusicManager(), activity, "Haply.ogg");
+					engine.getMusicManager(), activity, "menu_music.ogg");
 			backgroundMusicMenu.setVolume(0.2f);
 			backgroundMusicMenu.setLooping(true);
 		} catch (IllegalStateException e) {
@@ -586,7 +587,7 @@ public class ResourcesManager {
 		MusicFactory.setAssetBasePath("mfx/");
 		try {
 			backgroundMusicGame = MusicFactory.createMusicFromAsset(
-					engine.getMusicManager(), activity, "Soliloquy.mp3");
+					engine.getMusicManager(), activity, "game_music.ogg");
 			backgroundMusicGame.setVolume(0.5f);
 			backgroundMusicGame.setLooping(true);
 		} catch (IllegalStateException e) {
@@ -602,18 +603,27 @@ public class ResourcesManager {
 
 			hit = SoundFactory.createSoundFromAsset(soundManager, activity,
 					"hit.wav");
+
 			hit_false = SoundFactory.createSoundFromAsset(soundManager,
 					activity, "hit_false.wav");
+
 			collect = SoundFactory.createSoundFromAsset(soundManager, activity,
 					"collect.wav");
+
 			walk = SoundFactory.createSoundFromAsset(soundManager, activity,
 					"walk.wav");
-			walk.setVolume(0.9f);
+			walk.setVolume(0.7f);
+
 			eat = SoundFactory.createSoundFromAsset(soundManager, activity,
-					"eat.wav");
+					"eat.ogg");
+
 			openChildScene = SoundFactory.createSoundFromAsset(soundManager,
-					activity, "childscene.wav");
-			openChildScene.setVolume(0.05f);
+					activity, "childscene.ogg");
+			openChildScene.setVolume(0.2f);
+
+			questFinished = SoundFactory.createSoundFromAsset(soundManager,
+					activity, "quest_finished.ogg");
+			questFinished.setVolume(0.5f);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

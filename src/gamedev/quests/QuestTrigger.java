@@ -44,6 +44,7 @@ public class QuestTrigger extends Rectangle {
 				quest.setFinished(true);
 				this.setIgnoreUpdate(true);
 				ResourcesManager.getInstance().removeSpriteAndBody(this);
+				ResourcesManager.getInstance().questFinished.play();
 			}
 		} else if (!this.collidesWith(ResourcesManager.getInstance().avatar)) {
 			this.contact = false;
