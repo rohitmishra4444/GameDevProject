@@ -165,6 +165,7 @@ public class SceneManager {
 					public void onTimePassed(final TimerHandler pTimerHandler) {
 						mEngine.unregisterUpdateHandler(pTimerHandler);
 						setScene(introScene);
+						resourcesManager.backgroundMusicGame.resume();
 						disposeLoadingScene();
 					}
 				}));
@@ -216,7 +217,9 @@ public class SceneManager {
 					public void onTimePassed(final TimerHandler pTimerHandler) {
 						mEngine.unregisterUpdateHandler(pTimerHandler);
 						setScene(gameMapScene);
-						resourcesManager.backgroundMusicGame.resume();
+						if (!resourcesManager.backgroundMusicGame.isPlaying()) {
+							resourcesManager.backgroundMusicGame.resume();
+						}
 						disposeLoadingScene();
 					}
 				}));
@@ -236,6 +239,7 @@ public class SceneManager {
 					public void onTimePassed(final TimerHandler pTimerHandler) {
 						mEngine.unregisterUpdateHandler(pTimerHandler);
 						setScene(gameEndScene);
+						resourcesManager.backgroundMusicGame.resume();
 					}
 				}));
 	}
@@ -263,11 +267,13 @@ public class SceneManager {
 			resourcesManager.backgroundMusicGame.pause();
 		} else if (currentSceneType.equals(SceneType.SCENE_GAME_END)) {
 			disposeGameEndScene();
+			resourcesManager.backgroundMusicGame.pause();
 		} else if (currentSceneType.equals(SceneType.SCENE_MENU)) {
 			disposeMenuScene();
 			resourcesManager.backgroundMusicMenu.stop();
 		} else if (currentSceneType.equals(SceneType.SCENE_INTRO)) {
 			disposeGameIntroScene();
+			// resourcesManager.backgroundMusicGame.pause();
 		}
 
 		if (setLoadingSceneNeeded) {

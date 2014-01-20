@@ -141,8 +141,9 @@ public class ResourcesManager {
 	// ---------------------------------------------
 
 	public Music backgroundMusicMenu;
-
 	public Music backgroundMusicGame;
+
+	private boolean gameSoundsLoaded;
 	public Sound hit;
 	public Sound hit_false;
 	public Sound collect;
@@ -256,7 +257,7 @@ public class ResourcesManager {
 		try {
 			backgroundMusicMenu = MusicFactory.createMusicFromAsset(
 					engine.getMusicManager(), activity, "menu_music.ogg");
-			backgroundMusicMenu.setVolume(0.2f);
+			backgroundMusicMenu.setVolume(0.1f);
 			backgroundMusicMenu.setLooping(true);
 		} catch (IllegalStateException e) {
 			e.printStackTrace();
@@ -302,6 +303,7 @@ public class ResourcesManager {
 
 	public void loadGameIntroResources() {
 		loadGameIntroGraphics();
+		createGameMusic();
 	}
 
 	public void unloadGameIntroResources() {
@@ -571,7 +573,7 @@ public class ResourcesManager {
 	}
 
 	private void loadGameAudio() {
-		if (walk == null) {
+		if (gameSoundsLoaded == false) {
 			createGameSounds();
 		}
 		if (backgroundMusicGame == null) {
@@ -619,13 +621,16 @@ public class ResourcesManager {
 
 			openChildScene = SoundFactory.createSoundFromAsset(soundManager,
 					activity, "childscene.ogg");
-			openChildScene.setVolume(0.2f);
+			openChildScene.setVolume(0.4f);
 
 			questFinished = SoundFactory.createSoundFromAsset(soundManager,
 					activity, "quest_finished.ogg");
-			questFinished.setVolume(0.5f);
+			questFinished.setVolume(0.2f);
+
+			gameSoundsLoaded = true;
 		} catch (IOException e) {
 			e.printStackTrace();
+			gameSoundsLoaded = false;
 		}
 	}
 
