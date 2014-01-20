@@ -7,7 +7,9 @@ public class Pig extends AnimatedObject {
 	private final static int TILES_PER_LINE = 9;
 	private final static long[] ANIMATION_DURATION = { 60, 60, 60, 60, 60, 60, 60, 60, 60 };
 	private final static int FRAMES_PER_ANIMATION = ANIMATION_DURATION.length;
-
+	
+	protected boolean catched = false;
+	
 	public Pig(float x, float y) {
 		super(x, y, ResourcesManager.getInstance().pigRegion);
 		this.velocity = 5f;
@@ -27,7 +29,7 @@ public class Pig extends AnimatedObject {
 				&& (direction == -1 || direction == this.direction)) {
 			return;
 		}
-
+				
 		this.state = state;
 		if (direction != -1)
 			this.direction = direction;
@@ -37,16 +39,19 @@ public class Pig extends AnimatedObject {
 		switch (state) {
 		case IDLE:
 			this.body.setLinearVelocity(0, 0);
+			this.stopAnimation();
 			break;
 		default:
 			break;
 		}
-
-		int startTile = rowIndex * TILES_PER_LINE + this.direction
-				* FRAMES_PER_ANIMATION;
-		this.animate(ANIMATION_DURATION, startTile, startTile
-				+ FRAMES_PER_ANIMATION - 1, loopAnimation);
-
+		
+		if (this.state != GameState.IDLE) {
+			int startTile = rowIndex * TILES_PER_LINE + this.direction
+					* FRAMES_PER_ANIMATION;
+			this.animate(ANIMATION_DURATION, startTile, startTile
+					+ FRAMES_PER_ANIMATION - 1, loopAnimation);	
+		}
+		
 	}
 
 	@Override
@@ -54,9 +59,19 @@ public class Pig extends AnimatedObject {
 		if (!super.onCustomUpdate(pSecondsElapsed)) {
 			return false;
 		} else {
-			this.moveStrategy.update(pSecondsElapsed);
+			if (this.moveStrategy != null) {
+				this.moveStrategy.update(pSecondsElapsed);				
+			}
 			return true;
 		}
+	}
+
+	public boolean isCatched() {
+		return catched;
+	}
+
+	public void setCatched(boolean catched) {
+		this.catched = catched;
 	}
 
 }

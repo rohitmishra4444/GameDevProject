@@ -1,5 +1,6 @@
 package gamedev.game;
 
+import gamedev.ai.FollowPlayerStrategy;
 import gamedev.game.GameActivity.GameMode;
 import gamedev.objects.AnimatedObject.GameState;
 import gamedev.objects.Berry;
@@ -107,14 +108,14 @@ public class BodiesContactListener implements ContactListener,
 					&& x2.getBody().getUserData().equals("Avatar")) {
 				pig = (Pig) x1.getBody().getUserData();
 			}
-			if (pig != null) {
+			if (pig != null && !pig.isCatched()) {
 				// Catched the Pig!
-				resourcesManager.removeSpriteAndBody(pig);
-				resourcesManager.activity.toastOnUIThread(
-						"Yes! Catched the pig... I need to bring it back.",
-						Toast.LENGTH_SHORT);
+//				resourcesManager.removeSpriteAndBody(pig);
+				resourcesManager.activity.toastOnUIThread("Gotcha!", Toast.LENGTH_SHORT);
 				resourcesManager.collect.play();
-				currentMapScene.getQuest(1).setCompleted(true);
+//				currentMapScene.getQuest(1).setCompleted(true);
+				pig.setCatched(true);
+				pig.setMoveStrategy(new FollowPlayerStrategy(pig, 1000, true));
 			}
 		}
 

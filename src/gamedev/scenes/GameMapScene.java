@@ -9,6 +9,7 @@ import gamedev.objects.Avatar;
 import gamedev.quests.Quest;
 import gamedev.quests.QuestBuildBridge;
 import gamedev.quests.QuestCatchPig;
+import gamedev.quests.QuestPassCanyon;
 
 import java.util.ArrayList;
 
@@ -116,6 +117,7 @@ public class GameMapScene extends BaseScene {
 	public void createQuests() {
 		this.quests.add(new QuestBuildBridge(this));
 		this.quests.add(new QuestCatchPig(this));
+		this.quests.add(new QuestPassCanyon(this));
 	}
 
 	private void createGameEndPortal() {

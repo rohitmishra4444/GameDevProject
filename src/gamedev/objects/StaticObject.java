@@ -32,4 +32,8 @@ abstract class StaticObject extends Sprite {
 	 */
 	abstract protected void createPhysics();
 	
+	public Body getBody() {
+		return this.body;
+	}
+	
 }
