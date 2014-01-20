@@ -143,6 +143,8 @@ public class SceneHUD extends HUD {
 						int currentEnergy = resourcesManager.avatar.getEnergy();
 						resourcesManager.avatar.setEnergy(currentEnergy
 								+ energyAdditionFromBerry);
+						// Feedback:
+						ResourcesManager.getInstance().eat.play();
 					}
 
 					return true;
@@ -183,6 +185,8 @@ public class SceneHUD extends HUD {
 				this.registerEntityModifier(new SequenceEntityModifier(
 						new ScaleModifier(0.25f, 1.25f, 1f), new ScaleModifier(
 								0.25f, 1f, 1.25f)));
+				// Feedback:
+				ResourcesManager.getInstance().openChildScene.play();
 
 				ShopScene shopScene = new ShopScene();
 				shopScene.openShopScene();
@@ -210,6 +214,8 @@ public class SceneHUD extends HUD {
 				this.registerEntityModifier(new SequenceEntityModifier(
 						new ScaleModifier(0.25f, 1.25f, 1f), new ScaleModifier(
 								0.25f, 1f, 1.25f)));
+				// Feedback:
+				ResourcesManager.getInstance().openChildScene.play();
 
 				QuestScene questScene = new QuestScene();
 				questScene.openQuestScene();
@@ -232,6 +238,8 @@ public class SceneHUD extends HUD {
 				this.registerEntityModifier(new SequenceEntityModifier(
 						new ScaleModifier(0.25f, 1.25f, 1f), new ScaleModifier(
 								0.25f, 1f, 1.25f)));
+				// Feedback:
+				ResourcesManager.getInstance().openChildScene.play();
 
 				HelpScene helpScene = new HelpScene();
 				helpScene.openHelpScene();

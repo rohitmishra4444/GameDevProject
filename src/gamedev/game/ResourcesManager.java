@@ -147,6 +147,8 @@ public class ResourcesManager {
 	public Sound hit_false;
 	public Sound collect;
 	public Sound walk;
+	public Sound eat;
+	public Sound openChildScene;
 
 	// ---------------------------------------------
 	// Physic
@@ -253,6 +255,8 @@ public class ResourcesManager {
 		try {
 			backgroundMusicMenu = MusicFactory.createMusicFromAsset(
 					engine.getMusicManager(), activity, "Haply.ogg");
+			backgroundMusicMenu.setVolume(0.2f);
+			backgroundMusicMenu.setLooping(true);
 		} catch (IllegalStateException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -583,6 +587,8 @@ public class ResourcesManager {
 		try {
 			backgroundMusicGame = MusicFactory.createMusicFromAsset(
 					engine.getMusicManager(), activity, "Soliloquy.mp3");
+			backgroundMusicGame.setVolume(0.5f);
+			backgroundMusicGame.setLooping(true);
 		} catch (IllegalStateException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -602,6 +608,12 @@ public class ResourcesManager {
 					"collect.wav");
 			walk = SoundFactory.createSoundFromAsset(soundManager, activity,
 					"walk.wav");
+			walk.setVolume(0.9f);
+			eat = SoundFactory.createSoundFromAsset(soundManager, activity,
+					"eat.wav");
+			openChildScene = SoundFactory.createSoundFromAsset(soundManager,
+					activity, "childscene.wav");
+			openChildScene.setVolume(0.05f);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

@@ -3,6 +3,7 @@ package gamedev.objects;
 import gamedev.game.Direction;
 import gamedev.game.ResourcesManager;
 
+import org.andengine.audio.sound.Sound;
 import org.andengine.engine.handler.physics.PhysicsHandler;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
@@ -65,10 +66,7 @@ public class Avatar extends AnimatedObject {
 		case RUNNING:
 			rowIndex = 8;
 			loopAnimation = true;
-			resourcesManager.walk.stop();
-			resourcesManager.walk.setRate(1.5f);
-			resourcesManager.walk.setLooping(true);
-			resourcesManager.walk.play();
+			playSound(resourcesManager.walk, 1.2f, true);
 			break;
 		case TIPPING_OVER:
 			rowIndex = 12;
@@ -77,10 +75,7 @@ public class Avatar extends AnimatedObject {
 		case WALKING:
 			rowIndex = 16;
 			loopAnimation = true;
-			resourcesManager.walk.stop();
-			resourcesManager.walk.setRate(1);
-			resourcesManager.walk.setLooping(true);
-			resourcesManager.walk.play();
+			playSound(resourcesManager.walk, 1f, true);
 			break;
 		default:
 			return;
@@ -90,6 +85,13 @@ public class Avatar extends AnimatedObject {
 				* FRAMES_PER_ANIMATION;
 		this.animate(ANIMATION_DURATION, startTile, startTile
 				+ FRAMES_PER_ANIMATION - 1, loopAnimation);
+	}
+
+	private void playSound(Sound sound, float rate, boolean loop) {
+		sound.stop();
+		sound.setRate(rate);
+		sound.setLooping(loop);
+		sound.play();
 	}
 
 	public void attack(int damage) {
