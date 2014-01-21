@@ -93,9 +93,8 @@ public class QuestScene extends CameraScene {
 
 			Text text = new Text(X_POSITION + 65, Y_POSITION_MIN + i
 					* GAP_BETWEEN_QUESTS, resourcesManager.font,
-//					quest.getDescription(), quest.getDescription().length(),
-					quest.getTitle(),
-					resourcesManager.vbom);
+			// quest.getDescription(), quest.getDescription().length(),
+					quest.getTitle(), resourcesManager.vbom);
 			attachChild(text);
 		}
 
@@ -109,10 +108,13 @@ public class QuestScene extends CameraScene {
 			sprite.setScale(0.8f);
 			attachChild(sprite);
 
-			Text text = new Text(X_POSITION + 65, Y_POSITION_MIN
-					+ (i + activeQuests.size()) * GAP_BETWEEN_QUESTS,
-//					resourcesManager.font, quest.getDescription(), quest.getDescription().length(), resourcesManager.vbom);
-			resourcesManager.font, quest.getTitle(), quest.getDescription().length(), resourcesManager.vbom);
+			Text text = new Text(X_POSITION + 65,
+					Y_POSITION_MIN + (i + activeQuests.size())
+							* GAP_BETWEEN_QUESTS,
+					// resourcesManager.font, quest.getDescription(),
+					// quest.getDescription().length(), resourcesManager.vbom);
+					resourcesManager.font, quest.getTitle(),
+					resourcesManager.vbom);
 
 			attachChild(text);
 		}
