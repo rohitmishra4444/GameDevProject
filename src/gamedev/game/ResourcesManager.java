@@ -113,6 +113,10 @@ public class ResourcesManager {
 	public ITextureRegion shopRegion;
 	private BitmapTextureAtlas shopTextureAtlas;
 
+	// Textures for game help scene
+	public ArrayList<BitmapTextureAtlas> helpTextureAtlas;
+	public ArrayList<ITextureRegion> helpRegion;
+
 	// Textures for menu scene
 	public ITextureRegion menu_background_region;
 	public ITiledTextureRegion menu_buttons_region;
@@ -140,7 +144,6 @@ public class ResourcesManager {
 	public BitmapTextureAtlas axeAtlas;
 	public ITextureRegion axeRegion;
 
-	
 	// ---------------------------------------------
 	// Sound and music
 	// ---------------------------------------------
@@ -339,7 +342,6 @@ public class ResourcesManager {
 		if (game_intro_atlas == null) {
 			createGameIntroGraphics();
 		}
-
 		for (BitmapTextureAtlas atlas : game_intro_atlas) {
 			atlas.load();
 		}
@@ -458,7 +460,6 @@ public class ResourcesManager {
 		this.treeRegion = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(treeAtlas, activity, "tree.png", 0, 0);
 
-		
 		this.oldCavemanAtlas = new BitmapTextureAtlas(textureManager, 36, 35,
 				TextureOptions.DEFAULT);
 
@@ -685,7 +686,53 @@ public class ResourcesManager {
 	}
 
 	// ---------------------------------------------
-	// Game shop resources
+	// GameHelp resources
+	// ---------------------------------------------
+
+	public void loadGameHelpResources() {
+		loadGameHelpGraphics();
+	}
+
+	public void unloadGameHelpResources() {
+		unloadGameHelpGraphics();
+	}
+
+	private void createGameHelpGraphics() {
+		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/help/");
+
+		helpTextureAtlas = new ArrayList<BitmapTextureAtlas>();
+		helpRegion = new ArrayList<ITextureRegion>();
+
+		for (int i = 0; i < 2; i++) {
+			BitmapTextureAtlas atlas = new BitmapTextureAtlas(textureManager,
+					800, 480, BitmapTextureFormat.RGBA_4444);
+			helpTextureAtlas.add(i, atlas);
+
+			String fileName = "help_0" + (i + 1) + ".png";
+
+			ITextureRegion region = BitmapTextureAtlasTextureRegionFactory
+					.createFromAsset(atlas, activity, fileName, 0, 0);
+			helpRegion.add(i, region);
+		}
+	}
+
+	private void loadGameHelpGraphics() {
+		if (helpTextureAtlas == null) {
+			createGameHelpGraphics();
+		}
+		for (BitmapTextureAtlas atlas : helpTextureAtlas) {
+			atlas.load();
+		}
+	}
+
+	private void unloadGameHelpGraphics() {
+		for (BitmapTextureAtlas atlas : helpTextureAtlas) {
+			atlas.unload();
+		}
+	}
+
+	// ---------------------------------------------
+	// GameShop resources
 	// ---------------------------------------------
 
 	public void loadGameShopResources() {

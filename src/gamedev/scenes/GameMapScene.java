@@ -45,20 +45,6 @@ public class GameMapScene extends BaseScene {
 	public void createScene() {
 		createMap();
 		connectPhysics();
-
-		// if (resourcesManager.avatar != null) {
-		// // Check if the player is already has a parent (avoid
-		// // assertEntityHasNoParent IllegalStateException)
-		// // This is needed for the back button during gameplay (for
-		// // restarting a
-		// // new game).
-		// if (resourcesManager.avatar.hasParent()) {
-		// IEntity parentEntity = resourcesManager.avatar.getParent();
-		// parentEntity.detachChild(resourcesManager.avatar);
-		// }
-		// attachChild(resourcesManager.avatar);
-		// }
-
 		createQuests();
 	}
 

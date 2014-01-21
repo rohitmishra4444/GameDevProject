@@ -5,6 +5,7 @@ import gamedev.game.SceneManager.SceneType;
 
 import org.andengine.engine.camera.Camera;
 import org.andengine.entity.modifier.FadeInModifier;
+import org.andengine.entity.modifier.FadeOutModifier;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.Sprite;
@@ -14,6 +15,9 @@ import org.andengine.opengl.util.GLState;
 import org.andengine.util.HorizontalAlign;
 
 public class GameEndScene extends BaseScene {
+
+	private static final float FADE_IN_DURATION = 1f;
+	private static final float FADE_OUT_DURATION = 0.5f;
 
 	private static final String gameEndString = "Congratulations! " + "\n"
 			+ "The portal was working properly and you returned to your era."
@@ -43,6 +47,8 @@ public class GameEndScene extends BaseScene {
 				/ 2, camera.getCenterY() - gameEndText.getHeight() / 2);
 		gameEndText.setHorizontalAlign(HorizontalAlign.CENTER);
 		attachChild(gameEndText);
+		gameEndText
+				.registerEntityModifier(new FadeInModifier(FADE_IN_DURATION));
 
 		gameEndSprite = new Sprite(centerX, centerY,
 				resourcesManager.game_end_region.getWidth(),
@@ -74,25 +80,38 @@ public class GameEndScene extends BaseScene {
 				if (pSceneTouchEvent.isActionDown()) {
 
 					if (gameEndText.hasParent()) {
-						gameEndText.detachSelf();
+						gameEndText.registerEntityModifier(new FadeOutModifier(
+								FADE_OUT_DURATION));
+						detachViaUpdateHandlerAfterTime(gameEndText,
+								FADE_OUT_DURATION);
 
 						attachChild(gameEndSprite);
 						gameEndSprite
-								.registerEntityModifier(new FadeInModifier(1f));
+								.registerEntityModifier(new FadeInModifier(
+										FADE_IN_DURATION));
 						return true;
 					}
 
 					if (gameEndSprite.hasParent()) {
-						gameEndSprite.detachSelf();
+						gameEndSprite
+								.registerEntityModifier(new FadeOutModifier(
+										FADE_OUT_DURATION));
+						detachViaUpdateHandlerAfterTime(gameEndSprite,
+								FADE_OUT_DURATION);
 
 						attachChild(gameDevelopersText);
 						gameDevelopersText
-								.registerEntityModifier(new FadeInModifier(1f));
+								.registerEntityModifier(new FadeInModifier(
+										FADE_IN_DURATION));
 						return true;
 					}
 
 					if (gameDevelopersText.hasParent()) {
-						gameDevelopersText.detachSelf();
+						gameDevelopersText
+								.registerEntityModifier(new FadeOutModifier(
+										FADE_OUT_DURATION));
+						detachViaUpdateHandlerAfterTime(gameDevelopersText,
+								FADE_OUT_DURATION);
 
 						SceneManager.getInstance().loadMenuScene(engine);
 						SceneManager.getInstance().deleteCurrentGameMapScene();

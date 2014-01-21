@@ -15,10 +15,12 @@ import org.andengine.opengl.util.GLState;
 
 public class ShopScene extends CameraScene {
 
+	private static ShopScene instance;
 	private ResourcesManager resourcesManager = ResourcesManager.getInstance();
+
 	private Sprite background;
 
-	public ShopScene() {
+	private ShopScene() {
 		super(ResourcesManager.getInstance().camera);
 		this.setBackgroundEnabled(false);
 
@@ -60,6 +62,13 @@ public class ShopScene extends CameraScene {
 		if (!this.isDisposed()) {
 			this.dispose();
 		}
+	}
+
+	public static ShopScene getInstance() {
+		if (instance == null) {
+			instance = new ShopScene();
+		}
+		return instance;
 	}
 
 }
