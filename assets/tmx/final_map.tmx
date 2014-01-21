@@ -20839,6 +20839,7 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
+   <tile gid="328"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -21151,6 +21152,7 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
+   <tile gid="328"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -21625,6 +21627,7 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
+   <tile gid="328"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -22443,6 +22446,7 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
+   <tile gid="328"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -23024,11 +23028,7 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
+   <tile gid="328"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -25023,7 +25023,13 @@
    <tile gid="0"/>
   </data>
  </layer>
- <objectgroup name="BerryBushes" width="100" height="50"/>
+ <objectgroup name="BerryBushes" width="100" height="50">
+  <object x="1007" y="368"/>
+  <object x="592" y="271"/>
+  <object x="207" y="526"/>
+  <object x="815" y="784"/>
+  <object x="240" y="974"/>
+ </objectgroup>
  <objectgroup name="Walls" width="100" height="50">
   <object x="1050" y="116" width="6" height="502"/>
   <object x="66" y="113" width="979" height="6"/>
@@ -25134,6 +25140,8 @@
   <object name="1" x="995" y="643" width="47" height="54"/>
   <object name="2" x="1528" y="1137" width="81" height="41"/>
   <object name="3" x="2091" y="188" width="96" height="113"/>
+  <object name="avatar" x="122" y="215" width="16" height="14"/>
+  <object name="portal" x="3056" y="103" width="32" height="25"/>
  </objectgroup>
  <objectgroup name="Spiders" width="100" height="50">
   <object x="563" y="462" width="10" height="11"/>

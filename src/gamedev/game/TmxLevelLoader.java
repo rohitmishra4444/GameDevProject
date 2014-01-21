@@ -5,13 +5,16 @@ import gamedev.ai.MoveStrategy;
 import gamedev.ai.RandomMoveStrategy;
 import gamedev.ai.WaypointMoveStrategy;
 import gamedev.objects.AnimatedObject;
+import gamedev.objects.Avatar;
 import gamedev.objects.BerryBush;
 import gamedev.objects.Dinosaur;
+import gamedev.objects.GameEndPortal;
 import gamedev.objects.Spider;
 import gamedev.quests.QuestTrigger;
 
 import java.util.ArrayList;
 
+import org.andengine.entity.IEntity;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.Scene;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
@@ -66,8 +69,6 @@ public class TmxLevelLoader {
 				this.createQuestTriggers(group.getTMXObjects());
 			}
 		}
-
-		// TODO: Create portal object from tmx map.
 	}
 
 	private void createSpiders(ArrayList<TMXObject> objects) {
@@ -83,11 +84,37 @@ public class TmxLevelLoader {
 
 	protected void createQuestTriggers(ArrayList<TMXObject> tmxObjects) {
 		for (final TMXObject object : tmxObjects) {
-			int id = Integer.parseInt(object.getName());
-			// System.out.println("Quest-ID: " + object.getName());
-			QuestTrigger q = new QuestTrigger(id, object.getX(), object.getY(),
-					object.getWidth(), object.getHeight());
-			this.scene.attachChild(q);
+			if (object.getName().equals("avatar")) {
+				float x = object.getX();
+				float y = object.getY();
+
+				if (resourcesManager.avatar == null) {
+					System.out.println("Avatar is null!");
+					resourcesManager.avatar = new Avatar();
+				}
+				resourcesManager.avatar.getBody().setTransform(x / 32, y / 32,
+						0);
+				// Check if the player is already has a parent (avoid
+				// assertEntityHasNoParent IllegalStateException)
+				// This is needed for the back button during gameplay (for
+				// restarting a
+				// new game).
+				if (resourcesManager.avatar.hasParent()) {
+					IEntity parentEntity = resourcesManager.avatar.getParent();
+					parentEntity.detachChild(resourcesManager.avatar);
+				}
+				this.scene.attachChild(resourcesManager.avatar);
+			} else if (object.getName().equals("portal")) {
+				GameEndPortal portal = new GameEndPortal(object.getX(),
+						object.getY());
+				this.scene.attachChild(portal);
+			} else {
+				int id = Integer.parseInt(object.getName());
+				// System.out.println("Quest-ID: " + object.getName());
+				QuestTrigger q = new QuestTrigger(id, object.getX(),
+						object.getY(), object.getWidth(), object.getHeight());
+				this.scene.attachChild(q);
+			}
 		}
 	}
 
