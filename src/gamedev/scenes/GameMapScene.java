@@ -1,11 +1,8 @@
 package gamedev.scenes;
 
-import gamedev.game.ResourcesManager;
 import gamedev.game.SceneManager;
 import gamedev.game.SceneManager.SceneType;
 import gamedev.game.TmxLevelLoader;
-import gamedev.objects.AnimatedObject.GameState;
-import gamedev.objects.Avatar;
 import gamedev.quests.Quest;
 import gamedev.quests.QuestBuildBridge;
 import gamedev.quests.QuestCatchPig;
@@ -13,8 +10,6 @@ import gamedev.quests.QuestPassCanyon;
 
 import java.util.ArrayList;
 
-import org.andengine.entity.IEntity;
-import org.andengine.entity.sprite.Sprite;
 import org.andengine.extension.tmx.TMXLayer;
 import org.andengine.extension.tmx.TMXLoader;
 import org.andengine.extension.tmx.TMXLoader.ITMXTilePropertiesListener;
@@ -26,8 +21,6 @@ import org.andengine.extension.tmx.util.exception.TMXLoadException;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.util.debug.Debug;
 
-import android.widget.Toast;
-
 /**
  * Base class for all levels
  * 
@@ -37,9 +30,6 @@ public class GameMapScene extends BaseScene {
 	// TMX Map containing the Level
 	protected TMXTiledMap mTMXTiledMap;
 	protected String tmxFileName;
-
-	private Sprite gameEndPortal;
-	private boolean gameEndPortalContact = false;
 
 	protected ArrayList<Quest> quests = new ArrayList<Quest>();
 
@@ -53,26 +43,9 @@ public class GameMapScene extends BaseScene {
 
 	@Override
 	public void createScene() {
-		this.createMap();
-		this.connectPhysics();
-
-		if (resourcesManager.avatar == null) {
-			System.out.println("Avatar is null!");
-			resourcesManager.avatar = new Avatar();
-		}
-
-		// Check if the player is already has a parent (avoid
-		// assertEntityHasNoParent IllegalStateException)
-		// This is needed for the back button during gameplay (for restarting a
-		// new game).
-		if (resourcesManager.avatar.hasParent()) {
-			IEntity parentEntity = resourcesManager.avatar.getParent();
-			parentEntity.detachChild(resourcesManager.avatar);
-		}
-		resourcesManager.avatar.getBody().setTransform(200 / 32, 200 / 32, 0);
-		this.attachChild(resourcesManager.avatar);
+		createMap();
+		connectPhysics();
 		createQuests();
-		createGameEndPortal();
 	}
 
 	protected void connectPhysics() {
@@ -118,46 +91,6 @@ public class GameMapScene extends BaseScene {
 		this.quests.add(new QuestBuildBridge(this));
 		this.quests.add(new QuestCatchPig(this));
 		this.quests.add(new QuestPassCanyon(this));
-	}
-
-	private void createGameEndPortal() {
-		// TODO: Game end portal should be created in TmxLevelLoader class. This
-		// will be done by dwettstein.
-		// This is only for testing the GameEndScene.
-		gameEndPortal = new Sprite(1500, 300,
-				resourcesManager.gameEndPortalRegion, vbom) {
-			@Override
-			protected void onManagedUpdate(float pSecondsElapsed) {
-				super.onManagedUpdate(pSecondsElapsed);
-				if (resourcesManager.avatar.collidesWith(this)
-						&& gameEndPortalContact == false) {
-					gameEndPortalContact = true;
-
-					int numberOfFinishedQuests = 0;
-					for (Quest quest : quests) {
-						if (quest.isFinished()) {
-							numberOfFinishedQuests++;
-						}
-					}
-					if (numberOfFinishedQuests == quests.size()) {
-						SceneManager.getInstance().loadGameEndScene(engine);
-						ResourcesManager.getInstance().avatar.setState(
-								GameState.IDLE, -1);
-					} else {
-						ResourcesManager.getInstance().activity
-								.toastOnUIThread(
-										"Hmm... the portal is not working. Did I complete all quests?",
-										Toast.LENGTH_SHORT);
-					}
-				} else if (!this
-						.collidesWith(ResourcesManager.getInstance().avatar)) {
-					gameEndPortalContact = false;
-				}
-			}
-		};
-		gameEndPortal.setAlpha(0.8f);
-		gameEndPortal.setScale(0.5f);
-		this.attachChild(gameEndPortal);
 	}
 
 	@Override

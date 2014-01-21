@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import org.andengine.engine.camera.Camera;
 import org.andengine.entity.modifier.FadeInModifier;
+import org.andengine.entity.modifier.FadeOutModifier;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.Sprite;
@@ -17,6 +18,9 @@ import org.andengine.opengl.util.GLState;
 import org.andengine.util.HorizontalAlign;
 
 public class GameIntroScene extends BaseScene {
+
+	private static final float FADE_IN_DURATION = 1f;
+	private static final float FADE_OUT_DURATION = 0.5f;
 
 	private static final String string0 = "Once a day," + "\n"
 			+ "in the modern world of today..." + "\n\n\n" + "Tap...";
@@ -80,35 +84,46 @@ public class GameIntroScene extends BaseScene {
 				if (pSceneTouchEvent.isActionDown()) {
 
 					if (gameIntroTexts.get(nextText - 1).hasParent()) {
-						Text oldText = gameIntroTexts.get(nextText - 1);
-						oldText.detachSelf();
+						final Text oldText = gameIntroTexts.get(nextText - 1);
+						oldText.registerEntityModifier(new FadeOutModifier(
+								FADE_OUT_DURATION));
+						detachViaUpdateHandlerAfterTime(oldText,
+								FADE_OUT_DURATION);
 
 						Sprite newSprite = gameIntroSprites.get(nextSprite);
 						attachChild(newSprite);
-						newSprite
-								.registerEntityModifier(new FadeInModifier(1f));
+						newSprite.registerEntityModifier(new FadeInModifier(
+								FADE_IN_DURATION));
 						nextSprite++;
 						return true;
 					}
 
 					// Show the GameMapScene if last sprite was touched, else
-					// show
-					// the next text.
+					// show the next text.
 					if (gameIntroSprites.get(gameIntroSprites.size() - 1)
 							.hasParent()) {
-						Sprite oldSprite = gameIntroSprites
+						final Sprite oldSprite = gameIntroSprites
 								.get(gameIntroSprites.size() - 1);
-						oldSprite.detachSelf();
+						oldSprite.registerEntityModifier(new FadeOutModifier(
+								FADE_OUT_DURATION));
+						detachViaUpdateHandlerAfterTime(oldSprite,
+								FADE_OUT_DURATION);
 
 						SceneManager.getInstance().createGameMapScene(engine,
 								false);
 						return true;
 					} else if (gameIntroSprites.get(nextSprite - 1).hasParent()) {
-						Sprite oldSprite = gameIntroSprites.get(nextSprite - 1);
-						oldSprite.detachSelf();
+						final Sprite oldSprite = gameIntroSprites
+								.get(nextSprite - 1);
+						oldSprite.registerEntityModifier(new FadeOutModifier(
+								FADE_OUT_DURATION));
+						detachViaUpdateHandlerAfterTime(oldSprite,
+								FADE_OUT_DURATION);
 
 						Text newText = gameIntroTexts.get(nextText);
 						attachChild(newText);
+						newText.registerEntityModifier(new FadeInModifier(
+								FADE_IN_DURATION));
 						nextText++;
 						return true;
 					}
@@ -131,6 +146,20 @@ public class GameIntroScene extends BaseScene {
 
 	@Override
 	public void disposeScene() {
+		for (Sprite sprite : gameIntroSprites) {
+			sprite.detachSelf();
+			sprite.clearEntityModifiers();
+			if (!sprite.isDisposed()) {
+				sprite.dispose();
+			}
+		}
+		for (Text text : gameIntroTexts) {
+			text.detachSelf();
+			text.clearEntityModifiers();
+			if (!text.isDisposed()) {
+				text.dispose();
+			}
+		}
 		this.detachSelf();
 		if (!this.isDisposed()) {
 			this.dispose();

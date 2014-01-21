@@ -1,14 +1,11 @@
 package gamedev.quests;
 
 import gamedev.game.ResourcesManager;
-import gamedev.objects.Avatar;
 import gamedev.objects.Inventory;
 import gamedev.objects.Tree;
-import gamedev.objects.Wood;
 import gamedev.scenes.GameMapScene;
 
 import org.andengine.entity.primitive.Rectangle;
-import org.andengine.entity.sprite.Sprite;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 
@@ -24,28 +21,29 @@ public class QuestPassCanyon extends Quest {
 	private final static float RECTANGLE_Y = 5 * 32;
 	private final static float RECTANGLE_HEIGHT = 175;
 	private final static float RECTANGLE_WIDTH = 10;
-	
+
 	protected Body body;
 	protected Rectangle rectangle;
 	protected Tree tree;
 	protected Tree tree2;
-	
+
 	public QuestPassCanyon(GameMapScene map) {
 		super(map);
 		this.title = "Find a way through the canyon";
 		this.description = "I need something to destroy those trees!";
-		
+
 		ResourcesManager res = ResourcesManager.getInstance();
-		
+
 		// Body and trees
-		this.rectangle = new Rectangle(RECTANGLE_X, RECTANGLE_Y, RECTANGLE_WIDTH, RECTANGLE_HEIGHT, res.vbom);
-		final FixtureDef boxFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0);
+		this.rectangle = new Rectangle(RECTANGLE_X, RECTANGLE_Y,
+				RECTANGLE_WIDTH, RECTANGLE_HEIGHT, res.vbom);
+		final FixtureDef boxFixtureDef = PhysicsFactory.createFixtureDef(0, 0,
+				0);
 		this.body = PhysicsFactory.createBoxBody(res.physicsWorld,
 				this.rectangle, BodyType.StaticBody, boxFixtureDef);
 		res.physicsWorld.registerPhysicsConnector(new PhysicsConnector(
 				rectangle, body, false, false));
 		map.attachChild(rectangle);
-		
 		this.tree = new Tree(68*32, 4.5f*32);
 		this.tree2 = new Tree(68*32, 6f*32);
 		this.map.attachChild(tree);
@@ -62,25 +60,25 @@ public class QuestPassCanyon extends Quest {
 	public void onFinish() {
 		ResourcesManager.getInstance().removeSpriteAndBody(rectangle);
 		ResourcesManager.getInstance().removeSpriteAndBody(tree);
-		ResourcesManager.getInstance().removeSpriteAndBody(tree2);		
+		ResourcesManager.getInstance().removeSpriteAndBody(tree2);
 	}
 
 	@Override
 	public String getStatus() {
-		return "I need a tool to destroy the trees... let's keep seraching!";
+		return "I need a tool to destroy the trees... let's keep searching!";
 	}
 
 	@Override
 	public boolean isCompleted() {
-		Inventory inventory = ResourcesManager.getInstance().avatar.getInventory();
+		Inventory inventory = ResourcesManager.getInstance().avatar
+				.getInventory();
 		QuestCatchPig quest = (QuestCatchPig) this.map.getQuest(1);
 		return inventory.contains(quest.getAxe());
-		//		return true;
+		// return true;
 	}
 
 	public Rectangle getRectangle() {
 		return this.rectangle;
 	}
-	
 
 }

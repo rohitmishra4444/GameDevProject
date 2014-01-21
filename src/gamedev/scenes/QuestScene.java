@@ -10,32 +10,32 @@ import java.util.ArrayList;
 
 import org.andengine.engine.camera.Camera;
 import org.andengine.entity.IEntity;
+import org.andengine.entity.modifier.FadeInModifier;
 import org.andengine.entity.scene.CameraScene;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
-import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.util.GLState;
-import org.andengine.util.color.Color;
 
 import android.widget.Toast;
 
 public class QuestScene extends CameraScene {
 
+	private static QuestScene instance;
 	private ResourcesManager resourcesManager = ResourcesManager.getInstance();
+
+	private static final float FADE_IN_DURATION = 1f;
 
 	private Sprite background;
 	private static final int X_POSITION = 125;
 	private static final int Y_POSITION_MIN = 110;
 	private static final int GAP_BETWEEN_QUESTS = 50;
 
-	public QuestScene() {
+	private QuestScene() {
 		super(ResourcesManager.getInstance().camera);
 		this.setBackgroundEnabled(false);
-		Background backgroundColor = new Background(new Color(0f, 0f, 0f, 0.5f));
-		this.setBackground(backgroundColor);
 
 		background = new Sprite(0, 0, resourcesManager.questFrameRegion,
 				resourcesManager.vbom) {
@@ -48,7 +48,6 @@ public class QuestScene extends CameraScene {
 		background.setScaleX(1.6f);
 		background.setScaleY(1.1f);
 		centerShapeInCamera(background);
-		attachChild(background);
 
 		this.setOnSceneTouchListener(new IOnSceneTouchListener() {
 			@Override
@@ -60,7 +59,6 @@ public class QuestScene extends CameraScene {
 				return true;
 			}
 		});
-
 	}
 
 	private void addCurrentQuestsToScene() {
@@ -93,9 +91,7 @@ public class QuestScene extends CameraScene {
 
 			Text text = new Text(X_POSITION + 65, Y_POSITION_MIN + i
 					* GAP_BETWEEN_QUESTS, resourcesManager.font,
-//					quest.getDescription(), quest.getDescription().length(),
-					quest.getTitle(),
-					resourcesManager.vbom);
+					quest.getTitle(), resourcesManager.vbom);
 			attachChild(text);
 		}
 
@@ -111,18 +107,20 @@ public class QuestScene extends CameraScene {
 
 			Text text = new Text(X_POSITION + 65, Y_POSITION_MIN
 					+ (i + activeQuests.size()) * GAP_BETWEEN_QUESTS,
-//					resourcesManager.font, quest.getDescription(), quest.getDescription().length(), resourcesManager.vbom);
-			resourcesManager.font, quest.getTitle(), quest.getDescription().length(), resourcesManager.vbom);
+					resourcesManager.font, quest.getTitle(),
+					resourcesManager.vbom);
 
 			attachChild(text);
 		}
 	}
 
 	public void openQuestScene() {
+		GameActivity.mode = GameMode.POPUP;
 		resourcesManager.loadQuestSceneGraphics();
 		resourcesManager.unloadHUDResources();
 		SceneManager.getInstance().getCurrentGameMapScene().setChildScene(this);
-		GameActivity.mode = GameMode.POPUP;
+		attachChild(background);
+		background.registerEntityModifier(new FadeInModifier(FADE_IN_DURATION));
 		addCurrentQuestsToScene();
 	}
 
@@ -135,6 +133,7 @@ public class QuestScene extends CameraScene {
 		for (int i = 0; i < this.getChildCount(); i++) {
 			IEntity entity = this.getChildByIndex(i);
 			entity.detachSelf();
+			entity.clearEntityModifiers();
 			if (!entity.isDisposed()) {
 				entity.dispose();
 			}
@@ -143,6 +142,13 @@ public class QuestScene extends CameraScene {
 		if (!this.isDisposed()) {
 			this.dispose();
 		}
+	}
+
+	public static QuestScene getInstance() {
+		if (instance == null) {
+			instance = new QuestScene();
+		}
+		return instance;
 	}
 
 }

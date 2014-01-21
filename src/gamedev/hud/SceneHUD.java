@@ -76,7 +76,7 @@ public class SceneHUD extends HUD {
 		createDPadControls();
 		createSprintButton();
 		createQuestButton();
-		// createHelpButton();
+		createHelpButton();
 		// createShopButton();
 		createBerriesAndButton();
 	}
@@ -188,7 +188,7 @@ public class SceneHUD extends HUD {
 				// Feedback:
 				ResourcesManager.getInstance().openChildScene.play();
 
-				ShopScene shopScene = new ShopScene();
+				ShopScene shopScene = ShopScene.getInstance();
 				shopScene.openShopScene();
 				// TODO: Remove.
 				resourcesManager.activity.toastOnUIThread(
@@ -217,7 +217,7 @@ public class SceneHUD extends HUD {
 				// Feedback:
 				ResourcesManager.getInstance().openChildScene.play();
 
-				QuestScene questScene = new QuestScene();
+				QuestScene questScene = QuestScene.getInstance();
 				questScene.openQuestScene();
 				return true;
 			};
@@ -241,12 +241,8 @@ public class SceneHUD extends HUD {
 				// Feedback:
 				ResourcesManager.getInstance().openChildScene.play();
 
-				HelpScene helpScene = new HelpScene();
+				HelpScene helpScene = HelpScene.getInstance();
 				helpScene.openHelpScene();
-				// TODO: Remove toast.
-				resourcesManager.activity.toastOnUIThread(
-						"Sorry, the help is not implemented yet.",
-						Toast.LENGTH_LONG);
 				return true;
 			};
 		};

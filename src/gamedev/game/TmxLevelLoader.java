@@ -5,14 +5,16 @@ import gamedev.ai.MoveStrategy;
 import gamedev.ai.RandomMoveStrategy;
 import gamedev.ai.WaypointMoveStrategy;
 import gamedev.objects.AnimatedObject;
+import gamedev.objects.Avatar;
 import gamedev.objects.BerryBush;
 import gamedev.objects.Dinosaur;
+import gamedev.objects.GameEndPortal;
 import gamedev.objects.Spider;
 import gamedev.quests.QuestTrigger;
 
 import java.util.ArrayList;
-import java.util.Random;
 
+import org.andengine.entity.IEntity;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.Scene;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
@@ -53,8 +55,8 @@ public class TmxLevelLoader {
 		for (final TMXObjectGroup group : this.map.getTMXObjectGroups()) {
 			if (group.getName().equals("Walls")) {
 				this.createBoundaries(group.getTMXObjects());
-//			} else if (group.getName().equals("Trees")) {
-//				this.createTrees(group.getTMXObjects());
+				// } else if (group.getName().equals("Trees")) {
+				// this.createTrees(group.getTMXObjects());
 			} else if (group.getName().equals("GreenDinosaurs")) {
 				this.createDinosaurs(group.getTMXObjects(), 0);
 			} else if (group.getName().equals("RedDinosaurs")) {
@@ -66,13 +68,7 @@ public class TmxLevelLoader {
 			} else if (group.getName().equals("QuestTrigger")) {
 				this.createQuestTriggers(group.getTMXObjects());
 			}
-//			 else if (group.getName().equals("ShopCave")) {
-//			 this.createShopCave(group.getTMXObjects());
-//			 }
-
 		}
-
-		// TODO: Create portal object from tmx map.
 	}
 
 	private void createSpiders(ArrayList<TMXObject> objects) {
@@ -82,45 +78,80 @@ public class TmxLevelLoader {
 			if (strategy != null) {
 				s.setMoveStrategy(strategy);
 			}
-			this.scene.attachChild(s);		
+			this.scene.attachChild(s);
 		}
 	}
 
 	protected void createQuestTriggers(ArrayList<TMXObject> tmxObjects) {
 		for (final TMXObject object : tmxObjects) {
-			int id = Integer.parseInt(object.getName());
-			// System.out.println("Quest-ID: " + object.getName());
-			QuestTrigger q = new QuestTrigger(id, object.getX(), object.getY(),
-					object.getWidth(), object.getHeight());
-			this.scene.attachChild(q);
+			if (object.getName().equals("avatar")) {
+				float x = object.getX();
+				float y = object.getY();
+
+				if (resourcesManager.avatar == null) {
+					System.out.println("Avatar is null!");
+					resourcesManager.avatar = new Avatar();
+				}
+				resourcesManager.avatar.getBody().setTransform(x / 32, y / 32,
+						0);
+				// Check if the player is already has a parent (avoid
+				// assertEntityHasNoParent IllegalStateException)
+				// This is needed for the back button during gameplay (for
+				// restarting a
+				// new game).
+				if (resourcesManager.avatar.hasParent()) {
+					IEntity parentEntity = resourcesManager.avatar.getParent();
+					parentEntity.detachChild(resourcesManager.avatar);
+				}
+				this.scene.attachChild(resourcesManager.avatar);
+			} else if (object.getName().equals("portal")) {
+				GameEndPortal portal = new GameEndPortal(object.getX(),
+						object.getY());
+				this.scene.attachChild(portal);
+			} else {
+				int id = Integer.parseInt(object.getName());
+				// System.out.println("Quest-ID: " + object.getName());
+				QuestTrigger q = new QuestTrigger(id, object.getX(),
+						object.getY(), object.getWidth(), object.getHeight());
+				this.scene.attachChild(q);
+			}
 		}
 	}
 
 	protected void createBoundaries(ArrayList<TMXObject> objects) {
 		for (final TMXObject object : objects) {
-			final Rectangle rect = new Rectangle(object.getX(), object.getY(), object.getWidth(), object.getHeight(), this.resourcesManager.vbom);
+			final Rectangle rect = new Rectangle(object.getX(), object.getY(),
+					object.getWidth(), object.getHeight(),
+					this.resourcesManager.vbom);
 			if (object.getTMXObjectProperties().size() > 0) {
 				for (int i = 0; i < object.getTMXObjectProperties().size(); i++) {
-					if (object.getTMXObjectProperties().get(i).getName().equals("rotate")) {
-						rect.setRotation((-1) * Float.parseFloat(object.getTMXObjectProperties().get(i).getValue()));
+					if (object.getTMXObjectProperties().get(i).getName()
+							.equals("rotate")) {
+						rect.setRotation((-1)
+								* Float.parseFloat(object
+										.getTMXObjectProperties().get(i)
+										.getValue()));
 					}
 				}
 			}
-			final FixtureDef boxFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0);
-			Body body = PhysicsFactory.createBoxBody(this.resourcesManager.physicsWorld, rect, BodyType.StaticBody, boxFixtureDef);
+			final FixtureDef boxFixtureDef = PhysicsFactory.createFixtureDef(0,
+					0, 0);
+			Body body = PhysicsFactory.createBoxBody(
+					this.resourcesManager.physicsWorld, rect,
+					BodyType.StaticBody, boxFixtureDef);
 			body.setUserData("Boundary");
-//			rect.setVisible(false);
+			// rect.setVisible(false);
 			this.scene.attachChild(rect);
 		}
 	}
 
-//	protected void createTrees(ArrayList<TMXObject> objects) {
-//		Random r = new Random();
-//		for (final TMXObject object : objects) {
-//			this.scene.attachChild(new Tree(object.getX(), object.getY(), r
-//					.nextInt(20)));
-//		}
-//	}
+	// protected void createTrees(ArrayList<TMXObject> objects) {
+	// Random r = new Random();
+	// for (final TMXObject object : objects) {
+	// this.scene.attachChild(new Tree(object.getX(), object.getY(), r
+	// .nextInt(20)));
+	// }
+	// }
 
 	protected void createDinosaurs(ArrayList<TMXObject> objects, int color) {
 		for (final TMXObject object : objects) {
@@ -128,7 +159,8 @@ public class TmxLevelLoader {
 			MoveStrategy alternateStrategy = this.getMoveStrategy(object, d);
 			// TODO Radius defined in class or also in tmx map?
 			if (alternateStrategy != null) {
-				d.setMoveStrategy(new FollowPlayerStrategy(d, d.getRadius(), alternateStrategy));
+				d.setMoveStrategy(new FollowPlayerStrategy(d, d.getRadius(),
+						alternateStrategy));
 			}
 			this.scene.attachChild(d);
 		}
