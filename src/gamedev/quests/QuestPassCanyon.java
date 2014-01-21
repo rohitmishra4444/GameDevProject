@@ -46,8 +46,8 @@ public class QuestPassCanyon extends Quest {
 				rectangle, body, false, false));
 		map.attachChild(rectangle);
 		
-		this.tree = new Tree(69*32, 4.5f*32);
-		this.tree2 = new Tree(69*32, 5.5f*32);
+		this.tree = new Tree(68*32, 4.5f*32);
+		this.tree2 = new Tree(68*32, 6f*32);
 		this.map.attachChild(tree);
 		this.map.attachChild(tree2);
 	}
