@@ -63,5 +63,31 @@ public class FollowPlayerStrategy extends MoveStrategy {
 			}
 		}
 	}
+
+	public float getRadius() {
+		return radius;
+	}
+
+	public void setRadius(float radius) {
+		this.radius = radius;
+	}
+
+	public MoveStrategy getAlternateStrategy() {
+		return alternateStrategy;
+	}
+
+	public void setAlternateStrategy(MoveStrategy alternateStrategy) {
+		this.alternateStrategy = alternateStrategy;
+	}
+
+	public boolean isStopWithAvatar() {
+		return stopWithAvatar;
+	}
+
+	public void setStopWithAvatar(boolean stopWithAvatar) {
+		this.stopWithAvatar = stopWithAvatar;
+	}
+	
+	
 		
 }

@@ -12,13 +12,15 @@ import org.andengine.util.math.MathUtils;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
 public class Avatar extends AnimatedObject {
-
+	
+	private final static float ENERY_LOSS_RUNNING = 0.5f;
+	
 	public final static long[] ANIMATION_DURATION = { 50, 50, 50, 50, 50, 50,
 			50, 50 };
 	public final static int FRAMES_PER_ANIMATION = ANIMATION_DURATION.length;
 	public final static int TILES_PER_LINE = 16;
 
-	protected int energy = 100;
+	protected float energy = 100;
 	protected Inventory inventory = new Inventory();
 
 	public Avatar(float pX, float pY) {
@@ -120,7 +122,7 @@ public class Avatar extends AnimatedObject {
 			this.body.setLinearVelocity(
 					pX * this.velocity * this.factorRunning, pY * this.velocity
 							* this.factorRunning);
-			this.setEnergy(this.energy - 1); // TODO Move to constant / variable
+			this.setEnergy(this.energy - ENERY_LOSS_RUNNING); // TODO Move to constant / variable
 		}
 		this.setState(state, direction);
 	}
@@ -135,11 +137,11 @@ public class Avatar extends AnimatedObject {
 		// TODO Game over when life == 0
 	}
 
-	public int getEnergy() {
+	public float getEnergy() {
 		return energy;
 	}
 
-	public void setEnergy(int energy) {
+	public void setEnergy(float energy) {
 		if (energy > 100) {
 			energy = 100;
 		}

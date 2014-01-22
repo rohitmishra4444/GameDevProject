@@ -47,7 +47,7 @@ public class SceneHUD extends HUD {
 		super();
 
 		int avatarLife = 100;
-		int avatarEnergy = 100;
+		float avatarEnergy = 100;
 
 		if (resourcesManager.avatar != null) {
 			avatarLife = resourcesManager.avatar.getLife();
@@ -140,7 +140,7 @@ public class SceneHUD extends HUD {
 						int currentLife = resourcesManager.avatar.getLife();
 						resourcesManager.avatar.setLife(currentLife
 								+ lifeAdditionFromBerry);
-						int currentEnergy = resourcesManager.avatar.getEnergy();
+						float currentEnergy = resourcesManager.avatar.getEnergy();
 						resourcesManager.avatar.setEnergy(currentEnergy
 								+ energyAdditionFromBerry);
 						// Feedback:
@@ -260,7 +260,7 @@ public class SceneHUD extends HUD {
 	 * @param percent
 	 *            value between {0..100}
 	 */
-	public void setEnergy(int percent) {
+	public void setEnergy(float percent) {
 		this.energy.setWidth(percent);
 	}
 

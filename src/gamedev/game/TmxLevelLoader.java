@@ -157,10 +157,8 @@ public class TmxLevelLoader {
 		for (final TMXObject object : objects) {
 			Dinosaur d = new Dinosaur(object.getX(), object.getY(), color);
 			MoveStrategy alternateStrategy = this.getMoveStrategy(object, d);
-			// TODO Radius defined in class or also in tmx map?
 			if (alternateStrategy != null) {
-				d.setMoveStrategy(new FollowPlayerStrategy(d, d.getRadius(),
-						alternateStrategy));
+				d.setAlternateMoveStrategy(alternateStrategy);
 			}
 			this.scene.attachChild(d);
 		}

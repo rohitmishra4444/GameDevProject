@@ -1,6 +1,7 @@
 package gamedev.objects;
 
 import gamedev.ai.FollowPlayerStrategy;
+import gamedev.ai.MoveStrategy;
 import gamedev.game.ResourcesManager;
 
 import org.andengine.entity.primitive.DrawMode;
@@ -19,7 +20,9 @@ public class Dinosaur extends AnimatedObject {
 			120, 120, 120 };
 	public final static int FRAMES_PER_ANIMATION = ANIMATION_DURATION.length;
 	public final static int TILES_PER_LINE = 16;
-
+	
+	private final static int SPRITE_SIZE = 54;
+	
 	/** Time in seconds to remove the update-handler after the dino is killed... */
 	private final static int REMOVE_UPDATEHANDLER_SECONDS = 4;
 	protected float timeDeath = 0;
@@ -29,10 +32,11 @@ public class Dinosaur extends AnimatedObject {
 
 	/** Radius inside the Dinosaur attacks/follows the player */
 	protected float radius;
-
+	
+	protected FollowPlayerStrategy moveStrategy;
+	protected MoveStrategy alternateMoveStrategy;
+	
 	public Dinosaur(float x, float y, int color) {
-		// TODO Make dinosaurRegion an array holding green on pos 0, red on pos
-		// 1
 		super(x, y, ResourcesManager.getInstance().dinosaurRegion[color]);
 		if (color == COLOR_GREEN) {
 			this.velocity = 2f;
@@ -43,15 +47,14 @@ public class Dinosaur extends AnimatedObject {
 			this.factorRunning = 2f;
 			this.radius = 5f;
 		}
-		this.moveStrategy = new FollowPlayerStrategy(this, this.radius);
 		this.getBody().setUserData(this);
-		Ellipse e = new Ellipse(x / 32, y / 32, this.radius * 32,
-				this.radius * 32, this.resourcesManager.vbom);
+		Ellipse e = new Ellipse(SPRITE_SIZE/2, SPRITE_SIZE/2, this.radius * 32, this.radius * 32, this.resourcesManager.vbom);
 		e.setColor(Color.RED);
 		e.setDrawMode(DrawMode.TRIANGLE_FAN);
 		e.setAlpha(0.1f);
 		// this.setCullingEnabled(true);
 		this.attachChild(e);
+		this.moveStrategy = new FollowPlayerStrategy(this, this.radius);
 	}
 
 	@Override
@@ -127,6 +130,7 @@ public class Dinosaur extends AnimatedObject {
 				// System.out.println("Cleared Update Handlers for Dinosaur");
 				this.setIgnoreUpdate(true);
 				this.clearUpdateHandlers();
+				this.body.setActive(false);
 			}
 			return false;
 		} else {
@@ -150,5 +154,16 @@ public class Dinosaur extends AnimatedObject {
 	public int getDinoColor() {
 		return this.color;
 	}
+
+	public MoveStrategy getAlternateMoveStrategy() {
+		return alternateMoveStrategy;
+	}
+
+	public void setAlternateMoveStrategy(MoveStrategy alternateMoveStrategy) {
+		this.alternateMoveStrategy = alternateMoveStrategy;
+		this.moveStrategy.setAlternateStrategy(this.alternateMoveStrategy);
+	}
+	
+	
 
 }
