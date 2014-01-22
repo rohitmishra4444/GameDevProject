@@ -7,6 +7,7 @@ import gamedev.objects.Berry;
 import gamedev.objects.BerryBush;
 import gamedev.objects.Dinosaur;
 import gamedev.objects.Pig;
+import gamedev.objects.Spider;
 import gamedev.scenes.FightScene;
 import gamedev.scenes.GameMapScene;
 
@@ -118,9 +119,28 @@ public class BodiesContactListener implements ContactListener,
 				pig.setMoveStrategy(new FollowPlayerStrategy(pig, 1000, true));
 			}
 		}
+		
+		// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+		// Spider
+		if (x1.getBody().getUserData().equals("Avatar")
+				&& x2.getBody().getUserData() instanceof Spider) {
+			poisenAvatar();
+			return;
+		} else if (x1.getBody().getUserData() instanceof Dinosaur
+				&& x2.getBody().getUserData().equals("Avatar")) {
+			poisenAvatar();
+			return;
+		}
 
 	}
-
+	
+	private void poisenAvatar() {
+		ResourcesManager.getInstance().avatar.setPoisened(true);
+		ResourcesManager.getInstance().avatar.attack(10);
+		ResourcesManager.getInstance().avatar.takeEnergy(20);
+		resourcesManager.activity.toastOnUIThread("Aaaargh...I'm feeling dizzy...", Toast.LENGTH_LONG);		
+	}
+	
 	private void showFightScene(Dinosaur d) {
 		GameActivity.mode = GameMode.FIGHTING;
 		FightScene fight = FightScene.getInstance();
