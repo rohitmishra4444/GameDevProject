@@ -23,14 +23,14 @@ public class GameIntroScene extends BaseScene {
 	private static final float FADE_IN_DURATION = 1f;
 	private static final float FADE_OUT_DURATION = 0.5f;
 
-	private static final String string0 = "Once a beautiful day in our modern world,"
-			+ "\n\n\n" + "Tap...";
-	private static final String string1 = "a bad accident messed up your life.";
-	private static final String string2 = "With a big flash, you were thrown back to the stoneage.";
-	private static final String string3 = "Fortunately, some kind cavemen have taken you to their living cave.";
-	private static final String string4 = "On a fascinating mural painting, you could recognise something.";
-	private static final String string5 = "There has to be a portal somewhere, which could bring you back to home.";
-	private static final String string6 = "Furthermore, on a small map you could see where this portal should have to be.";
+	private static final String string0 = "Once a beautiful day in our modern world..."
+			+ "\n\n\n" + "(Tap to continue intro screens)";
+	private static final String string1 = "a bad accident messed up your life...";
+	private static final String string2 = "With a big flash and a terrible noise,\nyou were thrown back to the stone age...";
+	private static final String string3 = "Fortunately, some kind of cavemen\nhave taken you to their living cave.\n They gave you food and water until\nfinally you were fully recovered...";
+	private static final String string4 = "But life in stone age is boring...\n After some weeks, you saw a fascinating\n mural painting and recognized something...";
+	private static final String string5 = "There has to be a portal somewhere,\nwhich could bring you back home...";
+	private static final String string6 = "On a small map you discovered where this portal could be!\nBrave and without fear, you walk out of the cave...";
 
 	private static final String[] gameIntroStrings = { string0, string1,
 			string2, string3, string4, string5, string6 };

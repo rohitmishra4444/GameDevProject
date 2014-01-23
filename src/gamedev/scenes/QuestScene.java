@@ -75,7 +75,7 @@ public class QuestScene extends CameraScene {
 
 		if (activeQuests.isEmpty() && finishedQuests.isEmpty()) {
 			ResourcesManager.getInstance().activity.toastOnUIThread(
-					"You have no active or finished quests yet.",
+					"There are no active or finished quests yet.",
 					Toast.LENGTH_SHORT);
 		}
 

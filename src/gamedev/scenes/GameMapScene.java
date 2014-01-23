@@ -8,6 +8,7 @@ import gamedev.quests.QuestBuildBridge;
 import gamedev.quests.QuestCatchPig;
 import gamedev.quests.QuestMakePortalWork;
 import gamedev.quests.QuestPassCanyon;
+import gamedev.quests.QuestSurviveDinos;
 
 import java.util.ArrayList;
 
@@ -92,6 +93,7 @@ public class GameMapScene extends BaseScene {
 		this.quests.add(new QuestBuildBridge(this));
 		this.quests.add(new QuestCatchPig(this));
 		this.quests.add(new QuestPassCanyon(this));
+		this.quests.add(new QuestSurviveDinos(this));
 		this.quests.add(new QuestMakePortalWork(this));
 	}
 

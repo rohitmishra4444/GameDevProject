@@ -178,7 +178,7 @@ public class FightScene extends CameraScene {
 					t.setDamageMiss(10);
 				} else {
 					t = new Target(position.x, position.y, TARGET_RADIUS,
-							Color.BLACK, this.fightDuration, 0.75f);
+							Color.BLACK, this.fightDuration, 0.5f);
 					t.setDamageOpponent(5);
 					t.setDamageMiss(15);
 				}
@@ -186,7 +186,7 @@ public class FightScene extends CameraScene {
 				// Bad target
 				if (d.getDinoColor() == Dinosaur.COLOR_GREEN) {
 					t = new Target(position.x, position.y, TARGET_RADIUS,
-							Color.RED, this.fightDuration, 0.5f);
+							Color.RED, this.fightDuration, 0.75f);
 					t.setDamageAvatar(10);
 				} else {
 					t = new Target(position.x, position.y, TARGET_RADIUS,
