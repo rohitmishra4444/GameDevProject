@@ -14,7 +14,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 public class Avatar extends AnimatedObject {
 	
 	private final static float ENERY_LOSS_RUNNING = 0.5f;
-	
+	private final static float TIME_POISENED = 20; // in seconds
 	public final static long[] ANIMATION_DURATION = { 50, 50, 50, 50, 50, 50,
 			50, 50 };
 	public final static int FRAMES_PER_ANIMATION = ANIMATION_DURATION.length;
@@ -22,6 +22,8 @@ public class Avatar extends AnimatedObject {
 
 	protected float energy = 100;
 	protected Inventory inventory = new Inventory();
+	protected boolean poisened = false;
+	protected float timePoisened = 0;
 
 	public Avatar(float pX, float pY) {
 		super(pX, pY, ResourcesManager.getInstance().playerRegion);
@@ -116,11 +118,14 @@ public class Avatar extends AnimatedObject {
 		// Check if enough energy, otherwise we reset to WALKIING
 		if (state == GameState.RUNNING && this.energy == 0)
 			state = GameState.WALKING;
+		
+		// Check if we are poisened
+		float velocity = (this.poisened) ? this.velocity * 0.5f : this.velocity;
 		if (state == GameState.WALKING) {
-			this.body.setLinearVelocity(pX * this.velocity, pY * this.velocity);
+			this.body.setLinearVelocity(pX * velocity, pY * velocity);
 		} else {
 			this.body.setLinearVelocity(
-					pX * this.velocity * this.factorRunning, pY * this.velocity
+					pX * velocity * this.factorRunning, pY * velocity
 							* this.factorRunning);
 			this.setEnergy(this.energy - ENERY_LOSS_RUNNING); // TODO Move to constant / variable
 		}
@@ -148,11 +153,28 @@ public class Avatar extends AnimatedObject {
 		this.energy = Math.max(energy, 0);
 		this.resourcesManager.hud.setEnergy(this.energy);
 	}
+	
+	public void takeEnergy(float energy) {
+		this.setEnergy(this.energy - energy);
+	}
 
 	public Inventory getInventory() {
 		return this.inventory;
 	}
-
+	
+	@Override
+	public void onManagedUpdate(float seconds) {
+		super.onManagedUpdate(seconds);
+		if (this.poisened) {
+			if (this.timePoisened > TIME_POISENED) {
+				this.poisened = false;
+				this.timePoisened = 0;
+			} else {
+				this.timePoisened += seconds;
+			}
+		}
+	}
+	
 	@Override
 	protected void createPhysic() {
 		this.body = PhysicsFactory.createBoxBody(resourcesManager.physicsWorld,
@@ -176,4 +198,13 @@ public class Avatar extends AnimatedObject {
 	public void setInitialState() {
 		this.setState(GameState.IDLE, Direction.SOUTH);
 	}
+
+	public boolean isPoisened() {
+		return poisened;
+	}
+
+	public void setPoisened(boolean poisened) {
+		this.poisened = poisened;
+	}
+	
 }
