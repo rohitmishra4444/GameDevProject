@@ -6,6 +6,7 @@ import gamedev.game.GameActivity;
 import gamedev.game.GameActivity.GameMode;
 import gamedev.game.ResourcesManager;
 
+import org.andengine.audio.sound.Sound;
 import org.andengine.engine.handler.physics.PhysicsHandler;
 import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
@@ -224,5 +225,13 @@ public abstract class AnimatedObject extends AnimatedSprite {
 	public void setTimeAlive(float timeAlive) {
 		this.timeAlive = timeAlive;
 	}
+	
+	public void playSound(Sound sound, float rate, boolean loop) {
+		sound.stop();
+		sound.setRate(rate);
+		sound.setLooping(loop);
+		sound.play();
+	}
+
 
 }

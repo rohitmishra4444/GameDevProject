@@ -159,6 +159,7 @@ public class ResourcesManager {
 	public Sound eat;
 	public Sound openChildScene;
 	public Sound questFinished;
+	public Sound pain;
 
 	// ---------------------------------------------
 	// Physic
@@ -642,6 +643,10 @@ public class ResourcesManager {
 			eat = SoundFactory.createSoundFromAsset(soundManager, activity,
 					"eat.ogg");
 
+			pain = SoundFactory.createSoundFromAsset(soundManager, activity,
+					"pain.wav");
+
+			
 			openChildScene = SoundFactory.createSoundFromAsset(soundManager,
 					activity, "childscene.ogg");
 			openChildScene.setVolume(0.4f);

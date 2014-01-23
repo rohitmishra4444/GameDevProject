@@ -13,14 +13,26 @@ public class SimpleMoveStrategy extends MoveStrategy {
 	/** Time needed to walk to goal position */
 	protected float duration = 0;
 	
+	protected GameState finishedState = GameState.IDLE;
+	
 	/**
 	 * Move to a position
 	 * @param object
 	 * @param moveTo
-	 * @param state
+	 * @param finishedState
 	 */
-	public SimpleMoveStrategy(AnimatedObject object, Vector2 moveTo, GameState state) {
+	public SimpleMoveStrategy(AnimatedObject object, Vector2 moveTo, GameState moveState, GameState finishedState) {
 		super(object);
+		this.finishedState = finishedState;
+		init(moveTo, moveState);
+	}
+
+	public SimpleMoveStrategy(AnimatedObject object, Vector2 moveTo, GameState moveState) {
+		super(object);
+		init(moveTo, moveState);
+	}
+	
+	protected void init(Vector2 moveTo, GameState moveState) {
 		Vector2 bodyPos = this.object.getBody().getPosition();
 		Vector2 moveTmp = null;
 		if (this.coordinates == COORDINATES_PIXEL) {
@@ -28,11 +40,11 @@ public class SimpleMoveStrategy extends MoveStrategy {
 		} else {
 			moveTmp = moveTo;
 		}
-		this.object.moveTo(moveTmp, state);
+		this.object.moveTo(moveTmp, moveState);
 		// Calculate the duration needed for movement
 		this.duration = calculateDuration(bodyPos, moveTmp, this.object.getBody().getLinearVelocity());
 		Vector2Pool.recycle(moveTmp);
-//		System.out.println("Move from " + bodyPos + " to point " + moveTo + ", needed time is " + this.duration);
+//		System.out.println("Move from " + bodyPos + " to point " + moveTo + ", needed time is " + this.duration);		
 	}
 	
 	@Override
@@ -44,7 +56,7 @@ public class SimpleMoveStrategy extends MoveStrategy {
 		if (this.time >= this.duration) {
 			this.reachedGoal = true;
 			// TODO Maybe make this state configurable?
-			this.object.setState(GameState.LOOKING, -1);
+			this.object.setState(this.finishedState, -1);
 			return false;
 		}
 		return true;

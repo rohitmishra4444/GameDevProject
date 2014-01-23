@@ -57,7 +57,6 @@ public class Avatar extends AnimatedObject {
 			this.body.setLinearVelocity(0, 0);
 			this.stopAnimation();
 			resourcesManager.walk.stop();
-			// TODO Give some amount of energy back after a certain level
 			return;
 		case ATTACK:
 			rowIndex = 0;
@@ -66,6 +65,7 @@ public class Avatar extends AnimatedObject {
 		case BEEN_HIT:
 			rowIndex = 4;
 			this.body.setLinearVelocity(0, 0);
+			playSound(resourcesManager.pain, 1, false);
 			break;
 		case RUNNING:
 			rowIndex = 8;
@@ -89,13 +89,6 @@ public class Avatar extends AnimatedObject {
 				* FRAMES_PER_ANIMATION;
 		this.animate(ANIMATION_DURATION, startTile, startTile
 				+ FRAMES_PER_ANIMATION - 1, loopAnimation);
-	}
-
-	private void playSound(Sound sound, float rate, boolean loop) {
-		sound.stop();
-		sound.setRate(rate);
-		sound.setLooping(loop);
-		sound.play();
 	}
 
 	public void attack(int damage) {
@@ -205,6 +198,13 @@ public class Avatar extends AnimatedObject {
 
 	public void setPoisened(boolean poisened) {
 		this.poisened = poisened;
+	}
+
+	public void poisen(int life, int energy) {
+		this.attack(life);
+		this.takeEnergy(energy);
+		this.poisened = true;
+		this.timePoisened = 0;
 	}
 	
 }

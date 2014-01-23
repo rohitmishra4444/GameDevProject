@@ -36,7 +36,7 @@ public class FightScene extends CameraScene {
 	protected float fightDuration = 0; // Total duration of fight
 	protected float lastTargetCreated = 0; // Last target created (passed
 											// seconds)
-	protected float frequencyOfTargts = 0.2f; // How often are new targets
+	protected float frequencyOfTargets = 0.2f; // How often are new targets
 												// created in seconds
 	private static FightScene instance;
 	
@@ -68,7 +68,7 @@ public class FightScene extends CameraScene {
 							if (target.getDamageAvatar() > 0) {
 								resourcesManager.avatar.attack(target
 										.getDamageAvatar());
-								resourcesManager.hit_false.play();
+//								resourcesManager.hit_false.play();
 							}
 							target.setRemovable(true);
 						}
@@ -101,8 +101,11 @@ public class FightScene extends CameraScene {
 		if (this.object instanceof Dinosaur) {
 			Dinosaur d = (Dinosaur) this.object;
 			if (d.getDinoColor() == Dinosaur.COLOR_RED) {
-				this.frequencyOfTargts = 0.1f;
+				this.frequencyOfTargets = 0.1f;
 			}
+		}
+		if (ResourcesManager.getInstance().avatar.isPoisened()) {
+			this.frequencyOfTargets = this.frequencyOfTargets * 0.7f;
 		}
 	}
 
@@ -139,8 +142,8 @@ public class FightScene extends CameraScene {
 		// Note that this depends on the time how often this method can be
 		// called - therefore we maybe must create multiple targets on slower
 		// devices
-		if (this.lastTargetCreated > this.frequencyOfTargts) {
-			int nTargets = (int) (this.lastTargetCreated / this.frequencyOfTargts);
+		if (this.lastTargetCreated > this.frequencyOfTargets) {
+			int nTargets = (int) (this.lastTargetCreated / this.frequencyOfTargets);
 			this.lastTargetCreated = 0;
 			for (int i = 0; i < nTargets; i++) {
 				Target t = this.generateTarget();

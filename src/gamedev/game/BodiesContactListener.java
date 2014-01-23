@@ -124,22 +124,22 @@ public class BodiesContactListener implements ContactListener,
 		// Spider
 		if (x1.getBody().getUserData().equals("Avatar")
 				&& x2.getBody().getUserData() instanceof Spider) {
-			poisenAvatar();
+			ResourcesManager.getInstance().avatar.poisen(10, 20);
 			return;
 		} else if (x1.getBody().getUserData() instanceof Dinosaur
 				&& x2.getBody().getUserData().equals("Avatar")) {
-			poisenAvatar();
+			ResourcesManager.getInstance().avatar.poisen(10, 20);
 			return;
 		}
 
 	}
 	
-	private void poisenAvatar() {
-		ResourcesManager.getInstance().avatar.setPoisened(true);
-		ResourcesManager.getInstance().avatar.attack(10);
-		ResourcesManager.getInstance().avatar.takeEnergy(20);
-		resourcesManager.activity.toastOnUIThread("Aaaargh...I'm feeling dizzy...", Toast.LENGTH_LONG);		
-	}
+//	private void poisenAvatar() {
+//		ResourcesManager.getInstance().avatar.setPoisened(true);
+//		ResourcesManager.getInstance().avatar.attack(10);
+//		ResourcesManager.getInstance().avatar.takeEnergy(20);
+//		resourcesManager.activity.toastOnUIThread("Aaaargh...I'm feeling dizzy...", Toast.LENGTH_LONG);		
+//	}
 	
 	private void showFightScene(Dinosaur d) {
 		GameActivity.mode = GameMode.FIGHTING;
