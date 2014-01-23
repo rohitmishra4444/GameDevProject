@@ -147,11 +147,13 @@ public class SceneManager {
 	// ---------------------------------------------
 
 	public void disposeGameIntroScene() {
-		if (!introScene.isDisposed()) {
-			introScene.disposeScene();
+		if (introScene != null) {
+			if (!introScene.isDisposed()) {
+				introScene.disposeScene();
+			}
+			resourcesManager.unloadGameIntroResources();
+			introScene = null;
 		}
-		resourcesManager.unloadGameIntroResources();
-		introScene = null;
 	}
 
 	public void loadGameIntroScene(final Engine mEngine) {
@@ -245,11 +247,13 @@ public class SceneManager {
 	}
 
 	public void disposeGameEndScene() {
-		if (!gameEndScene.isDisposed()) {
-			gameEndScene.disposeScene();
+		if (gameEndScene != null) {
+			if (!gameEndScene.isDisposed()) {
+				gameEndScene.disposeScene();
+			}
+			resourcesManager.unloadGameEndResources();
+			gameEndScene = null;
 		}
-		resourcesManager.unloadGameEndResources();
-		gameEndScene = null;
 	}
 
 	// ---------------------------------------------
@@ -272,13 +276,19 @@ public class SceneManager {
 			disposeMenuScene();
 			resourcesManager.backgroundMusicMenu.stop();
 		} else if (currentSceneType.equals(SceneType.SCENE_INTRO)) {
-			disposeGameIntroScene();
+
 			// resourcesManager.backgroundMusicGame.pause();
 		}
 
 		if (setLoadingSceneNeeded) {
 			setLoadingScene();
 		}
+	}
+
+	public void disposeAllGameScenes() {
+		disposeGameIntroScene();
+		disposeGameMapScene();
+		disposeGameEndScene();
 	}
 
 	public void setLoadingScene() {
@@ -315,6 +325,7 @@ public class SceneManager {
 	}
 
 	public void deleteCurrentGameMapScene() {
+		disposeAllGameScenes();
 		gameMapScene = null;
 	}
 

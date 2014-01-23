@@ -1,6 +1,5 @@
 package gamedev.game;
 
-import gamedev.ai.FollowPlayerStrategy;
 import gamedev.ai.MoveStrategy;
 import gamedev.ai.RandomMoveStrategy;
 import gamedev.ai.WaypointMoveStrategy;
@@ -17,6 +16,7 @@ import java.util.ArrayList;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.Scene;
+import org.andengine.extension.physics.box2d.FixedStepPhysicsWorld;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.tmx.TMXLayer;
 import org.andengine.extension.tmx.TMXObject;
@@ -45,6 +45,12 @@ public class TmxLevelLoader {
 	}
 
 	public void createWorldAndObjects() {
+		if (resourcesManager.physicsWorld == null) {
+			resourcesManager.physicsWorld = new FixedStepPhysicsWorld(30,
+					new Vector2(0, 0), false, 8, 1);
+			resourcesManager.physicsWorld
+					.setContactListener(new BodiesContactListener());
+		}
 
 		// Loop through the layers and attach them as child scene.
 		for (int i = 0; i < this.map.getTMXLayers().size(); i++) {

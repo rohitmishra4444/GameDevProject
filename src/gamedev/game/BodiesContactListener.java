@@ -9,7 +9,6 @@ import gamedev.objects.Dinosaur;
 import gamedev.objects.Pig;
 import gamedev.objects.Spider;
 import gamedev.scenes.FightScene;
-import gamedev.scenes.GameMapScene;
 
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
@@ -30,7 +29,6 @@ public class BodiesContactListener implements ContactListener,
 
 	protected ResourcesManager resourcesManager = ResourcesManager
 			.getInstance();
-	protected GameMapScene currentMapScene;
 	private Rectangle collectingBar;
 	private BerryBush berryBush;
 	// Duration of collecting a berry:
@@ -42,8 +40,6 @@ public class BodiesContactListener implements ContactListener,
 		// No need to handle contacts if not exploring the world...
 		if (GameActivity.mode != GameMode.EXPLORING)
 			return;
-
-		currentMapScene = SceneManager.getInstance().getCurrentGameMapScene();
 
 		final Fixture x1 = contact.getFixtureA();
 		final Fixture x2 = contact.getFixtureB();
@@ -100,7 +96,8 @@ public class BodiesContactListener implements ContactListener,
 
 		// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 		// Pig for second Quest
-		if (currentMapScene.getQuest(1).isActive()) {
+		if (SceneManager.getInstance().getCurrentGameMapScene().getQuest(1)
+				.isActive()) {
 			Pig pig = null;
 			if (x1.getBody().getUserData().equals("Avatar")
 					&& x2.getBody().getUserData() instanceof Pig) {
@@ -111,15 +108,16 @@ public class BodiesContactListener implements ContactListener,
 			}
 			if (pig != null && !pig.isCatched()) {
 				// Catched the Pig!
-//				resourcesManager.removeSpriteAndBody(pig);
-				resourcesManager.activity.toastOnUIThread("Gotcha!", Toast.LENGTH_SHORT);
+				// resourcesManager.removeSpriteAndBody(pig);
+				resourcesManager.activity.toastOnUIThread("Gotcha!",
+						Toast.LENGTH_SHORT);
 				resourcesManager.collect.play();
-//				currentMapScene.getQuest(1).setCompleted(true);
+				// currentMapScene.getQuest(1).setCompleted(true);
 				pig.setCatched(true);
 				pig.setMoveStrategy(new FollowPlayerStrategy(pig, 1000, true));
 			}
 		}
-		
+
 		// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 		// Spider
 		if (x1.getBody().getUserData().equals("Avatar")
@@ -133,26 +131,28 @@ public class BodiesContactListener implements ContactListener,
 		}
 
 	}
-	
+
 	private void poisenAvatar() {
 		ResourcesManager.getInstance().avatar.setPoisened(true);
 		ResourcesManager.getInstance().avatar.attack(10);
 		ResourcesManager.getInstance().avatar.takeEnergy(20);
-		resourcesManager.activity.toastOnUIThread("Aaaargh...I'm feeling dizzy...", Toast.LENGTH_LONG);		
+		resourcesManager.activity.toastOnUIThread(
+				"Aaaargh...I'm feeling dizzy...", Toast.LENGTH_LONG);
 	}
-	
+
 	private void showFightScene(Dinosaur d) {
 		GameActivity.mode = GameMode.FIGHTING;
 		FightScene fight = FightScene.getInstance();
 		fight.setObject(d);
-		currentMapScene.setChildScene(fight);
+		SceneManager.getInstance().getCurrentGameMapScene()
+				.setChildScene(fight);
 	}
 
 	@Override
 	public void endContact(Contact contact) {
 		// Remove collecting berry bar if player runs away.
 		if (collectingBar != null) {
-			currentMapScene.detachChild(collectingBar);
+			resourcesManager.removeSpriteAndBody(collectingBar);
 			collectingBar = null;
 			berryBush = null;
 		}
@@ -171,10 +171,9 @@ public class BodiesContactListener implements ContactListener,
 		if (collectingBar == null) {
 			return;
 		}
-
 		if (collectingBar.getWidth() == 0) {
 			addBerryToAvatarInventory();
-			currentMapScene.detachChild(collectingBar);
+			resourcesManager.removeSpriteAndBody(collectingBar);
 			collectingBar = null;
 		} else {
 			collectingBar.setWidth(collectingBar.getWidth() - 1);
@@ -202,7 +201,8 @@ public class BodiesContactListener implements ContactListener,
 							onProgressChanged((int) timerSeconds);
 					}
 				}));
-		currentMapScene.attachChild(collectingBar);
+		SceneManager.getInstance().getCurrentGameMapScene()
+				.attachChild(collectingBar);
 	}
 
 	private void addBerryToAvatarInventory() {

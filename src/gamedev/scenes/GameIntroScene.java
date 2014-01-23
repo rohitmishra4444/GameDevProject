@@ -23,14 +23,16 @@ public class GameIntroScene extends BaseScene {
 	private static final float FADE_IN_DURATION = 1f;
 	private static final float FADE_OUT_DURATION = 0.5f;
 
-	private static final String string0 = "Once a beautiful day in our modern world,"
-			+ "\n\n\n" + "Tap...";
+	private static final String string0 = "Once a beautiful day in our modern world,";
 	private static final String string1 = "a bad accident messed up your life.";
 	private static final String string2 = "With a big flash, you were thrown back to the stoneage.";
-	private static final String string3 = "Fortunately, some kind cavemen have taken you to their living cave.";
-	private static final String string4 = "On a fascinating mural painting, you could recognise something.";
-	private static final String string5 = "There has to be a portal somewhere, which could bring you back to home.";
-	private static final String string6 = "Furthermore, on a small map you could see where this portal should have to be.";
+	private static final String string3 = "Fortunately, some kind cavemen have"
+			+ "\n" + "taken you to their living cave.";
+	private static final String string4 = "On a mural painting, you could recognise something.";
+	private static final String string5 = "Somewhere has to be a portal, which could"
+			+ "\n" + "bring you back to home.";
+	private static final String string6 = "Furthermore, on a small map you could see"
+			+ "\n" + "where this portal should have to be.";
 
 	private static final String[] gameIntroStrings = { string0, string1,
 			string2, string3, string4, string5, string6 };

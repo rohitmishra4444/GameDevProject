@@ -50,7 +50,7 @@ public abstract class AnimatedObject extends AnimatedSprite {
 
 	/** Duration of the current animation/state */
 	protected float animationTime;
-	
+
 	/** The time alive... just a counter */
 	protected float timeAlive = 0;
 
@@ -105,7 +105,8 @@ public abstract class AnimatedObject extends AnimatedSprite {
 	public boolean onCustomUpdate(float pSecondsElapsed) {
 		if (this.state == GameState.DEAD)
 			return false;
-		if (GameActivity.mode == GameMode.FIGHTING || GameActivity.mode == GameMode.POPUP) {
+		if (GameActivity.mode == GameMode.FIGHTING
+				|| GameActivity.mode == GameMode.POPUP) {
 			this.body.setLinearVelocity(0, 0);
 			this.setState(GameState.IDLE, -1);
 			return false;
@@ -120,7 +121,8 @@ public abstract class AnimatedObject extends AnimatedSprite {
 	 *            Amount of life taken
 	 */
 	public void attack(int damage) {
-		this.life -= damage;
+		int life = this.life - damage;
+		this.setLife(life);
 		if (this.life <= 0) {
 			this.life = 0;
 			this.setState(GameState.DEAD, -1);

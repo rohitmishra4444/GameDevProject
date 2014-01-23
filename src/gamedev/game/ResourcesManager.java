@@ -171,6 +171,9 @@ public class ResourcesManager {
 	// ---------------------------------------------
 
 	public void removeSpriteAndBody(final IShape shape) {
+		if (shape == null) {
+			return;
+		}
 		final PhysicsConnector physicsConnector = physicsWorld
 				.getPhysicsConnectorManager()
 				.findPhysicsConnectorByShape(shape);

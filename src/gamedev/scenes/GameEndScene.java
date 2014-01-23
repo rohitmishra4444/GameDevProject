@@ -3,6 +3,8 @@ package gamedev.scenes;
 import gamedev.game.SceneManager;
 import gamedev.game.SceneManager.SceneType;
 
+import java.util.Iterator;
+
 import org.andengine.engine.camera.Camera;
 import org.andengine.entity.modifier.FadeInModifier;
 import org.andengine.entity.modifier.FadeOutModifier;
@@ -13,6 +15,8 @@ import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.util.GLState;
 import org.andengine.util.HorizontalAlign;
+
+import com.badlogic.gdx.physics.box2d.Body;
 
 public class GameEndScene extends BaseScene {
 
@@ -114,8 +118,22 @@ public class GameEndScene extends BaseScene {
 								FADE_OUT_DURATION);
 
 						SceneManager.getInstance().loadMenuScene(engine);
-						SceneManager.getInstance().deleteCurrentGameMapScene();
+
+						GameMapScene mapScene = SceneManager.getInstance()
+								.getCurrentGameMapScene();
+						mapScene.disposeScene();
+
+						Iterator<Body> it = resourcesManager.physicsWorld
+								.getBodies();
+						while (it.hasNext()) {
+							Body body = it.next();
+							resourcesManager.physicsWorld.destroyBody(body);
+						}
+
+						resourcesManager.physicsWorld = null;
 						resourcesManager.avatar = null;
+						SceneManager.getInstance().deleteCurrentGameMapScene();
+
 						return true;
 					}
 				}
