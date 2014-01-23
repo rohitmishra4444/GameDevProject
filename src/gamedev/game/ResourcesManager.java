@@ -96,7 +96,7 @@ public class ResourcesManager {
 
 	public BitmapTextureAtlas bgBarsAtlas;
 	public TextureRegion bgBarsRegion;
-
+	
 	// Textures for splash scene
 	public ITextureRegion splash_region;
 	private BitmapTextureAtlas splashTextureAtlas;
@@ -159,6 +159,7 @@ public class ResourcesManager {
 	public Sound eat;
 	public Sound openChildScene;
 	public Sound questFinished;
+	public Sound pain;
 
 	// ---------------------------------------------
 	// Physic
@@ -645,6 +646,10 @@ public class ResourcesManager {
 			eat = SoundFactory.createSoundFromAsset(soundManager, activity,
 					"eat.ogg");
 
+			pain = SoundFactory.createSoundFromAsset(soundManager, activity,
+					"pain.wav");
+
+			
 			openChildScene = SoundFactory.createSoundFromAsset(soundManager,
 					activity, "childscene.ogg");
 			openChildScene.setVolume(0.4f);
@@ -820,7 +825,7 @@ public class ResourcesManager {
 				TextureOptions.BILINEAR);
 		this.hudHelpIconRegion = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(hudHelpIconAtlas, activity,
-						"Game_Icons_0000_Help.png", 0, 0);
+						"help.png", 0, 0);
 
 		this.hudQuestListIconAtlas = new BitmapTextureAtlas(textureManager, 44,
 				44, TextureOptions.BILINEAR);

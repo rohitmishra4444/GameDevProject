@@ -23,16 +23,14 @@ public class GameIntroScene extends BaseScene {
 	private static final float FADE_IN_DURATION = 1f;
 	private static final float FADE_OUT_DURATION = 0.5f;
 
-	private static final String string0 = "Once a beautiful day in our modern world,";
-	private static final String string1 = "a bad accident messed up your life.";
-	private static final String string2 = "With a big flash, you were thrown back to the stoneage.";
-	private static final String string3 = "Fortunately, some kind cavemen have"
-			+ "\n" + "taken you to their living cave.";
-	private static final String string4 = "On a mural painting, you could recognise something.";
-	private static final String string5 = "Somewhere has to be a portal, which could"
-			+ "\n" + "bring you back to home.";
-	private static final String string6 = "Furthermore, on a small map you could see"
-			+ "\n" + "where this portal should have to be.";
+	private static final String string0 = "Once a beautiful day in our modern world..."
+			+ "\n\n\n" + "(Tap to continue intro screens)";
+	private static final String string1 = "a bad accident messed up your life...";
+	private static final String string2 = "With a big flash and a terrible noise,\nyou were thrown back to the stone age...";
+	private static final String string3 = "Fortunately, some kindly cavemen\nhave taken you to their living cave.\n They gave you food and water until\nfinally you were fully recovered...";
+	private static final String string4 = "But life in stone age is boring...\n After some weeks, you saw a fascinating\n mural painting and recognized something...";
+	private static final String string5 = "There has to be a portal somewhere,\nwhich could bring you back home...";
+	private static final String string6 = "On a small map you discovered where this portal could be!\nBrave and without fear, you walk out of the cave...";
 
 	private static final String[] gameIntroStrings = { string0, string1,
 			string2, string3, string4, string5, string6 };
@@ -42,9 +40,6 @@ public class GameIntroScene extends BaseScene {
 	private ArrayList<IEntity> gameIntroEntities;
 
 	private int nextEntity = 1;
-
-	// private int nextText = 0;
-	// private int nextSprite = 1;
 
 	@Override
 	public void createScene() {
@@ -127,50 +122,6 @@ public class GameIntroScene extends BaseScene {
 						nextEntity++;
 						return true;
 					}
-
-					// if (gameIntroTexts.get(nextText - 1).hasParent()) {
-					// final Text oldText = gameIntroTexts.get(nextText - 1);
-					// oldText.registerEntityModifier(new FadeOutModifier(
-					// FADE_OUT_DURATION));
-					// detachViaUpdateHandlerAfterTime(oldText,
-					// FADE_OUT_DURATION);
-					//
-					// Sprite newSprite = gameIntroSprites.get(nextSprite);
-					// attachChild(newSprite);
-					// newSprite.registerEntityModifier(new FadeInModifier(
-					// FADE_IN_DURATION));
-					// nextSprite++;
-					// return true;
-					// }
-
-					// if (gameIntroSprites.get(gameIntroSprites.size() - 1)
-					// .hasParent()) {
-					// final Sprite oldSprite = gameIntroSprites
-					// .get(gameIntroSprites.size() - 1);
-					// oldSprite.registerEntityModifier(new FadeOutModifier(
-					// FADE_OUT_DURATION));
-					// detachViaUpdateHandlerAfterTime(oldSprite,
-					// FADE_OUT_DURATION);
-					//
-					// SceneManager.getInstance().createGameMapScene(engine,
-					// false);
-					// return true;
-					// } else if (gameIntroSprites.get(nextSprite -
-					// 1).hasParent()) {
-					// final Sprite oldSprite = gameIntroSprites
-					// .get(nextSprite - 1);
-					// oldSprite.registerEntityModifier(new FadeOutModifier(
-					// FADE_OUT_DURATION));
-					// detachViaUpdateHandlerAfterTime(oldSprite,
-					// FADE_OUT_DURATION);
-					//
-					// Text newText = gameIntroTexts.get(nextText);
-					// attachChild(newText);
-					// newText.registerEntityModifier(new FadeInModifier(
-					// FADE_IN_DURATION));
-					// nextText++;
-					// return true;
-					// }
 				}
 				return false;
 			}
@@ -199,13 +150,6 @@ public class GameIntroScene extends BaseScene {
 				entity.dispose();
 			}
 		}
-		// for (Text text : gameIntroTexts) {
-		// text.detachSelf();
-		// text.clearEntityModifiers();
-		// if (!text.isDisposed()) {
-		// text.dispose();
-		// }
-		// }
 		this.detachSelf();
 		if (!this.isDisposed()) {
 			this.dispose();

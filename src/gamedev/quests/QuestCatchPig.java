@@ -44,13 +44,13 @@ public class QuestCatchPig extends Quest {
 		// Create the pig :-D
 		this.pig = new Pig(500, 500);
 		RandomMoveStrategy rm = new RandomMoveStrategy(pig, 100, 300, 0,
-				42 * 32, 65 * 32, 11 * 32, 43 * 32);
+				42 * 32, 60 * 32, 14 * 32, 34 * 32);
 		pig.setMoveStrategy(rm);
 		map.attachChild(pig);
 
 		this.pig2 = new Pig(500, 500);
-		pig2.setMoveStrategy(new RandomMoveStrategy(pig2, 100, 300, 0, 42 * 32,
-				65 * 32, 11 * 32, 43 * 32));
+		pig2.setMoveStrategy(new RandomMoveStrategy(pig2, 100, 300, 0, 
+				42 * 32, 60 * 32, 14 * 32, 34 * 32));
 		map.attachChild(pig2);
 
 		// Caveman
@@ -84,10 +84,8 @@ public class QuestCatchPig extends Quest {
 		Body b = caveman.getBody();
 		Vector2 v = Vector2Pool.obtain(b.getPosition());
 		b.setTransform(v.x - 3f, v.y - 2f, b.getAngle());
-		pig.setMoveStrategy(new SimpleMoveStrategy(pig, new Vector2(58 * 32,
-				43 * 32), GameState.WALKING));
-		pig2.setMoveStrategy(new SimpleMoveStrategy(pig, new Vector2(55 * 32,
-				44 * 32), GameState.WALKING));
+		pig.setMoveStrategy(new SimpleMoveStrategy(pig, new Vector2(58 * 32, 39 * 32), GameState.WALKING));
+		pig2.setMoveStrategy(new SimpleMoveStrategy(pig2, new Vector2(55 * 32, 40 * 32), GameState.WALKING));
 	}
 
 	@Override

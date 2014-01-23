@@ -25075,8 +25075,6 @@
   <object x="1100" y="891" width="5" height="48"/>
   <object x="1222" y="1109" width="4" height="80"/>
   <object x="1159" y="1179" width="363" height="6"/>
-  <object x="1124" y="1186" width="6" height="132"/>
-  <object x="1242" y="1422" width="68" height="6"/>
   <object x="1436" y="1547" width="191" height="7"/>
   <object x="1654" y="1520" width="207" height="7"/>
   <object x="1825" y="234" width="6" height="170">
@@ -25085,19 +25083,35 @@
    </properties>
   </object>
   <object x="2034" y="446" width="5" height="93"/>
-  <object x="2132" y="801" width="5" height="234"/>
-  <object x="2161" y="1056" width="7" height="96"/>
-  <object x="1181" y="1305" width="5" height="153">
+  <object x="2132" y="801" width="7" height="377"/>
+  <object x="1618" y="1176" width="513" height="8"/>
+  <object x="1622" y="1202" width="478" height="7"/>
+  <object x="1356" y="1205" width="166" height="6"/>
+  <object x="1352" y="1218" width="5" height="251"/>
+  <object x="1515" y="1179" width="7" height="26"/>
+  <object x="1619" y="1178" width="10" height="27"/>
+  <object x="2077" y="166" width="271" height="12"/>
+  <object x="2184" y="504" width="6" height="169"/>
+  <object x="1389" y="1434" width="8" height="131">
    <properties>
-    <property name="rotate" value="45"/>
+    <property name="rotate" value="40"/>
    </properties>
   </object>
-  <object x="1618" y="1176" width="513" height="8"/>
-  <object x="1622" y="1215" width="478" height="7"/>
-  <object x="1356" y="1217" width="163" height="6"/>
-  <object x="1352" y="1218" width="5" height="251"/>
-  <object x="1515" y="1179" width="6" height="42"/>
-  <object x="1619" y="1178" width="8" height="47"/>
+  <object x="1986" y="1175" width="5" height="384">
+   <properties>
+    <property name="rotate" value="-40"/>
+   </properties>
+  </object>
+  <object x="2096" y="506" width="7" height="310">
+   <properties>
+    <property name="rotate" value="30"/>
+   </properties>
+  </object>
+  <object x="1966" y="140" width="5" height="262">
+   <properties>
+    <property name="rotate" value="-40"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup name="GreenDinosaurs" width="100" height="50">
   <object x="863" y="183" width="10" height="11">
@@ -25110,6 +25124,14 @@
   </object>
   <object x="877" y="424" width="11" height="11"/>
   <object x="163" y="1396" width="11" height="10"/>
+  <object x="1319" y="187" width="9" height="9"/>
+  <object x="1184" y="906" width="9" height="10">
+   <properties>
+    <property name="MoveStrategy" value="WaypointMoveStrategy"/>
+    <property name="point" value="37,28"/>
+    <property name="point2" value="63,28"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup name="RedDinosaurs" width="100" height="50">
   <object x="583" y="900" width="10" height="11"/>
@@ -25129,16 +25151,28 @@
     <property name="point2" value="74,26"/>
    </properties>
   </object>
+  <object x="1943" y="423" width="11" height="10"/>
+  <object x="1916" y="986" width="9" height="10"/>
  </objectgroup>
  <objectgroup name="QuestTrigger" width="100" height="50">
   <object name="1" x="995" y="643" width="47" height="54"/>
   <object name="2" x="1528" y="1137" width="81" height="41"/>
   <object name="3" x="2091" y="188" width="96" height="113"/>
   <object name="avatar" x="122" y="215" width="16" height="14"/>
-  <object name="portal" x="3056" y="103" width="32" height="25"/>
+  <object name="portal" x="3102" y="77" width="32" height="25"/>
+  <object name="4" x="3011" y="31" width="84" height="130"/>
  </objectgroup>
  <objectgroup name="Spiders" width="100" height="50">
   <object x="563" y="462" width="10" height="11"/>
   <object x="588" y="1194" width="11" height="11"/>
+  <object x="1784" y="655" width="11" height="10">
+   <properties>
+    <property name="MoveStrategy" value="WaypointMoveStrategy"/>
+    <property name="point1" value="42,21"/>
+    <property name="point2" value="42,32"/>
+    <property name="point3" value="57,32"/>
+    <property name="point4" value="56,20"/>
+   </properties>
+  </object>
  </objectgroup>
 </map>

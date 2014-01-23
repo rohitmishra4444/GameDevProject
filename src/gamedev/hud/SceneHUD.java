@@ -127,14 +127,14 @@ public class SceneHUD extends HUD {
 	}
 
 	private void createBerriesAndButton() {
-		this.berries = new ButtonSprite(cameraWidth - 115, 120,
+		this.berries = new ButtonSprite(cameraWidth - 115, 90,
 				resourcesManager.hudBerryRegion, resourcesManager.vbom) {
 			public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y) {
 
 				if (touchEvent.isActionUp()) {
 					this.registerEntityModifier(new SequenceEntityModifier(
-							new ScaleModifier(0.25f, 1.25f, 1f),
-							new ScaleModifier(0.25f, 1f, 1.25f)));
+							new ScaleModifier(0.25f, 0.75f, 1.25f),
+							new ScaleModifier(0.25f, 1.25f, 0.75f)));
 
 					if (resourcesManager.avatar.getInventory().removeBerry()) {
 						int currentLife = resourcesManager.avatar.getLife();
@@ -153,10 +153,11 @@ public class SceneHUD extends HUD {
 			}
 		};
 		this.attachChild(berries);
+		berries.setScale(0.75f);
 		this.registerTouchArea(berries);
 
 		String berryInitialString = " 0";
-		this.berryCounter = new Text(cameraWidth - 140, 120,
+		this.berryCounter = new Text(cameraWidth - 130, 90,
 				resourcesManager.font, berryInitialString,
 				berryInitialString.length(), resourcesManager.vbom);
 		this.berryCounter.registerUpdateHandler(new IUpdateHandler() {
@@ -207,7 +208,7 @@ public class SceneHUD extends HUD {
 	}
 
 	private void createQuestButton() {
-		ButtonSprite questButton = new ButtonSprite(cameraWidth - 300, 20,
+		ButtonSprite questButton = new ButtonSprite(cameraWidth - 250, 20,
 				resourcesManager.hudQuestListIconRegion, resourcesManager.vbom) {
 			@Override
 			public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y) {
@@ -231,7 +232,7 @@ public class SceneHUD extends HUD {
 	}
 
 	private void createHelpButton() {
-		ButtonSprite helpButton = new ButtonSprite(70, 20,
+		ButtonSprite helpButton = new ButtonSprite(25, 20,
 				resourcesManager.hudHelpIconRegion, resourcesManager.vbom) {
 			@Override
 			public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y) {

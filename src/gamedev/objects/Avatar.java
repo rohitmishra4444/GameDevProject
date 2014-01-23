@@ -4,11 +4,12 @@ import gamedev.game.Direction;
 import gamedev.game.ResourcesManager;
 import gamedev.scenes.GameOverScene;
 
-import org.andengine.audio.sound.Sound;
 import org.andengine.engine.handler.physics.PhysicsHandler;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.util.math.MathUtils;
+
+import android.widget.Toast;
 
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
@@ -58,7 +59,6 @@ public class Avatar extends AnimatedObject {
 			this.body.setLinearVelocity(0, 0);
 			this.stopAnimation();
 			resourcesManager.walk.stop();
-			// TODO Give some amount of energy back after a certain level
 			return;
 		case ATTACK:
 			rowIndex = 0;
@@ -67,6 +67,7 @@ public class Avatar extends AnimatedObject {
 		case BEEN_HIT:
 			rowIndex = 4;
 			this.body.setLinearVelocity(0, 0);
+			playSound(resourcesManager.pain, 1, false);
 			break;
 		case RUNNING:
 			rowIndex = 8;
@@ -90,13 +91,6 @@ public class Avatar extends AnimatedObject {
 				* FRAMES_PER_ANIMATION;
 		this.animate(ANIMATION_DURATION, startTile, startTile
 				+ FRAMES_PER_ANIMATION - 1, loopAnimation);
-	}
-
-	private void playSound(Sound sound, float rate, boolean loop) {
-		sound.stop();
-		sound.setRate(rate);
-		sound.setLooping(loop);
-		sound.play();
 	}
 
 	public void attack(int damage) {
@@ -128,9 +122,7 @@ public class Avatar extends AnimatedObject {
 		} else {
 			this.body.setLinearVelocity(pX * velocity * this.factorRunning, pY
 					* velocity * this.factorRunning);
-			this.setEnergy(this.energy - ENERY_LOSS_RUNNING); // TODO Move to
-																// constant /
-																// variable
+			this.setEnergy(this.energy - ENERY_LOSS_RUNNING);
 		}
 		this.setState(state, direction);
 	}
@@ -214,6 +206,18 @@ public class Avatar extends AnimatedObject {
 
 	public void setPoisened(boolean poisened) {
 		this.poisened = poisened;
+		if (!poisened) {
+			this.timePoisened = 0;
+		}
+	}
+
+	public void poisen(int life, int energy) {
+		this.attack(life);
+		this.takeEnergy(energy);
+		this.poisened = true;
+		this.timePoisened = 0;
+		resourcesManager.activity.toastOnUIThread("Feeling dizzy...",
+				Toast.LENGTH_SHORT);
 	}
 
 }
