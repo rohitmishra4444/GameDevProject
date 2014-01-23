@@ -133,14 +133,7 @@ public class BodiesContactListener implements ContactListener,
 		}
 
 	}
-	
-//	private void poisenAvatar() {
-//		ResourcesManager.getInstance().avatar.setPoisened(true);
-//		ResourcesManager.getInstance().avatar.attack(10);
-//		ResourcesManager.getInstance().avatar.takeEnergy(20);
-//		resourcesManager.activity.toastOnUIThread("Aaaargh...I'm feeling dizzy...", Toast.LENGTH_LONG);		
-//	}
-	
+		
 	private void showFightScene(Dinosaur d) {
 		GameActivity.mode = GameMode.FIGHTING;
 		FightScene fight = FightScene.getInstance();

@@ -96,7 +96,7 @@ public class ResourcesManager {
 
 	public BitmapTextureAtlas bgBarsAtlas;
 	public TextureRegion bgBarsRegion;
-
+	
 	// Textures for splash scene
 	public ITextureRegion splash_region;
 	private BitmapTextureAtlas splashTextureAtlas;
@@ -822,7 +822,7 @@ public class ResourcesManager {
 				TextureOptions.BILINEAR);
 		this.hudHelpIconRegion = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(hudHelpIconAtlas, activity,
-						"Game_Icons_0000_Help.png", 0, 0);
+						"help.png", 0, 0);
 
 		this.hudQuestListIconAtlas = new BitmapTextureAtlas(textureManager, 44,
 				44, TextureOptions.BILINEAR);

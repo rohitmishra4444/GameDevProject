@@ -100,12 +100,10 @@ public class FightScene extends CameraScene {
 		this.object = object;
 		if (this.object instanceof Dinosaur) {
 			Dinosaur d = (Dinosaur) this.object;
-			if (d.getDinoColor() == Dinosaur.COLOR_RED) {
-				this.frequencyOfTargets = 0.1f;
-			}
+			this.frequencyOfTargets = (d.getDinoColor() == Dinosaur.COLOR_RED) ? 0.1f : 0.2f; 
 		}
 		if (ResourcesManager.getInstance().avatar.isPoisened()) {
-			this.frequencyOfTargets = this.frequencyOfTargets * 0.7f;
+			this.frequencyOfTargets = this.frequencyOfTargets * 0.5f;
 		}
 	}
 

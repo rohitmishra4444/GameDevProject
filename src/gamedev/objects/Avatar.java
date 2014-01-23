@@ -9,6 +9,8 @@ import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.util.math.MathUtils;
 
+import android.widget.Toast;
+
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
 public class Avatar extends AnimatedObject {
@@ -120,7 +122,7 @@ public class Avatar extends AnimatedObject {
 			this.body.setLinearVelocity(
 					pX * velocity * this.factorRunning, pY * velocity
 							* this.factorRunning);
-			this.setEnergy(this.energy - ENERY_LOSS_RUNNING); // TODO Move to constant / variable
+			this.setEnergy(this.energy - ENERY_LOSS_RUNNING);
 		}
 		this.setState(state, direction);
 	}
@@ -198,6 +200,9 @@ public class Avatar extends AnimatedObject {
 
 	public void setPoisened(boolean poisened) {
 		this.poisened = poisened;
+		if (!poisened) {
+			this.timePoisened = 0;
+		}
 	}
 
 	public void poisen(int life, int energy) {
@@ -205,6 +210,7 @@ public class Avatar extends AnimatedObject {
 		this.takeEnergy(energy);
 		this.poisened = true;
 		this.timePoisened = 0;
+		resourcesManager.activity.toastOnUIThread("Feeling dizzy...", Toast.LENGTH_SHORT);
 	}
 	
 }

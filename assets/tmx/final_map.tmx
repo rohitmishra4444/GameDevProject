@@ -25159,7 +25159,8 @@
   <object name="2" x="1528" y="1137" width="81" height="41"/>
   <object name="3" x="2091" y="188" width="96" height="113"/>
   <object name="avatar" x="122" y="215" width="16" height="14"/>
-  <object name="portal" x="3056" y="103" width="32" height="25"/>
+  <object name="portal" x="3102" y="77" width="32" height="25"/>
+  <object name="4" x="3011" y="31" width="84" height="130"/>
  </objectgroup>
  <objectgroup name="Spiders" width="100" height="50">
   <object x="563" y="462" width="10" height="11"/>
