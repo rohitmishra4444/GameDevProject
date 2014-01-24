@@ -16,8 +16,8 @@ public class Dinosaur extends AnimatedObject {
 	// TODO Durations can be different per animation. E.G. we will remove
 	// RUNNING and just play the same animation as WALKING but faster...
 	// Handle this inside the setState method!
-	public final static long[] ANIMATION_DURATION = { 120, 120, 120, 120, 120,
-			120, 120, 120 };
+	public final static long[] ANIMATION_DURATION = { 100, 100, 100, 100, 100, 100, 100, 100 };
+	public final static long[] ANIMATION_DURATION_LOOKING = { 200, 200, 200, 200, 200, 200, 200, 200 };
 	public final static int FRAMES_PER_ANIMATION = ANIMATION_DURATION.length;
 	public final static int TILES_PER_LINE = 16;
 	
@@ -36,6 +36,8 @@ public class Dinosaur extends AnimatedObject {
 	protected FollowPlayerStrategy moveStrategy;
 	protected MoveStrategy alternateMoveStrategy;
 	
+	protected Ellipse e;
+	
 	public Dinosaur(float x, float y, int color) {
 		super(x, y, ResourcesManager.getInstance().dinosaurRegion[color]);
 		if (color == COLOR_GREEN) {
@@ -48,7 +50,7 @@ public class Dinosaur extends AnimatedObject {
 			this.radius = 5f;
 		}
 		this.getBody().setUserData(this);
-		Ellipse e = new Ellipse(SPRITE_SIZE/2, SPRITE_SIZE/2, this.radius * 32, this.radius * 32, this.resourcesManager.vbom);
+		e = new Ellipse(SPRITE_SIZE/2, SPRITE_SIZE/2, this.radius * 32, this.radius * 32, this.resourcesManager.vbom);
 		e.setColor(Color.RED);
 		e.setDrawMode(DrawMode.TRIANGLE_FAN);
 		e.setAlpha(0.1f);
@@ -74,7 +76,8 @@ public class Dinosaur extends AnimatedObject {
 			this.direction = direction;
 		int rowIndex = 0;
 		boolean loopAnimation = true;
-
+		long[] duration = ANIMATION_DURATION;
+		
 		switch (state) {
 		case WALKING:
 			rowIndex = 12;
@@ -102,6 +105,7 @@ public class Dinosaur extends AnimatedObject {
 		case LOOKING:
 			rowIndex = 0;
 			this.body.setLinearVelocity(0, 0);
+			duration = ANIMATION_DURATION_LOOKING;
 			break;
 		// case BEEN_HIT:
 		// rowIndex = 4;
@@ -118,7 +122,7 @@ public class Dinosaur extends AnimatedObject {
 
 		int startTile = rowIndex * TILES_PER_LINE + this.direction
 				* FRAMES_PER_ANIMATION;
-		this.animate(ANIMATION_DURATION, startTile, startTile
+		this.animate(duration, startTile, startTile
 				+ FRAMES_PER_ANIMATION - 1, loopAnimation);
 	}
 
@@ -148,7 +152,9 @@ public class Dinosaur extends AnimatedObject {
 	}
 
 	public void setRadius(float radius) {
+		this.e.setScale(radius / this.radius);
 		this.radius = radius;
+		this.moveStrategy.setRadius(radius);
 	}
 
 	public int getDinoColor() {

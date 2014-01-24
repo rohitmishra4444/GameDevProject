@@ -9,7 +9,7 @@ public class QuestMakePortalWork extends Quest {
 	public QuestMakePortalWork(GameMapScene map) {
 		super(map);
 		this.title = "Make the portal work";
-		this.description = "I need to find some information how to repair the portal...";
+		this.description = "I need to find some information how to make the portal work...";
 	}
 
 	@Override
@@ -33,8 +33,8 @@ public class QuestMakePortalWork extends Quest {
 	public void setActive(boolean bool) {
 		super.setActive(bool);
 		ResourcesManager.getInstance().activity.toastOnUIThread("There it is... the portal! But it's not working...", Toast.LENGTH_SHORT);
-		ResourcesManager.getInstance().activity.toastOnUIThread("Guess I need to find some tools to repair the portal", Toast.LENGTH_SHORT);
-		ResourcesManager.getInstance().activity.toastOnUIThread("There are some footsteps in the sand, maybe I can follow them?", Toast.LENGTH_SHORT);
+		ResourcesManager.getInstance().activity.toastOnUIThread("But it's not working...", Toast.LENGTH_SHORT);
+		ResourcesManager.getInstance().activity.toastOnUIThread("I should look around, maybe I find something?", Toast.LENGTH_SHORT);
 	}
 	
 }

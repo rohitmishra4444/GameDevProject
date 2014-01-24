@@ -160,6 +160,7 @@ public class ResourcesManager {
 	public Sound openChildScene;
 	public Sound questFinished;
 	public Sound pain;
+	public Sound heartbeat;
 
 	// ---------------------------------------------
 	// Physic
@@ -639,6 +640,9 @@ public class ResourcesManager {
 			collect = SoundFactory.createSoundFromAsset(soundManager, activity,
 					"collect.wav");
 
+			heartbeat = SoundFactory.createSoundFromAsset(soundManager, activity,
+					"heartbeat.mp3");
+			
 			walk = SoundFactory.createSoundFromAsset(soundManager, activity,
 					"walk.wav");
 			walk.setVolume(0.7f);

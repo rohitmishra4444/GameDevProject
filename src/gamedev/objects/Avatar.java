@@ -15,10 +15,10 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
 public class Avatar extends AnimatedObject {
 
-	private final static float ENERY_LOSS_RUNNING = 0.5f;
+	private final static float ENERGY_LOSS_RUNNING = 0.5f;
 	private final static float TIME_POISENED = 20; // in seconds
-	public final static long[] ANIMATION_DURATION = { 50, 50, 50, 50, 50, 50,
-			50, 50 };
+	public final static long[] ANIMATION_DURATION = { 60, 60, 60, 60, 60, 60, 60, 60, 60 };
+	public final static long[] RUNNING_WALKING_POISENED_DURATION = { 120, 120, 120, 120, 120, 120, 120, 120 };
 	public final static int FRAMES_PER_ANIMATION = ANIMATION_DURATION.length;
 	public final static int TILES_PER_LINE = 16;
 
@@ -53,7 +53,7 @@ public class Avatar extends AnimatedObject {
 			this.direction = direction;
 		int rowIndex = 0;
 		boolean loopAnimation = false;
-
+		
 		switch (state) {
 		case IDLE:
 			this.body.setLinearVelocity(0, 0);
@@ -72,7 +72,7 @@ public class Avatar extends AnimatedObject {
 		case RUNNING:
 			rowIndex = 8;
 			loopAnimation = true;
-			playSound(resourcesManager.walk, 1.2f, true);
+			playSound(resourcesManager.walk, (isPoisened()) ? 0.6f : 0.8f, true);
 			break;
 		case TIPPING_OVER:
 			rowIndex = 12;
@@ -81,21 +81,22 @@ public class Avatar extends AnimatedObject {
 		case WALKING:
 			rowIndex = 16;
 			loopAnimation = true;
-			playSound(resourcesManager.walk, 1f, true);
+			playSound(resourcesManager.walk, (isPoisened()) ? 0.4f : 0.6f, true);
 			break;
 		default:
 			return;
 		}
-
+		
+		long[] duration = (this.isPoisened()) ? RUNNING_WALKING_POISENED_DURATION : ANIMATION_DURATION;
+		
 		int startTile = rowIndex * TILES_PER_LINE + this.direction
 				* FRAMES_PER_ANIMATION;
-		this.animate(ANIMATION_DURATION, startTile, startTile
+		this.animate(duration, startTile, startTile
 				+ FRAMES_PER_ANIMATION - 1, loopAnimation);
 	}
 
 	public void attack(int damage) {
 		super.attack(damage);
-
 		this.resourcesManager.hud.setLife(this.life);
 	}
 
@@ -122,7 +123,7 @@ public class Avatar extends AnimatedObject {
 		} else {
 			this.body.setLinearVelocity(pX * velocity * this.factorRunning, pY
 					* velocity * this.factorRunning);
-			this.setEnergy(this.energy - ENERY_LOSS_RUNNING);
+//			this.setEnergy(this.energy - ENERY_LOSS_RUNNING);
 		}
 		this.setState(state, direction);
 	}
@@ -134,9 +135,15 @@ public class Avatar extends AnimatedObject {
 	public void setLife(int life) {
 		super.setLife(life);
 		this.resourcesManager.hud.setLife(this.life);
+		if (this.life < 15) {
+			playSound(resourcesManager.heartbeat, 1f, true);
+		} else {
+			resourcesManager.heartbeat.stop();
+		}
 
 		// Game over if the avatar has no more life.
 		if (this.getLife() <= 0) {
+			resourcesManager.heartbeat.stop();
 			this.setState(GameState.TIPPING_OVER, -1);
 			GameOverScene gameOverScene = GameOverScene.getInstance();
 			gameOverScene.openGameOverScene();
@@ -148,9 +155,7 @@ public class Avatar extends AnimatedObject {
 	}
 
 	public void setEnergy(float energy) {
-		if (energy > 100) {
-			energy = 100;
-		}
+		if (energy > 100) this.energy = 100;
 		this.energy = Math.max(energy, 0);
 		this.resourcesManager.hud.setEnergy(this.energy);
 	}
@@ -168,7 +173,7 @@ public class Avatar extends AnimatedObject {
 		super.onManagedUpdate(seconds);
 		if (this.poisened) {
 			if (this.timePoisened > TIME_POISENED) {
-				this.poisened = false;
+				this.setPoisened(false);
 				this.timePoisened = 0;
 			} else {
 				this.timePoisened += seconds;
@@ -208,6 +213,7 @@ public class Avatar extends AnimatedObject {
 		this.poisened = poisened;
 		if (!poisened) {
 			this.timePoisened = 0;
+			resourcesManager.heartbeat.stop();
 		}
 	}
 
@@ -218,6 +224,7 @@ public class Avatar extends AnimatedObject {
 		this.timePoisened = 0;
 		resourcesManager.activity.toastOnUIThread("Feeling dizzy...",
 				Toast.LENGTH_SHORT);
+		playSound(resourcesManager.heartbeat, 1f, true);
 	}
 
 }

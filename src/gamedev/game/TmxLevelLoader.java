@@ -151,13 +151,6 @@ public class TmxLevelLoader {
 		}
 	}
 
-	// protected void createTrees(ArrayList<TMXObject> objects) {
-	// Random r = new Random();
-	// for (final TMXObject object : objects) {
-	// this.scene.attachChild(new Tree(object.getX(), object.getY(), r
-	// .nextInt(20)));
-	// }
-	// }
 
 	protected void createDinosaurs(ArrayList<TMXObject> objects, int color) {
 		for (final TMXObject object : objects) {
@@ -165,6 +158,15 @@ public class TmxLevelLoader {
 			MoveStrategy alternateStrategy = this.getMoveStrategy(object, d);
 			if (alternateStrategy != null) {
 				d.setAlternateMoveStrategy(alternateStrategy);
+			}
+			for (int i = 0; i < object.getTMXObjectProperties().size(); i++) {
+				if (object.getTMXObjectProperties().get(i).getName().equals("radius")) {
+					d.setRadius(Float.parseFloat(object.getTMXObjectProperties().get(i).getValue()));
+				} else if (object.getTMXObjectProperties().get(i).getName().equals("velocity")) {
+					d.setVelocity(Float.parseFloat(object.getTMXObjectProperties().get(i).getValue()));					
+				} else if (object.getTMXObjectProperties().get(i).getName().equals("scale")) {
+					d.setScale(Float.parseFloat(object.getTMXObjectProperties().get(i).getValue()));
+				}
 			}
 			this.scene.attachChild(d);
 		}
@@ -209,7 +211,7 @@ public class TmxLevelLoader {
 				} else if (object.getTMXObjectProperties().get(i).getValue()
 						.equals(MOVE_STRATEGY_SIMPLE)) {
 
-					// TODO Simple
+					// TODO Simple... not needed until now ;)
 
 				} else if (object.getTMXObjectProperties().get(i).getValue()
 						.equals(MOVE_STRATEGY_RANDOM)) {
@@ -257,21 +259,5 @@ public class TmxLevelLoader {
 			this.scene.attachChild(rect);
 		}
 	}
-
-	// private void createShopCave(ArrayList<TMXObject> objects) {
-	// for (final TMXObject object : objects) {
-	// final Rectangle rect = new Rectangle(object.getX(), object.getY(),
-	// object.getWidth(), object.getHeight(),
-	// this.resourcesManager.vbom);
-	// final FixtureDef boxFixtureDef = PhysicsFactory.createFixtureDef(0,
-	// 0, 0);
-	// Body body = PhysicsFactory.createBoxBody(
-	// this.resourcesManager.physicsWorld, rect,
-	// BodyType.StaticBody, boxFixtureDef);
-	// body.setUserData("ShopCave");
-	// rect.setVisible(false);
-	// this.scene.attachChild(rect);
-	// }
-	// }
 
 }
