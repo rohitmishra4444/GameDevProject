@@ -59,6 +59,7 @@ public class BodiesContactListener implements ContactListener,
 			berryBush = (BerryBush) x1.getBody().getUserData();
 			if (!berryBush.isEmpty()) {
 				addCollectingBarToBerryBush(berryBush);
+//				addBerryToAvatarInventory();
 			} else {
 				resourcesManager.activity.toastOnUIThread(
 						"No berries ripened.", Toast.LENGTH_SHORT);
@@ -69,6 +70,7 @@ public class BodiesContactListener implements ContactListener,
 			berryBush = (BerryBush) x2.getBody().getUserData();
 			if (!berryBush.isEmpty()) {
 				addCollectingBarToBerryBush(berryBush);
+//				addBerryToAvatarInventory();
 			} else {
 				resourcesManager.activity.toastOnUIThread(
 						"No berries ripened.", Toast.LENGTH_SHORT);

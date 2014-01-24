@@ -83,8 +83,12 @@ public class GameOverScene extends CameraScene {
 		Iterator<Body> it = resourcesManager.physicsWorld.getBodies();
 		while (it.hasNext()) {
 			Body body = it.next();
-			resourcesManager.physicsWorld.destroyBody(body);
+			if (body != null) resourcesManager.physicsWorld.destroyBody(body);
 		}
+		resourcesManager.physicsWorld.clearForces();
+		resourcesManager.physicsWorld.clearPhysicsConnectors();
+		resourcesManager.physicsWorld.reset();
+		resourcesManager.physicsWorld.dispose();
 		resourcesManager.physicsWorld = null;
 		resourcesManager.avatar = null;
 		SceneManager.getInstance().deleteCurrentGameMapScene();

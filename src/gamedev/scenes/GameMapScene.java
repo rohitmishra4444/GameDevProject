@@ -1,6 +1,8 @@
 package gamedev.scenes;
 
+import gamedev.game.GameActivity;
 import gamedev.game.SceneManager;
+import gamedev.game.GameActivity.GameMode;
 import gamedev.game.SceneManager.SceneType;
 import gamedev.game.TmxLevelLoader;
 import gamedev.quests.Quest;
@@ -48,6 +50,7 @@ public class GameMapScene extends BaseScene {
 		createMap();
 		connectPhysics();
 		createQuests();
+		GameActivity.mode = GameMode.EXPLORING;
 	}
 
 	protected void connectPhysics() {
