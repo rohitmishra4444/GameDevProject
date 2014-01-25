@@ -2,6 +2,8 @@ package gamedev.quests;
 
 import android.widget.Toast;
 import gamedev.game.ResourcesManager;
+import gamedev.game.SceneManager;
+import gamedev.objects.AnimatedObject.GameState;
 import gamedev.scenes.GameMapScene;
 
 public class QuestMakePortalWork extends Quest {
@@ -14,20 +16,18 @@ public class QuestMakePortalWork extends Quest {
 
 	@Override
 	public void onFinish() {
-		// TODO Auto-generated method stub
-
+		SceneManager.getInstance().loadGameEndScene(ResourcesManager.getInstance().engine);
+		ResourcesManager.getInstance().avatar.setState(GameState.IDLE, -1);
 	}
 
 	@Override
 	public String getStatus() {
-		// TODO Auto-generated method stub
-		return null;
+		return "There is still something missing...";
 	}
 
 	@Override
 	public boolean isCompleted() {
-		// TODO Auto-generated method stub
-		return false;
+		return SceneManager.getInstance().getCurrentGameMapScene().getQuest(3).isFinished();
 	}
 	
 	public void setActive(boolean bool) {

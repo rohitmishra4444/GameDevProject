@@ -1,6 +1,7 @@
 package gamedev.game;
 
 import gamedev.ai.FollowPlayerStrategy;
+import gamedev.ai.RandomMoveStrategy;
 import gamedev.game.GameActivity.GameMode;
 import gamedev.objects.AnimatedObject.GameState;
 import gamedev.objects.Berry;
@@ -8,6 +9,7 @@ import gamedev.objects.BerryBush;
 import gamedev.objects.Dinosaur;
 import gamedev.objects.Pig;
 import gamedev.objects.Spider;
+import gamedev.quests.QuestCatchPig;
 import gamedev.scenes.FightScene;
 
 import org.andengine.engine.handler.timer.ITimerCallback;
@@ -110,11 +112,9 @@ public class BodiesContactListener implements ContactListener,
 			}
 			if (pig != null && !pig.isCatched()) {
 				// Catched the Pig!
-				// resourcesManager.removeSpriteAndBody(pig);
 				resourcesManager.activity.toastOnUIThread("Gotcha!",
 						Toast.LENGTH_SHORT);
 				resourcesManager.collect.play();
-				// currentMapScene.getQuest(1).setCompleted(true);
 				pig.setCatched(true);
 				pig.setMoveStrategy(new FollowPlayerStrategy(pig, 1000, true));
 			}
@@ -125,13 +125,23 @@ public class BodiesContactListener implements ContactListener,
 		if (x1.getBody().getUserData().equals("Avatar")
 				&& x2.getBody().getUserData() instanceof Spider) {
 			ResourcesManager.getInstance().avatar.poisen(10, 20);
+			loosePigInSecondQuest();
 			return;
 		} else if (x1.getBody().getUserData() instanceof Dinosaur
 				&& x2.getBody().getUserData().equals("Avatar")) {
 			ResourcesManager.getInstance().avatar.poisen(10, 20);
+			loosePigInSecondQuest();
 			return;
 		}
 
+	}
+		
+	private void loosePigInSecondQuest() {
+		if (SceneManager.getInstance().getCurrentGameMapScene().getQuest(1).isActive()) {
+			QuestCatchPig quest = (QuestCatchPig) SceneManager.getInstance().getCurrentGameMapScene().getQuest(1);
+			if (quest.getPig1().isCatched()) quest.loosePig(quest.getPig1()); 
+			if (quest.getPig2().isCatched()) quest.loosePig(quest.getPig2()); 
+		}
 	}
 
 	private void showFightScene(Dinosaur d) {

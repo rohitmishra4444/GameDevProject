@@ -102,5 +102,18 @@ public class QuestCatchPig extends Quest {
 	public Axe getAxe() {
 		return this.axe;
 	}
-
+	
+	public Pig getPig1() {
+		return this.pig;
+	}
+	
+	public Pig getPig2() {
+		return this.pig2;
+	}
+	
+	public void loosePig(Pig pig) {
+		pig.setCatched(false);
+		pig.setMoveStrategy(new RandomMoveStrategy(pig, 100, 300, 0, 42 * 32, 60 * 32, 14 * 32, 34 * 32));
+	}
+	
 }
