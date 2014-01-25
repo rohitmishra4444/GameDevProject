@@ -31,15 +31,10 @@ public class QuestCatchPig extends Quest {
 		this.title = "Catch the pigs and bring them back to the cave man";
 		this.description = "Save them from the dinosaurs";
 
-		this.conversation
-				.add("Hi, my name is Detlef. I need to pass the canyon, can you help me?");
-		this.conversation.add("Hmm... My back hurts, I'm so old!");
-		this.conversation
-				.add("And even worse, two of my pigs broke out this morning...");
-		this.conversation
-				.add("I'm scared that the dinosaurs will kill them... Can you catch them for me?");
-		this.conversation
-				.add("I will give you my axe so you can destroy the trees and go trought the canyon.");
+		this.conversation.add("Hey young cave man! Please help me...");
+		this.conversation.add("Two of my pigs broke out this morning...");
+		this.conversation.add("I'm scared that the dinosaurs will kill them... Can you catch them for me?");
+		this.conversation.add("I have some tools in my garden, maybe there's something useful for you?");
 
 		// Create the pig :-D
 		this.pig = new Pig(500, 500);
@@ -67,7 +62,7 @@ public class QuestCatchPig extends Quest {
 		if (active) {
 			for (String s : this.conversation) {
 				ResourcesManager.getInstance().activity.toastOnUIThread(s,
-						Toast.LENGTH_SHORT);
+						Toast.LENGTH_LONG);
 			}
 		}
 	}
@@ -75,12 +70,12 @@ public class QuestCatchPig extends Quest {
 	@Override
 	public void onFinish() {
 		ResourcesManager.getInstance().activity.toastOnUIThread(
-				"Thank you very much young man! I'm so lucky...",
-				Toast.LENGTH_SHORT);
-		ResourcesManager.getInstance().activity.toastOnUIThread(
-				"Go grab your axe!", Toast.LENGTH_SHORT);
+				"Thank you very much young man! I'm so lucky...!",
+				Toast.LENGTH_LONG);
+//		ResourcesManager.getInstance().activity.toastOnUIThread(
+//				"Go grab your axe!", Toast.LENGTH_SHORT);
 		ResourcesManager.getInstance().activity.toastOnUIThread("Be safe...",
-				Toast.LENGTH_SHORT);
+				Toast.LENGTH_LONG);
 		Body b = caveman.getBody();
 		Vector2 v = Vector2Pool.obtain(b.getPosition());
 		b.setTransform(v.x - 3f, v.y - 2f, b.getAngle());

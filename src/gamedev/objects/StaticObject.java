@@ -25,6 +25,7 @@ abstract class StaticObject extends Sprite {
 		this.resourcesManager = ResourcesManager.getInstance();
 		this.bodyUserData = "StaticObject";
 		this.createPhysics();
+		this.setCullingEnabled(true);
 	}
 	
 	/**

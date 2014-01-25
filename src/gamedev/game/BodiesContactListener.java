@@ -6,6 +6,7 @@ import gamedev.game.GameActivity.GameMode;
 import gamedev.objects.AnimatedObject.GameState;
 import gamedev.objects.Berry;
 import gamedev.objects.BerryBush;
+import gamedev.objects.Box;
 import gamedev.objects.Dinosaur;
 import gamedev.objects.Pig;
 import gamedev.objects.Spider;
@@ -134,6 +135,21 @@ public class BodiesContactListener implements ContactListener,
 			return;
 		}
 
+		// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+		// Boxes for 4th quest
+		if (x1.getBody().getUserData().equals("Avatar")
+				&& x2.getBody().getUserData() instanceof Box) {
+			Box box = (Box) x2.getBody().getUserData();
+			box.setOpened(true);
+			return;
+		} else if (x1.getBody().getUserData() instanceof Box
+				&& x2.getBody().getUserData().equals("Avatar")) {
+			Box box = (Box) x1.getBody().getUserData();
+			box.setOpened(true);
+			return;
+		}
+
+		
 	}
 		
 	private void loosePigInSecondQuest() {
