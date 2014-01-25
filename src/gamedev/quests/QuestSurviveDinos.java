@@ -14,20 +14,20 @@ public class QuestSurviveDinos extends Quest {
 		super(map);
 		this.title = "Survive and find something to make the portal work";
 		this.description = "Damn, I need to go down here, allthought it looks dangerous...";
-		this.box1 = new Box(77, 47) {
+		this.box1 = new Box(77*32, 47*32, map) {
 			public void setOpened(boolean opened) {
-				super.setOpened(opened);
 				if (opened && !this.opened) {
 					ResourcesManager.getInstance().activity.toastOnUIThread("A key... could be one of the keys for the portal!", Toast.LENGTH_LONG);	
 				}
+				super.setOpened(opened);
 			}
 		};
-		this.box2 = new Box(102, 47) {
+		this.box2 = new Box(102*32, 47*32, map) {
 			public void setOpened(boolean opened) {
-				super.setOpened(opened);
 				if (opened && !this.opened) {
 					ResourcesManager.getInstance().activity.toastOnUIThread("A key... could be one of the keys for the portal!", Toast.LENGTH_LONG);	
 				}
+				super.setOpened(opened);
 			}
 		};
 		map.attachChild(box1);

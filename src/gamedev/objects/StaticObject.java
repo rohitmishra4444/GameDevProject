@@ -15,16 +15,11 @@ abstract class StaticObject extends Sprite {
 	protected ResourcesManager resourcesManager;
 	protected Body body;
 	
-	/**
-	 * The identifier for the constactListener. Subclasses can override this string if needed...
-	 */
-	protected String bodyUserData;
 	
 	public StaticObject(float pX, float pY, ITextureRegion textureRegion) {
 		super(pX, pY, textureRegion, ResourcesManager.getInstance().vbom);
 		this.resourcesManager = ResourcesManager.getInstance();
-		this.bodyUserData = "StaticObject";
-		this.createPhysics();
+//		this.createPhysics();
 		this.setCullingEnabled(true);
 	}
 	
@@ -33,8 +28,8 @@ abstract class StaticObject extends Sprite {
 	 */
 	abstract protected void createPhysics();
 	
-	public Body getBody() {
-		return this.body;
-	}
+//	public Body getBody() {
+//		return this.body;
+//	}
 	
 }
