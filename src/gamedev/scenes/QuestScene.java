@@ -119,7 +119,9 @@ public class QuestScene extends CameraScene {
 		resourcesManager.loadQuestSceneGraphics();
 		resourcesManager.unloadHUDResources();
 		SceneManager.getInstance().getCurrentGameMapScene().setChildScene(this);
-		attachChild(background);
+		if (!background.hasParent()) {
+			attachChild(background);
+		}
 		background.registerEntityModifier(new FadeInModifier(FADE_IN_DURATION));
 		addCurrentQuestsToScene();
 	}
@@ -129,7 +131,10 @@ public class QuestScene extends CameraScene {
 		resourcesManager.loadHUDResources();
 		resourcesManager.unloadQuestSceneGraphics();
 		GameActivity.mode = GameMode.EXPLORING;
-
+		background.detachSelf();
+		if (!background.isDisposed()) {
+			background.dispose();
+		}
 		for (int i = 0; i < this.getChildCount(); i++) {
 			IEntity entity = this.getChildByIndex(i);
 			entity.detachSelf();
