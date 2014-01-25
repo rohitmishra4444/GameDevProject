@@ -84,6 +84,13 @@ public class TmxLevelLoader {
 			if (strategy != null) {
 				s.setMoveStrategy(strategy);
 			}
+			for (int i = 0; i < object.getTMXObjectProperties().size(); i++) {
+				if (object.getTMXObjectProperties().get(i).getName().equals("velocity")) {
+					s.setVelocity(Float.parseFloat(object.getTMXObjectProperties().get(i).getValue()));					
+				} else if (object.getTMXObjectProperties().get(i).getName().equals("scale")) {
+					s.setScale(Float.parseFloat(object.getTMXObjectProperties().get(i).getValue()));
+				}
+			}
 			this.scene.attachChild(s);
 		}
 	}
@@ -218,6 +225,10 @@ public class TmxLevelLoader {
 					float minDistance = 0;
 					float maxDistance = 0;
 					float waitBetweenTime = 0;
+					float minX = -1;
+					float maxX = -1;
+					float minY = -1;
+					float maxY = -1;
 					for (int j = (i + 1); j < object.getTMXObjectProperties()
 							.size(); j++) {
 						String name = object.getTMXObjectProperties().get(j)
@@ -225,15 +236,26 @@ public class TmxLevelLoader {
 						String value = object.getTMXObjectProperties().get(j)
 								.getValue();
 						if (name.equals("minDistance")) {
-							minDistance = Float.parseFloat(value);
+							minDistance = Float.parseFloat(value) * 32;
 						} else if (name.equals("maxDistance")) {
-							maxDistance = Float.parseFloat(value);
+							maxDistance = Float.parseFloat(value) * 32;
 						} else if (name.equals("waitBetweenTime")) {
 							waitBetweenTime = Float.parseFloat(value);
+						} else if (name.equals("minX")) {
+							minX = Float.parseFloat(value) * 32;
+						} else if (name.equals("maxX")) {
+							maxX = Float.parseFloat(value) * 32;
+						} else if (name.equals("minY")) {
+							minY = Float.parseFloat(value) * 32;
+						} else if (name.equals("maxY")) {
+							maxY = Float.parseFloat(value) * 32;
 						}
 					}
-					return new RandomMoveStrategy(d, minDistance, maxDistance,
-							waitBetweenTime);
+					if (minX != -1 && maxX != -1 && minY != -1 && maxY != -1) {
+						return new RandomMoveStrategy(d, minDistance, maxDistance, waitBetweenTime, minX, maxX, minY, maxY);
+					} else {
+						return new RandomMoveStrategy(d, minDistance, maxDistance, waitBetweenTime);						
+					}
 				}
 			}
 		}

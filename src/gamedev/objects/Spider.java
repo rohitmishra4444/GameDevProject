@@ -15,8 +15,6 @@ public class Spider extends AnimatedObject {
 		this.factorRunning = 1.5f;
 		this.getBody().setUserData(this);
 		this.setCullingEnabled(true);
-		// TODO We need to set this strategy with the correct boundaries from the levelLoader...!
-		this.moveStrategy = new RandomMoveStrategy(this, 100, 400);
 	}
 
 	@Override
@@ -57,7 +55,7 @@ public class Spider extends AnimatedObject {
 		if (!super.onCustomUpdate(pSecondsElapsed)) {
 			return false;
 		} else {
-			this.moveStrategy.update(pSecondsElapsed);
+			if (this.moveStrategy != null) this.moveStrategy.update(pSecondsElapsed);
 			return true;
 		}
 	}

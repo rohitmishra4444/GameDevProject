@@ -29,7 +29,7 @@ public class FightScene extends CameraScene {
 	private final static float TARGET_RADIUS = 50;
 
 	protected Sprite fightDino;
-	protected AnimatedObject object;
+	protected AnimatedObject dinosaur;
 	protected ResourcesManager resourcesManager;
 	protected ArrayList<Target> targets = new ArrayList<Target>();
 	protected ArrayList<Target> targetsToRemove = new ArrayList<Target>();
@@ -62,18 +62,17 @@ public class FightScene extends CameraScene {
 					for (Target target : targets) {
 						if (target.isHit(pX, pY)) {
 							if (target.getDamageOpponent() > 0) {
-								object.attack(target.getDamageOpponent());
+								dinosaur.attack(target.getDamageOpponent());
 								resourcesManager.hit.play();
 							}
 							if (target.getDamageAvatar() > 0) {
 								resourcesManager.avatar.attack(target
 										.getDamageAvatar());
-//								resourcesManager.hit_false.play();
 							}
 							target.setRemovable(true);
 						}
 					}
-					if (object.getState() == GameState.DEAD) {
+					if (dinosaur.getState() == GameState.DEAD) {
 						resourcesManager.avatar.setState(GameState.IDLE, -1);
 						GameActivity.mode = GameMode.EXPLORING;
 						onClose();
@@ -96,19 +95,19 @@ public class FightScene extends CameraScene {
 		return instance;
 	}
 
-	public void setObject(AnimatedObject object) {
-		this.object = object;
-		if (this.object instanceof Dinosaur) {
-			Dinosaur d = (Dinosaur) this.object;
-			this.frequencyOfTargets = (d.getDinoColor() == Dinosaur.COLOR_RED) ? 0.1f : 0.2f; 
-		}
+	public void setObject(Dinosaur d) {
+		this.dinosaur = d;
+		this.frequencyOfTargets = (d.getDinoColor() == Dinosaur.COLOR_RED) ? 0.1f : 0.2f; 
 		if (ResourcesManager.getInstance().avatar.isPoisened()) {
 			this.frequencyOfTargets = this.frequencyOfTargets * 0.5f;
+		}
+		if (this.dinosaur.getScaleX() > 1) {
+			this.frequencyOfTargets = this.frequencyOfTargets * 0.8f;
 		}
 	}
 
 	public void onManagedUpdate(float seconds) {
-		if (this.object == null)
+		if (this.dinosaur == null)
 			return;
 		this.fightDuration += seconds;
 		this.lastTargetCreated += seconds;
@@ -165,8 +164,8 @@ public class FightScene extends CameraScene {
 		Target t = null;
 
 		// I know it's horrible this way, but who cares... we're in a hurry
-		if (this.object instanceof Dinosaur) {
-			Dinosaur d = (Dinosaur) this.object;
+		if (this.dinosaur instanceof Dinosaur) {
+			Dinosaur d = (Dinosaur) this.dinosaur;
 			pGoodTarget = (d.getDinoColor() == Dinosaur.COLOR_GREEN) ? 0.7f
 					: 0.9f;
 			if (r.nextFloat() < pGoodTarget) {
@@ -230,7 +229,7 @@ public class FightScene extends CameraScene {
 			t.dispose();
 		}
 		this.targets.clear();
-		this.object = null;
+		this.dinosaur = null;
 		this.fightDuration = 0;
 		this.lastTargetCreated = 0;
 		this.resourcesManager.loadHUDResources();
