@@ -156,7 +156,7 @@ public class Avatar extends AnimatedObject {
 
 	public void setEnergy(float energy) {
 		if (energy > 100) this.energy = 100;
-		this.energy = Math.max(energy, 0);
+		if (energy < 0) this.energy = 0;
 		this.resourcesManager.hud.setEnergy(this.energy);
 	}
 

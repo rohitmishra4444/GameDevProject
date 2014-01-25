@@ -41,15 +41,20 @@ public class Target extends Ellipse {
 	 */
 	protected boolean isRemovable;
 	
-	public Target(float pX, float pY, float radius, Color color, float created, float showed) {
-		super(pX, pY, radius, radius, ResourcesManager.getInstance().vbom);
+	public Target(float radius) {
+		super(-100f, -100f, radius, radius, ResourcesManager.getInstance().vbom);
 		this.radius = radius;
-		this.timeCreated = created;
-		this.timeShowed = showed;
-		this.setColor(color);
 		this.setDrawMode(DrawMode.TRIANGLE_FAN);
 		this.setAlpha(0.8f);
 	}
+	
+//	public Target(float pX, float pY, float radius, Color color, float created, float showed) {
+//		super(pX, pY, radius, radius, ResourcesManager.getInstance().vbom);
+//		this.radius = radius;
+//		this.timeCreated = created;
+//		this.timeShowed = showed;
+//		this.setColor(color);
+//	}
 	
 	
 	public boolean isHit(float x, float y) {
@@ -88,7 +93,7 @@ public class Target extends Ellipse {
 		this.damageAvatar = damageAvatar;
 	}
 
-	public float getTimeAlive() {
+	public float getTimeShowed() {
 		return timeShowed;
 	}
 
@@ -116,6 +121,17 @@ public class Target extends Ellipse {
 	
 	public float getRadius() {
 		return this.radius;
+	}
+
+	public void resetTarget() {
+		this.setX(-100f);
+		this.setY(-100f);
+		this.setRemovable(false);
+		this.timeCreated = 0;
+		this.timeShowed = 0;
+		this.damageAvatar = 0;
+		this.damageOpponent = 0;
+		this.damageMiss = 0;
 	}
 	
 	

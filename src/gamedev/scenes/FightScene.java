@@ -29,7 +29,7 @@ public class FightScene extends CameraScene {
 	private final static float TARGET_RADIUS = 50;
 
 	protected Sprite fightDino;
-	protected AnimatedObject dinosaur;
+	protected Dinosaur dinosaur;
 	protected ResourcesManager resourcesManager;
 	protected ArrayList<Target> targets = new ArrayList<Target>();
 	protected ArrayList<Target> targetsToRemove = new ArrayList<Target>();
@@ -41,6 +41,11 @@ public class FightScene extends CameraScene {
 	private static FightScene instance;
 	
 	protected Random r = new Random();
+	
+	/**
+	 * Target-Pool contains the inactive target objects, so GC has less work with allocate/clear memory
+	 */
+	protected static ArrayList<Target> targetPool = new ArrayList<Target>();
 	
 	private FightScene() {
 		super(ResourcesManager.getInstance().camera);
@@ -114,7 +119,7 @@ public class FightScene extends CameraScene {
 
 		// First step: Check for dismissed targets!
 		for (Target t : this.targets) {
-			if ((this.fightDuration - t.getTimeAlive()) > t.getTimeCreated()) {
+			if ((this.fightDuration - t.getTimeShowed()) > t.getTimeCreated()) {
 				// Missed!
 				if (t.getDamageMiss() > 0)
 					resourcesManager.avatar.attack(t.getDamageMiss());
@@ -127,11 +132,13 @@ public class FightScene extends CameraScene {
 				targetsToRemove.add(t);
 		}
 
-		// Second step: Remove targets!
+		// Second step: Remove targets - add them back to Pool and off the screen!
 		for (Target t : targetsToRemove) {
 			this.targets.remove(t);
-			this.detachChild(t);
-			t.dispose();
+//			this.detachChild(t);
+//			t.dispose();
+			t.resetTarget();
+			targetPool.add(t);
 		}
 		this.targetsToRemove.clear();
 
@@ -145,7 +152,6 @@ public class FightScene extends CameraScene {
 			for (int i = 0; i < nTargets; i++) {
 				Target t = this.generateTarget();
 				this.targets.add(t);
-				this.attachChild(t);
 			}
 		}
 	}
@@ -159,39 +165,49 @@ public class FightScene extends CameraScene {
 		// hit ;)
 		// 1-p is the percentage of a "bad" target, that should not be hit
 		float pGoodTarget = 0;
-		Random r = new Random();
 		Vector2 position = this.getRandomPosition();
+		// Get Dummy target from Pool or create a new Object...
 		Target t = null;
-
-		// I know it's horrible this way, but who cares... we're in a hurry
-		if (this.dinosaur instanceof Dinosaur) {
-			Dinosaur d = (Dinosaur) this.dinosaur;
-			pGoodTarget = (d.getDinoColor() == Dinosaur.COLOR_GREEN) ? 0.7f
-					: 0.9f;
-			if (r.nextFloat() < pGoodTarget) {
-				// Good target
-				if (d.getDinoColor() == Dinosaur.COLOR_GREEN) {
-					t = new Target(position.x, position.y, TARGET_RADIUS,
-							Color.BLACK, this.fightDuration, 0.75f);
-					t.setDamageOpponent(10);
-					t.setDamageMiss(10);
-				} else {
-					t = new Target(position.x, position.y, TARGET_RADIUS,
-							Color.BLACK, this.fightDuration, 0.5f);
-					t.setDamageOpponent(5);
-					t.setDamageMiss(15);
-				}
+		if (targetPool.isEmpty()) {
+			t = new Target(TARGET_RADIUS);
+			this.attachChild(t);
+		} else {
+			t = targetPool.get(0);
+			targetPool.remove(t);
+		}
+		pGoodTarget = (dinosaur.getDinoColor() == Dinosaur.COLOR_GREEN) ? 0.7f : 0.9f;
+		t.setTimeCreated(this.fightDuration);
+		t.setX(position.x);
+		t.setY(position.y);
+		if (r.nextFloat() < pGoodTarget) {
+			// Good target
+			t.setColor(Color.BLACK);
+			if (dinosaur.getDinoColor() == Dinosaur.COLOR_GREEN) {
+//				t = new Target(position.x, position.y, TARGET_RADIUS,
+//						Color.BLACK, this.fightDuration, 0.75f);
+				t.setTimeShowed(0.75f);
+				t.setDamageOpponent(10);
+				t.setDamageMiss(10);
 			} else {
-				// Bad target
-				if (d.getDinoColor() == Dinosaur.COLOR_GREEN) {
-					t = new Target(position.x, position.y, TARGET_RADIUS,
-							Color.RED, this.fightDuration, 0.75f);
-					t.setDamageAvatar(10);
-				} else {
-					t = new Target(position.x, position.y, TARGET_RADIUS,
-							Color.RED, this.fightDuration, 0.5f);
-					t.setDamageAvatar(15);
-				}
+//				t = new Target(position.x, position.y, TARGET_RADIUS,
+//						Color.BLACK, this.fightDuration, 0.5f);
+				t.setTimeShowed(0.5f);
+				t.setDamageOpponent(5);
+				t.setDamageMiss(15);
+			}
+		} else {
+			// Bad target
+			t.setColor(Color.RED);
+			if (dinosaur.getDinoColor() == Dinosaur.COLOR_GREEN) {
+//				t = new Target(position.x, position.y, TARGET_RADIUS,
+//						Color.RED, this.fightDuration, 0.75f);
+				t.setDamageAvatar(10);
+				t.setTimeShowed(0.75f);
+			} else {
+//				t = new Target(position.x, position.y, TARGET_RADIUS,
+//						Color.RED, this.fightDuration, 0.5f);
+				t.setDamageAvatar(15);
+				t.setTimeShowed(0.5f);
 			}
 		}
 		return t;
