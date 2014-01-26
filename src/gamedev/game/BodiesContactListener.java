@@ -85,6 +85,7 @@ public class BodiesContactListener implements ContactListener,
 			Dinosaur dino = (Dinosaur) x2.getBody().getUserData();
 			if (dino.getState() == GameState.DEAD)
 				return;
+			loosePigInSecondQuest();
 			showFightScene(dino);
 			return;
 		} else if (x1.getBody().getUserData() instanceof Dinosaur
@@ -92,6 +93,7 @@ public class BodiesContactListener implements ContactListener,
 			Dinosaur dino = (Dinosaur) x1.getBody().getUserData();
 			if (dino.getState() == GameState.DEAD)
 				return;
+			loosePigInSecondQuest();
 			showFightScene(dino);
 			return;
 		}
