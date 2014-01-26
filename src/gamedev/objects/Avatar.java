@@ -17,8 +17,10 @@ public class Avatar extends AnimatedObject {
 
 	private final static float ENERGY_LOSS_RUNNING = 0.5f;
 	private final static float TIME_POISENED = 20; // in seconds
-	public final static long[] ANIMATION_DURATION = { 60, 60, 60, 60, 60, 60, 60, 60 };
-	public final static long[] RUNNING_WALKING_POISENED_DURATION = { 120, 120, 120, 120, 120, 120, 120, 120 };
+	public final static long[] ANIMATION_DURATION = { 60, 60, 60, 60, 60, 60,
+			60, 60 };
+	public final static long[] RUNNING_WALKING_POISENED_DURATION = { 120, 120,
+			120, 120, 120, 120, 120, 120 };
 	public final static int FRAMES_PER_ANIMATION = ANIMATION_DURATION.length;
 	public final static int TILES_PER_LINE = 16;
 
@@ -53,7 +55,7 @@ public class Avatar extends AnimatedObject {
 			this.direction = direction;
 		int rowIndex = 0;
 		boolean loopAnimation = false;
-		
+
 		switch (state) {
 		case IDLE:
 			this.body.setLinearVelocity(0, 0);
@@ -86,13 +88,14 @@ public class Avatar extends AnimatedObject {
 		default:
 			return;
 		}
-		
-		long[] duration = (this.isPoisened()) ? RUNNING_WALKING_POISENED_DURATION : ANIMATION_DURATION;
-		
+
+		long[] duration = (this.isPoisened()) ? RUNNING_WALKING_POISENED_DURATION
+				: ANIMATION_DURATION;
+
 		int startTile = rowIndex * TILES_PER_LINE + this.direction
 				* FRAMES_PER_ANIMATION;
-		this.animate(duration, startTile, startTile
-				+ FRAMES_PER_ANIMATION - 1, loopAnimation);
+		this.animate(duration, startTile, startTile + FRAMES_PER_ANIMATION - 1,
+				loopAnimation);
 	}
 
 	public void attack(int damage) {
@@ -123,7 +126,7 @@ public class Avatar extends AnimatedObject {
 		} else {
 			this.body.setLinearVelocity(pX * velocity * this.factorRunning, pY
 					* velocity * this.factorRunning);
-//			this.setEnergy(this.energy - ENERY_LOSS_RUNNING);
+			this.setEnergy(this.energy - ENERGY_LOSS_RUNNING);
 		}
 		this.setState(state, direction);
 	}
@@ -155,8 +158,12 @@ public class Avatar extends AnimatedObject {
 	}
 
 	public void setEnergy(float energy) {
-		if (energy > 100) this.energy = 100;
-		if (energy < 0) this.energy = 0;
+		if (energy > 100)
+			this.energy = 100;
+		else if (energy < 0)
+			this.energy = 0;
+		else
+			this.energy = Math.max(energy, 0);
 		this.resourcesManager.hud.setEnergy(this.energy);
 	}
 

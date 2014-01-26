@@ -34,7 +34,7 @@ public class SceneHUD extends HUD {
 
 	protected ButtonSprite berries;
 	public Text berryCounter;
-	private static int lifeAdditionFromBerry = 10;
+	private static int lifeAdditionFromBerry = 20;
 	private static int energyAdditionFromBerry = 30;
 
 	protected boolean isTouchedPrimary = false;
@@ -140,7 +140,8 @@ public class SceneHUD extends HUD {
 						int currentLife = resourcesManager.avatar.getLife();
 						resourcesManager.avatar.setLife(currentLife
 								+ lifeAdditionFromBerry);
-						float currentEnergy = resourcesManager.avatar.getEnergy();
+						float currentEnergy = resourcesManager.avatar
+								.getEnergy();
 						resourcesManager.avatar.setEnergy(currentEnergy
 								+ energyAdditionFromBerry);
 						// Feedback:

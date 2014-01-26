@@ -18,13 +18,14 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.util.GLState;
 import org.andengine.util.HorizontalAlign;
 
+import android.widget.Toast;
+
 public class GameIntroScene extends BaseScene {
 
 	private static final float FADE_IN_DURATION = 1f;
 	private static final float FADE_OUT_DURATION = 0.5f;
 
-	private static final String string0 = "Once a beautiful day in our modern world..."
-			+ "\n\n\n" + "(Tap to continue intro screens)";
+	private static final String string0 = "Once a beautiful day in our modern world...";
 	private static final String string1 = "a bad accident messed up your life...";
 	private static final String string2 = "With a big flash and a terrible noise,\nyou were thrown back to the stone age...";
 	private static final String string3 = "Fortunately, some kindly cavemen\nhave taken you to their living cave.\n They gave you food and water until\nfinally you were fully recovered...";
@@ -81,6 +82,10 @@ public class GameIntroScene extends BaseScene {
 		}
 		// Attach the first entity to the scene.
 		attachChild(gameIntroEntities.get(0));
+
+		// Tell how to proceed.
+		resourcesManager.activity.toastOnUIThread("Tap to continue...",
+				Toast.LENGTH_SHORT);
 
 		// This call has to be at the end.
 		registerSceneTouchListener();

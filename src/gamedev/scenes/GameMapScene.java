@@ -1,8 +1,8 @@
 package gamedev.scenes;
 
 import gamedev.game.GameActivity;
-import gamedev.game.SceneManager;
 import gamedev.game.GameActivity.GameMode;
+import gamedev.game.SceneManager;
 import gamedev.game.SceneManager.SceneType;
 import gamedev.game.TmxLevelLoader;
 import gamedev.quests.Quest;
@@ -24,6 +24,8 @@ import org.andengine.extension.tmx.TMXTiledMap;
 import org.andengine.extension.tmx.util.exception.TMXLoadException;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.util.debug.Debug;
+
+import android.widget.Toast;
 
 /**
  * Base class for all levels
@@ -51,6 +53,9 @@ public class GameMapScene extends BaseScene {
 		connectPhysics();
 		createQuests();
 		GameActivity.mode = GameMode.EXPLORING;
+
+		resourcesManager.activity.toastOnUIThread(
+				"Tap on ?-Button to see how to play.", Toast.LENGTH_LONG);
 	}
 
 	protected void connectPhysics() {
