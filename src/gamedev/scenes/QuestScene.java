@@ -29,8 +29,8 @@ public class QuestScene extends CameraScene {
 	private static final float FADE_IN_DURATION = 1f;
 
 	private Sprite background;
-	private static final int X_POSITION = 125;
-	private static final int Y_POSITION_MIN = 110;
+	private static final int X_POSITION = 50;
+	private static final int Y_POSITION_MIN = 100;
 	private static final int GAP_BETWEEN_QUESTS = 50;
 
 	private QuestScene() {
@@ -89,9 +89,12 @@ public class QuestScene extends CameraScene {
 			sprite.setScale(0.8f);
 			attachChild(sprite);
 
+			String activeQuestString = quest.getTitle() + ": "
+					+ quest.statusForQuestScene();
+
 			Text text = new Text(X_POSITION + 65, Y_POSITION_MIN + i
 					* GAP_BETWEEN_QUESTS, resourcesManager.font,
-					quest.getTitle(), resourcesManager.vbom);
+					activeQuestString, resourcesManager.vbom);
 			attachChild(text);
 		}
 

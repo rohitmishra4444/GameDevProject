@@ -44,8 +44,8 @@ public class QuestPassCanyon extends Quest {
 		res.physicsWorld.registerPhysicsConnector(new PhysicsConnector(
 				rectangle, body, false, false));
 		map.attachChild(rectangle);
-		this.tree = new Tree(68*32, 4.5f*32);
-		this.tree2 = new Tree(68*32, 6f*32);
+		this.tree = new Tree(68 * 32, 4.5f * 32);
+		this.tree2 = new Tree(68 * 32, 6f * 32);
 		this.map.attachChild(tree);
 		this.map.attachChild(tree2);
 	}
@@ -69,12 +69,25 @@ public class QuestPassCanyon extends Quest {
 	}
 
 	@Override
+	public String statusForQuestScene() {
+		Inventory inventory = ResourcesManager.getInstance().avatar
+				.getInventory();
+		QuestCatchPig quest = (QuestCatchPig) this.map.getQuest(1);
+
+		if (inventory.contains(quest.getAxe())) {
+			return "I have an axe";
+		} else {
+			return "Tool is missing";
+		}
+	}
+
+	@Override
 	public boolean isCompleted() {
 		Inventory inventory = ResourcesManager.getInstance().avatar
 				.getInventory();
 		QuestCatchPig quest = (QuestCatchPig) this.map.getQuest(1);
-//		return inventory.contains(quest.getAxe());
-		 return true;
+		// return inventory.contains(quest.getAxe());
+		return true;
 	}
 
 	public Rectangle getRectangle() {

@@ -22,6 +22,8 @@ public abstract class Quest {
 
 	public abstract String getStatus();
 
+	public abstract String statusForQuestScene();
+
 	public abstract boolean isCompleted();
 
 	public boolean isActive() {
