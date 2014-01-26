@@ -14,6 +14,7 @@ import gamedev.quests.QuestSurviveDinos;
 
 import java.util.ArrayList;
 
+import org.andengine.entity.IEntity;
 import org.andengine.extension.tmx.TMXLayer;
 import org.andengine.extension.tmx.TMXLoader;
 import org.andengine.extension.tmx.TMXLoader.ITMXTilePropertiesListener;
@@ -118,6 +119,13 @@ public class GameMapScene extends BaseScene {
 	@Override
 	public void disposeScene() {
 		this.camera.setHUD(null);
+		for (int i = 0; i < this.getChildCount(); i++) {
+			IEntity child = this.getChildByIndex(i);
+			child.detachSelf();
+			if (!child.isDisposed()) {
+				child.dispose();
+			}
+		}
 		this.detachSelf();
 		if (!this.isDisposed()) {
 			this.dispose();

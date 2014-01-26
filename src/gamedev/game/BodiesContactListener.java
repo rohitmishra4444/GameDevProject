@@ -1,7 +1,6 @@
 package gamedev.game;
 
 import gamedev.ai.FollowPlayerStrategy;
-import gamedev.ai.RandomMoveStrategy;
 import gamedev.game.GameActivity.GameMode;
 import gamedev.objects.AnimatedObject.GameState;
 import gamedev.objects.Berry;
@@ -62,7 +61,6 @@ public class BodiesContactListener implements ContactListener,
 			berryBush = (BerryBush) x1.getBody().getUserData();
 			if (!berryBush.isEmpty()) {
 				addCollectingBarToBerryBush(berryBush);
-//				addBerryToAvatarInventory();
 			} else {
 				resourcesManager.activity.toastOnUIThread(
 						"No berries ripened.", Toast.LENGTH_SHORT);
@@ -73,7 +71,6 @@ public class BodiesContactListener implements ContactListener,
 			berryBush = (BerryBush) x2.getBody().getUserData();
 			if (!berryBush.isEmpty()) {
 				addCollectingBarToBerryBush(berryBush);
-//				addBerryToAvatarInventory();
 			} else {
 				resourcesManager.activity.toastOnUIThread(
 						"No berries ripened.", Toast.LENGTH_SHORT);
@@ -141,22 +138,27 @@ public class BodiesContactListener implements ContactListener,
 				&& x2.getBody().getUserData() instanceof Box) {
 			Box box = (Box) x2.getBody().getUserData();
 			box.setOpened(true);
+			resourcesManager.collect.play();
 			return;
 		} else if (x1.getBody().getUserData() instanceof Box
 				&& x2.getBody().getUserData().equals("Avatar")) {
 			Box box = (Box) x1.getBody().getUserData();
 			box.setOpened(true);
+			resourcesManager.collect.play();
 			return;
 		}
 
-		
 	}
-		
+
 	private void loosePigInSecondQuest() {
-		if (SceneManager.getInstance().getCurrentGameMapScene().getQuest(1).isActive()) {
-			QuestCatchPig quest = (QuestCatchPig) SceneManager.getInstance().getCurrentGameMapScene().getQuest(1);
-			if (quest.getPig1().isCatched()) quest.loosePig(quest.getPig1()); 
-			if (quest.getPig2().isCatched()) quest.loosePig(quest.getPig2()); 
+		if (SceneManager.getInstance().getCurrentGameMapScene().getQuest(1)
+				.isActive()) {
+			QuestCatchPig quest = (QuestCatchPig) SceneManager.getInstance()
+					.getCurrentGameMapScene().getQuest(1);
+			if (quest.getPig1().isCatched())
+				quest.loosePig(quest.getPig1());
+			if (quest.getPig2().isCatched())
+				quest.loosePig(quest.getPig2());
 		}
 	}
 
