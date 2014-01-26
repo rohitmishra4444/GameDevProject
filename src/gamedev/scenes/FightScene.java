@@ -16,7 +16,9 @@ import org.andengine.entity.scene.CameraScene;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.Sprite;
+import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
+import org.andengine.util.HorizontalAlign;
 import org.andengine.util.color.Color;
 import org.andengine.util.math.MathUtils;
 
@@ -27,7 +29,8 @@ public class FightScene extends CameraScene {
 	private final static int FIGHTBAR_WIDTH = 400;
 	private static final int FIGHTBAR_HEIGHT = 300;
 	private final static float TARGET_RADIUS = 50;
-
+	private final static int SECONDS_COUNTDOWN = 1;
+	
 	protected Sprite fightDino;
 	protected Dinosaur dinosaur;
 	protected ResourcesManager resourcesManager;
@@ -38,6 +41,11 @@ public class FightScene extends CameraScene {
 											// seconds)
 	protected float frequencyOfTargets = 0.2f; // How often are new targets
 												// created in seconds
+	protected float countdownTime = 0;
+	protected int countdownIndex = 0;
+	protected boolean countdownActive = false;
+	protected Text countdownText;
+	protected ArrayList<String> countdownStrings = new ArrayList<String>();
 	private static FightScene instance;
 	
 	protected Random r = new Random();
@@ -89,6 +97,13 @@ public class FightScene extends CameraScene {
 				return false;
 			}
 		});
+		
+		this.countdownStrings.add("3     ");
+		this.countdownStrings.add("2     ");
+		this.countdownStrings.add("1     ");
+		this.countdownStrings.add("Fight!");
+		this.countdownText = new Text(0, 0, ResourcesManager.getInstance().font, "      ", ResourcesManager.getInstance().vbom);
+		this.attachChild(this.countdownText);
 
 	}
 
@@ -109,51 +124,73 @@ public class FightScene extends CameraScene {
 		if (this.dinosaur.getScaleX() > 1) {
 			this.frequencyOfTargets = this.frequencyOfTargets * 0.8f;
 		}
+		this.countdownActive = true;
+		this.countdownText.setHorizontalAlign(HorizontalAlign.CENTER);
+		this.centerShapeInCamera(this.countdownText);
+		this.countdownText.setVisible(true);
 	}
 
 	public void onManagedUpdate(float seconds) {
 		if (this.dinosaur == null)
 			return;
-		this.fightDuration += seconds;
-		this.lastTargetCreated += seconds;
-
-		// First step: Check for dismissed targets!
-		for (Target t : this.targets) {
-			if ((this.fightDuration - t.getTimeShowed()) > t.getTimeCreated()) {
-				// Missed!
-				if (t.getDamageMiss() > 0)
-					resourcesManager.avatar.attack(t.getDamageMiss());
-				t.setRemovable(true);
-				// System.out.println("You dismissed target [actual time: "+
-				// fightDuration + ", created: " + t.getTimeCreated() +
-				// ", timeAlive: " + t.getTimeAlive()+"]");
+		
+		if (this.countdownActive) {
+			this.countdownTime += seconds;
+			if (this.countdownTime > SECONDS_COUNTDOWN) {
+				if (this.countdownIndex == this.countdownStrings.size()) {
+					this.countdownIndex = 0;
+					this.countdownTime = 0;
+					this.countdownActive = false;
+					this.countdownText.setText("      ");
+					this.countdownText.setVisible(false);
+					return;
+				}
+				this.countdownTime = 0;
+				this.countdownText.setText(this.countdownStrings.get(this.countdownIndex));					
+				this.countdownIndex++;
 			}
-			if (t.isRemovable())
-				targetsToRemove.add(t);
-		}
+		} else {
+			this.fightDuration += seconds;
+			this.lastTargetCreated += seconds;
 
-		// Second step: Remove targets - add them back to Pool and off the screen!
-		for (Target t : targetsToRemove) {
-			this.targets.remove(t);
-//			this.detachChild(t);
-//			t.dispose();
-			t.resetTarget();
-			targetPool.add(t);
-		}
-		this.targetsToRemove.clear();
-
-		// Third step: Check how much new target should be created.
-		// Note that this depends on the time how often this method can be
-		// called - therefore we maybe must create multiple targets on slower
-		// devices
-		if (this.lastTargetCreated > this.frequencyOfTargets) {
-			int nTargets = (int) (this.lastTargetCreated / this.frequencyOfTargets);
-			this.lastTargetCreated = 0;
-			for (int i = 0; i < nTargets; i++) {
-				Target t = this.generateTarget();
-				this.targets.add(t);
+			// First step: Check for dismissed targets!
+			for (Target t : this.targets) {
+				if ((this.fightDuration - t.getTimeShowed()) > t.getTimeCreated()) {
+					// Missed!
+					if (t.getDamageMiss() > 0)
+						resourcesManager.avatar.attack(t.getDamageMiss());
+					t.setRemovable(true);
+					// System.out.println("You dismissed target [actual time: "+
+					// fightDuration + ", created: " + t.getTimeCreated() +
+					// ", timeAlive: " + t.getTimeAlive()+"]");
+				}
+				if (t.isRemovable())
+					targetsToRemove.add(t);
 			}
+
+			// Second step: Remove targets - add them back to Pool and off the screen!
+			for (Target t : targetsToRemove) {
+				this.targets.remove(t);
+				t.resetTarget();
+				targetPool.add(t);
+			}
+			this.targetsToRemove.clear();
+
+			// Third step: Check how much new target should be created.
+			// Note that this depends on the time how often this method can be
+			// called - therefore we maybe must create multiple targets on slower
+			// devices
+			if (this.lastTargetCreated > this.frequencyOfTargets) {
+				int nTargets = (int) (this.lastTargetCreated / this.frequencyOfTargets);
+				this.lastTargetCreated = 0;
+				for (int i = 0; i < nTargets; i++) {
+					Target t = this.generateTarget();
+					this.targets.add(t);
+				}
+			}
+		
 		}
+		
 	}
 
 	/**
@@ -241,10 +278,11 @@ public class FightScene extends CameraScene {
 
 	protected void onClose() {
 		for (Target t : this.targets) {
-			this.detachChild(t);
-			t.dispose();
+			t.resetTarget();
+			targetPool.add(t);
 		}
 		this.targets.clear();
+		this.targetsToRemove.clear();
 		this.dinosaur = null;
 		this.fightDuration = 0;
 		this.lastTargetCreated = 0;
