@@ -70,9 +70,11 @@ public class GameOverScene extends CameraScene {
 		resourcesManager.unloadHUDResources();
 		Scene childScene = SceneManager.getInstance().getCurrentGameMapScene()
 				.getChildScene();
-		childScene.detachSelf();
-		if (!childScene.isDisposed()) {
-			childScene.dispose();
+		if (childScene != null) {
+			childScene.detachSelf();
+			if (!childScene.isDisposed()) {
+				childScene.dispose();
+			}			
 		}
 		SceneManager.getInstance().getCurrentGameMapScene().clearChildScene();
 		SceneManager.getInstance().getCurrentGameMapScene().setChildScene(this);

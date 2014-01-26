@@ -49,7 +49,7 @@ public class Avatar extends AnimatedObject {
 				&& (direction == -1 || direction == this.direction)) {
 			return;
 		}
-
+		
 		this.state = state;
 		if (direction != -1)
 			this.direction = direction;
@@ -79,6 +79,7 @@ public class Avatar extends AnimatedObject {
 		case TIPPING_OVER:
 			rowIndex = 12;
 			this.body.setLinearVelocity(0, 0);
+			this.state = GameState.DEAD;
 			break;
 		case WALKING:
 			rowIndex = 16;
