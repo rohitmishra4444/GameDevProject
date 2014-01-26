@@ -69,7 +69,7 @@ public class QuestCatchPig extends Quest {
 		ResourcesManager.getInstance().physicsWorld
 				.registerPhysicsConnector(new PhysicsConnector(rect, body,
 						false, false));
-		// rect.setVisible(false);
+		rect.setVisible(false);
 		map.attachChild(rect);
 		this.axe = new Axe(59 * 32, 41 * 32);
 		map.attachChild(axe);

@@ -41,6 +41,7 @@ public class QuestBuildBridge extends Quest {
 		ResourcesManager res = ResourcesManager.getInstance();
 		this.rectangle = new Rectangle(RECTANGLE_X, RECTANGLE_Y,
 				RECTANGLE_WIDTH, RECTANGLE_HEIGHT, res.vbom);
+		this.rectangle.setVisible(false);
 		final FixtureDef boxFixtureDef = PhysicsFactory.createFixtureDef(0, 0,
 				0);
 		this.body = PhysicsFactory.createBoxBody(res.physicsWorld,
