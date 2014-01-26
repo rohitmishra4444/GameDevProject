@@ -105,11 +105,12 @@ public class QuestBuildBridge extends Quest {
 
 	@Override
 	public boolean isCompleted() {
-		// Inventory inventory =
-		// ResourcesManager.getInstance().avatar.getInventory();
-		// for (int i=0; i<N_WOOD; i++) {
-		// if (!inventory.contains(this.woods[i])) return false;
-		// }
+		Inventory inventory = ResourcesManager.getInstance().avatar
+				.getInventory();
+		for (int i = 0; i < N_WOOD; i++) {
+			if (!inventory.contains(this.woods[i]))
+				return false;
+		}
 		return true;
 	}
 

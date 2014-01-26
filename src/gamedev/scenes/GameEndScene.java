@@ -89,7 +89,9 @@ public class GameEndScene extends BaseScene {
 						detachViaUpdateHandlerAfterTime(gameEndText,
 								FADE_OUT_DURATION);
 
-						attachChild(gameEndSprite);
+						if (!gameEndSprite.hasParent()) {
+							attachChild(gameEndSprite);
+						}
 						gameEndSprite
 								.registerEntityModifier(new FadeInModifier(
 										FADE_IN_DURATION));
@@ -103,7 +105,9 @@ public class GameEndScene extends BaseScene {
 						detachViaUpdateHandlerAfterTime(gameEndSprite,
 								FADE_OUT_DURATION);
 
-						attachChild(gameDevelopersText);
+						if (!gameDevelopersText.hasParent()) {
+							attachChild(gameDevelopersText);
+						}
 						gameDevelopersText
 								.registerEntityModifier(new FadeInModifier(
 										FADE_IN_DURATION));

@@ -86,8 +86,8 @@ public class QuestPassCanyon extends Quest {
 		Inventory inventory = ResourcesManager.getInstance().avatar
 				.getInventory();
 		QuestCatchPig quest = (QuestCatchPig) this.map.getQuest(1);
-		// return inventory.contains(quest.getAxe());
-		return true;
+		return inventory.contains(quest.getAxe());
+		// return true;
 	}
 
 	public Rectangle getRectangle() {
