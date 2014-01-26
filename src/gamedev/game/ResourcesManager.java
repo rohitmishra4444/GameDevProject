@@ -13,6 +13,7 @@ import org.andengine.audio.sound.SoundFactory;
 import org.andengine.audio.sound.SoundManager;
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.BoundCamera;
+import org.andengine.entity.IEntity;
 import org.andengine.entity.shape.IShape;
 import org.andengine.extension.physics.box2d.FixedStepPhysicsWorld;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
@@ -96,7 +97,7 @@ public class ResourcesManager {
 
 	public BitmapTextureAtlas bgBarsAtlas;
 	public TextureRegion bgBarsRegion;
-	
+
 	// Textures for splash scene
 	public ITextureRegion splash_region;
 	private BitmapTextureAtlas splashTextureAtlas;
@@ -145,7 +146,6 @@ public class ResourcesManager {
 	public ITextureRegion axeRegion;
 	public BitmapTextureAtlas boxAtlas;
 	public ITextureRegion boxRegion;
-	
 
 	// ---------------------------------------------
 	// Sound and music
@@ -193,6 +193,26 @@ public class ResourcesManager {
 				shape.setIgnoreUpdate(true);
 				shape.clearUpdateHandlers();
 				shape.detachSelf();
+				if (!shape.isDisposed()) {
+					shape.dispose();
+				}
+			}
+		});
+	}
+
+	public void removeIEntity(final IEntity entity) {
+		if (entity == null) {
+			return;
+		}
+		engine.runOnUpdateThread(new Runnable() {
+			@Override
+			public void run() {
+				entity.setIgnoreUpdate(true);
+				entity.clearUpdateHandlers();
+				entity.detachSelf();
+				if (!entity.isDisposed()) {
+					entity.dispose();
+				}
 			}
 		});
 	}
@@ -470,7 +490,6 @@ public class ResourcesManager {
 		this.boxRegion = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(boxAtlas, activity, "box.png", 0, 0);
 
-		
 		this.treeAtlas = new BitmapTextureAtlas(textureManager, 65, 114,
 				TextureOptions.DEFAULT);
 
@@ -652,9 +671,9 @@ public class ResourcesManager {
 			collect = SoundFactory.createSoundFromAsset(soundManager, activity,
 					"collect.wav");
 
-			heartbeat = SoundFactory.createSoundFromAsset(soundManager, activity,
-					"heartbeat.mp3");
-			
+			heartbeat = SoundFactory.createSoundFromAsset(soundManager,
+					activity, "heartbeat.mp3");
+
 			walk = SoundFactory.createSoundFromAsset(soundManager, activity,
 					"walk.wav");
 			walk.setVolume(0.7f);
@@ -665,7 +684,6 @@ public class ResourcesManager {
 			pain = SoundFactory.createSoundFromAsset(soundManager, activity,
 					"pain.wav");
 
-			
 			openChildScene = SoundFactory.createSoundFromAsset(soundManager,
 					activity, "childscene.ogg");
 			openChildScene.setVolume(0.4f);
@@ -840,8 +858,7 @@ public class ResourcesManager {
 		this.hudHelpIconAtlas = new BitmapTextureAtlas(textureManager, 50, 52,
 				TextureOptions.BILINEAR);
 		this.hudHelpIconRegion = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(hudHelpIconAtlas, activity,
-						"help.png", 0, 0);
+				.createFromAsset(hudHelpIconAtlas, activity, "help.png", 0, 0);
 
 		this.hudQuestListIconAtlas = new BitmapTextureAtlas(textureManager, 44,
 				44, TextureOptions.BILINEAR);
@@ -877,7 +894,7 @@ public class ResourcesManager {
 		hudQuestListIconAtlas.unload();
 		hudShopIconAtlas.unload();
 		bgBarsAtlas.unload();
-	}	
+	}
 
 	// ---------------------------------------------
 	// GameEnd resources

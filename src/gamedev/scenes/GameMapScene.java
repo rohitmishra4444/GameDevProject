@@ -121,10 +121,7 @@ public class GameMapScene extends BaseScene {
 		this.camera.setHUD(null);
 		for (int i = 0; i < this.getChildCount(); i++) {
 			IEntity child = this.getChildByIndex(i);
-			child.detachSelf();
-			if (!child.isDisposed()) {
-				child.dispose();
-			}
+			resourcesManager.removeIEntity(child);
 		}
 		this.detachSelf();
 		if (!this.isDisposed()) {
