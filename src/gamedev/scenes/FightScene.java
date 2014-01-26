@@ -111,7 +111,8 @@ public class FightScene extends CameraScene {
 		if (instance == null) {
 			instance = new FightScene();
 		}
-		ResourcesManager.getInstance().unloadHUDResources();
+//		ResourcesManager.getInstance().unloadHUDResources();
+		ResourcesManager.getInstance().hud.showBarsOnly();
 		return instance;
 	}
 
@@ -286,7 +287,8 @@ public class FightScene extends CameraScene {
 		this.dinosaur = null;
 		this.fightDuration = 0;
 		this.lastTargetCreated = 0;
-		this.resourcesManager.loadHUDResources();
+//		this.resourcesManager.loadHUDResources();
+		this.resourcesManager.hud.setVisible(true);
 	}
 
 }

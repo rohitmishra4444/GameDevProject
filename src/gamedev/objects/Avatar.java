@@ -226,6 +226,7 @@ public class Avatar extends AnimatedObject {
 	}
 
 	public void poisen(int life, int energy) {
+		if (this.state == GameState.DEAD) return;
 		this.attack(life);
 		this.takeEnergy(energy);
 		this.poisened = true;

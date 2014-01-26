@@ -873,12 +873,11 @@ public class ResourcesManager {
 	private void unloadHUDGraphics() {
 		controlTextureAtlas.unload();
 		hudBerryAtlas.unload();
-
 		hudHelpIconAtlas.unload();
 		hudQuestListIconAtlas.unload();
 		hudShopIconAtlas.unload();
 		bgBarsAtlas.unload();
-	}
+	}	
 
 	// ---------------------------------------------
 	// GameEnd resources

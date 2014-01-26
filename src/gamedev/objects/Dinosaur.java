@@ -17,7 +17,7 @@ public class Dinosaur extends AnimatedObject {
 	// RUNNING and just play the same animation as WALKING but faster...
 	// Handle this inside the setState method!
 	public final static long[] ANIMATION_DURATION = { 100, 100, 100, 100, 100, 100, 100, 100 };
-	public final static long[] ANIMATION_DURATION_LOOKING = { 200, 200, 200, 200, 200, 200, 200, 200 };
+	public final static long[] ANIMATION_DURATION_LOOKING = { 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000 };
 	public final static int FRAMES_PER_ANIMATION = ANIMATION_DURATION.length;
 	public final static int TILES_PER_LINE = 16;
 	

@@ -31,8 +31,12 @@ public class SceneHUD extends HUD {
 
 	protected Rectangle life;
 	protected Rectangle energy;
+	protected Sprite bgBars;
 
 	protected ButtonSprite berries;
+	protected ButtonSprite sprintButton;
+	protected ButtonSprite questButton;
+	protected ButtonSprite helpButton;
 	public Text berryCounter;
 	private static int lifeAdditionFromBerry = 20;
 	private static int energyAdditionFromBerry = 30;
@@ -54,7 +58,7 @@ public class SceneHUD extends HUD {
 			avatarEnergy = resourcesManager.avatar.getEnergy();
 		}
 
-		Sprite bgBars = new Sprite(cameraWidth - 190, 20,
+		bgBars = new Sprite(cameraWidth - 190, 20,
 				resourcesManager.bgBarsRegion, resourcesManager.vbom);
 		bgBars.setAlpha(0.9f);
 		this.attachChild(bgBars);
@@ -101,7 +105,7 @@ public class SceneHUD extends HUD {
 	}
 
 	private void createSprintButton() {
-		ButtonSprite sprintButton = new ButtonSprite(cameraWidth - 120,
+		sprintButton = new ButtonSprite(cameraWidth - 120,
 				cameraHeight - 100, resourcesManager.controlKnobTextureRegion,
 				resourcesManager.vbom) {
 			@Override
@@ -179,37 +183,37 @@ public class SceneHUD extends HUD {
 
 	}
 
-	private void createShopButton() {
-		ButtonSprite shopButton = new ButtonSprite(cameraWidth - 400, 20,
-				resourcesManager.hudShopIconRegion, resourcesManager.vbom) {
-			@Override
-			public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y) {
-				this.registerEntityModifier(new SequenceEntityModifier(
-						new ScaleModifier(0.25f, 1.25f, 1f), new ScaleModifier(
-								0.25f, 1f, 1.25f)));
-				// Feedback:
-				ResourcesManager.getInstance().openChildScene.play();
-
-				ShopScene shopScene = ShopScene.getInstance();
-				shopScene.openShopScene();
-				// TODO: Remove.
-				resourcesManager.activity.toastOnUIThread(
-						"Sorry, the shop is not implemented yet.",
-						Toast.LENGTH_LONG);
-
-				return true;
-			};
-		};
-
-		shopButton.setAlpha(0.8f);
-		// shopButton.setScale(1.25f);
-
-		this.registerTouchArea(shopButton);
-		this.attachChild(shopButton);
-	}
+//	private void createShopButton() {
+//		ButtonSprite shopButton = new ButtonSprite(cameraWidth - 400, 20,
+//				resourcesManager.hudShopIconRegion, resourcesManager.vbom) {
+//			@Override
+//			public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y) {
+//				this.registerEntityModifier(new SequenceEntityModifier(
+//						new ScaleModifier(0.25f, 1.25f, 1f), new ScaleModifier(
+//								0.25f, 1f, 1.25f)));
+//				// Feedback:
+//				ResourcesManager.getInstance().openChildScene.play();
+//
+//				ShopScene shopScene = ShopScene.getInstance();
+//				shopScene.openShopScene();
+//				// TODO: Remove.
+//				resourcesManager.activity.toastOnUIThread(
+//						"Sorry, the shop is not implemented yet.",
+//						Toast.LENGTH_LONG);
+//
+//				return true;
+//			};
+//		};
+//
+//		shopButton.setAlpha(0.8f);
+//		// shopButton.setScale(1.25f);
+//
+//		this.registerTouchArea(shopButton);
+//		this.attachChild(shopButton);
+//	}
 
 	private void createQuestButton() {
-		ButtonSprite questButton = new ButtonSprite(cameraWidth - 250, 20,
+		questButton = new ButtonSprite(cameraWidth - 250, 20,
 				resourcesManager.hudQuestListIconRegion, resourcesManager.vbom) {
 			@Override
 			public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y) {
@@ -233,7 +237,7 @@ public class SceneHUD extends HUD {
 	}
 
 	private void createHelpButton() {
-		ButtonSprite helpButton = new ButtonSprite(25, 20,
+		helpButton = new ButtonSprite(25, 20,
 				resourcesManager.hudHelpIconRegion, resourcesManager.vbom) {
 			@Override
 			public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y) {
@@ -278,6 +282,25 @@ public class SceneHUD extends HUD {
 
 	public boolean isTouchedSecondaryButton() {
 		return this.isSprintButtonTouched;
+	}
+	
+	public void showBarsOnly() {
+		this.setVisible(false);
+		this.bgBars.setVisible(true);
+		this.life.setVisible(true);
+		this.energy.setVisible(true);
+	}
+	
+	public void setVisible(boolean visible) {
+		this.pad.setVisible(visible);
+		this.berries.setVisible(visible);
+		this.helpButton.setVisible(visible);
+		this.questButton.setVisible(visible);
+		this.sprintButton.setVisible(visible);
+		this.berryCounter.setVisible(visible);
+		this.bgBars.setVisible(visible);
+		this.life.setVisible(visible);
+		this.energy.setVisible(visible);
 	}
 
 }
