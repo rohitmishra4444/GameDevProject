@@ -130,11 +130,8 @@ public class FightScene extends CameraScene {
 	public void setObject(Dinosaur d) {
 		this.dinosaur = d;
 		this.frequencyOfTargets = (d.getDinoColor() == Dinosaur.COLOR_RED) ? 0.1f : 0.2f; 
-//		if (ResourcesManager.getInstance().avatar.isPoisened()) {
-//			this.frequencyOfTargets = this.frequencyOfTargets * 0.5f;
-//		}
 		if (this.dinosaur.getScaleX() > 1) {
-			this.frequencyOfTargets = this.frequencyOfTargets * 0.8f;
+			this.frequencyOfTargets = this.frequencyOfTargets * 0.7f;
 		}
 		this.countdownActive = true;
 		this.countdownText.setHorizontalAlign(HorizontalAlign.CENTER);
@@ -204,8 +201,9 @@ public class FightScene extends CameraScene {
 			}
 			
 			// Update the remaining life of dinosaur
-			this.rectLifeDino.setY(GameActivity.HEIGHT - (GameActivity.HEIGHT / 100 * dinosaur.getLife()));
-		
+			if (dinosaur.getLife() < 100) {
+				this.rectLifeDino.setY(GameActivity.HEIGHT - GameActivity.HEIGHT / 100 * dinosaur.getLife());				
+			}
 		}
 		
 	}
@@ -237,29 +235,21 @@ public class FightScene extends CameraScene {
 			// Good target
 			t.setColor(Color.BLACK);
 			if (dinosaur.getDinoColor() == Dinosaur.COLOR_GREEN) {
-//				t = new Target(position.x, position.y, TARGET_RADIUS,
-//						Color.BLACK, this.fightDuration, 0.75f);
 				t.setTimeShowed(0.75f);
-				t.setDamageOpponent(10);
+				t.setDamageOpponent(resourcesManager.avatar.isPoisened() ? 7 : 10);
 				t.setDamageMiss(10);
 			} else {
-//				t = new Target(position.x, position.y, TARGET_RADIUS,
-//						Color.BLACK, this.fightDuration, 0.5f);
 				t.setTimeShowed(0.5f);
-				t.setDamageOpponent(5);
+				t.setDamageOpponent(resourcesManager.avatar.isPoisened() ? 2 : 5);
 				t.setDamageMiss(15);
 			}
 		} else {
 			// Bad target
 			t.setColor(Color.RED);
 			if (dinosaur.getDinoColor() == Dinosaur.COLOR_GREEN) {
-//				t = new Target(position.x, position.y, TARGET_RADIUS,
-//						Color.RED, this.fightDuration, 0.75f);
 				t.setDamageAvatar(10);
 				t.setTimeShowed(0.75f);
 			} else {
-//				t = new Target(position.x, position.y, TARGET_RADIUS,
-//						Color.RED, this.fightDuration, 0.5f);
 				t.setDamageAvatar(15);
 				t.setTimeShowed(0.5f);
 			}
