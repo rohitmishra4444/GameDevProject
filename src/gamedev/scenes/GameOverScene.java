@@ -5,6 +5,8 @@ import gamedev.game.SceneManager;
 
 import java.util.Iterator;
 
+import org.andengine.engine.handler.timer.ITimerCallback;
+import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.entity.scene.CameraScene;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
@@ -46,16 +48,22 @@ public class GameOverScene extends CameraScene {
 		centerShapeInCamera(text);
 		attachChild(text);
 
-		this.setOnSceneTouchListener(new IOnSceneTouchListener() {
-			@Override
-			public boolean onSceneTouchEvent(Scene pScene,
-					TouchEvent pSceneTouchEvent) {
-				if (pSceneTouchEvent.isActionDown()) {
-					closeGameOverScene();
-				}
-				return true;
-			}
-		});
+		// Wait 3 seconds until the onSceneTouchListener is added.
+		resourcesManager.engine.registerUpdateHandler(new TimerHandler(3,
+				new ITimerCallback() {
+					public void onTimePassed(final TimerHandler pTimerHandler) {
+						setOnSceneTouchListener(new IOnSceneTouchListener() {
+							@Override
+							public boolean onSceneTouchEvent(Scene pScene,
+									TouchEvent pSceneTouchEvent) {
+								if (pSceneTouchEvent.isActionDown()) {
+									closeGameOverScene();
+								}
+								return true;
+							}
+						});
+					}
+				}));
 	}
 
 	public void openGameOverScene() {
@@ -83,7 +91,8 @@ public class GameOverScene extends CameraScene {
 		Iterator<Body> it = resourcesManager.physicsWorld.getBodies();
 		while (it.hasNext()) {
 			Body body = it.next();
-			if (body != null) resourcesManager.physicsWorld.destroyBody(body);
+			if (body != null)
+				resourcesManager.physicsWorld.destroyBody(body);
 		}
 		resourcesManager.physicsWorld.clearForces();
 		resourcesManager.physicsWorld.clearPhysicsConnectors();

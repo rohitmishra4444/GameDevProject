@@ -8,8 +8,8 @@ public class BerryBush {
 	private float y;
 	private ArrayList<Berry> berries;
 	private long lastRipenTime;
-	// The player has to wait 5min currently (1s = 1000000000ns):
-	private final static long WAIT_TIME_FOR_RIPEN_IN_NS = 300000000000l;
+	// First number is time to wait in seconds (1s = 1000000000ns):
+	private final static long WAIT_TIME_FOR_RIPEN_IN_NS = 180 * 1000000000l;
 
 	public BerryBush(float pX, float pY) {
 		this.x = pX;
