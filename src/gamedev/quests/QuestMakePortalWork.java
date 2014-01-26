@@ -1,13 +1,13 @@
 package gamedev.quests;
 
-import android.widget.Toast;
 import gamedev.game.ResourcesManager;
 import gamedev.game.SceneManager;
 import gamedev.objects.AnimatedObject.GameState;
 import gamedev.scenes.GameMapScene;
+import android.widget.Toast;
 
 public class QuestMakePortalWork extends Quest {
-	
+
 	public QuestMakePortalWork(GameMapScene map) {
 		super(map);
 		this.title = "Go back home with the portal";
@@ -16,7 +16,8 @@ public class QuestMakePortalWork extends Quest {
 
 	@Override
 	public void onFinish() {
-		SceneManager.getInstance().loadGameEndScene(ResourcesManager.getInstance().engine);
+		SceneManager.getInstance().loadGameEndScene(
+				ResourcesManager.getInstance().engine);
 		ResourcesManager.getInstance().avatar.setState(GameState.IDLE, -1);
 	}
 
@@ -26,15 +27,26 @@ public class QuestMakePortalWork extends Quest {
 	}
 
 	@Override
-	public boolean isCompleted() {
-		return SceneManager.getInstance().getCurrentGameMapScene().getQuest(3).isFinished();
+	public String statusForQuestScene() {
+		return "I haven't found everything.";
 	}
-	
+
+	@Override
+	public boolean isCompleted() {
+		return SceneManager.getInstance().getCurrentGameMapScene().getQuest(3)
+				.isFinished();
+	}
+
 	public void setActive(boolean bool) {
 		super.setActive(bool);
-		ResourcesManager.getInstance().activity.toastOnUIThread("There it is... the portal!", Toast.LENGTH_LONG);
-		ResourcesManager.getInstance().activity.toastOnUIThread("But it's not working...looks like I need two keys!", Toast.LENGTH_LONG);
-		ResourcesManager.getInstance().activity.toastOnUIThread("I should look around, maybe I find something?", Toast.LENGTH_LONG);
+		ResourcesManager.getInstance().activity.toastOnUIThread(
+				"There it is... the portal!", Toast.LENGTH_LONG);
+		ResourcesManager.getInstance().activity.toastOnUIThread(
+				"But it's not working...looks like I need two keys!",
+				Toast.LENGTH_LONG);
+		ResourcesManager.getInstance().activity.toastOnUIThread(
+				"I should look around, maybe I find something?",
+				Toast.LENGTH_LONG);
 	}
-	
+
 }
