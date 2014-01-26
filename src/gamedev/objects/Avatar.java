@@ -16,7 +16,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 public class Avatar extends AnimatedObject {
 
 	private final static float ENERGY_LOSS_RUNNING = 0.5f;
-	private final static float TIME_POISENED = 20; // in seconds
+	private final static float TIME_POISENED = 10; // in seconds
 	public final static long[] ANIMATION_DURATION = { 60, 60, 60, 60, 60, 60,
 			60, 60 };
 	public final static long[] RUNNING_WALKING_POISENED_DURATION = { 120, 120,

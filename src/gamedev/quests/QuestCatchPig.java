@@ -12,6 +12,7 @@ import gamedev.scenes.GameMapScene;
 import java.util.ArrayList;
 
 import org.andengine.entity.primitive.Rectangle;
+import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.util.Vector2Pool;
 
@@ -30,6 +31,7 @@ public class QuestCatchPig extends Quest {
 	protected OldCaveman caveman;
 	protected Axe axe;
 	protected Body body;
+	protected Rectangle rect;
 	
 	public QuestCatchPig(GameMapScene map) {
 		super(map);
@@ -56,11 +58,12 @@ public class QuestCatchPig extends Quest {
 		// Caveman
 		this.caveman = new OldCaveman(48 * 32, 37 * 32);
 		map.attachChild(caveman);
-//	    final Rectangle rect = new Rectangle(caveman.getX()-32, caveman.getY()-32, 100, 10, ResourcesManager.getInstance().vbom);
+	    rect = new Rectangle(caveman.getX()-25, caveman.getY(), 100, 10, ResourcesManager.getInstance().vbom);
 	    final FixtureDef boxFixtureDef = PhysicsFactory.createFixtureDef(0, 0, 0);
-	    this.body = PhysicsFactory.createBoxBody(ResourcesManager.getInstance().physicsWorld, caveman, BodyType.StaticBody, boxFixtureDef);
-//	    rect.setVisible(false);
-		
+	    this.body = PhysicsFactory.createBoxBody(ResourcesManager.getInstance().physicsWorld, rect, BodyType.StaticBody, boxFixtureDef);
+		ResourcesManager.getInstance().physicsWorld.registerPhysicsConnector(new PhysicsConnector(rect, body, false, false));
+	    //	    rect.setVisible(false);
+		map.attachChild(rect);
 		this.axe = new Axe(59 * 32, 41 * 32);
 		map.attachChild(axe);
 	}
@@ -83,9 +86,7 @@ public class QuestCatchPig extends Quest {
 				Toast.LENGTH_LONG);
 		ResourcesManager.getInstance().activity.toastOnUIThread("Be safe...",
 				Toast.LENGTH_LONG);
-		Body b = this.body;
-		Vector2 v = Vector2Pool.obtain(b.getPosition());
-		b.setTransform(v.x - 3f, v.y - 2f, b.getAngle());
+		ResourcesManager.getInstance().removeSpriteAndBody(rect);
 		this.caveman.setPosition(caveman.getX() - 32f, caveman.getY() - 32);
 		pig.setMoveStrategy(new SimpleMoveStrategy(pig, new Vector2(58 * 32, 39 * 32), GameState.WALKING));
 		pig2.setMoveStrategy(new SimpleMoveStrategy(pig2, new Vector2(55 * 32, 40 * 32), GameState.WALKING));
