@@ -44,7 +44,7 @@ public class GameOverScene extends CameraScene {
 		Text text = new Text(0, 0, resourcesManager.font, gameOverString,
 				resourcesManager.vbom);
 		text.setHorizontalAlign(HorizontalAlign.CENTER);
-		text.setScale(2f);
+		text.setScale(1.5f);
 		centerShapeInCamera(text);
 		attachChild(text);
 
@@ -74,7 +74,7 @@ public class GameOverScene extends CameraScene {
 			childScene.detachSelf();
 			if (!childScene.isDisposed()) {
 				childScene.dispose();
-			}			
+			}
 		}
 		SceneManager.getInstance().getCurrentGameMapScene().clearChildScene();
 		SceneManager.getInstance().getCurrentGameMapScene().setChildScene(this);

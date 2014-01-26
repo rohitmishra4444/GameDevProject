@@ -9,7 +9,10 @@ import org.andengine.engine.camera.Camera;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.FadeInModifier;
 import org.andengine.entity.modifier.FadeOutModifier;
+import org.andengine.entity.primitive.Rectangle;
+import org.andengine.entity.scene.IOnAreaTouchListener;
 import org.andengine.entity.scene.IOnSceneTouchListener;
+import org.andengine.entity.scene.ITouchArea;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
@@ -17,6 +20,7 @@ import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.util.GLState;
 import org.andengine.util.HorizontalAlign;
+import org.andengine.util.color.Color;
 
 import android.widget.Toast;
 
@@ -24,6 +28,8 @@ public class GameIntroScene extends BaseScene {
 
 	private static final float FADE_IN_DURATION = 1f;
 	private static final float FADE_OUT_DURATION = 0.5f;
+
+	private static final String skipIntroString = "Tap here to skip the intro.";
 
 	private static final String string0 = "Once a beautiful day in our modern world...";
 	private static final String string1 = "a bad accident messed up your life...";
@@ -40,6 +46,9 @@ public class GameIntroScene extends BaseScene {
 	private ArrayList<Sprite> gameIntroSprites;
 	private ArrayList<IEntity> gameIntroEntities;
 
+	private Rectangle skipIntroButton;
+	private Text skipIntroText;
+
 	private int nextEntity = 1;
 
 	@Override
@@ -47,8 +56,7 @@ public class GameIntroScene extends BaseScene {
 		// Create the text list.
 		gameIntroTexts = new ArrayList<Text>();
 		for (String string : gameIntroStrings) {
-			Text text = new Text(0, 0, resourcesManager.font, string,
-					string.length(), vbom);
+			Text text = new Text(0, 0, resourcesManager.font, string, vbom);
 			text.setPosition(camera.getCenterX() - text.getWidth() / 2,
 					camera.getCenterY() - text.getHeight() / 2);
 			text.setHorizontalAlign(HorizontalAlign.CENTER);
@@ -82,6 +90,8 @@ public class GameIntroScene extends BaseScene {
 		}
 		// Attach the first entity to the scene.
 		attachChild(gameIntroEntities.get(0));
+		// Add skip intro button. Remove it after the first entity.
+		addSkipIntroButton();
 
 		// Tell how to proceed.
 		resourcesManager.activity.toastOnUIThread("Tap to continue...",
@@ -91,8 +101,47 @@ public class GameIntroScene extends BaseScene {
 		registerSceneTouchListener();
 	}
 
+	private void addSkipIntroButton() {
+		skipIntroButton = new Rectangle(480, 410, 300, 50, vbom);
+		skipIntroButton.setColor(Color.BLACK);
+		skipIntroText = new Text(10, 8, resourcesManager.font, skipIntroString,
+				vbom);
+		skipIntroButton.attachChild(skipIntroText);
+
+		this.attachChild(skipIntroButton);
+		this.registerTouchArea(skipIntroButton);
+		this.setOnAreaTouchListener(new IOnAreaTouchListener() {
+
+			@Override
+			public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
+					ITouchArea pTouchArea, float pTouchAreaLocalX,
+					float pTouchAreaLocalY) {
+				if (pSceneTouchEvent.isActionDown()) {
+					SceneManager.getInstance()
+							.createGameMapScene(engine, false);
+					return true;
+				}
+				return false;
+			}
+
+		});
+	}
+
+	private void removeSkipIntroButton() {
+		skipIntroText.detachSelf();
+		if (!skipIntroText.isDisposed()) {
+			skipIntroText.dispose();
+		}
+
+		skipIntroButton.detachSelf();
+		if (!skipIntroButton.isDisposed()) {
+			skipIntroButton.dispose();
+		}
+	}
+
 	private void registerSceneTouchListener() {
 		this.setOnSceneTouchListener(new IOnSceneTouchListener() {
+
 			@Override
 			public boolean onSceneTouchEvent(Scene pScene,
 					TouchEvent pSceneTouchEvent) {
@@ -120,6 +169,10 @@ public class GameIntroScene extends BaseScene {
 						detachViaUpdateHandlerAfterTime(oldEntity,
 								FADE_OUT_DURATION);
 
+						if (nextEntity == 1) {
+							removeSkipIntroButton();
+						}
+
 						IEntity newEntity = gameIntroEntities.get(nextEntity);
 						attachChild(newEntity);
 						newEntity.registerEntityModifier(new FadeInModifier(
@@ -130,7 +183,6 @@ public class GameIntroScene extends BaseScene {
 				}
 				return false;
 			}
-
 		});
 	}
 
@@ -155,6 +207,9 @@ public class GameIntroScene extends BaseScene {
 				entity.dispose();
 			}
 		}
+
+		removeSkipIntroButton();
+
 		this.detachSelf();
 		if (!this.isDisposed()) {
 			this.dispose();
