@@ -12,6 +12,7 @@ import gamedev.objects.Target;
 import java.util.ArrayList;
 import java.util.Random;
 
+import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.CameraScene;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
@@ -49,6 +50,7 @@ public class FightScene extends CameraScene {
 	private static FightScene instance;
 	
 	protected Random r = new Random();
+	protected Rectangle rectLifeDino;
 	
 	/**
 	 * Target-Pool contains the inactive target objects, so GC has less work with allocate/clear memory
@@ -72,6 +74,7 @@ public class FightScene extends CameraScene {
 				if (pSceneTouchEvent.isActionDown()) {
 					float pX = pSceneTouchEvent.getX();
 					float pY = pSceneTouchEvent.getY();
+					boolean hit = false;
 					for (Target target : targets) {
 						if (target.isHit(pX, pY)) {
 							if (target.getDamageOpponent() > 0) {
@@ -83,12 +86,16 @@ public class FightScene extends CameraScene {
 										.getDamageAvatar());
 							}
 							target.setRemovable(true);
+							hit = true;
 						}
+					}
+					if (!hit) {
+						resourcesManager.avatar.attack(5);	
 					}
 					if (dinosaur.getState() == GameState.DEAD) {
 						resourcesManager.avatar.setState(GameState.IDLE, -1);
 						GameActivity.mode = GameMode.EXPLORING;
-						onClose();
+						resetScene();
 						SceneManager.getInstance().getCurrentGameMapScene()
 								.clearChildScene();
 					}
@@ -102,9 +109,12 @@ public class FightScene extends CameraScene {
 		this.countdownStrings.add("2     ");
 		this.countdownStrings.add("1     ");
 		this.countdownStrings.add("Fight!");
-		this.countdownText = new Text(0, 0, ResourcesManager.getInstance().font, "      ", ResourcesManager.getInstance().vbom);
+		this.countdownText = new Text(0, 0, ResourcesManager.getInstance().font, "      ", resourcesManager.vbom);
 		this.attachChild(this.countdownText);
-
+		this.rectLifeDino = new Rectangle(0, 0, 64, GameActivity.HEIGHT, resourcesManager.vbom);
+		this.rectLifeDino.setColor(Color.RED);
+		this.rectLifeDino.setAlpha(0.75f);
+		this.attachChild(this.rectLifeDino);
 	}
 
 	public static FightScene getInstance() {
@@ -112,6 +122,7 @@ public class FightScene extends CameraScene {
 			instance = new FightScene();
 		}
 //		ResourcesManager.getInstance().unloadHUDResources();
+		instance.resetScene();
 		ResourcesManager.getInstance().hud.showBarsOnly();
 		return instance;
 	}
@@ -119,9 +130,9 @@ public class FightScene extends CameraScene {
 	public void setObject(Dinosaur d) {
 		this.dinosaur = d;
 		this.frequencyOfTargets = (d.getDinoColor() == Dinosaur.COLOR_RED) ? 0.1f : 0.2f; 
-		if (ResourcesManager.getInstance().avatar.isPoisened()) {
-			this.frequencyOfTargets = this.frequencyOfTargets * 0.5f;
-		}
+//		if (ResourcesManager.getInstance().avatar.isPoisened()) {
+//			this.frequencyOfTargets = this.frequencyOfTargets * 0.5f;
+//		}
 		if (this.dinosaur.getScaleX() > 1) {
 			this.frequencyOfTargets = this.frequencyOfTargets * 0.8f;
 		}
@@ -129,6 +140,8 @@ public class FightScene extends CameraScene {
 		this.countdownText.setHorizontalAlign(HorizontalAlign.CENTER);
 		this.centerShapeInCamera(this.countdownText);
 		this.countdownText.setVisible(true);
+		this.rectLifeDino.setHeight(GameActivity.HEIGHT);
+		this.rectLifeDino.setY(0);
 	}
 
 	public void onManagedUpdate(float seconds) {
@@ -189,6 +202,9 @@ public class FightScene extends CameraScene {
 					this.targets.add(t);
 				}
 			}
+			
+			// Update the remaining life of dinosaur
+			this.rectLifeDino.setY(GameActivity.HEIGHT - (GameActivity.HEIGHT / 100 * dinosaur.getLife()));
 		
 		}
 		
@@ -277,7 +293,7 @@ public class FightScene extends CameraScene {
 		return new Vector2(x, y);
 	}
 
-	protected void onClose() {
+	protected void resetScene() {
 		for (Target t : this.targets) {
 			t.resetTarget();
 			targetPool.add(t);

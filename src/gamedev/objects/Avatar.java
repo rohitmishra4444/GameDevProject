@@ -139,14 +139,14 @@ public class Avatar extends AnimatedObject {
 	public void setLife(int life) {
 		super.setLife(life);
 		this.resourcesManager.hud.setLife(this.life);
-		if (this.life < 15) {
+		if (this.life < 20) {
 			playSound(resourcesManager.heartbeat, 1f, true);
 		} else {
 			resourcesManager.heartbeat.stop();
 		}
 
 		// Game over if the avatar has no more life.
-		if (this.getLife() <= 0) {
+		if (this.life <= 0) {
 			resourcesManager.heartbeat.stop();
 			this.setState(GameState.TIPPING_OVER, -1);
 			GameOverScene gameOverScene = GameOverScene.getInstance();
