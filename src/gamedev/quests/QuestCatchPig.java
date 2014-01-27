@@ -31,7 +31,10 @@ public class QuestCatchPig extends Quest {
 	protected Axe axe;
 	protected Body body;
 	protected Rectangle rect;
-
+	protected RandomMoveStrategy moveStrategyPig1;
+	protected RandomMoveStrategy moveStrategyPig2;
+	
+	
 	public QuestCatchPig(GameMapScene map) {
 		super(map);
 		this.title = "Catch the pigs and bring them back to the cave man";
@@ -46,14 +49,12 @@ public class QuestCatchPig extends Quest {
 
 		// Create the pig :-D
 		this.pig = new Pig(500, 500);
-		RandomMoveStrategy rm = new RandomMoveStrategy(pig, 100, 300, 0,
-				42 * 32, 60 * 32, 14 * 32, 34 * 32);
-		pig.setMoveStrategy(rm);
+		moveStrategyPig1 = new RandomMoveStrategy(pig, 75, 300, 0, 41*32, 55*32, 4*32, 18*32);
+		pig.setMoveStrategy(moveStrategyPig1);
 		map.attachChild(pig);
 
 		this.pig2 = new Pig(500, 500);
-		pig2.setMoveStrategy(new RandomMoveStrategy(pig2, 100, 300, 0, 42 * 32,
-				60 * 32, 14 * 32, 34 * 32));
+		pig2.setMoveStrategy(new RandomMoveStrategy(pig2, 75, 300, 0, 39*32, 64*32, 18*32, 36*32));
 		map.attachChild(pig2);
 
 		// Caveman
@@ -138,8 +139,11 @@ public class QuestCatchPig extends Quest {
 
 	public void loosePig(Pig pig) {
 		pig.setCatched(false);
-		pig.setMoveStrategy(new RandomMoveStrategy(pig, 100, 300, 0, 42 * 32,
-				60 * 32, 14 * 32, 34 * 32));
+		if (this.moveStrategyPig1.getObject() == pig) {
+			pig.setMoveStrategy(new RandomMoveStrategy(pig, 75, 300, 0, 41*32, 55*32, 4*32, 18*32));
+		} else {
+			pig.setMoveStrategy(new RandomMoveStrategy(pig, 75, 300, 0, 39*32, 64*32, 18*32, 36*32));
+		}
 	}
 
 }

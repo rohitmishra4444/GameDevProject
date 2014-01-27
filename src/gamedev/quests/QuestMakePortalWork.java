@@ -23,12 +23,12 @@ public class QuestMakePortalWork extends Quest {
 
 	@Override
 	public String getStatus() {
-		return "There is still something missing...";
+		return "The portal still isn't working...";
 	}
 
 	@Override
 	public String statusForQuestScene() {
-		return "I haven't found everything.";
+		return "I need to find both keys";
 	}
 
 	@Override

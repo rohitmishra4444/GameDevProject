@@ -35,9 +35,9 @@ public class GameIntroScene extends BaseScene {
 	private static final String string1 = "a bad accident messed up your life...";
 	private static final String string2 = "With a big flash and a terrible noise,\nyou were thrown back to the stone age...";
 	private static final String string3 = "Fortunately, some kindly cavemen\nhave taken you to their living cave.\n They gave you food and water until\nfinally you were fully recovered...";
-	private static final String string4 = "But life in stone age is boring...\n After some weeks, you saw a fascinating\n mural painting and recognized something...";
+	private static final String string4 = "But life in stone age is boring...\n You miss your wife and friends back home...\nAfter some weeks, you saw a fascinating\n mural painting and recognized something...";
 	private static final String string5 = "There has to be a portal somewhere,\nwhich could bring you back home...";
-	private static final String string6 = "On a small map you discovered where this portal could be!\nBrave and without fear, you walk out of the cave...";
+	private static final String string6 = "On a small map you discovered where this portal could be!\nWithout fear and armed with a spear,\nyou walk out of the cave...";
 
 	private static final String[] gameIntroStrings = { string0, string1,
 			string2, string3, string4, string5, string6 };

@@ -54,7 +54,7 @@ public class QuestPassCanyon extends Quest {
 	public void setActive(boolean active) {
 		super.setActive(active);
 		ResourcesManager.getInstance().activity.toastOnUIThread(
-				this.description, Toast.LENGTH_SHORT);
+				this.description, Toast.LENGTH_LONG);
 	}
 
 	@Override

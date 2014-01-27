@@ -105,9 +105,9 @@ public class FightScene extends CameraScene {
 			}
 		});
 		
-		this.countdownStrings.add("3     ");
-		this.countdownStrings.add("2     ");
-		this.countdownStrings.add("1     ");
+		this.countdownStrings.add("  3   ");
+		this.countdownStrings.add("  2   ");
+		this.countdownStrings.add("  1   ");
 		this.countdownStrings.add("Fight!");
 		this.countdownText = new Text(0, 0, ResourcesManager.getInstance().font, "      ", resourcesManager.vbom);
 		this.attachChild(this.countdownText);

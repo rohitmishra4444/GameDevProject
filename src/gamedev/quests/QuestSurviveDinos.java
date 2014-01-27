@@ -48,7 +48,7 @@ public class QuestSurviveDinos extends Quest {
 
 	@Override
 	public String getStatus() {
-		return "I didn't have found all items yet.";
+		return "I didn't find both keys yet...";
 	}
 
 	@Override
@@ -60,7 +60,7 @@ public class QuestSurviveDinos extends Quest {
 		if (box2.isOpened()) {
 			count++;
 		}
-		return Integer.toString(count) + "/2" + " items";
+		return Integer.toString(count) + "/2" + " keys";
 	}
 
 	@Override
@@ -74,7 +74,7 @@ public class QuestSurviveDinos extends Quest {
 				"Damn those dinosaurs are big! But I need to go down here...",
 				Toast.LENGTH_LONG);
 		ResourcesManager.getInstance().activity.toastOnUIThread(
-				"I really should avoid fighting against those beasts...",
+				"I really should avoid fighting against those beasts!",
 				Toast.LENGTH_LONG);
 	}
 

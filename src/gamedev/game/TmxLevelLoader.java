@@ -153,7 +153,7 @@ public class TmxLevelLoader {
 					this.resourcesManager.physicsWorld, rect,
 					BodyType.StaticBody, boxFixtureDef);
 			body.setUserData("Boundary");
-			// rect.setVisible(false);
+			 rect.setVisible(false);
 			this.scene.attachChild(rect);
 		}
 	}

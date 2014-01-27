@@ -124,7 +124,9 @@ public class ResourcesManager {
 	private BitmapTextureAtlas menuBackgroundTextureAtlas;
 	private BitmapTextureAtlas menuButtonsTextureAtlas;
 	public Font font;
+	public Font fontBig;
 
+	
 	// Textures for game intro scene
 	public ArrayList<BitmapTextureAtlas> game_intro_atlas;
 	public ArrayList<ITextureRegion> game_intro_region;
@@ -316,6 +318,11 @@ public class ResourcesManager {
 				activity.getAssets(), "UniversElse-Regular.ttf", 22, true,
 				Color.WHITE);
 
+//		fontBig = FontFactory.createFromAsset(
+//				((GameActivity) activity).getFontManager(), mainFontTexture,
+//				activity.getAssets(), "UniversElse-Regular.ttf", 60, true,
+//				Color.WHITE);
+
 		// font = FontFactory.createFromAsset(
 		// ((GameActivity) activity).getFontManager(), mainFontTexture,
 		// activity.getAssets(), "font.ttf", 35f, true, Color.WHITE);
@@ -327,10 +334,12 @@ public class ResourcesManager {
 			createMenuFonts();
 		}
 		font.load();
+//		fontBig.load();
 	}
 
 	private void unloadMenuFonts() {
 		font.unload();
+//		fontBig.unload();
 	}
 
 	// ---------------------------------------------

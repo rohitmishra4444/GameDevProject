@@ -62,5 +62,15 @@ public abstract class MoveStrategy {
 	public static float calculateDuration(Vector2 from, Vector2 to, Vector2 velocity) {
 		return MathUtils.distance(from.x, from.y, to.x, to.y) / velocity.len();
 	}
+
+
+	public AnimatedObject getObject() {
+		return object;
+	}
+
+
+	public void setObject(AnimatedObject object) {
+		this.object = object;
+	}
 	
 }
