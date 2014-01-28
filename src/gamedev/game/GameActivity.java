@@ -10,7 +10,7 @@ import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.WakeLockOptions;
-import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
+import org.andengine.engine.options.resolutionpolicy.FillResolutionPolicy;
 import org.andengine.entity.scene.Scene;
 import org.andengine.entity.util.FPSLogger;
 import org.andengine.ui.activity.BaseGameActivity;
@@ -45,8 +45,7 @@ public class GameActivity extends BaseGameActivity {
 	public EngineOptions onCreateEngineOptions() {
 		this.camera = new BoundCamera(0, 0, WIDTH, HEIGHT);
 		EngineOptions engineOptions = new EngineOptions(true,
-				ScreenOrientation.LANDSCAPE_FIXED, new RatioResolutionPolicy(
-						WIDTH, HEIGHT), this.camera);
+				ScreenOrientation.LANDSCAPE_FIXED, new FillResolutionPolicy(), this.camera);
 		engineOptions.getAudioOptions().setNeedsMusic(true).setNeedsSound(true);
 		engineOptions.setWakeLockOptions(WakeLockOptions.SCREEN_ON);
 		engineOptions.getTouchOptions().setNeedsMultiTouch(true);
