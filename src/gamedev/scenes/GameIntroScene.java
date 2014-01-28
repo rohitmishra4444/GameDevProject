@@ -102,7 +102,8 @@ public class GameIntroScene extends BaseScene {
 	}
 
 	private void addSkipIntroButton() {
-		skipIntroButton = new Rectangle(480, 410, 300, 50, vbom);
+		skipIntroButton = new Rectangle(camera.getCenterX() + 80,
+				camera.getCenterY() + 170, 300, 50, vbom);
 		skipIntroButton.setColor(Color.BLACK);
 		skipIntroText = new Text(10, 8, resourcesManager.font, skipIntroString,
 				vbom);
