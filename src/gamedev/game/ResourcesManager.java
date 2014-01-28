@@ -772,7 +772,7 @@ public class ResourcesManager {
 					800, 480, BitmapTextureFormat.RGBA_4444);
 			helpTextureAtlas.add(i, atlas);
 
-			String fileName = "help_0" + (i + 1) + ".png";
+			String fileName = "help_0" + (i + 1) + ".jpg";
 
 			ITextureRegion region = BitmapTextureAtlasTextureRegionFactory
 					.createFromAsset(atlas, activity, fileName, 0, 0);
