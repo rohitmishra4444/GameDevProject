@@ -21,9 +21,12 @@ public class GameOverScene extends CameraScene {
 
 	private static GameOverScene instance;
 	private ResourcesManager resourcesManager = ResourcesManager.getInstance();
-
-	private Sprite background;
-
+	private final static float WAIT_SECONDS = 3;
+	
+//	private Sprite background;
+	
+	protected float timeWaited = 0;
+	
 	private GameOverScene() {
 		super(ResourcesManager.getInstance().camera);
 		this.setBackgroundEnabled(false);
@@ -47,21 +50,22 @@ public class GameOverScene extends CameraScene {
 		attachChild(text);
 
 		// Wait 3 seconds until the onSceneTouchListener is added.
-		resourcesManager.engine.registerUpdateHandler(new TimerHandler(3,
-				new ITimerCallback() {
-					public void onTimePassed(final TimerHandler pTimerHandler) {
+//		resourcesManager.engine.registerUpdateHandler(new TimerHandler(3,
+//				new ITimerCallback() {
+//					public void onTimePassed(final TimerHandler pTimerHandler) {
 						setOnSceneTouchListener(new IOnSceneTouchListener() {
 							@Override
 							public boolean onSceneTouchEvent(Scene pScene,
 									TouchEvent pSceneTouchEvent) {
+								if (timeWaited < WAIT_SECONDS) return false;
 								if (pSceneTouchEvent.isActionDown()) {
 									closeGameOverScene();
 								}
 								return true;
 							}
 						});
-					}
-				}));
+//					}
+//				}));
 	}
 
 	public void openGameOverScene() {
@@ -79,6 +83,8 @@ public class GameOverScene extends CameraScene {
 	}
 
 	public void closeGameOverScene() {
+		this.setIgnoreUpdate(true);
+		this.timeWaited = 0;
 		this.detachSelf();
 		if (!this.isDisposed()) {
 			this.dispose();
@@ -109,7 +115,12 @@ public class GameOverScene extends CameraScene {
 		if (instance == null) {
 			instance = new GameOverScene();
 		}
+		instance.setIgnoreUpdate(false);
 		return instance;
+	}
+	
+	public void onManagedUpdate(float seconds) {
+		this.timeWaited += seconds;
 	}
 
 }
