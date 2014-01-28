@@ -92,8 +92,8 @@ public class ResourcesManager {
 	public TextureRegion hudHelpIconRegion;
 	private BitmapTextureAtlas hudQuestListIconAtlas;
 	public TextureRegion hudQuestListIconRegion;
-	private BitmapTextureAtlas hudShopIconAtlas;
-	public TextureRegion hudShopIconRegion;
+//	private BitmapTextureAtlas hudShopIconAtlas;
+//	public TextureRegion hudShopIconRegion;
 
 	public BitmapTextureAtlas bgBarsAtlas;
 	public TextureRegion bgBarsRegion;
@@ -165,7 +165,9 @@ public class ResourcesManager {
 	public Sound questFinished;
 	public Sound pain;
 	public Sound heartbeat;
+	public Sound dinoGrowl;
 
+	
 	// ---------------------------------------------
 	// Physic
 	// ---------------------------------------------
@@ -708,7 +710,10 @@ public class ResourcesManager {
 			questFinished = SoundFactory.createSoundFromAsset(soundManager,
 					activity, "quest_finished.ogg");
 			questFinished.setVolume(0.2f);
-
+			
+			dinoGrowl = SoundFactory.createSoundFromAsset(soundManager,
+					activity, "dino_growl.wav");
+			
 			gameSoundsLoaded = true;
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -883,11 +888,6 @@ public class ResourcesManager {
 				.createFromAsset(hudQuestListIconAtlas, activity, "quests.png",
 						0, 0);
 
-		this.hudShopIconAtlas = new BitmapTextureAtlas(textureManager, 44, 44,
-				TextureOptions.BILINEAR);
-		this.hudShopIconRegion = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(hudShopIconAtlas, activity,
-						"Game_Icons_0009_Shop.png", 0, 0);
 	}
 
 	private void loadHUDGraphics() {
@@ -900,7 +900,7 @@ public class ResourcesManager {
 
 		hudHelpIconAtlas.load();
 		hudQuestListIconAtlas.load();
-		hudShopIconAtlas.load();
+//		hudShopIconAtlas.load();
 		bgBarsAtlas.load();
 	}
 
@@ -909,7 +909,7 @@ public class ResourcesManager {
 		hudBerryAtlas.unload();
 		hudHelpIconAtlas.unload();
 		hudQuestListIconAtlas.unload();
-		hudShopIconAtlas.unload();
+//		hudShopIconAtlas.unload();
 		bgBarsAtlas.unload();
 	}
 

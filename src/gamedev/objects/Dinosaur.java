@@ -91,8 +91,11 @@ public class Dinosaur extends AnimatedObject {
 			this.timeDeath = this.timeAlive;
 			break;
 		case RUNNING:
+			rowIndex = 4;
+			break;
 		case CHASE_PLAYER:
 			rowIndex = 4;
+			resourcesManager.dinoGrowl.play();
 			break;
 		// case ROARING:
 		// rowIndex = 16;

@@ -237,11 +237,11 @@ public class FightScene extends CameraScene {
 			t.setColor(Color.BLACK);
 			if (dinosaur.getDinoColor() == Dinosaur.COLOR_GREEN) {
 				t.setTimeShowed(1.2f);
-				t.setDamageOpponent(resourcesManager.avatar.isPoisened() ? 7 : 10);
+				t.setDamageOpponent(resourcesManager.avatar.isPoisened() ? 4 : 6);
 				t.setDamageMiss(10);
 			} else {
 				t.setTimeShowed(0.8f);
-				t.setDamageOpponent(resourcesManager.avatar.isPoisened() ? 2 : 5);
+				t.setDamageOpponent(resourcesManager.avatar.isPoisened() ? 2 : 4);
 				t.setDamageMiss(15);
 			}
 		} else {

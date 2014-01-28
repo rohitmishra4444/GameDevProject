@@ -29,7 +29,7 @@ public class GameIntroScene extends BaseScene {
 	private static final float FADE_IN_DURATION = 1f;
 	private static final float FADE_OUT_DURATION = 0.5f;
 
-	private static final String skipIntroString = "Tap here to skip the intro.";
+	private static final String skipIntroString = "Tap here to skip the intro";
 
 	private static final String string0 = "Once a beautiful day in our modern world...";
 	private static final String string1 = "a bad accident messed up your life...";
@@ -95,7 +95,7 @@ public class GameIntroScene extends BaseScene {
 
 		// Tell how to proceed.
 		resourcesManager.activity.toastOnUIThread(
-				"Tap on the screen to continue...", Toast.LENGTH_LONG);
+				"Tap anywhere on screen to continue", Toast.LENGTH_LONG);
 
 		// This call has to be at the end.
 		registerSceneTouchListener();
