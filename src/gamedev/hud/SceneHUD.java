@@ -156,13 +156,17 @@ public class SceneHUD extends HUD {
 							new ScaleModifier(0.25f, 1.25f, 0.75f)));
 
 					if (resourcesManager.avatar.getInventory().removeBerry()) {
-						int currentLife = resourcesManager.avatar.getLife();
-						resourcesManager.avatar.setLife(currentLife
-								+ lifeAdditionFromBerry);
-						float currentEnergy = resourcesManager.avatar
-								.getEnergy();
-						resourcesManager.avatar.setEnergy(currentEnergy
-								+ energyAdditionFromBerry);
+						if (resourcesManager.avatar.isPoisened()) {
+							resourcesManager.avatar.setPoisened(false);
+						} else {
+							int currentLife = resourcesManager.avatar.getLife();
+							resourcesManager.avatar.setLife(currentLife
+									+ lifeAdditionFromBerry);
+							float currentEnergy = resourcesManager.avatar
+									.getEnergy();
+							resourcesManager.avatar.setEnergy(currentEnergy
+									+ energyAdditionFromBerry);							
+						}
 						// Feedback:
 						ResourcesManager.getInstance().eat.play();
 					}

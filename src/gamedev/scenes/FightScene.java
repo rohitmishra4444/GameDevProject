@@ -72,9 +72,10 @@ public class FightScene extends CameraScene {
 			public boolean onSceneTouchEvent(Scene pScene,
 					TouchEvent pSceneTouchEvent) {
 				if (pSceneTouchEvent.isActionDown()) {
+					if (countdownActive) return false;
 					float pX = pSceneTouchEvent.getX();
 					float pY = pSceneTouchEvent.getY();
-//					boolean hit = false;
+					boolean hit = false;
 					for (Target target : targets) {
 						if (target.isHit(pX, pY)) {
 							if (target.getDamageOpponent() > 0) {
@@ -86,12 +87,12 @@ public class FightScene extends CameraScene {
 										.getDamageAvatar());
 							}
 							target.setRemovable(true);
-//							hit = true;
+							hit = true;
 						}
 					}
-//					if (!hit) {
-//						resourcesManager.avatar.attack(5);	
-//					}
+					if (!hit) {
+						resourcesManager.avatar.attack(5);	
+					}
 					if (dinosaur.getState() == GameState.DEAD) {
 						resourcesManager.avatar.setState(GameState.IDLE, -1);
 						GameActivity.mode = GameMode.EXPLORING;
@@ -235,11 +236,11 @@ public class FightScene extends CameraScene {
 			// Good target
 			t.setColor(Color.BLACK);
 			if (dinosaur.getDinoColor() == Dinosaur.COLOR_GREEN) {
-				t.setTimeShowed(0.75f);
+				t.setTimeShowed(1.2f);
 				t.setDamageOpponent(resourcesManager.avatar.isPoisened() ? 7 : 10);
 				t.setDamageMiss(10);
 			} else {
-				t.setTimeShowed(0.5f);
+				t.setTimeShowed(0.8f);
 				t.setDamageOpponent(resourcesManager.avatar.isPoisened() ? 2 : 5);
 				t.setDamageMiss(15);
 			}
@@ -248,10 +249,10 @@ public class FightScene extends CameraScene {
 			t.setColor(Color.RED);
 			if (dinosaur.getDinoColor() == Dinosaur.COLOR_GREEN) {
 				t.setDamageAvatar(10);
-				t.setTimeShowed(0.75f);
+				t.setTimeShowed(1f);
 			} else {
 				t.setDamageAvatar(15);
-				t.setTimeShowed(0.5f);
+				t.setTimeShowed(1f);
 			}
 		}
 		return t;
