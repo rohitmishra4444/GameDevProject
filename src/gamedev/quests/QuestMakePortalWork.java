@@ -28,7 +28,8 @@ public class QuestMakePortalWork extends Quest {
 
 	@Override
 	public String statusForQuestScene() {
-		if (this.isCompleted()) {
+		if (SceneManager.getInstance().getCurrentGameMapScene().getQuest(3)
+				.isCompleted()) {
 			return "I have the keys for the portal";
 		} else {
 			return "I need to find both keys";
