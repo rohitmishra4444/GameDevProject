@@ -88,6 +88,8 @@ public class GameOverScene extends CameraScene {
 		GameMapScene mapScene = SceneManager.getInstance()
 				.getCurrentGameMapScene();
 		mapScene.disposeScene();
+		mapScene.removeChildren();
+
 		Iterator<Body> it = resourcesManager.physicsWorld.getBodies();
 		while (it.hasNext()) {
 			Body body = it.next();

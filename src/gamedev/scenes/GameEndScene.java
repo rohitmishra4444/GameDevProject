@@ -126,6 +126,7 @@ public class GameEndScene extends BaseScene {
 						GameMapScene mapScene = SceneManager.getInstance()
 								.getCurrentGameMapScene();
 						mapScene.disposeScene();
+						mapScene.removeChildren();
 
 						Iterator<Body> it = resourcesManager.physicsWorld
 								.getBodies();

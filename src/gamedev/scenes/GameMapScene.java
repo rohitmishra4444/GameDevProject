@@ -120,13 +120,16 @@ public class GameMapScene extends BaseScene {
 	@Override
 	public void disposeScene() {
 		this.camera.setHUD(null);
-		for (int i = 0; i < this.getChildCount(); i++) {
-			IEntity child = this.getChildByIndex(i);
-			resourcesManager.removeIEntity(child);
-		}
 		this.detachSelf();
 		if (!this.isDisposed()) {
 			this.dispose();
+		}
+	}
+
+	public void removeChildren() {
+		for (int i = 0; i < this.getChildCount(); i++) {
+			IEntity child = this.getChildByIndex(i);
+			resourcesManager.removeIEntity(child);
 		}
 	}
 
