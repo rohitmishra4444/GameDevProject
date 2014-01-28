@@ -4,7 +4,6 @@ import gamedev.game.GameActivity;
 import gamedev.game.ResourcesManager;
 import gamedev.scenes.HelpScene;
 import gamedev.scenes.QuestScene;
-import gamedev.scenes.ShopScene;
 
 import org.andengine.engine.camera.hud.HUD;
 import org.andengine.engine.camera.hud.controls.AnalogOnScreenControl;
@@ -19,7 +18,6 @@ import org.andengine.input.touch.TouchEvent;
 import org.andengine.util.color.Color;
 
 import android.opengl.GLES20;
-import android.widget.Toast;
 
 public class SceneHUD extends HUD {
 
@@ -105,8 +103,8 @@ public class SceneHUD extends HUD {
 	}
 
 	private void createSprintButton() {
-		sprintButton = new ButtonSprite(cameraWidth - 120,
-				cameraHeight - 100, resourcesManager.controlKnobTextureRegion,
+		sprintButton = new ButtonSprite(cameraWidth - 120, cameraHeight - 100,
+				resourcesManager.controlKnobTextureRegion,
 				resourcesManager.vbom) {
 			@Override
 			public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y) {
@@ -132,11 +130,20 @@ public class SceneHUD extends HUD {
 
 	private void createBerriesAndButton() {
 		this.berries = new ButtonSprite(cameraWidth - 115, 90,
-				resourcesManager.hudBerryRegion, resourcesManager.vbom) {
-			public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y) {
+				resourcesManager.hudBerryRegion, resourcesManager.vbom);
 
+		final int TOUCH_RECTANGLE_MARGIN = 60;
+
+		Rectangle touchRectangle = new Rectangle(berries.getX()
+				- TOUCH_RECTANGLE_MARGIN / 2, berries.getY()
+				- TOUCH_RECTANGLE_MARGIN / 2,
+				resourcesManager.hudBerryRegion.getWidth()
+						+ TOUCH_RECTANGLE_MARGIN,
+				resourcesManager.hudBerryRegion.getHeight()
+						+ TOUCH_RECTANGLE_MARGIN, resourcesManager.vbom) {
+			public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y) {
 				if (touchEvent.isActionUp()) {
-					this.registerEntityModifier(new SequenceEntityModifier(
+					berries.registerEntityModifier(new SequenceEntityModifier(
 							new ScaleModifier(0.25f, 0.75f, 1.25f),
 							new ScaleModifier(0.25f, 1.25f, 0.75f)));
 
@@ -157,9 +164,12 @@ public class SceneHUD extends HUD {
 				return false;
 			}
 		};
-		this.attachChild(berries);
+		touchRectangle.setVisible(false);
+
 		berries.setScale(0.75f);
-		this.registerTouchArea(berries);
+		this.attachChild(berries);
+		this.attachChild(touchRectangle);
+		this.registerTouchArea(touchRectangle);
 
 		String berryInitialString = " 0";
 		this.berryCounter = new Text(cameraWidth - 130, 90,
@@ -178,39 +188,37 @@ public class SceneHUD extends HUD {
 			}
 
 		});
-		// this.berryCounter.setScale(1.5f);
 		this.attachChild(berryCounter);
 
 	}
 
-//	private void createShopButton() {
-//		ButtonSprite shopButton = new ButtonSprite(cameraWidth - 400, 20,
-//				resourcesManager.hudShopIconRegion, resourcesManager.vbom) {
-//			@Override
-//			public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y) {
-//				this.registerEntityModifier(new SequenceEntityModifier(
-//						new ScaleModifier(0.25f, 1.25f, 1f), new ScaleModifier(
-//								0.25f, 1f, 1.25f)));
-//				// Feedback:
-//				ResourcesManager.getInstance().openChildScene.play();
-//
-//				ShopScene shopScene = ShopScene.getInstance();
-//				shopScene.openShopScene();
-//				// TODO: Remove.
-//				resourcesManager.activity.toastOnUIThread(
-//						"Sorry, the shop is not implemented yet.",
-//						Toast.LENGTH_LONG);
-//
-//				return true;
-//			};
-//		};
-//
-//		shopButton.setAlpha(0.8f);
-//		// shopButton.setScale(1.25f);
-//
-//		this.registerTouchArea(shopButton);
-//		this.attachChild(shopButton);
-//	}
+	// private void createShopButton() {
+	// ButtonSprite shopButton = new ButtonSprite(cameraWidth - 400, 20,
+	// resourcesManager.hudShopIconRegion, resourcesManager.vbom) {
+	// @Override
+	// public boolean onAreaTouched(TouchEvent touchEvent, float X, float Y) {
+	// this.registerEntityModifier(new SequenceEntityModifier(
+	// new ScaleModifier(0.25f, 1.25f, 1f), new ScaleModifier(
+	// 0.25f, 1f, 1.25f)));
+	// // Feedback:
+	// ResourcesManager.getInstance().openChildScene.play();
+	//
+	// ShopScene shopScene = ShopScene.getInstance();
+	// shopScene.openShopScene();
+	// // TODO: Remove.
+	// resourcesManager.activity.toastOnUIThread(
+	// "Sorry, the shop is not implemented yet.",
+	// Toast.LENGTH_LONG);
+	//
+	// return true;
+	// };
+	// };
+	// shopButton.setAlpha(0.8f);
+	// // shopButton.setScale(1.25f);
+	//
+	// this.registerTouchArea(shopButton);
+	// this.attachChild(shopButton);
+	// }
 
 	private void createQuestButton() {
 		questButton = new ButtonSprite(cameraWidth - 250, 20,
@@ -228,9 +236,7 @@ public class SceneHUD extends HUD {
 				return true;
 			};
 		};
-
 		questButton.setAlpha(0.9f);
-		// questButton.setScale(1.25f);
 
 		this.registerTouchArea(questButton);
 		this.attachChild(questButton);
@@ -252,9 +258,7 @@ public class SceneHUD extends HUD {
 				return true;
 			};
 		};
-
 		helpButton.setAlpha(0.9f);
-		// helpButton.setScale(1.25f);
 
 		this.registerTouchArea(helpButton);
 		this.attachChild(helpButton);
@@ -283,14 +287,14 @@ public class SceneHUD extends HUD {
 	public boolean isTouchedSecondaryButton() {
 		return this.isSprintButtonTouched;
 	}
-	
+
 	public void showBarsOnly() {
 		this.setVisible(false);
 		this.bgBars.setVisible(true);
 		this.life.setVisible(true);
 		this.energy.setVisible(true);
 	}
-	
+
 	public void setVisible(boolean visible) {
 		this.pad.setVisible(visible);
 		this.berries.setVisible(visible);
