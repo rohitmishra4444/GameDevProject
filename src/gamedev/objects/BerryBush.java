@@ -19,7 +19,6 @@ public class BerryBush {
 	}
 
 	private void addNewBerry() {
-		lastRipenTime = System.nanoTime();
 		Berry berry = new Berry();
 		this.berries.add(berry);
 	}
@@ -28,7 +27,8 @@ public class BerryBush {
 		long currentTime = System.nanoTime();
 		long timeSinceLastRipen = currentTime - lastRipenTime;
 
-		if (timeSinceLastRipen > WAIT_TIME_FOR_RIPEN_IN_NS) {
+		if (timeSinceLastRipen > WAIT_TIME_FOR_RIPEN_IN_NS
+				&& this.berries.isEmpty()) {
 			addNewBerry();
 		}
 
