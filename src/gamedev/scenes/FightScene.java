@@ -74,7 +74,7 @@ public class FightScene extends CameraScene {
 				if (pSceneTouchEvent.isActionDown()) {
 					float pX = pSceneTouchEvent.getX();
 					float pY = pSceneTouchEvent.getY();
-					boolean hit = false;
+//					boolean hit = false;
 					for (Target target : targets) {
 						if (target.isHit(pX, pY)) {
 							if (target.getDamageOpponent() > 0) {
@@ -86,12 +86,12 @@ public class FightScene extends CameraScene {
 										.getDamageAvatar());
 							}
 							target.setRemovable(true);
-							hit = true;
+//							hit = true;
 						}
 					}
-					if (!hit) {
-						resourcesManager.avatar.attack(5);	
-					}
+//					if (!hit) {
+//						resourcesManager.avatar.attack(5);	
+//					}
 					if (dinosaur.getState() == GameState.DEAD) {
 						resourcesManager.avatar.setState(GameState.IDLE, -1);
 						GameActivity.mode = GameMode.EXPLORING;
@@ -108,8 +108,8 @@ public class FightScene extends CameraScene {
 		this.countdownStrings.add("  3   ");
 		this.countdownStrings.add("  2   ");
 		this.countdownStrings.add("  1   ");
-		this.countdownStrings.add("Fight!");
-		this.countdownText = new Text(0, 0, ResourcesManager.getInstance().font, "      ", resourcesManager.vbom);
+		this.countdownStrings.add("FIGHT!");
+		this.countdownText = new Text(0, 0, ResourcesManager.getInstance().fontBig, "      ", resourcesManager.vbom);
 		this.attachChild(this.countdownText);
 		this.rectLifeDino = new Rectangle(0, 0, 64, GameActivity.HEIGHT, resourcesManager.vbom);
 		this.rectLifeDino.setColor(Color.RED);
