@@ -21,8 +21,7 @@ import android.opengl.GLES20;
 
 public class SceneHUD extends HUD {
 
-	final protected ResourcesManager resourcesManager = ResourcesManager
-			.getInstance();
+	private ResourcesManager resourcesManager = ResourcesManager.getInstance();
 
 	// Controls
 	protected AnalogOnScreenControl pad;

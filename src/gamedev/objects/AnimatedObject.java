@@ -7,7 +7,6 @@ import gamedev.game.GameActivity.GameMode;
 import gamedev.game.ResourcesManager;
 
 import org.andengine.audio.sound.Sound;
-import org.andengine.engine.handler.physics.PhysicsHandler;
 import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
@@ -21,7 +20,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 public abstract class AnimatedObject extends AnimatedSprite {
 
 	protected Body body;
-	protected PhysicsHandler physicsHandler;
+	// protected PhysicsHandler physicsHandler;
 	protected ResourcesManager resourcesManager;
 
 	/**
@@ -122,7 +121,8 @@ public abstract class AnimatedObject extends AnimatedSprite {
 	 *            Amount of life taken
 	 */
 	public void attack(int damage) {
-		if (this.state == GameState.DEAD) return;
+		if (this.state == GameState.DEAD)
+			return;
 		int life = this.life - damage;
 		this.setLife(life);
 		if (this.life <= 0) {
@@ -228,13 +228,12 @@ public abstract class AnimatedObject extends AnimatedSprite {
 	public void setTimeAlive(float timeAlive) {
 		this.timeAlive = timeAlive;
 	}
-	
+
 	public void playSound(Sound sound, float rate, boolean loop) {
 		sound.stop();
 		sound.setRate(rate);
 		sound.setLooping(loop);
 		sound.play();
 	}
-
 
 }

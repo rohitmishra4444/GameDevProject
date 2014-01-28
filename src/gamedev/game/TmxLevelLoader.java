@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.entity.scene.Scene;
-import org.andengine.extension.physics.box2d.FixedStepPhysicsWorld;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.tmx.TMXLayer;
 import org.andengine.extension.tmx.TMXObject;
@@ -45,13 +44,6 @@ public class TmxLevelLoader {
 	}
 
 	public void createWorldAndObjects() {
-		if (resourcesManager.physicsWorld == null) {
-			resourcesManager.physicsWorld = new FixedStepPhysicsWorld(30,
-					new Vector2(0, 0), false, 8, 1);
-			resourcesManager.physicsWorld
-					.setContactListener(new BodiesContactListener());
-		}
-
 		// Loop through the layers and attach them as child scene.
 		for (int i = 0; i < this.map.getTMXLayers().size(); i++) {
 			TMXLayer tmxLayer = this.map.getTMXLayers().get(i);
@@ -85,10 +77,14 @@ public class TmxLevelLoader {
 				s.setMoveStrategy(strategy);
 			}
 			for (int i = 0; i < object.getTMXObjectProperties().size(); i++) {
-				if (object.getTMXObjectProperties().get(i).getName().equals("velocity")) {
-					s.setVelocity(Float.parseFloat(object.getTMXObjectProperties().get(i).getValue()));					
-				} else if (object.getTMXObjectProperties().get(i).getName().equals("scale")) {
-					s.setScale(Float.parseFloat(object.getTMXObjectProperties().get(i).getValue()));
+				if (object.getTMXObjectProperties().get(i).getName()
+						.equals("velocity")) {
+					s.setVelocity(Float.parseFloat(object
+							.getTMXObjectProperties().get(i).getValue()));
+				} else if (object.getTMXObjectProperties().get(i).getName()
+						.equals("scale")) {
+					s.setScale(Float.parseFloat(object.getTMXObjectProperties()
+							.get(i).getValue()));
 				}
 			}
 			this.scene.attachChild(s);
@@ -153,11 +149,10 @@ public class TmxLevelLoader {
 					this.resourcesManager.physicsWorld, rect,
 					BodyType.StaticBody, boxFixtureDef);
 			body.setUserData("Boundary");
-			 rect.setVisible(false);
+			rect.setVisible(false);
 			this.scene.attachChild(rect);
 		}
 	}
-
 
 	protected void createDinosaurs(ArrayList<TMXObject> objects, int color) {
 		for (final TMXObject object : objects) {
@@ -167,12 +162,18 @@ public class TmxLevelLoader {
 				d.setAlternateMoveStrategy(alternateStrategy);
 			}
 			for (int i = 0; i < object.getTMXObjectProperties().size(); i++) {
-				if (object.getTMXObjectProperties().get(i).getName().equals("radius")) {
-					d.setRadius(Float.parseFloat(object.getTMXObjectProperties().get(i).getValue()));
-				} else if (object.getTMXObjectProperties().get(i).getName().equals("velocity")) {
-					d.setVelocity(Float.parseFloat(object.getTMXObjectProperties().get(i).getValue()));					
-				} else if (object.getTMXObjectProperties().get(i).getName().equals("scale")) {
-					d.setScale(Float.parseFloat(object.getTMXObjectProperties().get(i).getValue()));
+				if (object.getTMXObjectProperties().get(i).getName()
+						.equals("radius")) {
+					d.setRadius(Float.parseFloat(object
+							.getTMXObjectProperties().get(i).getValue()));
+				} else if (object.getTMXObjectProperties().get(i).getName()
+						.equals("velocity")) {
+					d.setVelocity(Float.parseFloat(object
+							.getTMXObjectProperties().get(i).getValue()));
+				} else if (object.getTMXObjectProperties().get(i).getName()
+						.equals("scale")) {
+					d.setScale(Float.parseFloat(object.getTMXObjectProperties()
+							.get(i).getValue()));
 				}
 			}
 			this.scene.attachChild(d);
@@ -252,9 +253,12 @@ public class TmxLevelLoader {
 						}
 					}
 					if (minX != -1 && maxX != -1 && minY != -1 && maxY != -1) {
-						return new RandomMoveStrategy(d, minDistance, maxDistance, waitBetweenTime, minX, maxX, minY, maxY);
+						return new RandomMoveStrategy(d, minDistance,
+								maxDistance, waitBetweenTime, minX, maxX, minY,
+								maxY);
 					} else {
-						return new RandomMoveStrategy(d, minDistance, maxDistance, waitBetweenTime);						
+						return new RandomMoveStrategy(d, minDistance,
+								maxDistance, waitBetweenTime);
 					}
 				}
 			}
@@ -275,7 +279,6 @@ public class TmxLevelLoader {
 			Body body = PhysicsFactory.createBoxBody(
 					this.resourcesManager.physicsWorld, rect,
 					BodyType.StaticBody, boxFixtureDef);
-			rect.setUserData(berryBush);
 			body.setUserData(berryBush);
 			rect.setVisible(false);
 			this.scene.attachChild(rect);

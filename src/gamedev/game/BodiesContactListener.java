@@ -29,8 +29,7 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 public class BodiesContactListener implements ContactListener,
 		IProgressListener {
 
-	protected ResourcesManager resourcesManager = ResourcesManager
-			.getInstance();
+	private ResourcesManager resourcesManager = ResourcesManager.getInstance();
 	private Rectangle collectingBar;
 	private BerryBush berryBush;
 	// Duration of collecting a berry:
@@ -238,6 +237,7 @@ public class BodiesContactListener implements ContactListener,
 						Toast.LENGTH_SHORT);
 				resourcesManager.collect.play();
 			}
+			berryBush = null;
 		}
 	}
 }

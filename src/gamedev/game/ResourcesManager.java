@@ -126,7 +126,6 @@ public class ResourcesManager {
 	public Font font;
 	public Font fontBig;
 
-	
 	// Textures for game intro scene
 	public ArrayList<BitmapTextureAtlas> game_intro_atlas;
 	public ArrayList<ITextureRegion> game_intro_region;
@@ -313,23 +312,26 @@ public class ResourcesManager {
 		final ITexture mainFontTexture = new BitmapTextureAtlas(textureManager,
 				256, 256, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 
-		final ITexture texture = new BitmapTextureAtlas(textureManager,
-				512, 512, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+		final ITexture texture = new BitmapTextureAtlas(textureManager, 512,
+				512, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 
-		
 		font = FontFactory.createFromAsset(
 				((GameActivity) activity).getFontManager(), mainFontTexture,
 				activity.getAssets(), "UniversElse-Regular.ttf", 22, true,
 				Color.WHITE);
 
+		// fontBig = FontFactory.createFromAsset(
+		// ((GameActivity) activity).getFontManager(), mainFontTexture,
+		// activity.getAssets(), "UniversElse-Regular.ttf", 60, true,
+		// Color.WHITE);
+
 		fontBig = FontFactory.createFromAsset(
 				((GameActivity) activity).getFontManager(), texture,
-				activity.getAssets(), "StoneHinge.ttf", 80, true,
-				Color.WHITE);
+				activity.getAssets(), "StoneHinge.ttf", 80, true, Color.WHITE);
 
-//		 font = FontFactory.createFromAsset(
-//		 ((GameActivity) activity).getFontManager(), mainFontTexture,
-//		 activity.getAssets(), "font.ttf", 35f, true, Color.WHITE);
+		// font = FontFactory.createFromAsset(
+		// ((GameActivity) activity).getFontManager(), mainFontTexture,
+		// activity.getAssets(), "font.ttf", 35f, true, Color.WHITE);
 
 	}
 
@@ -403,14 +405,16 @@ public class ResourcesManager {
 		loadMenuFonts();
 		loadGameAudio();
 		loadHUDResources();
-		loadGameShopResources();
+		// loadGameShopResources();
 
-		// TODO: Refactor. This should not be created here, rather in
-		// GameMapScene.
-		if (physicsWorld == null || avatar == null) {
+		// Avatar reacts no more after contact with berrybush, if the following
+		// code is not in here.
+		if (physicsWorld == null) {
 			physicsWorld = new FixedStepPhysicsWorld(30, new Vector2(0, 0),
 					false, 8, 1);
 			physicsWorld.setContactListener(new BodiesContactListener());
+		}
+		if (avatar == null) {
 			avatar = new Avatar();
 		}
 	}
@@ -419,11 +423,11 @@ public class ResourcesManager {
 		unloadGameGraphics();
 		unloadGameAudio();
 		unloadHUDResources();
-		unloadGameShopResources();
+		// unloadGameShopResources();
 	}
 
 	private void loadGameGraphics() {
-		if (playerAtlas == null || gameGraphicsCreated == false) {
+		if (gameGraphicsCreated == false) {
 			createGameGraphics();
 		}
 		gameEndPortalAtlas.load();

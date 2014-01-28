@@ -134,6 +134,10 @@ public class GameEndScene extends BaseScene {
 							resourcesManager.physicsWorld.destroyBody(body);
 						}
 
+						resourcesManager.physicsWorld.clearForces();
+						resourcesManager.physicsWorld.clearPhysicsConnectors();
+						resourcesManager.physicsWorld.reset();
+						resourcesManager.physicsWorld.dispose();
 						resourcesManager.physicsWorld = null;
 						resourcesManager.avatar = null;
 						SceneManager.getInstance().deleteCurrentGameMapScene();

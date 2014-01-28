@@ -4,7 +4,6 @@ import gamedev.game.Direction;
 import gamedev.game.ResourcesManager;
 import gamedev.scenes.GameOverScene;
 
-import org.andengine.engine.handler.physics.PhysicsHandler;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.util.math.MathUtils;
@@ -49,7 +48,7 @@ public class Avatar extends AnimatedObject {
 				&& (direction == -1 || direction == this.direction)) {
 			return;
 		}
-		
+
 		this.state = state;
 		if (direction != -1)
 			this.direction = direction;
@@ -195,8 +194,8 @@ public class Avatar extends AnimatedObject {
 				this, BodyType.DynamicBody,
 				PhysicsFactory.createFixtureDef(0, 0, 0));
 		this.body.setUserData("Avatar");
-		this.physicsHandler = new PhysicsHandler(this);
-		this.registerUpdateHandler(this.physicsHandler);
+		// this.physicsHandler = new PhysicsHandler(this);
+		// this.registerUpdateHandler(this.physicsHandler);
 		this.resourcesManager.physicsWorld
 				.registerPhysicsConnector(new PhysicsConnector(this, this.body,
 						true, false) {
@@ -226,7 +225,8 @@ public class Avatar extends AnimatedObject {
 	}
 
 	public void poisen(int life, int energy) {
-		if (this.state == GameState.DEAD) return;
+		if (this.state == GameState.DEAD)
+			return;
 		this.attack(life);
 		this.takeEnergy(energy);
 		this.poisened = true;

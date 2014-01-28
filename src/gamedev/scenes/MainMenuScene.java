@@ -92,24 +92,12 @@ public class MainMenuScene extends BaseScene implements
 
 		switch (pMenuItem.getID()) {
 		case MENU_PLAY:
-			boolean restart = false;
 			if (SceneManager.getInstance().isGameMapSceneCreated() == false) {
 				// Show intro scene
 				SceneManager.getInstance().loadGameIntroScene(engine);
-				// SceneManager.getInstance().createGameMapScene(engine,
-				// restart);
-
 			} else {
-				// Uncomment the following lines if you want to restart the game
-				// by
-				// clicking
-				// on "New game" in the menu.
-				// if (SceneManager.getInstance().isGameMapSceneCreated()) {
-				// restart = true;
-				// }
 				SceneManager.getInstance().loadGameMapScene(engine);
 			}
-
 			return true;
 		case MENU_EXIT:
 			System.exit(0);

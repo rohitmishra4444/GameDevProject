@@ -10,15 +10,13 @@ import org.andengine.engine.camera.hud.controls.BaseOnScreenControl;
 public class AnalogOnScreenControlListener implements
 		IAnalogOnScreenControlListener {
 
-	protected ResourcesManager resourcesManager = ResourcesManager
-			.getInstance();
+	private ResourcesManager resourcesManager = ResourcesManager.getInstance();
 
 	@Override
 	public void onControlChange(final BaseOnScreenControl pBaseOnScreenControl,
 			final float pValueX, final float pValueY) {
 
-		// Avoid nullpointer, needs to be resourcesManager.player, since
-		// it is final here
+		// Avoid nullpointer
 		if (resourcesManager.avatar == null) {
 			return;
 		}
@@ -27,11 +25,13 @@ public class AnalogOnScreenControlListener implements
 			// Only set the player to idle if state is not attack or animation
 			// is not running. This is needed, because when the state is attack
 			// x and y can also be 0.
-			if (resourcesManager.avatar.getState() != GameState.ATTACK || !resourcesManager.avatar.isAnimationRunning()) {
+			if (resourcesManager.avatar.getState() != GameState.ATTACK
+					|| !resourcesManager.avatar.isAnimationRunning()) {
 				resourcesManager.avatar.setState(GameState.IDLE, -1);
 			}
 		} else {
-			GameState state = resourcesManager.hud.isTouchedSecondaryButton() ? GameState.RUNNING: GameState.WALKING;
+			GameState state = resourcesManager.hud.isTouchedSecondaryButton() ? GameState.RUNNING
+					: GameState.WALKING;
 			resourcesManager.avatar.setVelocity(pValueX, pValueY, state);
 		}
 

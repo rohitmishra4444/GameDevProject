@@ -59,11 +59,11 @@ public class GameMapScene extends BaseScene {
 				"Tap on ?-Button to see how to play.", Toast.LENGTH_LONG);
 	}
 
-	protected void connectPhysics() {
-		this.registerUpdateHandler(this.resourcesManager.physicsWorld);
+	private void connectPhysics() {
+		this.registerUpdateHandler(resourcesManager.physicsWorld);
 	}
 
-	protected void createMap() {
+	private void createMap() {
 		// Try to load the tmx file
 		try {
 			final TMXLoader tmxLoader = new TMXLoader(
@@ -108,6 +108,7 @@ public class GameMapScene extends BaseScene {
 
 	@Override
 	public void onBackKeyPressed() {
+		resourcesManager.soundManager.setMasterVolume(0);
 		SceneManager.getInstance().loadMenuScene(engine);
 	}
 

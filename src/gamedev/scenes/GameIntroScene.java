@@ -94,8 +94,8 @@ public class GameIntroScene extends BaseScene {
 		addSkipIntroButton();
 
 		// Tell how to proceed.
-		resourcesManager.activity.toastOnUIThread("Tap to continue...",
-				Toast.LENGTH_SHORT);
+		resourcesManager.activity.toastOnUIThread(
+				"Tap on the screen to continue...", Toast.LENGTH_LONG);
 
 		// This call has to be at the end.
 		registerSceneTouchListener();
@@ -117,8 +117,7 @@ public class GameIntroScene extends BaseScene {
 					ITouchArea pTouchArea, float pTouchAreaLocalX,
 					float pTouchAreaLocalY) {
 				if (pSceneTouchEvent.isActionDown()) {
-					SceneManager.getInstance()
-							.createGameMapScene(engine, false);
+					SceneManager.getInstance().loadGameMapScene(engine);
 					return true;
 				}
 				return false;
@@ -157,8 +156,7 @@ public class GameIntroScene extends BaseScene {
 						detachViaUpdateHandlerAfterTime(oldEntity,
 								FADE_OUT_DURATION);
 
-						SceneManager.getInstance().createGameMapScene(engine,
-								false);
+						SceneManager.getInstance().loadGameMapScene(engine);
 						return true;
 					} else if (gameIntroEntities.get(nextEntity - 1)
 							.hasParent()) {
