@@ -44,8 +44,10 @@ public class SceneHUD extends HUD {
 
 	float cameraWidth = this.resourcesManager.camera.getWidth();
 	float cameraHeight = this.resourcesManager.camera.getHeight();
-
-	public SceneHUD() {
+	
+	private static SceneHUD instance;
+	
+	private SceneHUD() {
 		super();
 
 		int avatarLife = 100;
@@ -82,7 +84,14 @@ public class SceneHUD extends HUD {
 		// createShopButton();
 		createBerriesAndButton();
 	}
-
+	
+	public static SceneHUD getInstance() {
+		if (instance == null) {
+			return new SceneHUD();
+		}
+		return instance;
+	}
+	
 	protected void createDPadControls() {
 		AnalogOnScreenControlListener controlListener = new AnalogOnScreenControlListener();
 		this.pad = new AnalogOnScreenControl(20, GameActivity.HEIGHT

@@ -74,7 +74,7 @@ public class FightScene extends CameraScene {
 				if (pSceneTouchEvent.isActionDown()) {
 					float pX = pSceneTouchEvent.getX();
 					float pY = pSceneTouchEvent.getY();
-					boolean hit = false;
+//					boolean hit = false;
 					for (Target target : targets) {
 						if (target.isHit(pX, pY)) {
 							if (target.getDamageOpponent() > 0) {
@@ -86,12 +86,12 @@ public class FightScene extends CameraScene {
 										.getDamageAvatar());
 							}
 							target.setRemovable(true);
-							hit = true;
+//							hit = true;
 						}
 					}
-					if (!hit) {
-						resourcesManager.avatar.attack(5);	
-					}
+//					if (!hit) {
+//						resourcesManager.avatar.attack(5);	
+//					}
 					if (dinosaur.getState() == GameState.DEAD) {
 						resourcesManager.avatar.setState(GameState.IDLE, -1);
 						GameActivity.mode = GameMode.EXPLORING;

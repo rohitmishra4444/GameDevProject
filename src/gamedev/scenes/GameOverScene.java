@@ -39,11 +39,10 @@ public class GameOverScene extends CameraScene {
 		// };
 		// centerShapeInCamera(background);
 		// attachChild(background);
-
-		Text text = new Text(0, 0, resourcesManager.font, "GAME OVER!" + "\n\n" + "Tap...",
+		String str = "GAME OVER!" + "\n\n" + "Tap...";
+		Text text = new Text(0, 0, resourcesManager.fontBig, str,
 				resourcesManager.vbom);
 		text.setHorizontalAlign(HorizontalAlign.CENTER);
-		text.setScale(1.5f);
 		centerShapeInCamera(text);
 		attachChild(text);
 

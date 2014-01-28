@@ -314,7 +314,7 @@ public class ResourcesManager {
 				256, 256, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 
 		final ITexture texture = new BitmapTextureAtlas(textureManager,
-				256, 256, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+				512, 512, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 
 		
 		font = FontFactory.createFromAsset(
@@ -825,7 +825,7 @@ public class ResourcesManager {
 
 	public void loadHUDResources() {
 		loadHUDGraphics();
-		this.hud = new SceneHUD();
+		this.hud = SceneHUD.getInstance();
 		this.camera.setHUD(this.hud);
 	}
 
