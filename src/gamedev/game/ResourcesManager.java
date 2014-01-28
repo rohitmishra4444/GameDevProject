@@ -267,7 +267,7 @@ public class ResourcesManager {
 				textureManager, 800, 600, BitmapTextureFormat.RGBA_8888);
 		this.menu_background_region = BitmapTextureAtlasTextureRegionFactory
 				.createTiledFromAsset(menuBackgroundTextureAtlas, activity,
-						"menubackground.png", 0, 0, 1, 1);
+						"menubackground.jpg", 0, 0, 1, 1);
 
 		// Menu buttons
 		this.menuButtonsTextureAtlas = new BitmapTextureAtlas(textureManager,
@@ -313,19 +313,23 @@ public class ResourcesManager {
 		final ITexture mainFontTexture = new BitmapTextureAtlas(textureManager,
 				256, 256, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 
+		final ITexture texture = new BitmapTextureAtlas(textureManager,
+				256, 256, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+
+		
 		font = FontFactory.createFromAsset(
 				((GameActivity) activity).getFontManager(), mainFontTexture,
 				activity.getAssets(), "UniversElse-Regular.ttf", 22, true,
 				Color.WHITE);
 
-//		fontBig = FontFactory.createFromAsset(
-//				((GameActivity) activity).getFontManager(), mainFontTexture,
-//				activity.getAssets(), "UniversElse-Regular.ttf", 60, true,
-//				Color.WHITE);
+		fontBig = FontFactory.createFromAsset(
+				((GameActivity) activity).getFontManager(), texture,
+				activity.getAssets(), "StoneHinge.ttf", 80, true,
+				Color.WHITE);
 
-		// font = FontFactory.createFromAsset(
-		// ((GameActivity) activity).getFontManager(), mainFontTexture,
-		// activity.getAssets(), "font.ttf", 35f, true, Color.WHITE);
+//		 font = FontFactory.createFromAsset(
+//		 ((GameActivity) activity).getFontManager(), mainFontTexture,
+//		 activity.getAssets(), "font.ttf", 35f, true, Color.WHITE);
 
 	}
 
@@ -334,12 +338,12 @@ public class ResourcesManager {
 			createMenuFonts();
 		}
 		font.load();
-//		fontBig.load();
+		fontBig.load();
 	}
 
 	private void unloadMenuFonts() {
 		font.unload();
-//		fontBig.unload();
+		fontBig.unload();
 	}
 
 	// ---------------------------------------------

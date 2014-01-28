@@ -40,8 +40,7 @@ public class GameOverScene extends CameraScene {
 		// centerShapeInCamera(background);
 		// attachChild(background);
 
-		String gameOverString = "GAME OVER!" + "\n\n" + "Tap...";
-		Text text = new Text(0, 0, resourcesManager.font, gameOverString,
+		Text text = new Text(0, 0, resourcesManager.font, "GAME OVER!" + "\n\n" + "Tap...",
 				resourcesManager.vbom);
 		text.setHorizontalAlign(HorizontalAlign.CENTER);
 		text.setScale(1.5f);

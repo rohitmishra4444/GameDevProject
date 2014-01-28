@@ -108,8 +108,8 @@ public class FightScene extends CameraScene {
 		this.countdownStrings.add("  3   ");
 		this.countdownStrings.add("  2   ");
 		this.countdownStrings.add("  1   ");
-		this.countdownStrings.add("Fight!");
-		this.countdownText = new Text(0, 0, ResourcesManager.getInstance().font, "      ", resourcesManager.vbom);
+		this.countdownStrings.add("FIGHT!");
+		this.countdownText = new Text(0, 0, ResourcesManager.getInstance().fontBig, "      ", resourcesManager.vbom);
 		this.attachChild(this.countdownText);
 		this.rectLifeDino = new Rectangle(0, 0, 64, GameActivity.HEIGHT, resourcesManager.vbom);
 		this.rectLifeDino.setColor(Color.RED);
