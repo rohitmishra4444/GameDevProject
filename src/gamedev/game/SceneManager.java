@@ -177,41 +177,14 @@ public class SceneManager {
 	// GameMapScene
 	// ---------------------------------------------
 
-	public void createGameMapScene(final Engine mEngine, boolean restart) {
-		disposeCurrentScene(true);
-
-		if (restart) {
-			gameMapScene = null;
-			resourcesManager.unloadGameResources();
-		} else if (restart == false && gameMapScene != null) {
-			loadGameMapScene(engine);
-			return;
-		}
-
-		if (resourcesManager.areGameResourcesCreated() == false) {
-			resourcesManager.loadGameResources();
-		}
-
-		gameMapScene = new GameMapScene();
-		loadGameMapScene(engine);
-	}
-
-	public void disposeGameMapScene() {
-		if (!gameMapScene.isDisposed()) {
-			gameMapScene.disposeScene();
-		}
-		resourcesManager.unloadGameResources();
-	}
-
 	public void loadGameMapScene(final Engine mEngine) {
 		if (!currentSceneType.equals(SceneType.SCENE_LOADING)) {
 			disposeCurrentScene(true);
 		}
 
-		if (gameMapScene == null) {
-			createGameMapScene(engine, true);
-		} else {
-			resourcesManager.loadGameResources();
+		resourcesManager.loadGameResources();
+		if (!isGameMapSceneCreated()) {
+			gameMapScene = new GameMapScene();
 		}
 
 		mEngine.registerUpdateHandler(new TimerHandler(0.1f,
@@ -222,9 +195,17 @@ public class SceneManager {
 						if (!resourcesManager.backgroundMusicGame.isPlaying()) {
 							resourcesManager.backgroundMusicGame.resume();
 						}
+						resourcesManager.soundManager.setMasterVolume(1);
 						disposeLoadingScene();
 					}
 				}));
+	}
+
+	public void disposeGameMapScene() {
+		if (!gameMapScene.isDisposed()) {
+			gameMapScene.disposeScene();
+		}
+		resourcesManager.unloadGameResources();
 	}
 
 	// ---------------------------------------------

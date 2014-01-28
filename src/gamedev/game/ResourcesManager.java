@@ -126,7 +126,6 @@ public class ResourcesManager {
 	public Font font;
 	public Font fontBig;
 
-	
 	// Textures for game intro scene
 	public ArrayList<BitmapTextureAtlas> game_intro_atlas;
 	public ArrayList<ITextureRegion> game_intro_region;
@@ -318,10 +317,10 @@ public class ResourcesManager {
 				activity.getAssets(), "UniversElse-Regular.ttf", 22, true,
 				Color.WHITE);
 
-//		fontBig = FontFactory.createFromAsset(
-//				((GameActivity) activity).getFontManager(), mainFontTexture,
-//				activity.getAssets(), "UniversElse-Regular.ttf", 60, true,
-//				Color.WHITE);
+		// fontBig = FontFactory.createFromAsset(
+		// ((GameActivity) activity).getFontManager(), mainFontTexture,
+		// activity.getAssets(), "UniversElse-Regular.ttf", 60, true,
+		// Color.WHITE);
 
 		// font = FontFactory.createFromAsset(
 		// ((GameActivity) activity).getFontManager(), mainFontTexture,
@@ -334,12 +333,12 @@ public class ResourcesManager {
 			createMenuFonts();
 		}
 		font.load();
-//		fontBig.load();
+		// fontBig.load();
 	}
 
 	private void unloadMenuFonts() {
 		font.unload();
-//		fontBig.unload();
+		// fontBig.unload();
 	}
 
 	// ---------------------------------------------
@@ -399,14 +398,16 @@ public class ResourcesManager {
 		loadMenuFonts();
 		loadGameAudio();
 		loadHUDResources();
-		loadGameShopResources();
+		// loadGameShopResources();
 
-		// TODO: Refactor. This should not be created here, rather in
-		// GameMapScene.
-		if (physicsWorld == null || avatar == null) {
+		// Avatar reacts no more after contact with berrybush, if the following
+		// code is not in here.
+		if (physicsWorld == null) {
 			physicsWorld = new FixedStepPhysicsWorld(30, new Vector2(0, 0),
 					false, 8, 1);
 			physicsWorld.setContactListener(new BodiesContactListener());
+		}
+		if (avatar == null) {
 			avatar = new Avatar();
 		}
 	}
@@ -415,11 +416,11 @@ public class ResourcesManager {
 		unloadGameGraphics();
 		unloadGameAudio();
 		unloadHUDResources();
-		unloadGameShopResources();
+		// unloadGameShopResources();
 	}
 
 	private void loadGameGraphics() {
-		if (playerAtlas == null || gameGraphicsCreated == false) {
+		if (gameGraphicsCreated == false) {
 			createGameGraphics();
 		}
 		gameEndPortalAtlas.load();
@@ -821,6 +822,8 @@ public class ResourcesManager {
 
 	public void loadHUDResources() {
 		loadHUDGraphics();
+		// The hud needs to created new, otherwise there is no hud when starting
+		// the game after a game over.
 		this.hud = new SceneHUD();
 		this.camera.setHUD(this.hud);
 	}
