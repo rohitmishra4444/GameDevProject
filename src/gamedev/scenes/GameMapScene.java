@@ -56,7 +56,7 @@ public class GameMapScene extends BaseScene {
 		GameActivity.mode = GameMode.EXPLORING;
 
 		resourcesManager.activity.toastOnUIThread(
-				"Tap on ?-Button to see how to play.", Toast.LENGTH_LONG);
+				"Tap on the ?-Button for instructions", Toast.LENGTH_LONG);
 	}
 
 	private void connectPhysics() {

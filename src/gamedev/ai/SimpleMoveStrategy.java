@@ -13,7 +13,10 @@ public class SimpleMoveStrategy extends MoveStrategy {
 	/** Time needed to walk to goal position */
 	protected float duration = 0;
 	
+	protected Vector2 moveTo;
+	
 	protected GameState finishedState = GameState.IDLE;
+	protected GameState moveState = GameState.WALKING;
 	
 	/**
 	 * Move to a position
@@ -24,12 +27,16 @@ public class SimpleMoveStrategy extends MoveStrategy {
 	public SimpleMoveStrategy(AnimatedObject object, Vector2 moveTo, GameState moveState, GameState finishedState) {
 		super(object);
 		this.finishedState = finishedState;
-		init(moveTo, moveState);
+		this.moveState = moveState;
+		this.moveTo = moveTo;
+		init(this.moveTo, moveState);
 	}
 
 	public SimpleMoveStrategy(AnimatedObject object, Vector2 moveTo, GameState moveState) {
 		super(object);
-		init(moveTo, moveState);
+		this.moveTo = moveTo;
+		this.moveState = moveState;
+		init(this.moveTo, moveState);
 	}
 	
 	protected void init(Vector2 moveTo, GameState moveState) {
@@ -52,10 +59,16 @@ public class SimpleMoveStrategy extends MoveStrategy {
 		if (reachedGoal) {
 			return false;
 		}
+		// If the objects state is IDLE and we did not reached our goal, this means
+		// that there was opened a popup- or fight scene. We need to recalculate stuff
+		// because the velocity of body is zero
+		if (this.object.getState() == GameState.IDLE) {
+			this.time = 0;
+			this.init(this.moveTo, this.moveState);
+		}
 		this.time += time;
 		if (this.time >= this.duration) {
 			this.reachedGoal = true;
-			// TODO Maybe make this state configurable?
 			this.object.setState(this.finishedState, -1);
 			return false;
 		}

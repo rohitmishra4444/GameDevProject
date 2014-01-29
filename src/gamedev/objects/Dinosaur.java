@@ -79,6 +79,10 @@ public class Dinosaur extends AnimatedObject {
 		long[] duration = ANIMATION_DURATION;
 		
 		switch (state) {
+		case IDLE:
+			this.body.setLinearVelocity(0, 0);
+			this.stopAnimation();
+			break;
 		case WALKING:
 			rowIndex = 12;
 			break;
@@ -97,36 +101,21 @@ public class Dinosaur extends AnimatedObject {
 			rowIndex = 4;
 			resourcesManager.dinoGrowl.play();
 			break;
-		// case ROARING:
-		// rowIndex = 16;
-		// this.body.setLinearVelocity(0, 0);
-		// break;
-		// case PAUSED:
-		// rowIndex = 12;
-		// this.body.setLinearVelocity(0, 0);
-		// break;
 		case LOOKING:
 			rowIndex = 0;
 			this.body.setLinearVelocity(0, 0);
 			duration = ANIMATION_DURATION_LOOKING;
 			break;
-		// case BEEN_HIT:
-		// rowIndex = 4;
-		// this.body.setLinearVelocity(0, 0);
-		// loopAnimation = false;
-		// break;
-		// case ATTACK:
-		// rowIndex = 0;
-		// this.body.setLinearVelocity(0, 0);
-		// break;
 		default:
 			break;
 		}
 
-		int startTile = rowIndex * TILES_PER_LINE + this.direction
-				* FRAMES_PER_ANIMATION;
-		this.animate(duration, startTile, startTile
-				+ FRAMES_PER_ANIMATION - 1, loopAnimation);
+		if (this.state != GameState.IDLE) {
+			int startTile = rowIndex * TILES_PER_LINE + this.direction
+					* FRAMES_PER_ANIMATION;
+			this.animate(duration, startTile, startTile
+					+ FRAMES_PER_ANIMATION - 1, loopAnimation);			
+		}
 	}
 
 	@Override
@@ -155,11 +144,17 @@ public class Dinosaur extends AnimatedObject {
 	}
 
 	public void setRadius(float radius) {
-		this.e.setScale(radius / this.radius);
+		this.e.setScale(this.e.getScaleX() * (radius / this.radius));
 		this.radius = radius;
 		this.moveStrategy.setRadius(radius);
 	}
-
+	
+	public void setScale(final float pScale) {
+		super.setScale(pScale);
+		// Reset scaling of radius... we only want the sprite itself to be bigger
+		this.e.setScale(this.e.getScaleX() / pScale);
+	}
+	
 	public int getDinoColor() {
 		return this.color;
 	}

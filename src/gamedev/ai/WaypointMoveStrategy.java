@@ -34,6 +34,7 @@ public class WaypointMoveStrategy extends MoveStrategy {
 	@Override
 	public boolean update(float time) {
 		// Is the movement to the point x finished? If not, just return true... SimpleMoveStrategy is handling the rest
+//		System.out.println("WaypointMoveStrategy: Seconds elapsed" + time);
 		if (this.currentMovement.update(time)) {
 			return true;
 		} else {

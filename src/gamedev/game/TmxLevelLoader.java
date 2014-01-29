@@ -161,21 +161,27 @@ public class TmxLevelLoader {
 			if (alternateStrategy != null) {
 				d.setAlternateMoveStrategy(alternateStrategy);
 			}
+			float radius = -1;
+			float velocity = -1;
+			float scale = -1;
 			for (int i = 0; i < object.getTMXObjectProperties().size(); i++) {
 				if (object.getTMXObjectProperties().get(i).getName()
 						.equals("radius")) {
-					d.setRadius(Float.parseFloat(object
-							.getTMXObjectProperties().get(i).getValue()));
+					radius = Float.parseFloat(object
+							.getTMXObjectProperties().get(i).getValue());
 				} else if (object.getTMXObjectProperties().get(i).getName()
 						.equals("velocity")) {
-					d.setVelocity(Float.parseFloat(object
-							.getTMXObjectProperties().get(i).getValue()));
+					velocity = Float.parseFloat(object
+							.getTMXObjectProperties().get(i).getValue());
 				} else if (object.getTMXObjectProperties().get(i).getName()
 						.equals("scale")) {
-					d.setScale(Float.parseFloat(object.getTMXObjectProperties()
-							.get(i).getValue()));
+					scale = Float.parseFloat(object.getTMXObjectProperties()
+							.get(i).getValue());
 				}
 			}
+			if (velocity != -1) d.setVelocity(velocity);
+			if (scale != -1) d.setScale(scale);
+			if (radius != -1) d.setRadius(radius);
 			this.scene.attachChild(d);
 		}
 	}

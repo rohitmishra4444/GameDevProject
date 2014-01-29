@@ -33,21 +33,22 @@ public class Spider extends AnimatedObject {
 		if (direction != -1)
 			this.direction = direction;
 		int rowIndex = 0;
-		boolean loopAnimation = true;
 
 		switch (state) {
 		case IDLE:
 			this.body.setLinearVelocity(0, 0);
+			this.stopAnimation();
 			break;
 		default:
 			break;
 		}
-
-		int startTile = rowIndex * TILES_PER_LINE + this.direction
-				* FRAMES_PER_ANIMATION;
-		this.animate(ANIMATION_DURATION, startTile, startTile
-				+ FRAMES_PER_ANIMATION - 1, loopAnimation);
-
+		
+		if (this.state != GameState.IDLE) {
+			int startTile = rowIndex * TILES_PER_LINE + this.direction
+					* FRAMES_PER_ANIMATION;
+			this.animate(ANIMATION_DURATION, startTile, startTile
+					+ FRAMES_PER_ANIMATION - 1, true);			
+		}
 	}
 
 	@Override

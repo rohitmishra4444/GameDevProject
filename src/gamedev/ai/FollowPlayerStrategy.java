@@ -52,14 +52,14 @@ public class FollowPlayerStrategy extends MoveStrategy {
 				return true;
 			} else {
 				this.object.moveTo(playerPos, GameState.CHASE_PLAYER);
-				return true;				
+				return true;
 			}
 		} else {
 			if (this.alternateStrategy == null) {
 				this.object.setState(GameState.LOOKING, -1);
 				return false;
 			} else {
-				return this.alternateStrategy.update(time); 
+				return this.alternateStrategy.update(time);
 			}
 		}
 	}

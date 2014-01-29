@@ -27716,17 +27716,17 @@
     <property name="point3" value="88,36"/>
     <property name="point4" value="88,31"/>
     <property name="point5" value="88,36"/>
-    <property name="radius" value="2"/>
+    <property name="radius" value="4"/>
     <property name="scale" value="1.5"/>
-    <property name="velocity" value="3"/>
+    <property name="velocity" value="4"/>
    </properties>
   </object>
   <object x="3404" y="781" width="14" height="13">
    <properties>
     <property name="MoveStrategy" value="WaypointMoveStrategy"/>
-    <property name="point1" value="83,24"/>
-    <property name="point2" value="106,24"/>
-    <property name="radius" value="1.5"/>
+    <property name="point1" value="83,24.5"/>
+    <property name="point2" value="106,24.5"/>
+    <property name="radius" value="3"/>
     <property name="scale" value="1.5"/>
     <property name="velocity" value="3.5"/>
    </properties>
@@ -27738,6 +27738,18 @@
     <property name="point2" value="46,20"/>
     <property name="point3" value="56,20"/>
     <property name="point4" value="66,7"/>
+   </properties>
+  </object>
+  <object x="3370" y="1449" width="14" height="13">
+   <properties>
+    <property name="MoveStrategy" value="WaypointMoveStrategy"/>
+    <property name="point2" value="98,47"/>
+    <property name="point3" value="105,40"/>
+    <property name="point4" value="98,38"/>
+    <property name="point5" value="98,30"/>
+    <property name="radius" value="3.5"/>
+    <property name="scale" value="1.5"/>
+    <property name="velocity" value="4"/>
    </properties>
   </object>
  </objectgroup>
@@ -27763,22 +27775,38 @@
   <object x="2521" y="776" width="14" height="13">
    <properties>
     <property name="MoveStrategy" value="WaypointMoveStrategy"/>
-    <property name="point1" value="98,24"/>
-    <property name="point2" value="79,24"/>
-    <property name="radius" value="1.5"/>
+    <property name="point1" value="98,24.5"/>
+    <property name="point2" value="79,24.5"/>
+    <property name="radius" value="3"/>
     <property name="scale" value="1.5"/>
     <property name="velocity" value="4"/>
    </properties>
   </object>
   <object x="1562" y="1040" width="11" height="10"/>
-  <object x="1967" y="1047" width="9" height="10"/>
+  <object x="2028" y="1068" width="9" height="10">
+   <properties>
+    <property name="MoveStrategy" value="WaypointMoveStrategy"/>
+    <property name="point1" value="61,33"/>
+    <property name="point2" value="44,26"/>
+    <property name="point3" value="62,22"/>
+   </properties>
+  </object>
   <object x="2913" y="1496" width="13" height="13"/>
+  <object x="2348" y="578" width="14" height="13">
+   <properties>
+    <property name="MoveStrategy" value="WaypointMoveStrategy"/>
+    <property name="point1" value="73,8"/>
+    <property name="point2" value="85,18"/>
+    <property name="point3" value="93,5"/>
+    <property name="point4" value="103,17"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup name="QuestTrigger" width="110" height="50">
   <object name="1" x="995" y="643" width="47" height="54"/>
   <object name="2" x="1528" y="1137" width="81" height="41"/>
   <object name="3" x="2091" y="188" width="96" height="113"/>
-  <object name="avatar" x="179" y="162" width="16" height="14"/>
+  <object name="avatar" x="2724" y="140" width="16" height="14"/>
   <object name="portal" x="2901" y="378" width="32" height="25"/>
   <object name="4" x="2870" y="597" width="154" height="46"/>
   <object name="5" x="2895" y="367" width="102" height="68"/>
@@ -27793,8 +27821,6 @@
     <property name="minDistance" value="3"/>
     <property name="minX" value="3"/>
     <property name="minY" value="5"/>
-    <property name="scale" value="1.25"/>
-    <property name="velocity" value="6"/>
    </properties>
   </object>
   <object x="1784" y="655" width="11" height="10">
@@ -27820,18 +27846,22 @@
   <object x="2516" y="990" width="11" height="11">
    <properties>
     <property name="MoveStrategy" value="WaypointMoveStrategy"/>
-    <property name="point1" value="98,31"/>
-    <property name="point2" value="78,31"/>
+    <property name="point1" value="98,30.9"/>
+    <property name="point2" value="78,30.9"/>
+    <property name="scale" value="1.5"/>
    </properties>
   </object>
   <object x="3415" y="991" width="11" height="11">
    <properties>
     <property name="MoveStrategy" value="WaypointMoveStrategy"/>
-    <property name="point1" value="88,31"/>
-    <property name="point2" value="107,31"/>
+    <property name="point1" value="88,30.9"/>
+    <property name="point2" value="107,30.9"/>
+    <property name="point3" value="107,24"/>
+    <property name="point4" value="107,30.9"/>
+    <property name="scale" value="1.5"/>
    </properties>
   </object>
-  <object x="608" y="419" width="11" height="11">
+  <object x="655" y="558" width="11" height="11">
    <properties>
     <property name="MoveStrategy" value="RandomMoveStrategy"/>
     <property name="maxDistance" value="9"/>
@@ -27884,6 +27914,18 @@
     <property name="minDistance" value="1"/>
     <property name="minX" value="96"/>
     <property name="minY" value="37"/>
+   </properties>
+  </object>
+  <object x="3072" y="283" width="11" height="11">
+   <properties>
+    <property name="MoveStrategy" value="RandomMoveStrategy"/>
+    <property name="maxDistance" value="6"/>
+    <property name="maxX" value="106"/>
+    <property name="maxY" value="18"/>
+    <property name="minDistance" value="2"/>
+    <property name="minX" value="82"/>
+    <property name="minY" value="3"/>
+    <property name="velocity" value="4"/>
    </properties>
   </object>
  </objectgroup>
