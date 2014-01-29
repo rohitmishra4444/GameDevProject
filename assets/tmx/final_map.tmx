@@ -27806,7 +27806,7 @@
   <object name="1" x="995" y="643" width="47" height="54"/>
   <object name="2" x="1528" y="1137" width="81" height="41"/>
   <object name="3" x="2091" y="188" width="96" height="113"/>
-  <object name="avatar" x="2724" y="140" width="16" height="14"/>
+  <object name="avatar" x="167" y="159" width="16" height="14"/>
   <object name="portal" x="2901" y="378" width="32" height="25"/>
   <object name="4" x="2870" y="597" width="154" height="46"/>
   <object name="5" x="2895" y="367" width="102" height="68"/>
