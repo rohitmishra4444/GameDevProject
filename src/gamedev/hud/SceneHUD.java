@@ -43,9 +43,9 @@ public class SceneHUD extends HUD {
 
 	float cameraWidth = this.resourcesManager.camera.getWidth();
 	float cameraHeight = this.resourcesManager.camera.getHeight();
-	
+
 	private static SceneHUD instance;
-	
+
 	private SceneHUD() {
 		super();
 
@@ -83,14 +83,14 @@ public class SceneHUD extends HUD {
 		// createShopButton();
 		createBerriesAndButton();
 	}
-	
+
 	public static SceneHUD getInstance() {
 		if (instance == null) {
 			return new SceneHUD();
 		}
 		return instance;
 	}
-	
+
 	protected void createDPadControls() {
 		AnalogOnScreenControlListener controlListener = new AnalogOnScreenControlListener();
 		this.pad = new AnalogOnScreenControl(20, GameActivity.HEIGHT
@@ -165,7 +165,7 @@ public class SceneHUD extends HUD {
 							float currentEnergy = resourcesManager.avatar
 									.getEnergy();
 							resourcesManager.avatar.setEnergy(currentEnergy
-									+ energyAdditionFromBerry);							
+									+ energyAdditionFromBerry);
 						}
 						// Feedback:
 						ResourcesManager.getInstance().eat.play();
@@ -302,6 +302,7 @@ public class SceneHUD extends HUD {
 
 	public void showBarsOnly() {
 		this.setVisible(false);
+		this.setIgnoreUpdate(true);
 		this.bgBars.setVisible(true);
 		this.life.setVisible(true);
 		this.energy.setVisible(true);
@@ -317,6 +318,7 @@ public class SceneHUD extends HUD {
 		this.bgBars.setVisible(visible);
 		this.life.setVisible(visible);
 		this.energy.setVisible(visible);
+		this.setIgnoreUpdate(!visible);
 	}
 
 }

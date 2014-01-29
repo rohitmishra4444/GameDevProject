@@ -27,12 +27,11 @@ public class GameEndScene extends BaseScene {
 			+ "The portal was working properly and you returned to your era."
 			+ "\n\n\n" + "Tap...";
 	private static final String gameDevelopersString = "This game was designed and developed by"
-			+ "\n"
-			+ "Stefan Wanzenried"
-			+ "\n"
-			+ "David Wettstein"
-			+ "\n\n\n"
-			+ "Tap...";
+			+ "\nStefan Wanzenried"
+			+ "\nDavid Wettstein"
+			+ "\n\nThe resources are taken from"
+			+ "\n- reinerstilesets.de"
+			+ "\n- opengameart.org" + "\n\nThanks!";
 
 	private Sprite gameEndSprite;
 	private Text gameEndText;
