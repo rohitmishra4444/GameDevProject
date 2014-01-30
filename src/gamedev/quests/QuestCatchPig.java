@@ -40,8 +40,7 @@ public class QuestCatchPig extends Quest {
 		this.title = "Catch the pigs and bring them back to the cave man";
 		this.description = "Save them from the dinosaurs";
 
-		this.conversation.add("Hey young cave man! Please help me...");
-		this.conversation.add("Two of my pigs broke out this morning...");
+		this.conversation.add("Hey young cave man! Please help me...two of my pigs broke out this morning!");
 		this.conversation
 				.add("I'm scared that the dinosaurs will kill them... Can you catch them for me?");
 		this.conversation
@@ -49,12 +48,12 @@ public class QuestCatchPig extends Quest {
 
 		// Create the pig :-D
 		this.pig = new Pig(500, 500);
-		moveStrategyPig1 = new RandomMoveStrategy(pig, 75, 300, 0, 40*32, 54*32, 3*32, 17*32);
+		moveStrategyPig1 = new RandomMoveStrategy(pig, 75, 300, 0, 42*32, 54*32, 5*32, 17*32);
 		pig.setMoveStrategy(moveStrategyPig1);
 		map.attachChild(pig);
 
 		this.pig2 = new Pig(500, 500);
-		pig2.setMoveStrategy(new RandomMoveStrategy(pig2, 75, 300, 0, 38*32, 63*32, 17*32, 35*32));
+		pig2.setMoveStrategy(new RandomMoveStrategy(pig2, 75, 300, 0, 40*32, 63*32, 19*32, 35*32));
 		map.attachChild(pig2);
 		
 		// Add some pigs in the garden
