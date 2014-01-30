@@ -30,7 +30,7 @@ public class FightScene extends CameraScene {
 	private final static int FIGHTBAR_WIDTH = 400;
 	private static final int FIGHTBAR_HEIGHT = 300;
 	private final static float TARGET_RADIUS = 50;
-	private final static int SECONDS_COUNTDOWN = 1;
+	private final static float SECONDS_COUNTDOWN = 0.5f;
 	
 	protected Sprite fightDino;
 	protected Dinosaur dinosaur;

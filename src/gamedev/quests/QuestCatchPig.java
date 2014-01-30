@@ -33,7 +33,7 @@ public class QuestCatchPig extends Quest {
 	protected Rectangle rect;
 	protected RandomMoveStrategy moveStrategyPig1;
 	protected RandomMoveStrategy moveStrategyPig2;
-	
+	private final static int N_PIGS_GARDEN = 3;
 	
 	public QuestCatchPig(GameMapScene map) {
 		super(map);
@@ -49,14 +49,22 @@ public class QuestCatchPig extends Quest {
 
 		// Create the pig :-D
 		this.pig = new Pig(500, 500);
-		moveStrategyPig1 = new RandomMoveStrategy(pig, 75, 300, 0, 41*32, 55*32, 4*32, 18*32);
+		moveStrategyPig1 = new RandomMoveStrategy(pig, 75, 300, 0, 40*32, 54*32, 3*32, 17*32);
 		pig.setMoveStrategy(moveStrategyPig1);
 		map.attachChild(pig);
 
 		this.pig2 = new Pig(500, 500);
-		pig2.setMoveStrategy(new RandomMoveStrategy(pig2, 75, 300, 0, 39*32, 64*32, 18*32, 36*32));
+		pig2.setMoveStrategy(new RandomMoveStrategy(pig2, 75, 300, 0, 38*32, 63*32, 17*32, 35*32));
 		map.attachChild(pig2);
-
+		
+		// Add some pigs in the garden
+		for (int i=0; i<N_PIGS_GARDEN; i++) {
+			Pig pig = new Pig(49*32, 41*32);
+			pig.setVelocity(0.8f);
+			pig.setMoveStrategy(new RandomMoveStrategy(pig, 2*32, 5*32, 2, 44*32, 55*32, 39*32, 46*32));
+			this.map.attachChild(pig);
+		}
+		
 		// Caveman
 		this.caveman = new OldCaveman(48 * 32, 37 * 32);
 		map.attachChild(caveman);
@@ -122,7 +130,7 @@ public class QuestCatchPig extends Quest {
 	@Override
 	public boolean isCompleted() {
 		return (pig.isCatched() && pig2.isCatched());
-		// return true;
+//		 return true;
 	}
 
 	public Axe getAxe() {
