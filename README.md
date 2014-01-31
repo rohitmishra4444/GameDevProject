@@ -3,7 +3,7 @@ Escape the Stone Age
 
 Source Code for an Android Game developed during a semester at the University of Fribourg for the course *Design and Graphics Programming for Game Development*.
 
-If you want to try the game, download the Android .apk file with the following Dropbox link (30.01.2014):
+If you want to try the game, download the Android .apk file with the following Dropbox link (31.01.2014):
 
 https://www.dropbox.com/s/b7zm4vaonky0ksn/Escape_the_Stone_Age.apk
 

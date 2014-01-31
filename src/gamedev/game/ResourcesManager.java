@@ -92,8 +92,8 @@ public class ResourcesManager {
 	public TextureRegion hudHelpIconRegion;
 	private BitmapTextureAtlas hudQuestListIconAtlas;
 	public TextureRegion hudQuestListIconRegion;
-//	private BitmapTextureAtlas hudShopIconAtlas;
-//	public TextureRegion hudShopIconRegion;
+	// private BitmapTextureAtlas hudShopIconAtlas;
+	// public TextureRegion hudShopIconRegion;
 
 	public BitmapTextureAtlas bgBarsAtlas;
 	public TextureRegion bgBarsRegion;
@@ -167,7 +167,6 @@ public class ResourcesManager {
 	public Sound heartbeat;
 	public Sound dinoGrowl;
 
-	
 	// ---------------------------------------------
 	// Physic
 	// ---------------------------------------------
@@ -296,7 +295,7 @@ public class ResourcesManager {
 		try {
 			backgroundMusicMenu = MusicFactory.createMusicFromAsset(
 					engine.getMusicManager(), activity, "menu_music.ogg");
-			backgroundMusicMenu.setVolume(0.1f);
+			backgroundMusicMenu.setVolume(0.2f);
 			backgroundMusicMenu.setLooping(true);
 		} catch (IllegalStateException e) {
 			e.printStackTrace();
@@ -710,10 +709,10 @@ public class ResourcesManager {
 			questFinished = SoundFactory.createSoundFromAsset(soundManager,
 					activity, "quest_finished.ogg");
 			questFinished.setVolume(0.2f);
-			
+
 			dinoGrowl = SoundFactory.createSoundFromAsset(soundManager,
 					activity, "dino_growl.wav");
-			
+
 			gameSoundsLoaded = true;
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -900,7 +899,7 @@ public class ResourcesManager {
 
 		hudHelpIconAtlas.load();
 		hudQuestListIconAtlas.load();
-//		hudShopIconAtlas.load();
+		// hudShopIconAtlas.load();
 		bgBarsAtlas.load();
 	}
 
@@ -909,7 +908,7 @@ public class ResourcesManager {
 		hudBerryAtlas.unload();
 		hudHelpIconAtlas.unload();
 		hudQuestListIconAtlas.unload();
-//		hudShopIconAtlas.unload();
+		// hudShopIconAtlas.unload();
 		bgBarsAtlas.unload();
 	}
 
