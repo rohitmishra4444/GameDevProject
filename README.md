@@ -3,9 +3,9 @@ Escape the Stone Age
 
 Source Code for an Android Game developed during a semester at the University of Fribourg for the course *Design and Graphics Programming for Game Development*.
 
-If you want to try the game, download the Android .apk file with the following Dropbox link (31.01.2014):
+If you want to try the game, download the Android .apk file from SourceForge:
 
-https://www.dropbox.com/s/b7zm4vaonky0ksn/Escape_the_Stone_Age.apk
+http://sourceforge.net/projects/escapethestoneage/files/
 
 The game requires at least Android version 2.2 (API 8), since OpenGL ES 2.0 was introduced then.
 It works fine on Android version 4.0.3 or higher and *should* also work on versions between 2.2 and 4.0.3, but we have not tested it.
